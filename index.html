@@ -34,7 +34,6 @@ body{
   width:100%;
   height:100%;
   overflow:hidden;
-
   background:#000;
   color:var(--fg);
 
@@ -53,35 +52,37 @@ body{
 
 
 /* =========================================================
-   RORSCHACH FIELD
+   RORSCHACH
    ========================================================= */
 
 #rorschach{
   position:fixed;
 
-  inset:-8%;
+  inset:-7%;
 
-  width:116%;
-  height:116%;
+  width:114%;
+  height:114%;
 
   z-index:0;
 
-  opacity:.86;
+  opacity:.78;
 
   filter:
-    blur(10px)
-    contrast(180%);
+    blur(16px)
+    contrast(145%);
 
-  transform:scale(1.04);
+  transform:
+    scale(1.045);
 
   transition:
-    filter 7s ease,
-    opacity 6s ease;
+    opacity 8s ease,
+    filter 8s ease,
+    transform 12s ease;
 }
 
 
 /* =========================================================
-   DREAM VEIL
+   VEIL
    ========================================================= */
 
 #veil{
@@ -117,7 +118,7 @@ body{
 
   animation:
     veilMove
-    19s
+    28s
     ease-in-out
     infinite
     alternate;
@@ -137,7 +138,7 @@ body{
 
   pointer-events:none;
 
-  opacity:.045;
+  opacity:.038;
 
   background-image:url(
   "data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.88' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"
@@ -145,14 +146,14 @@ body{
 
   animation:
     grainMove
-    .22s
+    .25s
     steps(2)
     infinite;
 }
 
 
 /* =========================================================
-   GHOSTS / ANSWER ECHOES
+   GHOSTS
    ========================================================= */
 
 #ghostLayer{
@@ -184,9 +185,9 @@ body{
   letter-spacing:-.05em;
 
   color:
-    rgba(255,255,255,.038);
+    rgba(255,255,255,.033);
 
-  filter:blur(9px);
+  filter:blur(10px);
 
   white-space:nowrap;
 
@@ -198,9 +199,9 @@ body{
 
 .answerGhost{
   color:
-    rgba(255,255,255,.055);
+    rgba(255,255,255,.05);
 
-  filter:blur(11px);
+  filter:blur(12px);
 }
 
 
@@ -276,6 +277,9 @@ body{
   text-transform:uppercase;
 
   color:var(--muted);
+
+  text-shadow:
+    0 1px 2px rgba(0,0,0,.8);
 }
 
 #screen{
@@ -314,6 +318,20 @@ body{
   text-transform:uppercase;
 
   color:var(--muted);
+
+  text-shadow:
+    0 1px 2px rgba(0,0,0,.75);
+}
+
+h1,
+h2,
+.introText,
+.sub,
+.introMeta,
+.received{
+  text-shadow:
+    0 1px 2px rgba(0,0,0,.78),
+    0 0 10px rgba(0,0,0,.20);
 }
 
 h1{
@@ -421,6 +439,9 @@ button{
   font:inherit;
 
   cursor:pointer;
+
+  text-shadow:
+    0 1px 2px rgba(0,0,0,.75);
 }
 
 .langs button{
@@ -435,6 +456,7 @@ button{
 .next:hover{
   background:#fff;
   color:#000;
+  text-shadow:none;
 }
 
 
@@ -446,23 +468,23 @@ button{
   display:inline-block;
 
   transition:
-    filter 3.6s ease,
-    opacity 3.6s ease,
-    transform 4s ease;
+    filter 5s ease,
+    opacity 5s ease,
+    transform 5s ease;
 }
 
 .dreamword.blur{
-  filter:blur(7px);
-  opacity:.67;
+  filter:blur(6px);
+  opacity:.70;
 }
 
 .dreamword.deepblur{
-  filter:blur(14px);
-  opacity:.28;
+  filter:blur(12px);
+  opacity:.32;
 }
 
 .dreamword.float{
-  transform:translateY(-.08em);
+  transform:translateY(-.06em);
 }
 
 
@@ -483,7 +505,7 @@ input{
   outline:0;
 
   background:
-    rgba(0,0,0,.04);
+    rgba(0,0,0,.05);
 
   color:#fff;
 
@@ -492,6 +514,9 @@ input{
   caret-color:#fff;
 
   border-radius:0;
+
+  text-shadow:
+    0 1px 2px rgba(0,0,0,.8);
 }
 
 textarea{
@@ -630,7 +655,7 @@ input::placeholder{
 #falseWake.active{
   animation:
     falseWakeSequence
-    6.2s
+    7.4s
     ease
     forwards;
 }
@@ -654,6 +679,9 @@ input::placeholder{
   letter-spacing:-.055em;
 
   font-weight:400;
+
+  text-shadow:
+    0 1px 2px rgba(0,0,0,.8);
 }
 
 .falseWakeSub{
@@ -732,7 +760,7 @@ input::placeholder{
 
 
 /* =========================================================
-   FINAL SCREEN
+   FINAL
    ========================================================= */
 
 #finalInvite{
@@ -888,16 +916,16 @@ input::placeholder{
 
   from{
     transform:
-      translate(-2%,0)
+      translate(-1.5%,0)
       scale(1);
   }
 
   to{
     transform:
-      translate(3%,-2%)
-      scale(1.1);
+      translate(2.2%,-1.5%)
+      scale(1.06);
 
-    filter:blur(12px);
+    filter:blur(10px);
   }
 
 }
@@ -918,28 +946,28 @@ input::placeholder{
     opacity:0;
 
     transform:
-      translate(-3vw,3vh)
-      scale(.96);
+      translate(-2vw,2vh)
+      scale(.97);
 
-    filter:blur(12px);
+    filter:blur(14px);
   }
 
-  18%{
+  20%{
     opacity:1;
   }
 
-  70%{
-    opacity:.7;
+  72%{
+    opacity:.66;
   }
 
   100%{
     opacity:0;
 
     transform:
-      translate(6vw,-4vh)
-      scale(1.07);
+      translate(4vw,-3vh)
+      scale(1.05);
 
-    filter:blur(24px);
+    filter:blur(26px);
   }
 
 }
@@ -948,22 +976,22 @@ input::placeholder{
 
   0%{
     opacity:0;
-    filter:blur(18px);
+    filter:blur(20px);
   }
 
-  18%{
+  20%{
     opacity:1;
     filter:blur(0);
   }
 
-  70%{
+  72%{
     opacity:1;
     filter:blur(0);
   }
 
   100%{
     opacity:0;
-    filter:blur(16px);
+    filter:blur(18px);
   }
 
 }
@@ -1151,9 +1179,6 @@ input::placeholder{
 
 <body>
 
-
-<!-- DREAM FIELD -->
-
 <canvas id="rorschach"></canvas>
 
 <div id="veil"></div>
@@ -1163,8 +1188,6 @@ input::placeholder{
 <div id="ghostLayer"></div>
 
 
-<!-- FALSE AWAKENING -->
-
 <div id="falseWake">
 
   <div class="falseWakeContent">
@@ -1172,28 +1195,22 @@ input::placeholder{
     <div
       class="falseWakeMain"
       id="falseWakeMain"
-    >
-    </div>
+    ></div>
 
     <div
       class="falseWakeSub"
       id="falseWakeSub"
-    >
-    </div>
+    ></div>
 
   </div>
 
 </div>
 
 
-<!-- FINAL TRANSITION -->
-
 <div id="whiteBloom"></div>
 
 <div id="whiteout"></div>
 
-
-<!-- FINAL INVITATION -->
 
 <div id="finalInvite">
 
@@ -1220,17 +1237,11 @@ input::placeholder{
 
       <div class="finalDetails">
 
-        <div>
-          15.10.2026
-        </div>
+        <div>15.10.2026</div>
 
-        <div>
-          HEVRE
-        </div>
+        <div>HEVRE</div>
 
-        <div>
-          KRAKÓW
-        </div>
+        <div>KRAKÓW</div>
 
       </div>
 
@@ -1240,8 +1251,6 @@ input::placeholder{
 
 </div>
 
-
-<!-- UI -->
 
 <div id="ui">
 
@@ -1274,9 +1283,8 @@ input::placeholder{
 
 <script>
 
-
 /* =========================================================
-   GOOGLE BACKEND
+   BACKEND
    ========================================================= */
 
 const API_URL =
@@ -1415,12 +1423,10 @@ meta:
 
 
 /* =========================================================
-   QUESTION BANK PL
-   3 LEVELS
+   QUESTIONS
    ========================================================= */
 
 const QUESTIONS_PL = {
-
 
 0:[
 
@@ -1462,7 +1468,6 @@ question:
 
 ],
 
-
 1:[
 
 {
@@ -1502,7 +1507,6 @@ question:
 }
 
 ],
-
 
 2:[
 
@@ -1547,12 +1551,7 @@ question:
 };
 
 
-/* =========================================================
-   QUESTION BANK EN
-   ========================================================= */
-
 const QUESTIONS_EN = {
-
 
 0:[
 
@@ -1594,7 +1593,6 @@ question:
 
 ],
 
-
 1:[
 
 {
@@ -1634,7 +1632,6 @@ question:
 }
 
 ],
-
 
 2:[
 
@@ -1688,91 +1685,40 @@ const UI = {
 PL:{
 
 back:"WSTECZ",
-
 next:"DALEJ",
-
 begin:"WEJDŹ W SEN",
-
 submit:"DALEJ",
-
-placeholder:
-"napisz to, co zostało...",
-
-saving:
-"ZAPISUJĘ SEN",
-
-done:
-"SEN ZAPISANY",
-
-sub:
-"Twoje wspomnienie weszło do symulacji.",
-
-nicknameTitle:
-"Jak mamy zapamiętać śniącego?",
-
-nicknameMeta:
-"Możesz użyć pseudonimu. Nie musisz podawać prawdziwego imienia.",
-
-nicknamePlaceholder:
-"NICKNAME",
-
-nicknameSubmit:
-"ZAPISZ SEN",
-
-error:
-"Sen nie został zapisany.",
-
-retry:
-"SPRÓBUJ PONOWNIE",
-
-invite:
-"Zapraszamy na nasz performance ze swoim snem."
+placeholder:"napisz to, co zostało...",
+saving:"ZAPISUJĘ SEN",
+done:"SEN ZAPISANY",
+sub:"Twoje wspomnienie weszło do symulacji.",
+nicknameTitle:"Jak mamy zapamiętać śniącego?",
+nicknameMeta:"Możesz użyć pseudonimu. Nie musisz podawać prawdziwego imienia.",
+nicknamePlaceholder:"NICKNAME",
+nicknameSubmit:"ZAPISZ SEN",
+error:"Sen nie został zapisany.",
+retry:"SPRÓBUJ PONOWNIE",
+invite:"Zapraszamy na nasz performance ze swoim snem."
 
 },
-
 
 ENG:{
 
 back:"BACK",
-
 next:"NEXT",
-
 begin:"ENTER DREAM",
-
 submit:"CONTINUE",
-
-placeholder:
-"write what remained...",
-
-saving:
-"SAVING DREAM",
-
-done:
-"DREAM RECEIVED",
-
-sub:
-"Your memory has entered the simulation.",
-
-nicknameTitle:
-"How should the dreamer be remembered?",
-
-nicknameMeta:
-"You may use a nickname. You do not need to provide your real name.",
-
-nicknamePlaceholder:
-"NICKNAME",
-
-nicknameSubmit:
-"SAVE DREAM",
-
-error:
-"The dream could not be saved.",
-
-retry:
-"TRY AGAIN",
-
-invite:
-"Join our performance with your dream."
+placeholder:"write what remained...",
+saving:"SAVING DREAM",
+done:"DREAM RECEIVED",
+sub:"Your memory has entered the simulation.",
+nicknameTitle:"How should the dreamer be remembered?",
+nicknameMeta:"You may use a nickname. You do not need to provide your real name.",
+nicknamePlaceholder:"NICKNAME",
+nicknameSubmit:"SAVE DREAM",
+error:"The dream could not be saved.",
+retry:"TRY AGAIN",
+invite:"Join our performance with your dream."
 
 }
 
@@ -1803,115 +1749,101 @@ questionsByLevel:{
 
 answers:[],
 
-nickname:"",
-
-falseWakeDone1:false,
-
-falseWakeDone2:false
+nickname:""
 
 };
 
 
 const screen =
-document.getElementById(
-"screen"
-);
+document.getElementById("screen");
 
 const progress =
-document.getElementById(
-"progress"
-);
+document.getElementById("progress");
 
 const depthLabel =
-document.getElementById(
-"depthLabel"
-);
+document.getElementById("depthLabel");
 
 const ghostLayer =
-document.getElementById(
-"ghostLayer"
-);
+document.getElementById("ghostLayer");
 
 
 /* =========================================================
-   RANDOM
+   SHUFFLE
    ========================================================= */
 
 function shuffle(array){
 
-const a =
-[...array];
+  const a =
+  [...array];
 
-for(
-let i=a.length-1;
-i>0;
-i--
-){
+  for(
+    let i=a.length-1;
+    i>0;
+    i--
+  ){
 
-const j =
-Math.floor(
-Math.random()
-*
-(i+1)
-);
+    const j =
+    Math.floor(
+      Math.random() *
+      (i+1)
+    );
 
-[
-a[i],
-a[j]
-]
-=
-[
-a[j],
-a[i]
-];
+    [
+      a[i],
+      a[j]
+    ]
+    =
+    [
+      a[j],
+      a[i]
+    ];
 
-}
+  }
 
-return a;
+  return a;
 
 }
 
 
 /* =========================================================
    PREPARE QUESTIONS
-   3 PER LEVEL
    ========================================================= */
 
 function prepareQuestions(){
 
-const bank =
-state.lang==="PL"
-?
-QUESTIONS_PL
-:
-QUESTIONS_EN;
+  const bank =
+  state.lang==="PL"
+  ?
+  QUESTIONS_PL
+  :
+  QUESTIONS_EN;
 
-state.questionsByLevel[0] =
-shuffle(
-bank[0]
-)
-.slice(
-0,
-3
-);
+  state.questionsByLevel[0] =
+  shuffle(
+    bank[0]
+  )
+  .slice(
+    0,
+    3
+  );
 
-state.questionsByLevel[1] =
-shuffle(
-bank[1]
-)
-.slice(
-0,
-3
-);
+  state.questionsByLevel[1] =
+  shuffle(
+    bank[1]
+  )
+  .slice(
+    0,
+    3
+  );
 
-state.questionsByLevel[2] =
-shuffle(
-bank[2]
-)
-.slice(
-0,
-3
-);
+  state.questionsByLevel[2] =
+  shuffle(
+    bank[2]
+  )
+  .slice(
+    0,
+    3
+  );
 
 }
 
@@ -1922,32 +1854,32 @@ bank[2]
 
 function transition(fn){
 
-screen
-.classList
-.add(
-"fade"
-);
+  screen
+  .classList
+  .add(
+    "fade"
+  );
 
-setTimeout(
-()=>{
+  setTimeout(
+    ()=>{
 
-fn();
+      fn();
 
-requestAnimationFrame(
-()=>{
+      requestAnimationFrame(
+        ()=>{
 
-screen
-.classList
-.remove(
-"fade"
-);
+          screen
+          .classList
+          .remove(
+            "fade"
+          );
 
-}
-);
+        }
+      );
 
-},
-720
-);
+    },
+    720
+  );
 
 }
 
@@ -1958,48 +1890,44 @@ screen
 
 function renderStart(){
 
-state.mode =
-"start";
+  state.mode =
+  "start";
 
-progress.textContent =
-"";
+  progress.textContent =
+  "";
 
-depthLabel.textContent =
-"TRAUM 0";
+  depthLabel.textContent =
+  "TRAUM 0";
 
-screen.innerHTML = `
+  screen.innerHTML = `
 
-<div class="eyebrow">
-TRAUM / DREAM ARCHIVE
-</div>
+  <div class="eyebrow">
+  TRAUM / DREAM ARCHIVE
+  </div>
 
-<h1>
-TRAUM
-<br>
-SIM
-</h1>
+  <h1>
+  TRAUM
+  <br>
+  SIM
+  </h1>
 
-<p class="sub">
-choose language / wybierz język
-</p>
+  <p class="sub">
+  choose language / wybierz język
+  </p>
 
-<div class="langs">
+  <div class="langs">
 
-<button
-onclick="chooseLanguage('PL')"
->
-PL
-</button>
+  <button onclick="chooseLanguage('PL')">
+  PL
+  </button>
 
-<button
-onclick="chooseLanguage('ENG')"
->
-ENG
-</button>
+  <button onclick="chooseLanguage('ENG')">
+  ENG
+  </button>
 
-</div>
+  </div>
 
-`;
+  `;
 
 }
 
@@ -2010,32 +1938,32 @@ ENG
 
 function chooseLanguage(lang){
 
-state.lang =
-lang;
+  state.lang =
+  lang;
 
-state.mode =
-"intro";
+  state.mode =
+  "intro";
 
-state.introStep =
-0;
+  state.introStep =
+  0;
 
-state.level =
-0;
+  state.level =
+  0;
 
-state.levelQuestion =
-0;
+  state.levelQuestion =
+  0;
 
-state.answers =
-[];
+  state.answers =
+  [];
 
-state.nickname =
-"";
+  state.nickname =
+  "";
 
-prepareQuestions();
+  prepareQuestions();
 
-transition(
-renderIntro
-);
+  transition(
+    renderIntro
+  );
 
 }
 
@@ -2046,88 +1974,90 @@ renderIntro
 
 function renderIntro(){
 
-const slides =
-INTRO[
-state.lang
-];
+  const slides =
+  INTRO[
+    state.lang
+  ];
 
-const slide =
-slides[
-state.introStep
-];
+  const slide =
+  slides[
+    state.introStep
+  ];
 
-const copy =
-UI[
-state.lang
-];
+  const copy =
+  UI[
+    state.lang
+  ];
 
-const last =
-state.introStep===
-slides.length-1;
+  const last =
+  state.introStep===
+  slides.length-1;
 
-progress.textContent =
-`${String(
-state.introStep+1
-).padStart(
-2,
-"0"
-)}
-/
-${String(
-slides.length
-).padStart(
-2,
-"0"
-)}`;
+  progress.textContent =
+  `${String(
+    state.introStep+1
+  ).padStart(
+    2,
+    "0"
+  )}
+  /
+  ${String(
+    slides.length
+  ).padStart(
+    2,
+    "0"
+  )}`;
 
-depthLabel.textContent =
-"TRAUM 0";
+  depthLabel.textContent =
+  "TRAUM 0";
 
-screen.innerHTML = `
+  screen.innerHTML = `
 
-<div class="eyebrow">
-${slide.label}
-</div>
+  <div class="eyebrow">
+  ${slide.label}
+  </div>
 
-<h2>
-${slide.title}
-</h2>
+  <h2>
+  ${slide.title}
+  </h2>
 
-<div class="introText">
-${slide.text}
-</div>
+  <div class="introText">
+  ${slide.text}
+  </div>
 
-<div class="introMeta">
-${slide.meta}
-</div>
+  <div class="introMeta">
+  ${slide.meta}
+  </div>
 
-<div class="actions">
+  <div class="actions">
 
-<button
-class="back"
-onclick="introBack()"
->
-${copy.back}
-</button>
+  <button
+  class="back"
+  onclick="introBack()"
+  >
+  ${copy.back}
+  </button>
 
-<button
-class="next"
-onclick="introNext()"
->
-${last
-?
-copy.begin
-:
-copy.next}
-</button>
+  <button
+  class="next"
+  onclick="introNext()"
+  >
+  ${
+    last
+    ?
+    copy.begin
+    :
+    copy.next
+  }
+  </button>
 
-</div>
+  </div>
 
-`;
+  `;
 
-ghost(
-slide.title
-);
+  ghost(
+    slide.title
+  );
 
 }
 
@@ -2138,63 +2068,63 @@ slide.title
 
 function introBack(){
 
-if(
-state.introStep===0
-){
+  if(
+    state.introStep===0
+  ){
 
-transition(
-renderStart
-);
+    transition(
+      renderStart
+    );
 
-return;
+    return;
 
-}
+  }
 
-state.introStep--;
+  state.introStep--;
 
-transition(
-renderIntro
-);
+  transition(
+    renderIntro
+  );
 
 }
 
 
 function introNext(){
 
-const slides =
-INTRO[
-state.lang
-];
+  const slides =
+  INTRO[
+    state.lang
+  ];
 
-if(
-state.introStep
-<
-slides.length-1
-){
+  if(
+    state.introStep
+    <
+    slides.length-1
+  ){
 
-state.introStep++;
+    state.introStep++;
 
-transition(
-renderIntro
-);
+    transition(
+      renderIntro
+    );
 
-}
-else{
+  }
+  else{
 
-state.mode =
-"questions";
+    state.mode =
+    "questions";
 
-state.level =
-0;
+    state.level =
+    0;
 
-state.levelQuestion =
-0;
+    state.levelQuestion =
+    0;
 
-transition(
-renderQuestion
-);
+    transition(
+      renderQuestion
+    );
 
-}
+  }
 
 }
 
@@ -2205,199 +2135,192 @@ renderQuestion
 
 function currentQuestion(){
 
-return state
-.questionsByLevel[
-state.level
-][
-state.levelQuestion
-];
+  return state
+  .questionsByLevel[
+    state.level
+  ][
+    state.levelQuestion
+  ];
 
 }
 
 
 /* =========================================================
-   GLOBAL QUESTION INDEX
+   GLOBAL INDEX
    ========================================================= */
 
 function globalQuestionIndex(){
 
-return (
-state.level
-*
-3
-)
-+
-state.levelQuestion;
+  return (
+    state.level
+    *
+    3
+  )
+  +
+  state.levelQuestion;
 
 }
 
 
 /* =========================================================
-   SURREALIZE
+   TYPOGRAPHY
    ========================================================= */
 
 function surrealize(text){
 
-if(!text){
-return "";
-}
+  if(!text){
+    return "";
+  }
 
-return text
-.split(" ")
-.map(
-word=>{
+  return text
+  .split(" ")
+  .map(
+    word=>{
 
-let cls =
-"dreamword";
+      let cls =
+      "dreamword";
 
-const random =
-Math.random();
+      const random =
+      Math.random();
 
-if(
-random<.08
-){
+      if(
+        random<.06
+      ){
 
-cls +=
-" deepblur";
+        cls +=
+        " deepblur";
 
-}
-else
-if(
-random<.22
-){
+      }
+      else if(
+        random<.18
+      ){
 
-cls +=
-" blur";
+        cls +=
+        " blur";
 
-}
+      }
 
-if(
-Math.random()<.08
-){
+      if(
+        Math.random()<.05
+      ){
 
-cls +=
-" float";
+        cls +=
+        " float";
 
-}
+      }
 
-return `<span class="${cls}">${escapeHtml(word)}</span>`;
+      return `<span class="${cls}">${escapeHtml(word)}</span>`;
 
-}
-)
-.join(" ");
+    }
+  )
+  .join(" ");
 
 }
 
 
 /* =========================================================
-   BUILD ECHO QUESTION
-   TRAUM 1 / 2 CAN USE PREVIOUS ANSWERS
+   ECHO QUESTION
    ========================================================= */
 
 function questionWithEcho(
-item
+  item
 ){
 
-if(
-state.level===0
-){
+  if(
+    state.level===0
+  ){
 
-return item.question;
+    return item.question;
 
-}
+  }
 
-const previous =
-state.answers
-.filter(
-a=>
-a.answer &&
-a.answer.trim().length>2
-);
+  const previous =
+  state.answers
+  .filter(
+    a=>
+    a &&
+    a.answer &&
+    a.answer.trim().length>2
+  );
 
-if(
-!previous.length
-){
+  if(
+    !previous.length
+  ){
 
-return item.question;
+    return item.question;
 
-}
+  }
 
+  if(
+    Math.random()>.62
+  ){
 
-/*
-sometimes use a fragment of
-the dreamer's own earlier answer
-*/
+    const source =
+    previous[
+      Math.floor(
+        Math.random()
+        *
+        previous.length
+      )
+    ];
 
-if(
-Math.random()>.58
-){
+    const fragment =
+    source.answer
+    .split(/\s+/)
+    .slice(
+      0,
+      7
+    )
+    .join(" ");
 
-const source =
-previous[
-Math.floor(
-Math.random()
-*
-previous.length
-)
-];
+    if(
+      state.lang==="PL"
+    ){
 
-const fragment =
-source.answer
-.split(/\s+/)
-.slice(
-0,
-7
-)
-.join(" ");
+      const variations = [
 
-if(
-state.lang==="PL"
-){
+      `Powiedziałeś wcześniej: „${fragment}”. Czy nadal tak to pamiętasz?`,
 
-const variations = [
+      `„${fragment}” — czy to należało do pierwszego snu?`,
 
-`Powiedziałeś wcześniej: „${fragment}”. Czy nadal tak to pamiętasz?`,
+      `Jeżeli „${fragment}” było prawdą, co wydarzyło się chwilę wcześniej?`
 
-`„${fragment}” — czy to należało do pierwszego snu?`,
+      ];
 
-`Jeżeli „${fragment}” było prawdą, co wydarzyło się chwilę wcześniej?`
+      return variations[
+        Math.floor(
+          Math.random()
+          *
+          variations.length
+        )
+      ];
 
-];
+    }
+    else{
 
-return variations[
-Math.floor(
-Math.random()
-*
-variations.length
-)
-];
+      const variations = [
 
-}
-else{
+      `Earlier you said: “${fragment}”. Do you still remember it that way?`,
 
-const variations = [
+      `“${fragment}” — did that belong to the first dream?`,
 
-`Earlier you said: “${fragment}”. Do you still remember it that way?`,
+      `If “${fragment}” was true, what happened immediately before it?`
 
-`“${fragment}” — did that belong to the first dream?`,
+      ];
 
-`If “${fragment}” was true, what happened immediately before it?`
+      return variations[
+        Math.floor(
+          Math.random()
+          *
+          variations.length
+        )
+      ];
 
-];
+    }
 
-return variations[
-Math.floor(
-Math.random()
-*
-variations.length
-)
-];
+  }
 
-}
-
-}
-
-return item.question;
+  return item.question;
 
 }
 
@@ -2412,196 +2335,176 @@ null;
 
 function renderQuestion(){
 
-state.mode =
-"questions";
+  state.mode =
+  "questions";
 
-const item =
-currentQuestion();
+  const item =
+  currentQuestion();
 
-const copy =
-UI[
-state.lang
-];
+  const copy =
+  UI[
+    state.lang
+  ];
 
-if(!item){
+  if(!item){
 
-console.error(
-"QUESTION MISSING",
-state
-);
+    console.error(
+      "QUESTION MISSING",
+      state
+    );
 
-return;
+    return;
 
-}
+  }
 
-const globalIndex =
-globalQuestionIndex();
+  const globalIndex =
+  globalQuestionIndex();
 
-const displayQuestion =
-questionWithEcho(
-item
-);
+  const displayQuestion =
+  questionWithEcho(
+    item
+  );
 
-progress.textContent =
-`${String(
-globalIndex+1
-).padStart(
-2,
-"0"
-)}
-/
-09`;
+  progress.textContent =
+  `${String(
+    globalIndex+1
+  ).padStart(
+    2,
+    "0"
+  )}
+  /
+  09`;
 
-depthLabel.textContent =
-`TRAUM ${state.level}`;
+  depthLabel.textContent =
+  `TRAUM ${state.level}`;
 
-const saved =
-state.answers[
-globalIndex
-];
+  const saved =
+  state.answers[
+    globalIndex
+  ];
 
-screen.innerHTML = `
+  screen.innerHTML = `
 
-<div class="eyebrow">
-${escapeHtml(
-item.group
-)}
-</div>
+  <div class="eyebrow">
+  ${escapeHtml(
+    item.group
+  )}
+  </div>
 
-<h2>
-${surrealize(
-displayQuestion
-)}
-</h2>
+  <h2>
+  ${surrealize(
+    displayQuestion
+  )}
+  </h2>
 
-<textarea
-id="answer"
-placeholder="${copy.placeholder}"
->${escapeHtml(
-saved
-?
-saved.answer
-:
-""
-)}</textarea>
+  <textarea
+  id="answer"
+  placeholder="${copy.placeholder}"
+  >${escapeHtml(
+    saved
+    ?
+    saved.answer
+    :
+    ""
+  )}</textarea>
 
-<div class="actions">
+  <div class="actions">
 
-<button
-class="back"
-onclick="questionBack()"
->
-${copy.back}
-</button>
+  <button
+  class="back"
+  onclick="questionBack()"
+  >
+  ${copy.back}
+  </button>
 
-<button
-class="next"
-onclick="questionNext()"
->
-${globalIndex===8
-?
-copy.submit
-:
-copy.next}
-</button>
+  <button
+  class="next"
+  onclick="questionNext()"
+  >
+  ${
+    globalIndex===8
+    ?
+    copy.submit
+    :
+    copy.next
+  }
+  </button>
 
-</div>
+  </div>
 
-`;
+  `;
 
-animateBlur();
+  animateBlur();
 
-ghost(
-item.group
-);
+  ghost(
+    item.group
+  );
 
-spawnPreviousAnswerGhost();
-
-setTimeout(
-()=>{
-
-document
-.getElementById(
-"answer"
-)
-?.focus();
-
-},
-450
-);
+  spawnPreviousAnswerGhost();
 
 }
 
 
 /* =========================================================
-   DYNAMIC BLUR
+   BLUR
    ========================================================= */
 
 function animateBlur(){
 
-if(
-blurTimer
-){
+  if(
+    blurTimer
+  ){
 
-clearInterval(
-blurTimer
-);
+    clearInterval(
+      blurTimer
+    );
 
-}
+  }
 
-blurTimer =
-setInterval(
-()=>{
+  blurTimer =
+  setInterval(
+    ()=>{
 
-const words =
-[
-...document
-.querySelectorAll(
-".dreamword"
-)
-];
+      const words =
+      [
+        ...document
+        .querySelectorAll(
+          ".dreamword"
+        )
+      ];
 
-if(
-!words.length
-){
-return;
-}
+      if(
+        !words.length
+      ){
+        return;
+      }
 
-const word =
-words[
-Math.floor(
-Math.random()
-*
-words.length
-)
-];
+      const word =
+      words[
+        Math.floor(
+          Math.random()
+          *
+          words.length
+        )
+      ];
 
-if(
-Math.random()>.55
-){
+      if(
+        Math.random()>.62
+      ){
 
-word
-.classList
-.toggle(
-"blur"
-);
+        word
+        .classList
+        .toggle(
+          "blur"
+        );
 
-}
-else{
+      }
 
-word
-.classList
-.toggle(
-"deepblur"
-);
-
-}
-
-},
-2000
-+
-Math.random()*1300
-);
+    },
+    3500
+    +
+    Math.random()*1800
+  );
 
 }
 
@@ -2612,49 +2515,49 @@ Math.random()*1300
 
 function saveCurrentAnswer(){
 
-const input =
-document.getElementById(
-"answer"
-);
+  const input =
+  document.getElementById(
+    "answer"
+  );
 
-if(!input){
-return;
-}
+  if(!input){
+    return;
+  }
 
-const globalIndex =
-globalQuestionIndex();
+  const globalIndex =
+  globalQuestionIndex();
 
-const item =
-currentQuestion();
+  const item =
+  currentQuestion();
 
-const existing =
-state.answers[
-globalIndex
-];
+  const existing =
+  state.answers[
+    globalIndex
+  ];
 
-state.answers[
-globalIndex
-]
-=
-{
+  state.answers[
+    globalIndex
+  ]
+  =
+  {
 
-level:
-state.level,
+    level:
+    state.level,
 
-category:
-item.group,
+    category:
+    item.group,
 
-question:
-existing
-?
-existing.question
-:
-item.question,
+    question:
+    existing
+    ?
+    existing.question
+    :
+    item.question,
 
-answer:
-input.value.trim()
+    answer:
+    input.value.trim()
 
-};
+  };
 
 }
 
@@ -2665,48 +2568,48 @@ input.value.trim()
 
 function questionBack(){
 
-saveCurrentAnswer();
+  saveCurrentAnswer();
 
-if(
-state.level===0 &&
-state.levelQuestion===0
-){
+  if(
+    state.level===0
+    &&
+    state.levelQuestion===0
+  ){
 
-state.introStep =
-INTRO[
-state.lang
-]
-.length-1;
+    state.introStep =
+    INTRO[
+      state.lang
+    ].length-1;
 
-transition(
-renderIntro
-);
+    transition(
+      renderIntro
+    );
 
-return;
+    return;
 
-}
+  }
 
-if(
-state.levelQuestion>0
-){
+  if(
+    state.levelQuestion>0
+  ){
 
-state.levelQuestion--;
+    state.levelQuestion--;
 
-}
-else{
+  }
+  else{
 
-state.level--;
+    state.level--;
 
-state.levelQuestion =
-2;
+    state.levelQuestion =
+    2;
 
-updateDepthVisuals();
+    updateDepthVisuals();
 
-}
+  }
 
-transition(
-renderQuestion
-);
+  transition(
+    renderQuestion
+  );
 
 }
 
@@ -2717,63 +2620,56 @@ renderQuestion
 
 function questionNext(){
 
-saveCurrentAnswer();
+  saveCurrentAnswer();
 
-const globalIndex =
-globalQuestionIndex();
+  const globalIndex =
+  globalQuestionIndex();
 
-if(globalIndex===8){
+  if(
+    globalIndex===8
+  ){
 
-transition(
-renderNickname
-);
+    transition(
+      renderNickname
+    );
 
-return;
+    return;
 
-}
+  }
 
+  if(
+    state.level===0
+    &&
+    state.levelQuestion===2
+  ){
 
-/*
-end of TRAUM 0
-*/
+    runFalseAwakening(
+      1
+    );
 
-if(
-state.level===0 &&
-state.levelQuestion===2
-){
+    return;
 
-runFalseAwakening(
-1
-);
+  }
 
-return;
+  if(
+    state.level===1
+    &&
+    state.levelQuestion===2
+  ){
 
-}
+    runFalseAwakening(
+      2
+    );
 
+    return;
 
-/*
-end of TRAUM 1
-*/
+  }
 
-if(
-state.level===1 &&
-state.levelQuestion===2
-){
+  state.levelQuestion++;
 
-runFalseAwakening(
-2
-);
-
-return;
-
-}
-
-
-state.levelQuestion++;
-
-transition(
-renderQuestion
-);
+  transition(
+    renderQuestion
+  );
 
 }
 
@@ -2783,168 +2679,170 @@ renderQuestion
    ========================================================= */
 
 function runFalseAwakening(
-targetLevel
+  targetLevel
 ){
 
-const overlay =
-document.getElementById(
-"falseWake"
-);
+  const overlay =
+  document.getElementById(
+    "falseWake"
+  );
 
-const main =
-document.getElementById(
-"falseWakeMain"
-);
+  const main =
+  document.getElementById(
+    "falseWakeMain"
+  );
 
-const sub =
-document.getElementById(
-"falseWakeSub"
-);
+  const sub =
+  document.getElementById(
+    "falseWakeSub"
+  );
 
-const ui =
-document.getElementById(
-"ui"
-);
+  const ui =
+  document.getElementById(
+    "ui"
+  );
 
+  ui.classList.add(
+    "hide"
+  );
 
-ui.classList.add(
-"hide"
-);
+  if(
+    targetLevel===1
+  ){
 
+    main.textContent =
+    "TRAUM SIM";
 
-if(targetLevel===1){
+    sub.textContent =
+    state.lang==="PL"
+    ?
+    "SESJA UTRACONA"
+    :
+    "SESSION LOST";
 
-main.textContent =
-"TRAUM SIM";
+  }
+  else{
 
-sub.textContent =
-state.lang==="PL"
-?
-"SESJA UTRACONA"
-:
-"SESSION LOST";
+    main.textContent =
+    state.lang==="PL"
+    ?
+    "OBUDZIŁEŚ SIĘ"
+    :
+    "YOU WOKE UP";
 
-}
-else{
+    sub.textContent =
+    state.lang==="PL"
+    ?
+    "ale coś nadal pamięta"
+    :
+    "but something still remembers";
 
-main.textContent =
-state.lang==="PL"
-?
-"OBUDZIŁEŚ SIĘ"
-:
-"YOU WOKE UP";
+  }
 
-sub.textContent =
-state.lang==="PL"
-?
-"ale coś nadal pamięta"
-:
-"but something still remembers";
+  overlay.classList.add(
+    "active"
+  );
 
-}
+  setTimeout(
+    ()=>{
 
+      if(
+        targetLevel===1
+      ){
 
-overlay.classList.add(
-"active"
-);
+        sub.textContent =
+        state.lang==="PL"
+        ?
+        "SESJA ODNALEZIONA · JUŻ TU BYŁEŚ"
+        :
+        "SESSION FOUND · YOU HAVE BEEN HERE";
 
+      }
+      else{
 
-setTimeout(
-()=>{
+        sub.textContent =
+        state.lang==="PL"
+        ?
+        "TO NIE BYŁO PRZEBUDZENIE"
+        :
+        "THAT WAS NOT WAKING";
 
-if(targetLevel===1){
+      }
 
-sub.textContent =
-state.lang==="PL"
-?
-"SESJA ODNALEZIONA · JUŻ TU BYŁEŚ"
-:
-"SESSION FOUND · YOU HAVE BEEN HERE";
+    },
+    3200
+  );
 
-}
-else{
+  setTimeout(
+    ()=>{
 
-sub.textContent =
-state.lang==="PL"
-?
-"TO NIE BYŁO PRZEBUDZENIE"
-:
-"THAT WAS NOT WAKING";
+      overlay.classList.remove(
+        "active"
+      );
 
-}
+      state.level =
+      targetLevel;
 
-},
-2800
-);
+      state.levelQuestion =
+      0;
 
+      updateDepthVisuals();
 
-setTimeout(
-()=>{
+      renderQuestion();
 
-overlay.classList.remove(
-"active"
-);
+      ui.classList.remove(
+        "hide"
+      );
 
-state.level =
-targetLevel;
-
-state.levelQuestion =
-0;
-
-updateDepthVisuals();
-
-renderQuestion();
-
-ui.classList.remove(
-"hide"
-);
-
-},
-6200
-);
+    },
+    7400
+  );
 
 }
 
 
 /* =========================================================
-   DEPTH VISUALS
+   DEPTH
    ========================================================= */
 
 function updateDepthVisuals(){
 
-const canvas =
-document.getElementById(
-"rorschach"
-);
+  const canvas =
+  document.getElementById(
+    "rorschach"
+  );
 
-if(state.level===0){
+  if(
+    state.level===0
+  ){
 
-canvas.style.filter =
-"blur(10px) contrast(180%)";
+    canvas.style.filter =
+    "blur(16px) contrast(145%)";
 
-canvas.style.opacity =
-".86";
+    canvas.style.opacity =
+    ".78";
 
-}
-else
-if(state.level===1){
+  }
+  else if(
+    state.level===1
+  ){
 
-canvas.style.filter =
-"blur(13px) contrast(195%)";
+    canvas.style.filter =
+    "blur(18px) contrast(155%)";
 
-canvas.style.opacity =
-".91";
+    canvas.style.opacity =
+    ".82";
 
-}
-else{
+  }
+  else{
 
-canvas.style.filter =
-"blur(17px) contrast(220%)";
+    canvas.style.filter =
+    "blur(20px) contrast(165%)";
 
-canvas.style.opacity =
-".96";
+    canvas.style.opacity =
+    ".86";
 
-}
+  }
 
 }
 
@@ -2955,59 +2853,59 @@ canvas.style.opacity =
 
 function spawnPreviousAnswerGhost(){
 
-if(
-state.level===0
-){
+  if(
+    state.level===0
+  ){
 
-return;
+    return;
 
-}
+  }
 
-const previous =
-state.answers
-.filter(
-entry=>
-entry &&
-entry.answer &&
-entry.answer.length>2
-);
+  const previous =
+  state.answers
+  .filter(
+    entry=>
+    entry &&
+    entry.answer &&
+    entry.answer.length>2
+  );
 
-if(
-!previous.length
-){
+  if(
+    !previous.length
+  ){
 
-return;
+    return;
 
-}
+  }
 
-if(
-Math.random()>.44
-){
+  if(
+    Math.random()>.55
+  ){
 
-const entry =
-previous[
-Math.floor(
-Math.random()
-*
-previous.length
-)
-];
+    const entry =
+    previous[
+      Math.floor(
+        Math.random()
+        *
+        previous.length
+      )
+    ];
 
-const fragment =
-entry.answer
-.split(/\s+/)
-.slice(
-0,
-8
-)
-.join(" ");
+    const fragment =
+    entry.answer
+    .split(/\s+/)
+    .slice(
+      0,
+      8
+    )
+    .join(" ");
 
-ghost(
-fragment,
-true
-);
+    ghost(
+      fragment,
+      true
+    );
 
-}
+  }
 
 }
 
@@ -3018,82 +2916,69 @@ true
 
 function renderNickname(){
 
-state.mode =
-"nickname";
+  state.mode =
+  "nickname";
 
-progress.textContent =
-"";
+  progress.textContent =
+  "";
 
-depthLabel.textContent =
-"WAKE ?";
+  depthLabel.textContent =
+  "WAKE ?";
 
-const copy =
-UI[
-state.lang
-];
+  const copy =
+  UI[
+    state.lang
+  ];
 
-screen.innerHTML = `
+  screen.innerHTML = `
 
-<div class="eyebrow">
-WHO DREAMED THIS?
-</div>
+  <div class="eyebrow">
+  WHO DREAMED THIS?
+  </div>
 
-<h2>
-${copy.nicknameTitle}
-</h2>
+  <h2>
+  ${copy.nicknameTitle}
+  </h2>
 
-<p class="sub">
-${copy.nicknameMeta}
-</p>
+  <p class="sub">
+  ${copy.nicknameMeta}
+  </p>
 
-<input
-id="nickname"
-type="text"
-maxlength="40"
-autocomplete="off"
-spellcheck="false"
-placeholder="${copy.nicknamePlaceholder}"
-value="${escapeHtml(
-state.nickname
-)}"
->
+  <input
+  id="nickname"
+  type="text"
+  maxlength="40"
+  autocomplete="off"
+  spellcheck="false"
+  placeholder="${copy.nicknamePlaceholder}"
+  value="${escapeHtml(
+    state.nickname
+  )}"
+  >
 
-<div class="actions">
+  <div class="actions">
 
-<button
-class="back"
-onclick="nicknameBack()"
->
-${copy.back}
-</button>
+  <button
+  class="back"
+  onclick="nicknameBack()"
+  >
+  ${copy.back}
+  </button>
 
-<button
-class="next"
-onclick="saveDream()"
->
-${copy.nicknameSubmit}
-</button>
+  <button
+  class="next"
+  onclick="saveDream()"
+  >
+  ${copy.nicknameSubmit}
+  </button>
 
-</div>
+  </div>
 
-`;
+  `;
 
-ghost(
-"WHO DREAMED THIS?"
-);
-
-setTimeout(
-()=>{
-
-document
-.getElementById(
-"nickname"
-)
-?.focus();
-
-},
-450
-);
+  ghost(
+    "WHO DREAMED THIS?"
+  );
 
 }
 
@@ -3104,27 +2989,27 @@ document
 
 function nicknameBack(){
 
-const nick =
-document.getElementById(
-"nickname"
-);
+  const nick =
+  document.getElementById(
+    "nickname"
+  );
 
-if(nick){
+  if(nick){
 
-state.nickname =
-nick.value.trim();
+    state.nickname =
+    nick.value.trim();
 
-}
+  }
 
-state.level =
-2;
+  state.level =
+  2;
 
-state.levelQuestion =
-2;
+  state.levelQuestion =
+  2;
 
-transition(
-renderQuestion
-);
+  transition(
+    renderQuestion
+  );
 
 }
 
@@ -3135,162 +3020,152 @@ renderQuestion
 
 async function saveDream(){
 
-const nicknameInput =
-document.getElementById(
-"nickname"
-);
+  const nicknameInput =
+  document.getElementById(
+    "nickname"
+  );
 
-state.nickname =
-nicknameInput
-?
-nicknameInput.value.trim()
-:
-"";
+  state.nickname =
+  nicknameInput
+  ?
+  nicknameInput.value.trim()
+  :
+  "";
 
+  if(
+    !state.nickname
+  ){
 
-if(
-!state.nickname
-){
+    state.nickname =
+    "ANONYMOUS";
 
-state.nickname =
-"ANONYMOUS";
+  }
 
-}
+  const copy =
+  UI[
+    state.lang
+  ];
 
+  const payload = {
 
-const copy =
-UI[
-state.lang
-];
+    nickname:
+    state.nickname,
 
+    language:
+    state.lang,
 
-const payload = {
+    answers:
+    state.answers,
 
-nickname:
-state.nickname,
+    dream:
+    state.answers
+    .map(
+      entry=>
+      entry
+      ?
+      entry.answer
+      :
+      ""
+    )
+    .join(
+      "\n\n"
+    )
 
-language:
-state.lang,
+  };
 
-answers:
-state.answers,
+  transition(
+    ()=>{
 
-dream:
-state.answers
-.map(
-entry=>
-entry
-?
-entry.answer
-:
-""
-)
-.join(
-"\n\n"
-)
+      progress.textContent =
+      "";
 
-};
+      depthLabel.textContent =
+      "ARCHIVE";
 
+      screen.innerHTML = `
 
-transition(
-()=>{
+      <div class="eyebrow">
+      TRAUM SIM
+      </div>
 
-progress.textContent =
-"";
+      <h2>
+      ${copy.saving}
+      </h2>
 
-depthLabel.textContent =
-"ARCHIVE";
+      <p class="sub">
+      ...
+      </p>
 
-screen.innerHTML = `
+      `;
 
-<div class="eyebrow">
-TRAUM SIM
-</div>
+    }
+  );
 
-<h2>
-${copy.saving}
-</h2>
+  try{
 
-<p class="sub">
-...
-</p>
+    const response =
+    await fetch(
+      API_URL,
+      {
 
-`;
+        method:
+        "POST",
 
-}
-);
+        headers:{
+          "Content-Type":
+          "text/plain;charset=utf-8"
+        },
 
+        body:
+        JSON.stringify(
+          payload
+        )
 
-try{
+      }
+    );
 
-const response =
-await fetch(
-API_URL,
-{
+    if(
+      !response.ok
+    ){
 
-method:
-"POST",
+      throw new Error(
+        "HTTP "
+        +
+        response.status
+      );
 
-headers:{
-"Content-Type":
-"text/plain;charset=utf-8"
-},
+    }
 
-body:
-JSON.stringify(
-payload
-)
+    const data =
+    await response.json();
 
-}
-);
+    if(
+      !data.ok
+    ){
 
+      throw new Error(
+        data.error
+        ||
+        "Backend error"
+      );
 
-if(
-!response.ok
-){
+    }
 
-throw new Error(
-"HTTP "
-+
-response.status
-);
+    renderSaved(
+      data.dreamId
+    );
 
-}
+  }
+  catch(error){
 
+    console.error(
+      "DREAM SAVE ERROR",
+      error
+    );
 
-const data =
-await response.json();
+    renderError();
 
-
-if(
-!data.ok
-){
-
-throw new Error(
-data.error
-||
-"Backend error"
-);
-
-}
-
-
-renderSaved(
-data.dreamId
-);
-
-
-}
-catch(error){
-
-console.error(
-"DREAM SAVE ERROR",
-error
-);
-
-renderError();
-
-}
+  }
 
 }
 
@@ -3301,48 +3176,47 @@ renderError();
 
 function renderSaved(id){
 
-const copy =
-UI[
-state.lang
-];
+  const copy =
+  UI[
+    state.lang
+  ];
 
-transition(
-()=>{
+  transition(
+    ()=>{
 
-screen.innerHTML = `
+      screen.innerHTML = `
 
-<div class="eyebrow">
-TRAUM SIM
-</div>
+      <div class="eyebrow">
+      TRAUM SIM
+      </div>
 
-<h2>
-${copy.done}
-</h2>
+      <h2>
+      ${copy.done}
+      </h2>
 
-<p class="sub">
-${copy.sub}
-</p>
+      <p class="sub">
+      ${copy.sub}
+      </p>
 
-<div class="received">
-${escapeHtml(
-id || ""
-)}
-&nbsp;&nbsp;/&nbsp;&nbsp;
-${escapeHtml(
-state.nickname
-)}
-</div>
+      <div class="received">
+      ${escapeHtml(
+        id || ""
+      )}
+      &nbsp;&nbsp;/&nbsp;&nbsp;
+      ${escapeHtml(
+        state.nickname
+      )}
+      </div>
 
-`;
+      `;
 
-}
-);
+    }
+  );
 
-
-setTimeout(
-startFinalSequence,
-4500
-);
+  setTimeout(
+    startFinalSequence,
+    4500
+  );
 
 }
 
@@ -3353,52 +3227,53 @@ startFinalSequence,
 
 function renderError(){
 
-const copy =
-UI[
-state.lang
-];
+  const copy =
+  UI[
+    state.lang
+  ];
 
-transition(
-()=>{
+  transition(
+    ()=>{
 
-screen.innerHTML = `
+      screen.innerHTML = `
 
-<div class="eyebrow">
-TRAUM SIM
-</div>
+      <div class="eyebrow">
+      TRAUM SIM
+      </div>
 
-<h2>
-${copy.error}
-</h2>
+      <h2>
+      ${copy.error}
+      </h2>
 
-<p class="sub">
+      <p class="sub">
 
-${state.lang==="PL"
-?
-"Połączenie z archiwum zostało przerwane."
-:
-"The connection to the archive was interrupted."
-}
+      ${
+        state.lang==="PL"
+        ?
+        "Połączenie z archiwum zostało przerwane."
+        :
+        "The connection to the archive was interrupted."
+      }
 
-</p>
+      </p>
 
-<div class="actions">
+      <div class="actions">
 
-<span></span>
+      <span></span>
 
-<button
-class="next"
-onclick="saveDream()"
->
-${copy.retry}
-</button>
+      <button
+      class="next"
+      onclick="saveDream()"
+      >
+      ${copy.retry}
+      </button>
 
-</div>
+      </div>
 
-`;
+      `;
 
-}
-);
+    }
+  );
 
 }
 
@@ -3409,82 +3284,78 @@ ${copy.retry}
 
 function startFinalSequence(){
 
-const ui =
-document.getElementById(
-"ui"
-);
+  const ui =
+  document.getElementById(
+    "ui"
+  );
 
-const bloom =
-document.getElementById(
-"whiteBloom"
-);
+  const bloom =
+  document.getElementById(
+    "whiteBloom"
+  );
 
-const whiteout =
-document.getElementById(
-"whiteout"
-);
+  const whiteout =
+  document.getElementById(
+    "whiteout"
+  );
 
-const final =
-document.getElementById(
-"finalInvite"
-);
+  const final =
+  document.getElementById(
+    "finalInvite"
+  );
 
+  ui.classList.add(
+    "hide"
+  );
 
-ui.classList.add(
-"hide"
-);
+  setTimeout(
+    ()=>{
 
+      bloom.classList.add(
+        "active"
+      );
 
-setTimeout(
-()=>{
+      whiteout.classList.add(
+        "active"
+      );
 
-bloom.classList.add(
-"active"
-);
+    },
+    1300
+  );
 
-whiteout.classList.add(
-"active"
-);
+  setTimeout(
+    ()=>{
 
-},
-1300
-);
+      document
+      .getElementById(
+        "finalTitle"
+      )
+      .textContent =
+      UI[
+        state.lang
+      ]
+      .invite;
 
+      final.classList.add(
+        "active"
+      );
 
-setTimeout(
-()=>{
+    },
+    7200
+  );
 
-document
-.getElementById(
-"finalTitle"
-)
-.textContent =
-UI[
-state.lang
-]
-.invite;
+  setTimeout(
+    ()=>{
 
-final.classList.add(
-"active"
-);
+      bloom.style.display =
+      "none";
 
-},
-7200
-);
+      whiteout.style.display =
+      "none";
 
-
-setTimeout(
-()=>{
-
-bloom.style.display =
-"none";
-
-whiteout.style.display =
-"none";
-
-},
-7800
-);
+    },
+    7800
+  );
 
 }
 
@@ -3494,74 +3365,74 @@ whiteout.style.display =
    ========================================================= */
 
 function ghost(
-text,
-answer=false
+  text,
+  answer=false
 ){
 
-if(!text){
-return;
-}
+  if(!text){
+    return;
+  }
 
-const element =
-document.createElement(
-"div"
-);
+  const element =
+  document.createElement(
+    "div"
+  );
 
-element.className =
-answer
-?
-"ghost answerGhost"
-:
-"ghost";
+  element.className =
+  answer
+  ?
+  "ghost answerGhost"
+  :
+  "ghost";
 
-element.textContent =
-text;
+  element.textContent =
+  text;
 
-element.style.left =
-(
-Math.random()*55
--
-5
-)
-+
-"vw";
+  element.style.left =
+  (
+    Math.random()*55
+    -
+    5
+  )
+  +
+  "vw";
 
-element.style.top =
-(
-Math.random()*75
-+
-8
-)
-+
-"vh";
+  element.style.top =
+  (
+    Math.random()*75
+    +
+    8
+  )
+  +
+  "vh";
 
-element.style.animationDuration =
-(
-10
-+
-Math.random()*10
-)
-+
-"s";
+  element.style.animationDuration =
+  (
+    14
+    +
+    Math.random()*12
+  )
+  +
+  "s";
 
-ghostLayer.appendChild(
-element
-);
+  ghostLayer.appendChild(
+    element
+  );
 
-setTimeout(
-()=>{
+  setTimeout(
+    ()=>{
 
-element.remove();
+      element.remove();
 
-},
-21000
-);
+    },
+    28000
+  );
 
 }
 
 
 /* =========================================================
-   AUTONOMOUS GHOST WORDS
+   AUTONOMOUS WORDS
    ========================================================= */
 
 const ghostWords = [
@@ -3596,26 +3467,26 @@ const ghostWords = [
 
 
 setInterval(
-()=>{
+  ()=>{
 
-if(
-Math.random()>.52
-){
+    if(
+      Math.random()>.58
+    ){
 
-ghost(
-ghostWords[
-Math.floor(
-Math.random()
-*
-ghostWords.length
-)
-]
-);
+      ghost(
+        ghostWords[
+          Math.floor(
+            Math.random()
+            *
+            ghostWords.length
+          )
+        ]
+      );
 
-}
+    }
 
-},
-5000
+  },
+  7000
 );
 
 
@@ -3625,41 +3496,41 @@ ghostWords.length
 
 function escapeHtml(value){
 
-return String(
-value || ""
-)
-.replace(
-/[&<>"']/g,
-char=>({
+  return String(
+    value || ""
+  )
+  .replace(
+    /[&<>"']/g,
+    char=>({
 
-"&":"&amp;",
+      "&":"&amp;",
 
-"<":"&lt;",
+      "<":"&lt;",
 
-">":"&gt;",
+      ">":"&gt;",
 
-"\"":"&quot;",
+      "\"":"&quot;",
 
-"'":"&#039;"
+      "'":"&#039;"
 
-}[char])
-);
+    }[char])
+  );
 
 }
 
 
 /* =========================================================
-   RORSCHACH ENGINE
+   ADVANCED RORSCHACH
    ========================================================= */
 
 const rCanvas =
 document.getElementById(
-"rorschach"
+  "rorschach"
 );
 
 const rCtx =
 rCanvas.getContext(
-"2d"
+  "2d"
 );
 
 
@@ -3669,411 +3540,580 @@ let RDPR;
 
 let forms=[];
 
-let morphSeed=0;
-
 
 /* =========================================================
-   RESIZE
+   FORM PARAMETERS
    ========================================================= */
 
 function resizeRorschach(){
 
-RW =
-window.innerWidth;
+  RW =
+  window.innerWidth;
 
-RH =
-window.innerHeight;
+  RH =
+  window.innerHeight;
 
-RDPR =
-Math.min(
-window.devicePixelRatio || 1,
-1.5
-);
+  RDPR =
+  Math.min(
+    window.devicePixelRatio || 1,
+    1.5
+  );
 
+  rCanvas.width =
+  RW * RDPR;
 
-rCanvas.width =
-RW * RDPR;
+  rCanvas.height =
+  RH * RDPR;
 
-rCanvas.height =
-RH * RDPR;
+  rCtx.setTransform(
+    RDPR,
+    0,
+    0,
+    RDPR,
+    0,
+    0
+  );
 
-
-rCtx.setTransform(
-RDPR,
-0,
-0,
-RDPR,
-0,
-0
-);
-
-
-generateForms();
+  createForms();
 
 }
 
 
 /* =========================================================
-   GENERATE FORMS
+   CREATE FORMS
    ========================================================= */
 
-function generateForms(){
+function createForms(){
 
-forms=[];
+  forms=[];
 
-const level =
-state.level || 0;
+  const level =
+  state.level || 0;
 
+  const count =
+  level===0
+  ?
+  5
+  :
+  level===1
+  ?
+  7
+  :
+  9;
 
-const count =
-level===0
-?
-6
-:
-level===1
-?
-9
-:
-12;
+  for(
+    let i=0;
+    i<count;
+    i++
+  ){
 
+    forms.push({
 
-for(
-let i=0;
-i<count;
-i++
-){
+      cy:
+      RH *
+      (
+        .16 +
+        Math.random()*.68
+      ),
 
-forms.push({
+      radius:
+      Math.min(
+        RW,
+        RH
+      )
+      *
+      (
+        .08 +
+        Math.random()*.19
+      ),
 
-cy:
-RH *
-(
-.15 +
-Math.random()*.70
-),
+      stretch:
+      .50 +
+      Math.random()*.95,
 
-radius:
-Math.min(
-RW,
-RH
-)
-*
-(
-.06 +
-Math.random()*.18
-),
+      lobes:
+      2 +
+      Math.floor(
+        Math.random()*7
+      ),
 
-stretch:
-.55 +
-Math.random()*.85,
+      phase:
+      Math.random()
+      *
+      Math.PI
+      *
+      2,
 
-lobes:
-3 +
-Math.floor(
-Math.random()*7
-),
+      speed:
+      .000015 +
+      Math.random()*.000025,
 
-phase:
-Math.random() *
-Math.PI *
-2,
+      drift:
+      .000004 +
+      Math.random()*.000008,
 
-speed:
-.00012 +
-Math.random()*.00030,
+      alpha:
+      .035 +
+      Math.random()*.055,
 
-alpha:
-.045 +
-Math.random()*.085,
+      tone:
+      105 +
+      Math.floor(
+        Math.random()*135
+      ),
 
-nested:
-Math.random()>.58
+      innerTone:
+      35 +
+      Math.floor(
+        Math.random()*90
+      ),
 
-});
+      nested:
+      Math.random()>.58
 
-}
+    });
+
+  }
 
 }
 
 
 /* =========================================================
-   RADIUS
+   ORGANIC RADIUS
    ========================================================= */
 
 function organicRadius(
-form,
-angle,
-time,
-layer=0
+  form,
+  angle,
+  time,
+  layer=0
 ){
 
-const level =
-state.level || 0;
+  const level =
+  state.level || 0;
 
+  const wave1 =
+  Math.sin(
+    angle *
+    form.lobes
+    +
+    time *
+    form.speed
+    *
+    1000
+    +
+    form.phase
+    +
+    layer*.3
+  )
+  *
+  (
+    .16
+    +
+    level*.012
+  );
 
-const waveA =
-Math.sin(
-angle *
-form.lobes
-+
-time *
-form.speed *
-1000
-+
-form.phase
-+
-layer
-)
-*
-(
-.19 +
-level*.025
-);
+  const wave2 =
+  Math.sin(
+    angle *
+    (
+      form.lobes+2
+    )
+    -
+    time *
+    form.speed
+    *
+    460
+    +
+    form.phase*.6
+  )
+  *
+  .065;
 
+  const wave3 =
+  Math.cos(
+    angle*2
+    +
+    time*.000035
+    +
+    form.phase*3
+  )
+  *
+  .05;
 
-const waveB =
-Math.sin(
-angle *
-(
-form.lobes+3
-)
--
-time *
-form.speed *
-630
-)
-*
-.10;
+  const wave4 =
+  Math.sin(
+    angle*7
+    +
+    time*.000018
+  )
+  *
+  .025;
 
-
-const waveC =
-Math.cos(
-angle*2
-+
-time*.00021
-+
-form.phase*4
-)
-*
-.075;
-
-
-return form.radius *
-(
-1 +
-waveA +
-waveB +
-waveC
-);
+  return form.radius *
+  (
+    1
+    +
+    wave1
+    +
+    wave2
+    +
+    wave3
+    +
+    wave4
+  );
 
 }
 
 
 /* =========================================================
-   DRAW MIRROR BLOT
+   BUILD POINTS
    ========================================================= */
 
-function drawMirrorBlot(
-form,
-time,
-scale=1,
-alphaScale=1
+function buildBlotPoints(
+  form,
+  time,
+  scale=1
 ){
 
-const cx =
-RW*.5;
+  const cx =
+  RW*.5;
 
-const cy =
-form.cy;
+  const cy =
+  form.cy
+  +
+  Math.sin(
+    time*form.drift*1000
+    +
+    form.phase
+  )
+  *
+  12;
 
-const count =
-86;
+  const count =
+  120;
 
-const left=[];
+  const left=[];
 
+  for(
+    let i=0;
+    i<=count;
+    i++
+  ){
 
-for(
-let i=0;
-i<=count;
-i++
-){
+    const p =
+    i/count;
 
-const p =
-i/count;
+    const angle =
+    -Math.PI*.5
+    +
+    p*Math.PI;
 
+    const radius =
+    organicRadius(
+      form,
+      angle,
+      time
+    )
+    *
+    scale;
 
-const angle =
--Math.PI*.5
-+
-p*Math.PI;
+    const x =
+    Math.cos(angle)
+    *
+    radius
+    *
+    form.stretch;
 
+    const y =
+    Math.sin(angle)
+    *
+    radius;
 
-const radius =
-organicRadius(
-form,
-angle,
-time
-)
-*
-scale;
+    left.push({
 
+      x:
+      cx-x,
 
-const x =
-Math.cos(angle)
-*
-radius
-*
-form.stretch;
+      y:
+      cy+y
 
+    });
 
-const y =
-Math.sin(angle)
-*
-radius;
+  }
 
-
-left.push({
-
-x:
-cx-x,
-
-y:
-cy+y
-
-});
+  return {
+    cx,
+    cy,
+    left
+  };
 
 }
 
 
-/*
-asymmetry only in TRAUM 2
-*/
+/* =========================================================
+   DRAW MIRRORED SHAPE
+   ========================================================= */
 
-const asymmetry =
-state.level===2
-?
-Math.sin(
-time*.00041
-+
-form.phase
-)
-*
-12
-:
-0;
-
-
-rCtx.beginPath();
-
-
-rCtx.moveTo(
-cx,
-cy-form.radius*.12
-);
-
-
-for(
-const point
-of
-left
+function drawShape(
+  form,
+  time,
+  scale,
+  alphaScale,
+  toneOffset=0
 ){
 
-rCtx.lineTo(
-point.x,
-point.y
-);
+  const data =
+  buildBlotPoints(
+    form,
+    time,
+    scale
+  );
+
+  const cx =
+  data.cx;
+
+  const cy =
+  data.cy;
+
+  const left =
+  data.left;
+
+  const asymmetry =
+  state.level===2
+  ?
+  Math.sin(
+    time*.00006
+    +
+    form.phase
+  )
+  *
+  7
+  :
+  0;
+
+  rCtx.beginPath();
+
+  rCtx.moveTo(
+    cx,
+    cy-form.radius*.12*scale
+  );
+
+  for(
+    const point
+    of
+    left
+  ){
+
+    rCtx.lineTo(
+      point.x,
+      point.y
+    );
+
+  }
+
+  for(
+    let i=left.length-1;
+    i>=0;
+    i--
+  ){
+
+    const point =
+    left[i];
+
+    const mirroredX =
+    cx
+    +
+    (
+      cx-point.x
+    )
+    +
+    asymmetry;
+
+    rCtx.lineTo(
+      mirroredX,
+      point.y
+    );
+
+  }
+
+  rCtx.closePath();
+
+  const tone =
+  Math.max(
+    20,
+    Math.min(
+      240,
+      form.tone
+      +
+      toneOffset
+    )
+  );
+
+  rCtx.fillStyle =
+  `rgba(
+    ${tone},
+    ${tone},
+    ${tone},
+    ${form.alpha*alphaScale}
+  )`;
+
+  rCtx.fill();
 
 }
 
 
-for(
-let i=left.length-1;
-i>=0;
-i--
+/* =========================================================
+   DRAW ONE COMPLEX BLOT
+   ========================================================= */
+
+function drawComplexBlot(
+  form,
+  time
 ){
 
-const point =
-left[i];
+  /*
+  broad outer haze
+  */
 
+  drawShape(
+    form,
+    time,
+    1.18,
+    .28,
+    30
+  );
 
-const mirroredX =
-cx
-+
-(
-cx-point.x
-)
-+
-asymmetry;
+  /*
+  main body
+  */
 
+  drawShape(
+    form,
+    time,
+    1.0,
+    1.0,
+    0
+  );
 
-rCtx.lineTo(
-mirroredX,
-point.y
-);
+  /*
+  middle grey
+  */
+
+  drawShape(
+    form,
+    time+8000,
+    .78,
+    .55,
+    -35
+  );
+
+  /*
+  darker core
+  */
+
+  drawShape(
+    form,
+    time+15000,
+    .55,
+    .38,
+    -90
+  );
+
+  /*
+  very faint internal dream
+  */
+
+  if(
+    state.level>=1
+    &&
+    form.nested
+  ){
+
+    drawShape(
+      form,
+      time+23000,
+      .34,
+      .26,
+      45
+    );
+
+  }
 
 }
 
 
-rCtx.closePath();
+/* =========================================================
+   CENTRAL NESTED RORSCHACH
+   ========================================================= */
 
-
-rCtx.fillStyle =
-`rgba(
-255,
-255,
-255,
-${form.alpha*alphaScale}
-)`;
-
-
-rCtx.fill();
-
-
-/*
-dream inside dream
-*/
-
-if(
-form.nested &&
-state.level>=1
+function drawNestedDream(
+  time
 ){
 
-rCtx.save();
+  if(
+    state.level<1
+    ||
+    !forms.length
+  ){
 
+    return;
 
-rCtx.translate(
-cx,
-cy
-);
+  }
 
+  rCtx.save();
 
-rCtx.scale(
-.62,
-.62
-);
+  rCtx.translate(
+    RW*.5,
+    RH*.5
+  );
 
+  const breathe =
+  .70
+  +
+  Math.sin(
+    time*.000025
+  )
+  *
+  .04;
 
-rCtx.translate(
--cx,
--cy
-);
+  rCtx.scale(
+    breathe,
+    breathe
+  );
 
+  rCtx.translate(
+    -RW*.5,
+    -RH*.5
+  );
 
-rCtx.fillStyle =
-`rgba(
-255,
-255,
-255,
-${form.alpha*.38}
-)`;
+  const limit =
+  Math.min(
+    state.level===1
+    ?
+    2
+    :
+    3,
+    forms.length
+  );
 
+  for(
+    let i=0;
+    i<limit;
+    i++
+  ){
 
-rCtx.fill();
+    drawShape(
+      forms[i],
+      time+30000,
+      .42,
+      .22,
+      20
+    );
 
+  }
 
-rCtx.restore();
-
-}
+  rCtx.restore();
 
 }
 
@@ -4084,232 +4124,155 @@ rCtx.restore();
 
 function drawRorschach(time){
 
-rCtx.fillStyle =
-state.level===0
-?
-"rgba(0,0,0,.065)"
-:
-state.level===1
-?
-"rgba(0,0,0,.055)"
-:
-"rgba(0,0,0,.045)";
+  /*
+  long persistence
+  */
+
+  rCtx.fillStyle =
+  "rgba(0,0,0,.022)";
+
+  rCtx.fillRect(
+    0,
+    0,
+    RW,
+    RH
+  );
 
 
-rCtx.fillRect(
-0,
-0,
-RW,
-RH
-);
+  /*
+  very subtle grey fog exposure
+  */
+
+  const bg =
+  4
+  +
+  (
+    Math.sin(
+      time*.000025
+    )
+    +
+    1
+  )
+  *
+  2;
+
+  rCtx.fillStyle =
+  `rgba(
+    ${bg},
+    ${bg},
+    ${bg},
+    .11
+  )`;
+
+  rCtx.fillRect(
+    0,
+    0,
+    RW,
+    RH
+  );
 
 
-/*
-breathing exposure
-*/
+  /*
+  soft screen blend
+  */
 
-const exposure =
-.008
-+
-(
-Math.sin(
-time*.00027
-)
-+
-1
-)
-*
-.006;
+  rCtx.globalCompositeOperation =
+  "screen";
 
 
-rCtx.fillStyle =
-`rgba(
-255,
-255,
-255,
-${exposure}
-)`;
+  for(
+    const form
+    of
+    forms
+  ){
+
+    drawComplexBlot(
+      form,
+      time
+    );
+
+  }
 
 
-rCtx.fillRect(
-0,
-0,
-RW,
-RH
-);
+  drawNestedDream(
+    time
+  );
 
 
-rCtx.globalCompositeOperation =
-"screen";
+  rCtx.globalCompositeOperation =
+  "source-over";
 
 
-for(
-const form
-of
-forms
-){
+  /*
+  central fold
+  */
 
-drawMirrorBlot(
-form,
-time
-);
+  const fold =
+  rCtx.createLinearGradient(
+    RW*.43,
+    0,
+    RW*.57,
+    0
+  );
 
-}
+  fold.addColorStop(
+    0,
+    "rgba(0,0,0,0)"
+  );
 
+  fold.addColorStop(
+    .5,
+    state.level===2
+    ?
+    "rgba(200,200,200,.025)"
+    :
+    "rgba(180,180,180,.016)"
+  );
 
-/*
-nested center world
-*/
+  fold.addColorStop(
+    1,
+    "rgba(0,0,0,0)"
+  );
 
-if(
-state.level>=1
-){
+  rCtx.fillStyle =
+  fold;
 
-rCtx.save();
-
-
-rCtx.translate(
-RW*.5,
-RH*.5
-);
-
-
-const pulse =
-.72
-+
-Math.sin(
-time*.00018
-)
-*
-.10;
-
-
-rCtx.scale(
-pulse,
-pulse
-);
+  rCtx.fillRect(
+    RW*.39,
+    0,
+    RW*.22,
+    RH
+  );
 
 
-rCtx.translate(
--RW*.5,
--RH*.5
-);
-
-
-for(
-let i=0;
-i<Math.min(
-3,
-forms.length
-);
-i++
-){
-
-drawMirrorBlot(
-forms[i],
-time+5000,
-.52,
-.42
-);
-
-}
-
-
-rCtx.restore();
-
-}
-
-
-rCtx.globalCompositeOperation =
-"source-over";
-
-
-/*
-central fold
-*/
-
-const fold =
-rCtx.createLinearGradient(
-RW*.43,
-0,
-RW*.57,
-0
-);
-
-
-fold.addColorStop(
-0,
-"rgba(0,0,0,0)"
-);
-
-
-fold.addColorStop(
-.5,
-state.level===2
-?
-"rgba(255,255,255,.055)"
-:
-"rgba(255,255,255,.028)"
-);
-
-
-fold.addColorStop(
-1,
-"rgba(0,0,0,0)"
-);
-
-
-rCtx.fillStyle =
-fold;
-
-
-rCtx.fillRect(
-RW*.39,
-0,
-RW*.22,
-RH
-);
-
-
-requestAnimationFrame(
-drawRorschach
-);
+  requestAnimationFrame(
+    drawRorschach
+  );
 
 }
 
 
 /* =========================================================
-   MORPH REBIRTH
+   VERY SLOW STRUCTURAL CHANGE
    ========================================================= */
 
 setInterval(
-()=>{
+  ()=>{
 
-morphSeed++;
+    /*
+    structure changes very rarely
+    */
 
-generateForms();
+    if(
+      Math.random()>.60
+    ){
 
+      createForms();
 
-if(
-Math.random()>.62
-){
+    }
 
-ghost(
-state.level===0
-?
-"ANOTHER FORM"
-:
-state.level===1
-?
-"DREAM WITHIN DREAM"
-:
-"IT REMEMBERS"
-);
-
-}
-
-},
-17000
+  },
+  48000
 );
 
 
@@ -4318,33 +4281,27 @@ state.level===1
    ========================================================= */
 
 window.addEventListener(
-"resize",
-resizeRorschach
+  "resize",
+  resizeRorschach
 );
 
-
 resizeRorschach();
-
 
 rCtx.fillStyle =
 "#000";
 
-
 rCtx.fillRect(
-0,
-0,
-RW,
-RH
+  0,
+  0,
+  RW,
+  RH
 );
-
 
 requestAnimationFrame(
-drawRorschach
+  drawRorschach
 );
 
-
 renderStart();
-
 
 </script>
 
