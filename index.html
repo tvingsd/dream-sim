@@ -14,7 +14,6 @@
 
 <title>TRAUM SIM — PATCHLAB 2026</title>
 
-
 <style>
 
 /* =========================================================
@@ -29,11 +28,36 @@
 
   --muted:rgba(255,255,255,.48);
 
-  --line:rgba(255,255,255,.18);
-
   --shadow:
     0 1px 2px rgba(0,0,0,.96),
     0 4px 24px rgba(0,0,0,.48);
+
+  /*
+  DREAM SUN
+  */
+
+  --sun-r:220;
+  --sun-g:220;
+  --sun-b:220;
+
+  --sun-x:13%;
+  --sun-y:56%;
+
+  --sun-scale:1;
+
+  --sun-opacity:.55;
+
+
+  /*
+  MOON
+  */
+
+  --moon-x:86%;
+  --moon-y:45%;
+
+  --moon-scale:.62;
+
+  --moon-opacity:0;
 
 }
 
@@ -71,39 +95,13 @@ body{
 }
 
 body{
-
-  min-height:
-    calc(
-      var(--vh) * 100
-    );
-
+  min-height:calc(var(--vh) * 100);
 }
 
 
-
 /* =========================================================
-   =========================================================
    DREAM LANDSCAPE
-   =========================================================
    ========================================================= */
-
-
-/*
-NO SVG.
-NO animated blur.
-NO animated filter.
-NO canvas.
-NO procedural redraw.
-
-Only:
-opacity
-transform
-static blur
-gradients
-
-This should be much safer in Safari.
-*/
-
 
 #dreamLandscape{
 
@@ -122,9 +120,8 @@ This should be much safer in Safari.
 }
 
 
-
 /* =========================================================
-   NIGHT SKY
+   SKY
    ========================================================= */
 
 .sky{
@@ -136,18 +133,10 @@ This should be much safer in Safari.
   background:
 
     radial-gradient(
-      ellipse at 24% 58%,
-      rgba(255,255,255,.18) 0%,
-      rgba(255,255,255,.075) 10%,
-      rgba(255,255,255,.022) 27%,
-      rgba(0,0,0,0) 52%
-    ),
-
-    radial-gradient(
-      ellipse at 70% 30%,
-      rgba(255,255,255,.035) 0%,
-      rgba(255,255,255,.012) 30%,
-      rgba(0,0,0,0) 58%
+      ellipse at 72% 30%,
+      rgba(255,255,255,.032),
+      rgba(255,255,255,.010) 30%,
+      transparent 58%
     ),
 
     linear-gradient(
@@ -158,11 +147,9 @@ This should be much safer in Safari.
       #020202 100%
     );
 
-  transform-origin:50% 60%;
-
   animation:
     skyDream
-    190s
+    210s
     ease-in-out
     infinite
     alternate;
@@ -170,60 +157,77 @@ This should be much safer in Safari.
 }
 
 
-
 /* =========================================================
-   SUN / DISTANT LIGHT
+   SUN SYSTEM
    ========================================================= */
 
-.sunGlow{
+#dreamSun{
 
   position:absolute;
 
-  left:13%;
-
-  top:50%;
+  left:var(--sun-x);
+  top:var(--sun-y);
 
   width:
     clamp(
       220px,
-      30vw,
-      540px
+      28vw,
+      560px
     );
 
   aspect-ratio:1;
 
-  border-radius:50%;
+  z-index:3;
+
+  opacity:var(--sun-opacity);
 
   transform:
-    translate(
-      -50%,
-      -50%
-    );
+    translate(-50%,-50%)
+    scale(var(--sun-scale));
+
+  transition:
+    left 9s cubic-bezier(.22,.61,.36,1),
+    top 9s cubic-bezier(.22,.61,.36,1),
+    transform 9s cubic-bezier(.22,.61,.36,1),
+    opacity 5s ease;
+
+  will-change:
+    left,
+    top,
+    transform,
+    opacity;
+
+}
+
+
+.sunHalo{
+
+  position:absolute;
+
+  inset:0;
+
+  border-radius:50%;
 
   background:
 
     radial-gradient(
       circle,
-
-      rgba(255,255,255,.52) 0%,
-
-      rgba(255,255,255,.24) 6%,
-
-      rgba(255,255,255,.09) 17%,
-
-      rgba(255,255,255,.025) 34%,
-
-      rgba(255,255,255,0) 68%
+      rgba(var(--sun-r),var(--sun-g),var(--sun-b),.50) 0%,
+      rgba(var(--sun-r),var(--sun-g),var(--sun-b),.28) 8%,
+      rgba(var(--sun-r),var(--sun-g),var(--sun-b),.13) 18%,
+      rgba(var(--sun-r),var(--sun-g),var(--sun-b),.050) 34%,
+      rgba(var(--sun-r),var(--sun-g),var(--sun-b),0) 68%
     );
 
   filter:
-    blur(16px);
+    blur(15px);
 
-  opacity:.70;
+  transition:
+    background 5s ease;
 
   animation:
-    sunDream
-    167s
+    haloBreath
+    58s
     ease-in-out
     infinite
     alternate;
@@ -231,48 +235,94 @@ This should be much safer in Safari.
 }
 
 
-.sunCore{
+.sunDisk{
 
   position:absolute;
 
-  left:13%;
+  left:50%;
+  top:50%;
 
-  top:56%;
-
-  width:
-    clamp(
-      20px,
-      2.7vw,
-      46px
-    );
-
+  width:8%;
   aspect-ratio:1;
 
   border-radius:50%;
 
   transform:
-    translate(
-      -50%,
-      -50%
-    );
+    translate(-50%,-50%);
 
   background:
-    rgba(255,255,255,.68);
+    rgb(
+      var(--sun-r),
+      var(--sun-g),
+      var(--sun-b)
+    );
+
+  opacity:.56;
 
   filter:
-    blur(5px);
+    blur(4px);
 
-  opacity:.55;
+  box-shadow:
+    0 0 24px
+    rgba(var(--sun-r),var(--sun-g),var(--sun-b),.18);
 
-  animation:
-    sunCoreDream
-    137s
-    ease-in-out
-    infinite
-    alternate;
+  transition:
+    background 5s ease,
+    box-shadow 5s ease;
 
 }
 
+
+/* =========================================================
+   MOON
+   ========================================================= */
+
+#dreamMoon{
+
+  position:absolute;
+
+  left:var(--moon-x);
+  top:var(--moon-y);
+
+  width:
+    clamp(
+      95px,
+      14vw,
+      260px
+    );
+
+  aspect-ratio:1;
+
+  z-index:4;
+
+  border-radius:50%;
+
+  background:#000;
+
+  opacity:
+    var(--moon-opacity);
+
+  transform:
+    translate(-50%,-50%)
+    scale(var(--moon-scale));
+
+  box-shadow:
+    0 0 1px rgba(255,255,255,.08),
+    inset 0 0 10px rgba(255,255,255,.015);
+
+  transition:
+    left 10s cubic-bezier(.22,.61,.36,1),
+    top 10s cubic-bezier(.22,.61,.36,1),
+    transform 10s cubic-bezier(.22,.61,.36,1),
+    opacity 5s ease;
+
+  will-change:
+    left,
+    top,
+    transform,
+    opacity;
+
+}
 
 
 /* =========================================================
@@ -294,38 +344,38 @@ This should be much safer in Safari.
 
     radial-gradient(
       ellipse at 8% 100%,
-      rgba(255,255,255,.055),
+      rgba(255,255,255,.045),
       transparent 55%
     ),
 
     radial-gradient(
       ellipse at 26% 100%,
-      rgba(255,255,255,.035),
+      rgba(255,255,255,.03),
       transparent 56%
     ),
 
     radial-gradient(
       ellipse at 47% 100%,
-      rgba(255,255,255,.07),
+      rgba(255,255,255,.055),
       transparent 54%
     ),
 
     radial-gradient(
       ellipse at 70% 100%,
-      rgba(255,255,255,.045),
+      rgba(255,255,255,.04),
       transparent 58%
     ),
 
     radial-gradient(
       ellipse at 92% 100%,
-      rgba(255,255,255,.035),
+      rgba(255,255,255,.03),
       transparent 57%
     );
 
   filter:
     blur(18px);
 
-  opacity:.70;
+  opacity:.64;
 
   animation:
     horizonFarDream
@@ -337,9 +387,8 @@ This should be much safer in Safari.
 }
 
 
-
 /* =========================================================
-   DREAM GROUND
+   GROUND
    ========================================================= */
 
 .ground{
@@ -357,26 +406,20 @@ This should be much safer in Safari.
 
     radial-gradient(
       ellipse at 12% 18%,
-      rgba(255,255,255,.040),
+      rgba(255,255,255,.034),
       transparent 34%
     ),
 
     radial-gradient(
       ellipse at 38% 10%,
-      rgba(255,255,255,.028),
+      rgba(255,255,255,.025),
       transparent 37%
     ),
 
     radial-gradient(
       ellipse at 67% 16%,
-      rgba(255,255,255,.045),
+      rgba(255,255,255,.039),
       transparent 32%
-    ),
-
-    radial-gradient(
-      ellipse at 91% 14%,
-      rgba(255,255,255,.022),
-      transparent 35%
     ),
 
     linear-gradient(
@@ -389,8 +432,6 @@ This should be much safer in Safari.
   filter:
     blur(11px);
 
-  transform-origin:50% 30%;
-
   animation:
     groundDream
     218s
@@ -399,7 +440,6 @@ This should be much safer in Safari.
     alternate;
 
 }
-
 
 
 /* =========================================================
@@ -431,7 +471,7 @@ This should be much safer in Safari.
   transform:
     translateX(-50%);
 
-  opacity:.66;
+  opacity:.64;
 
   filter:
     blur(4px);
@@ -488,7 +528,8 @@ This should be much safer in Safari.
   background:
     rgba(5,5,5,.95);
 
-  border-radius:99px;
+  border-radius:
+    99px;
 
 }
 
@@ -539,8 +580,7 @@ This should be much safer in Safari.
 
   position:absolute;
 
-  border-radius:
-    50%;
+  border-radius:50%;
 
   background:
 
@@ -599,7 +639,6 @@ This should be much safer in Safari.
 }
 
 
-
 /* =========================================================
    HOUSE
    ========================================================= */
@@ -621,7 +660,7 @@ This should be much safer in Safari.
 
   aspect-ratio:1.22;
 
-  opacity:.60;
+  opacity:.58;
 
   filter:
     blur(3.5px);
@@ -653,9 +692,6 @@ This should be much safer in Safari.
   background:
     rgba(8,8,8,.95);
 
-  border-radius:
-    3px 3px 1px 1px;
-
 }
 
 
@@ -664,11 +700,9 @@ This should be much safer in Safari.
   position:absolute;
 
   left:4%;
-
   top:3%;
 
   width:92%;
-
   height:51%;
 
   background:
@@ -696,13 +730,15 @@ This should be much safer in Safari.
   width:12%;
   height:22%;
 
-  border-radius:50% 50% 10% 10%;
+  border-radius:
+    50% 50% 10% 10%;
 
   background:
-    rgba(255,255,255,.17);
+    rgba(255,255,255,.15);
 
   box-shadow:
-    0 0 18px rgba(255,255,255,.08);
+    0 0 18px
+    rgba(255,255,255,.07);
 
 }
 
@@ -717,10 +753,8 @@ This should be much safer in Safari.
 }
 
 
-
 /* =========================================================
-   DISTANT SECOND HOUSE
-   barely visible
+   SECOND DISTANT HOUSE
    ========================================================= */
 
 .houseGhost{
@@ -745,7 +779,7 @@ This should be much safer in Safari.
       90px
     );
 
-  opacity:.08;
+  opacity:.07;
 
   filter:
     blur(8px);
@@ -772,7 +806,6 @@ This should be much safer in Safari.
 }
 
 
-
 /* =========================================================
    FOG
    ========================================================= */
@@ -793,15 +826,13 @@ This should be much safer in Safari.
 
     radial-gradient(
       ellipse,
-      rgba(255,255,255,.052) 0%,
-      rgba(255,255,255,.022) 40%,
+      rgba(255,255,255,.046) 0%,
+      rgba(255,255,255,.019) 40%,
       rgba(255,255,255,0) 75%
     );
 
   filter:
     blur(20px);
-
-  opacity:.58;
 
 }
 
@@ -809,6 +840,8 @@ This should be much safer in Safari.
 .fog.one{
 
   bottom:15%;
+
+  opacity:.58;
 
   animation:
     fogOneDream
@@ -824,7 +857,7 @@ This should be much safer in Safari.
 
   bottom:32%;
 
-  opacity:.35;
+  opacity:.32;
 
   animation:
     fogTwoDream
@@ -842,7 +875,7 @@ This should be much safer in Safari.
 
   height:17%;
 
-  opacity:.18;
+  opacity:.16;
 
   animation:
     fogThreeDream
@@ -854,9 +887,8 @@ This should be much safer in Safari.
 }
 
 
-
 /* =========================================================
-   SKY VEILS
+   CLOUD VEILS
    ========================================================= */
 
 .cloudVeil{
@@ -864,6 +896,7 @@ This should be much safer in Safari.
   position:absolute;
 
   width:88%;
+
   height:33%;
 
   border-radius:50%;
@@ -872,8 +905,8 @@ This should be much safer in Safari.
 
     radial-gradient(
       ellipse,
-      rgba(255,255,255,.035),
-      rgba(255,255,255,.012) 38%,
+      rgba(255,255,255,.030),
+      rgba(255,255,255,.010) 38%,
       transparent 70%
     );
 
@@ -905,7 +938,7 @@ This should be much safer in Safari.
 
   top:22%;
 
-  opacity:.57;
+  opacity:.52;
 
   animation:
     cloudTwoDream
@@ -917,9 +950,8 @@ This should be much safer in Safari.
 }
 
 
-
 /* =========================================================
-   STRANGE LIGHT / SURREAL TRACE
+   STRANGE LIGHT
    ========================================================= */
 
 .strangeLight{
@@ -944,22 +976,21 @@ This should be much safer in Safari.
       360px
     );
 
-  border-radius:
-    50%;
+  border-radius:50%;
 
   background:
 
     radial-gradient(
       ellipse,
-      rgba(255,255,255,.045),
-      rgba(255,255,255,.014) 43%,
+      rgba(255,255,255,.038),
+      rgba(255,255,255,.012) 43%,
       transparent 72%
     );
 
   filter:
     blur(25px);
 
-  opacity:.42;
+  opacity:.38;
 
   transform:
     rotate(-9deg);
@@ -974,7 +1005,6 @@ This should be much safer in Safari.
 }
 
 
-
 /* =========================================================
    VIGNETTE
    ========================================================= */
@@ -985,26 +1015,23 @@ This should be much safer in Safari.
 
   inset:0;
 
+  z-index:8;
+
   background:
 
     radial-gradient(
       ellipse at 50% 48%,
-
       rgba(0,0,0,0) 0%,
-
       rgba(0,0,0,.06) 37%,
-
       rgba(0,0,0,.34) 74%,
-
       rgba(0,0,0,.82) 100%
     );
 
 }
 
 
-
 /* =========================================================
-   TEXT READABILITY
+   READABILITY
    ========================================================= */
 
 #readingShadow{
@@ -1013,23 +1040,19 @@ This should be much safer in Safari.
 
   inset:0;
 
-  z-index:2;
+  z-index:9;
 
   pointer-events:none;
 
-  opacity:.17;
+  opacity:.16;
 
   background:
 
     radial-gradient(
       ellipse at 50% 49%,
-
       rgba(0,0,0,.08) 0%,
-
       rgba(0,0,0,.20) 40%,
-
       rgba(0,0,0,.48) 82%,
-
       rgba(0,0,0,.67) 100%
     );
 
@@ -1048,7 +1071,6 @@ body.questionMode #readingShadow{
 }
 
 
-
 /* =========================================================
    STATIC GRAIN
    ========================================================= */
@@ -1059,17 +1081,15 @@ body.questionMode #readingShadow{
 
   inset:0;
 
-  z-index:6;
+  z-index:10;
 
   pointer-events:none;
 
-  opacity:.018;
+  opacity:.015;
 
-  background-image:
-
-    url(
-      "data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.88' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"
-    );
+  background-image:url(
+    "data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.88' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"
+  );
 
 }
 
@@ -1084,7 +1104,7 @@ body.questionMode #readingShadow{
 
   inset:0;
 
-  z-index:5;
+  z-index:11;
 
   pointer-events:none;
 
@@ -1132,7 +1152,6 @@ body.questionMode #readingShadow{
     rgba(255,255,255,.032);
 
 }
-
 
 
 /* =========================================================
@@ -1227,9 +1246,8 @@ body.questionMode #readingShadow{
 }
 
 
-
 /* =========================================================
-   MAIN SCREEN
+   SCREEN
    ========================================================= */
 
 #screenWrap{
@@ -1246,11 +1264,6 @@ body.questionMode #readingShadow{
 
 }
 
-
-/*
-Subtle black readability field.
-NO blur animation.
-*/
 
 #screenWrap::before{
 
@@ -1270,13 +1283,9 @@ NO blur animation.
 
     radial-gradient(
       ellipse,
-
       rgba(0,0,0,.58) 0%,
-
       rgba(0,0,0,.38) 45%,
-
       rgba(0,0,0,.14) 67%,
-
       rgba(0,0,0,0) 83%
     );
 
@@ -1305,7 +1314,6 @@ NO blur animation.
   opacity:0;
 
 }
-
 
 
 /* =========================================================
@@ -1346,8 +1354,7 @@ h1{
 
   font-weight:400;
 
-  text-shadow:
-    var(--shadow);
+  text-shadow:var(--shadow);
 
 }
 
@@ -1369,8 +1376,7 @@ h2{
 
   font-weight:400;
 
-  text-shadow:
-    var(--shadow);
+  text-shadow:var(--shadow);
 
 }
 
@@ -1392,8 +1398,7 @@ h2{
 
   letter-spacing:-.015em;
 
-  text-shadow:
-    var(--shadow);
+  text-shadow:var(--shadow);
 
 }
 
@@ -1411,8 +1416,7 @@ h2{
   color:
     rgba(255,255,255,.53);
 
-  text-shadow:
-    var(--shadow);
+  text-shadow:var(--shadow);
 
 }
 
@@ -1430,8 +1434,7 @@ h2{
   color:
     rgba(255,255,255,.56);
 
-  text-shadow:
-    var(--shadow);
+  text-shadow:var(--shadow);
 
 }
 
@@ -1451,11 +1454,9 @@ h2{
   color:
     rgba(255,255,255,.27);
 
-  text-shadow:
-    var(--shadow);
+  text-shadow:var(--shadow);
 
 }
-
 
 
 /* =========================================================
@@ -1496,8 +1497,7 @@ button{
 
   cursor:pointer;
 
-  text-shadow:
-    var(--shadow);
+  text-shadow:var(--shadow);
 
 }
 
@@ -1522,7 +1522,6 @@ button:hover{
   text-shadow:none;
 
 }
-
 
 
 /* =========================================================
@@ -1553,8 +1552,7 @@ input{
 
   border-radius:0;
 
-  text-shadow:
-    var(--shadow);
+  text-shadow:var(--shadow);
 
 }
 
@@ -1566,9 +1564,7 @@ textarea{
   margin-top:30px;
 
   padding:
-    16px
-    0
-    20px;
+    16px 0 20px;
 
   resize:none;
 
@@ -1589,9 +1585,7 @@ input{
   margin-top:34px;
 
   padding:
-    18px
-    0
-    20px;
+    18px 0 20px;
 
   font-size:
     clamp(
@@ -1612,7 +1606,6 @@ input::placeholder{
     rgba(255,255,255,.17);
 
 }
-
 
 
 /* =========================================================
@@ -1662,8 +1655,7 @@ input::placeholder{
   min-width:150px;
 
   padding:
-    17px
-    20px;
+    17px 20px;
 
   border:
     1px solid
@@ -1706,7 +1698,6 @@ input::placeholder{
     rgba(255,255,255,.35);
 
 }
-
 
 
 /* =========================================================
@@ -1818,7 +1809,6 @@ input::placeholder{
 }
 
 
-
 /* =========================================================
    FINAL
    ========================================================= */
@@ -1845,21 +1835,11 @@ input::placeholder{
 
     radial-gradient(
       circle at 50% 50%,
-
-      rgba(255,255,255,1)
-      0%,
-
-      rgba(255,255,255,.90)
-      17%,
-
-      rgba(255,255,255,.48)
-      37%,
-
-      rgba(255,255,255,.08)
-      58%,
-
-      rgba(255,255,255,0)
-      74%
+      rgba(255,255,255,1) 0%,
+      rgba(255,255,255,.90) 17%,
+      rgba(255,255,255,.48) 37%,
+      rgba(255,255,255,.08) 58%,
+      rgba(255,255,255,0) 74%
     );
 
 }
@@ -2052,9 +2032,7 @@ input::placeholder{
   height:1px;
 
   margin:
-    42px
-    0
-    24px;
+    42px 0 24px;
 
   background:
     rgba(255,255,255,.21);
@@ -2082,150 +2060,49 @@ input::placeholder{
 }
 
 
-
 /* =========================================================
-   =========================================================
-   DREAM ANIMATIONS
-   ONLY TRANSFORM + OPACITY
-   =========================================================
+   ANIMATIONS
    ========================================================= */
 
 @keyframes skyDream{
 
   0%{
-
     transform:
-      translate3d(
-        -1%,
-        0,
-        0
-      )
+      translate3d(-1%,0,0)
       scale(1.02);
 
     opacity:.91;
-
   }
 
-
-  45%{
-
+  50%{
     transform:
-      translate3d(
-        .4%,
-        -.6%,
-        0
-      )
+      translate3d(.4%,-.6%,0)
       scale(1.035);
 
     opacity:1;
-
   }
 
-
   100%{
-
     transform:
-      translate3d(
-        1.1%,
-        .4%,
-        0
-      )
+      translate3d(1.1%,.4%,0)
       scale(1.055);
 
     opacity:.94;
-
   }
 
 }
 
 
-@keyframes sunDream{
+@keyframes haloBreath{
 
   0%{
-
-    transform:
-      translate(
-        -50%,
-        -50%
-      )
-      scale(.92);
-
-    opacity:.48;
-
+    transform:scale(.97);
+    opacity:.82;
   }
-
-
-  48%{
-
-    transform:
-      translate(
-        -49%,
-        -52%
-      )
-      scale(1.08);
-
-    opacity:.74;
-
-  }
-
 
   100%{
-
-    transform:
-      translate(
-        -52%,
-        -49%
-      )
-      scale(.98);
-
-    opacity:.57;
-
-  }
-
-}
-
-
-@keyframes sunCoreDream{
-
-  0%{
-
-    transform:
-      translate(
-        -50%,
-        -50%
-      )
-      scale(.94);
-
-    opacity:.38;
-
-  }
-
-
-  60%{
-
-    transform:
-      translate(
-        -50%,
-        -51%
-      )
-      scale(1.04);
-
-    opacity:.61;
-
-  }
-
-
-  100%{
-
-    transform:
-      translate(
-        -50%,
-        -50%
-      )
-      scale(.96);
-
-    opacity:.43;
-
+    transform:scale(1.08);
+    opacity:1;
   }
 
 }
@@ -2234,44 +2111,24 @@ input::placeholder{
 @keyframes horizonFarDream{
 
   0%{
-
     transform:
-      translate3d(
-        -1.5%,
-        0,
-        0
-      )
+      translate3d(-1.5%,0,0)
       scaleX(.98)
       scaleY(1.04);
-
   }
-
 
   50%{
-
     transform:
-      translate3d(
-        .5%,
-        1%,
-        0
-      )
+      translate3d(.5%,1%,0)
       scaleX(1.04)
       scaleY(.97);
-
   }
 
-
   100%{
-
     transform:
-      translate3d(
-        1.6%,
-        -.6%,
-        0
-      )
+      translate3d(1.6%,-.6%,0)
       scaleX(.99)
       scaleY(1.03);
-
   }
 
 }
@@ -2280,44 +2137,24 @@ input::placeholder{
 @keyframes groundDream{
 
   0%{
-
     transform:
-      translate3d(
-        -1%,
-        0,
-        0
-      )
+      translate3d(-1%,0,0)
       scaleX(1.02)
       scaleY(1.02);
-
   }
-
 
   50%{
-
     transform:
-      translate3d(
-        1%,
-        -.7%,
-        0
-      )
+      translate3d(1%,-.7%,0)
       scaleX(.985)
       scaleY(1.055);
-
   }
 
-
   100%{
-
     transform:
-      translate3d(
-        -.4%,
-        .5%,
-        0
-      )
+      translate3d(-.4%,.5%,0)
       scaleX(1.04)
       scaleY(.98);
-
   }
 
 }
@@ -2326,38 +2163,30 @@ input::placeholder{
 @keyframes treeDream{
 
   0%{
-
     transform:
       translateX(-50%)
       rotate(-.45deg)
       scale(.985);
 
     opacity:.57;
-
   }
 
-
   50%{
-
     transform:
       translateX(-50%)
       rotate(.35deg)
       scale(1.015);
 
     opacity:.70;
-
   }
 
-
   100%{
-
     transform:
       translateX(-50%)
       rotate(-.15deg)
       scale(.995);
 
     opacity:.61;
-
   }
 
 }
@@ -2366,47 +2195,27 @@ input::placeholder{
 @keyframes houseDream{
 
   0%{
-
     transform:
-      translate3d(
-        -1px,
-        1px,
-        0
-      )
+      translate3d(-1px,1px,0)
       scale(.98);
 
     opacity:.50;
-
   }
 
-
   51%{
-
     transform:
-      translate3d(
-        2px,
-        -2px,
-        0
-      )
+      translate3d(2px,-2px,0)
       scale(1.025);
 
     opacity:.67;
-
   }
 
-
   100%{
-
     transform:
-      translate3d(
-        -2px,
-        0,
-        0
-      )
+      translate3d(-2px,0,0)
       scale(.99);
 
     opacity:.56;
-
   }
 
 }
@@ -2415,47 +2224,27 @@ input::placeholder{
 @keyframes ghostHouseDream{
 
   0%{
-
     transform:
-      translate3d(
-        0,
-        3px,
-        0
-      )
+      translate3d(0,3px,0)
       scale(.92);
 
     opacity:.035;
-
   }
 
-
   54%{
-
     transform:
-      translate3d(
-        -5px,
-        -3px,
-        0
-      )
+      translate3d(-5px,-3px,0)
       scale(1.10);
 
     opacity:.11;
-
   }
 
-
   100%{
-
     transform:
-      translate3d(
-        2px,
-        1px,
-        0
-      )
+      translate3d(2px,1px,0)
       scale(.97);
 
     opacity:.055;
-
   }
 
 }
@@ -2464,32 +2253,19 @@ input::placeholder{
 @keyframes fogOneDream{
 
   0%{
-
     transform:
-      translate3d(
-        -5%,
-        0,
-        0
-      )
+      translate3d(-5%,0,0)
       scaleX(1.03);
 
     opacity:.41;
-
   }
 
-
   100%{
-
     transform:
-      translate3d(
-        6%,
-        -2%,
-        0
-      )
+      translate3d(6%,-2%,0)
       scaleX(.96);
 
     opacity:.66;
-
   }
 
 }
@@ -2498,28 +2274,15 @@ input::placeholder{
 @keyframes fogTwoDream{
 
   0%{
-
     transform:
-      translate3d(
-        5%,
-        -1%,
-        0
-      )
+      translate3d(5%,-1%,0)
       scaleX(.96);
-
   }
 
-
   100%{
-
     transform:
-      translate3d(
-        -6%,
-        1%,
-        0
-      )
+      translate3d(-6%,1%,0)
       scaleX(1.06);
-
   }
 
 }
@@ -2528,28 +2291,15 @@ input::placeholder{
 @keyframes fogThreeDream{
 
   0%{
-
     transform:
-      translate3d(
-        -3%,
-        0,
-        0
-      )
+      translate3d(-3%,0,0)
       scale(1);
-
   }
 
-
   100%{
-
     transform:
-      translate3d(
-        4%,
-        2%,
-        0
-      )
+      translate3d(4%,2%,0)
       scale(1.04);
-
   }
 
 }
@@ -2558,32 +2308,19 @@ input::placeholder{
 @keyframes cloudOneDream{
 
   from{
-
     transform:
-      translate3d(
-        -2%,
-        0,
-        0
-      )
+      translate3d(-2%,0,0)
       scaleX(1.02);
 
     opacity:.45;
-
   }
 
-
   to{
-
     transform:
-      translate3d(
-        5%,
-        2%,
-        0
-      )
+      translate3d(5%,2%,0)
       scaleX(.96);
 
     opacity:.68;
-
   }
 
 }
@@ -2592,28 +2329,15 @@ input::placeholder{
 @keyframes cloudTwoDream{
 
   from{
-
     transform:
-      translate3d(
-        4%,
-        0,
-        0
-      )
+      translate3d(4%,0,0)
       scale(.98);
-
   }
 
-
   to{
-
     transform:
-      translate3d(
-        -4%,
-        -2%,
-        0
-      )
+      translate3d(-4%,-2%,0)
       scale(1.06);
-
   }
 
 }
@@ -2622,35 +2346,27 @@ input::placeholder{
 @keyframes strangeLightDream{
 
   0%{
-
     transform:
       rotate(-9deg)
       scale(.90);
 
     opacity:.19;
-
   }
 
-
   56%{
-
     transform:
       rotate(-7deg)
       scale(1.11);
 
     opacity:.48;
-
   }
 
-
   100%{
-
     transform:
       rotate(-10deg)
       scale(.98);
 
     opacity:.25;
-
   }
 
 }
@@ -2659,44 +2375,25 @@ input::placeholder{
 @keyframes ghostMove{
 
   0%{
-
     opacity:0;
 
     transform:
-      translate3d(
-        -1vw,
-        1vh,
-        0
-      );
-
+      translate3d(-1vw,1vh,0);
   }
-
 
   20%{
-
     opacity:1;
-
   }
-
 
   75%{
-
     opacity:.48;
-
   }
 
-
   100%{
-
     opacity:0;
 
     transform:
-      translate3d(
-        1.5vw,
-        -1vh,
-        0
-      );
-
+      translate3d(1.5vw,-1vh,0);
   }
 
 }
@@ -2726,39 +2423,22 @@ input::placeholder{
 @keyframes bloom{
 
   0%{
-
     opacity:0;
-
-    transform:
-      scale(.2);
-
+    transform:scale(.2);
   }
-
 
   42%{
-
     opacity:.14;
-
   }
-
 
   74%{
-
     opacity:.62;
-
-    transform:
-      scale(1);
-
+    transform:scale(1);
   }
 
-
   100%{
-
     opacity:1;
-
-    transform:
-      scale(1.9);
-
+    transform:scale(1.9);
   }
 
 }
@@ -2766,21 +2446,10 @@ input::placeholder{
 
 @keyframes whiteout{
 
-  0%{
-    opacity:0;
-  }
-
-  58%{
-    opacity:.05;
-  }
-
-  82%{
-    opacity:.34;
-  }
-
-  100%{
-    opacity:1;
-  }
+  0%{opacity:0;}
+  58%{opacity:.05;}
+  82%{opacity:.34;}
+  100%{opacity:1;}
 
 }
 
@@ -2788,26 +2457,16 @@ input::placeholder{
 @keyframes finalIn{
 
   0%{
-
     opacity:0;
-
-    transform:
-      scale(1.01);
-
+    transform:scale(1.01);
   }
 
-
   100%{
-
     opacity:1;
-
-    transform:
-      scale(1);
-
+    transform:scale(1);
   }
 
 }
-
 
 
 /* =========================================================
@@ -2842,42 +2501,32 @@ input::placeholder{
 
   }
 
-
   h1{
-
     font-size:
       clamp(
         54px,
         19vw,
         84px
       );
-
   }
 
-
   h2{
-
     font-size:
       clamp(
         27px,
         8.4vw,
         43px
       );
-
   }
 
-
   .introText{
-
     font-size:
       clamp(
         19px,
         6vw,
         29px
       );
-
   }
-
 
   textarea{
 
@@ -2897,64 +2546,50 @@ input::placeholder{
 
   }
 
-
   .langs{
-
     margin-top:36px;
-
   }
-
 
   .langs button{
-
     height:70px;
-
     font-size:11px;
-
   }
-
 
   .actions{
-
     margin-top:24px;
-
   }
-
 
   .next{
-
     min-width:128px;
-
   }
-
 
   .tree{
-
     left:27%;
-
     bottom:27%;
-
-    opacity:.57;
-
   }
-
 
   .house{
-
     right:10%;
-
     bottom:33%;
-
   }
 
-
-  .sunGlow,
-  .sunCore{
-
-    left:8%;
-
+  #dreamSun{
+    width:
+      clamp(
+        180px,
+        50vw,
+        420px
+      );
   }
 
+  #dreamMoon{
+    width:
+      clamp(
+        70px,
+        23vw,
+        180px
+      );
+  }
 
   .finalGrid{
 
@@ -2970,36 +2605,22 @@ input::placeholder{
 
   }
 
-
   .logoBlock img{
-
-    width:
-      min(
-        52vw,
-        190px
-      );
-
+    width:min(52vw,190px);
   }
 
-
   #finalTitle{
-
     font-size:
       clamp(
         31px,
         9vw,
         46px
       );
-
   }
 
-
   .finalDetails{
-
     flex-direction:column;
-
     gap:8px;
-
   }
 
 }
@@ -3012,7 +2633,6 @@ input::placeholder{
 <body>
 
 
-
 <!-- ======================================================
      DREAM LANDSCAPE
      ====================================================== -->
@@ -3023,18 +2643,27 @@ input::placeholder{
   <div class="sky"></div>
 
 
-  <div class="sunGlow"></div>
+  <!-- SUN -->
 
-  <div class="sunCore"></div>
+  <div id="dreamSun">
+
+    <div class="sunHalo"></div>
+
+    <div class="sunDisk"></div>
+
+  </div>
+
+
+  <!-- MOON -->
+
+  <div id="dreamMoon"></div>
 
 
   <div class="cloudVeil one"></div>
 
   <div class="cloudVeil two"></div>
 
-
   <div class="strangeLight"></div>
-
 
   <div class="horizonFar"></div>
 
@@ -3098,17 +2727,11 @@ input::placeholder{
 </div>
 
 
-
-<!-- ======================================================
-     FOREGROUND ATMOSPHERE
-     ====================================================== -->
-
 <div id="readingShadow"></div>
 
 <div id="ghostLayer"></div>
 
 <div id="grain"></div>
-
 
 
 <!-- ======================================================
@@ -3117,25 +2740,19 @@ input::placeholder{
 
 <div id="dreamShift">
 
-
   <div class="dreamShiftWrap">
-
 
     <div id="dreamShiftMain"></div>
 
-
     <div id="dreamShiftSub"></div>
 
-
   </div>
-
 
 </div>
 
 
-
 <!-- ======================================================
-     FINAL TRANSITION
+     FINAL
      ====================================================== -->
 
 <div id="whiteBloom"></div>
@@ -3143,74 +2760,45 @@ input::placeholder{
 <div id="whiteout"></div>
 
 
-
-<!-- ======================================================
-     FINAL CARD
-     ====================================================== -->
-
 <div id="finalInvite">
-
 
   <div class="finalGrid">
 
-
     <div class="logoBlock">
-
 
       <img
         src="patchlab_2026_header_1.png"
         alt="Patchlab Festival 2026"
       >
 
-
     </div>
 
 
     <div class="finalCopy">
 
-
       <div class="finalLabel">
-
         TRAUM SIM / PATCHLAB 2026
-
       </div>
-
 
       <div id="finalTitle"></div>
 
-
       <div class="finalRule"></div>
-
 
       <div class="finalDetails">
 
+        <div>15.10.2026</div>
 
-        <div>
-          15.10.2026
-        </div>
+        <div>HEVRE</div>
 
-
-        <div>
-          HEVRE
-        </div>
-
-
-        <div>
-          KRAKÓW
-        </div>
-
+        <div>KRAKÓW</div>
 
       </div>
 
-
     </div>
-
 
   </div>
 
-
 </div>
-
 
 
 <!-- ======================================================
@@ -3219,52 +2807,40 @@ input::placeholder{
 
 <div id="ui">
 
-
   <div class="top">
-
 
     <span>
       TRAUM SIM
     </span>
 
-
     <span id="progress"></span>
-
 
   </div>
 
 
   <div id="screenWrap">
 
-
     <main id="screen"></main>
-
 
   </div>
 
 
   <div class="bottom">
 
-
     <span>
       PATCHLAB 2026
     </span>
-
 
     <span id="depthLabel">
       TRAUM
     </span>
 
-
   </div>
-
 
 </div>
 
 
-
 <script>
-
 
 /* =========================================================
    BACKEND
@@ -3272,7 +2848,6 @@ input::placeholder{
 
 const API_URL =
 "https://script.google.com/macros/s/AKfycbzU_GDYcK7nC4aGNVxmQd4fojRBacX1UR076Ox-lCI8KrGV1YVN7G_mwGT-6UFzOhJY3g/exec";
-
 
 
 /* =========================================================
@@ -3283,10 +2858,10 @@ function setVH(){
 
   const h =
     window.visualViewport
-      ?
-      window.visualViewport.height
-      :
-      window.innerHeight;
+    ?
+    window.visualViewport.height
+    :
+    window.innerHeight;
 
 
   document
@@ -3299,15 +2874,12 @@ function setVH(){
 
 }
 
-
 setVH();
-
 
 window.addEventListener(
   "resize",
   setVH
 );
-
 
 if(
   window.visualViewport
@@ -3321,264 +2893,123 @@ if(
 }
 
 
-
 /* =========================================================
    INTRO
    ========================================================= */
 
 const INTRO = {
 
-
 PL:[
 
-
 {
-
 type:"text",
-
-label:
-"TRAUM / 01",
-
-title:
-"Sen nie jest filmem.",
-
-text:
-"Sen nie musi mieć początku ani końca. Pamięć miesza miejsca, ludzi, czas i emocje w rzeczywistość, która przez chwilę wydaje się całkowicie naturalna.",
-
-meta:
-"Nie próbuj jeszcze niczego wyjaśniać. Pozwól temu po prostu wrócić."
-
+label:"TRAUM / 01",
+title:"Sen nie jest filmem.",
+text:"Sen nie musi mieć początku ani końca. Pamięć miesza miejsca, ludzi, czas i emocje w rzeczywistość, która przez chwilę wydaje się całkowicie naturalna.",
+meta:"Nie próbuj jeszcze niczego wyjaśniać. Pozwól temu po prostu wrócić."
 },
 
-
 {
-
 type:"text",
-
-label:
-"TRAUM / 02",
-
-title:
-"Pamięć rekonstruuje.",
-
-text:
-"To, co pamiętasz po przebudzeniu, nie musi być dokładnym zapisem snu. Sam akt przypominania może go zmieniać.",
-
-meta:
-"Za chwilę TRAUM SIM zacznie podążać za tym, co opisujesz."
-
+label:"TRAUM / 02",
+title:"Pamięć rekonstruuje.",
+text:"To, co pamiętasz po przebudzeniu, nie musi być dokładnym zapisem snu. Sam akt przypominania może go zmieniać.",
+meta:"Za chwilę TRAUM SIM zacznie podążać za tym, co opisujesz."
 },
 
-
 {
-
 type:"color",
-
-label:
-"TRAUM / 03",
-
-title:
-"Jaki kolor mają Twoje najlepsze sny?",
-
-text:
-"Nie zastanawiaj się długo. Wpisz pierwszy kolor, który pojawił się w Twojej głowie.",
-
-meta:
-"Nie szukamy poprawnej odpowiedzi. Interesuje nas pierwszy ślad."
-
+label:"TRAUM / 03",
+title:"Jaki kolor mają Twoje najlepsze sny?",
+text:"Nie zastanawiaj się długo. Wpisz pierwszy kolor, który pojawił się w Twojej głowie.",
+meta:"Od tej chwili światło zacznie pamiętać ten kolor."
 },
 
-
 {
-
 type:"text",
-
-label:
-"TRAUM / 04",
-
-title:
-"Opowiedz. Nie interpretuj.",
-
-text:
-"Nie musisz znać znaczenia snu. Opisz to, co pamiętasz: przestrzeń, osobę, sytuację, uczucie albo jeden obraz.",
-
-meta:
-"Każda odpowiedź zmieni następne pytanie."
-
+label:"TRAUM / 04",
+title:"Opowiedz. Nie interpretuj.",
+text:"Nie musisz znać znaczenia snu. Opisz to, co pamiętasz: przestrzeń, osobę, sytuację, uczucie albo jeden obraz.",
+meta:"Każda odpowiedź zmieni następne pytanie."
 }
 
-
 ],
-
 
 
 ENG:[
 
-
 {
-
 type:"text",
-
-label:
-"TRAUM / 01",
-
-title:
-"A dream is not a film.",
-
-text:
-"A dream does not need a beginning or an end. Memory mixes places, people, time and emotion into a reality that briefly feels completely natural.",
-
-meta:
-"Do not explain anything yet. Simply allow it to return."
-
+label:"TRAUM / 01",
+title:"A dream is not a film.",
+text:"A dream does not need a beginning or an end. Memory mixes places, people, time and emotion into a reality that briefly feels completely natural.",
+meta:"Do not explain anything yet. Simply allow it to return."
 },
 
-
 {
-
 type:"text",
-
-label:
-"TRAUM / 02",
-
-title:
-"Memory reconstructs.",
-
-text:
-"What you remember after waking may not be an exact recording of the dream. The act of remembering can change it.",
-
-meta:
-"In a moment TRAUM SIM will begin to follow what you describe."
-
+label:"TRAUM / 02",
+title:"Memory reconstructs.",
+text:"What you remember after waking may not be an exact recording of the dream. The act of remembering can change it.",
+meta:"In a moment TRAUM SIM will begin to follow what you describe."
 },
 
-
 {
-
 type:"color",
-
-label:
-"TRAUM / 03",
-
-title:
-"What colour do your best dreams have?",
-
-text:
-"Do not think too long. Type the first colour that appeared in your mind.",
-
-meta:
-"There is no correct answer. We are interested in the first trace."
-
+label:"TRAUM / 03",
+title:"What colour do your best dreams have?",
+text:"Do not think too long. Type the first colour that appeared in your mind.",
+meta:"From now on the light will begin to remember this colour."
 },
 
-
 {
-
 type:"text",
-
-label:
-"TRAUM / 04",
-
-title:
-"Describe. Do not interpret.",
-
-text:
-"You do not need to understand the dream. Describe what remains: a space, a person, an event, a feeling or a single image.",
-
-meta:
-"Every answer will change the next question."
-
+label:"TRAUM / 04",
+title:"Describe. Do not interpret.",
+text:"You do not need to understand the dream. Describe what remains: a space, a person, an event, a feeling or a single image.",
+meta:"Every answer will change the next question."
 }
-
 
 ],
 
 
-
 UKR:[
 
-
 {
-
 type:"text",
-
-label:
-"TRAUM / 01",
-
-title:
-"Сон — це не фільм.",
-
-text:
-"Сон не обов’язково має початок чи кінець. Пам’ять змішує місця, людей, час та емоції у реальність, яка на мить здається абсолютно природною.",
-
-meta:
-"Поки що не намагайся нічого пояснювати. Просто дозволь цьому повернутися."
-
+label:"TRAUM / 01",
+title:"Сон — це не фільм.",
+text:"Сон не обов’язково має початок чи кінець. Пам’ять змішує місця, людей, час та емоції у реальність, яка на мить здається абсолютно природною.",
+meta:"Поки що не намагайся нічого пояснювати. Просто дозволь цьому повернутися."
 },
 
-
 {
-
 type:"text",
-
-label:
-"TRAUM / 02",
-
-title:
-"Пам’ять реконструює.",
-
-text:
-"Те, що залишається в пам’яті після пробудження, не обов’язково є точним записом сну. Сам процес пригадування може його змінювати.",
-
-meta:
-"За мить TRAUM SIM почне слідувати за тим, що з’являється в описі."
-
+label:"TRAUM / 02",
+title:"Пам’ять реконструює.",
+text:"Те, що залишається в пам’яті після пробудження, не обов’язково є точним записом сну. Сам процес пригадування може його змінювати.",
+meta:"За мить TRAUM SIM почне слідувати за тим, що з’являється в описі."
 },
 
-
 {
-
 type:"color",
-
-label:
-"TRAUM / 03",
-
-title:
-"Якого кольору найкращі сни?",
-
-text:
-"Не думай довго. Напиши перший колір, який з’являється в уяві.",
-
-meta:
-"Правильної відповіді немає. Нас цікавить перший слід."
-
+label:"TRAUM / 03",
+title:"Якого кольору найкращі сни?",
+text:"Не думай довго. Напиши перший колір, який з’являється в уяві.",
+meta:"Відтепер світло почне пам’ятати цей колір."
 },
 
-
 {
-
 type:"text",
-
-label:
-"TRAUM / 04",
-
-title:
-"Описуй. Не пояснюй.",
-
-text:
-"Не потрібно шукати значення сну. Опиши те, що залишилося: простір, людину, ситуацію, відчуття або один образ.",
-
-meta:
-"Кожна відповідь змінюватиме наступне запитання."
-
+label:"TRAUM / 04",
+title:"Описуй. Не пояснюй.",
+text:"Не потрібно шукати значення сну. Опиши те, що залишилося: простір, людину, ситуацію, відчуття або один образ.",
+meta:"Кожна відповідь змінюватиме наступне запитання."
 }
-
 
 ]
 
-
 };
-
 
 
 /* =========================================================
@@ -3587,209 +3018,141 @@ meta:
 
 const UI = {
 
-
 PL:{
 
-
-back:
-"WSTECZ",
-
-
-next:
-"DALEJ",
-
-
-begin:
-"WEJDŹ W SEN",
-
+back:"WSTECZ",
+next:"DALEJ",
+begin:"WEJDŹ W SEN",
 
 placeholder:
 "opisz to własnymi słowami...",
 
-
 colorPlaceholder:
 "np. granatowy, fioletowy, czerwony...",
-
 
 nicknameTitle:
 "Jak mamy zapamiętać osobę, która śniła?",
 
-
 nicknameMeta:
 "Możesz użyć pseudonimu. Nie musisz podawać prawdziwego imienia.",
 
-
 nicknamePlaceholder:
 "NICKNAME",
-
 
 nicknameSubmit:
 "ZAPISZ SEN",
 
-
 saving:
 "ZAPISUJĘ SEN",
-
 
 done:
 "SEN ZAPISANY",
 
-
 sub:
 "Twój sen wszedł do wspólnego archiwum.",
-
 
 error:
 "Sen nie został zapisany.",
 
-
 retry:
 "SPRÓBUJ PONOWNIE",
-
 
 invite:
 "Zapraszamy na nasz performance ze swoim snem."
 
-
 },
-
 
 
 ENG:{
 
-
-back:
-"BACK",
-
-
-next:
-"NEXT",
-
-
-begin:
-"ENTER DREAM",
-
+back:"BACK",
+next:"NEXT",
+begin:"ENTER DREAM",
 
 placeholder:
 "describe it in your own words...",
 
-
 colorPlaceholder:
 "e.g. blue, violet, red...",
-
 
 nicknameTitle:
 "How should the dreamer be remembered?",
 
-
 nicknameMeta:
 "You may use a nickname. You do not need to provide your real name.",
 
-
 nicknamePlaceholder:
 "NICKNAME",
-
 
 nicknameSubmit:
 "SAVE DREAM",
 
-
 saving:
 "SAVING DREAM",
-
 
 done:
 "DREAM RECEIVED",
 
-
 sub:
 "Your dream has entered the collective archive.",
-
 
 error:
 "The dream could not be saved.",
 
-
 retry:
 "TRY AGAIN",
-
 
 invite:
 "Join our performance with your dream."
 
-
 },
-
 
 
 UKR:{
 
-
-back:
-"НАЗАД",
-
-
-next:
-"ДАЛІ",
-
-
-begin:
-"УВІЙТИ У СОН",
-
+back:"НАЗАД",
+next:"ДАЛІ",
+begin:"УВІЙТИ У СОН",
 
 placeholder:
 "опиши це своїми словами...",
 
-
 colorPlaceholder:
 "наприклад: синій, фіолетовий, червоний...",
-
 
 nicknameTitle:
 "Як нам запам’ятати людину, якій наснився цей сон?",
 
-
 nicknameMeta:
 "Можна використати псевдонім. Справжнє ім’я вказувати не обов’язково.",
-
 
 nicknamePlaceholder:
 "NICKNAME",
 
-
 nicknameSubmit:
 "ЗБЕРЕГТИ СОН",
-
 
 saving:
 "ЗБЕРІГАЮ СОН",
 
-
 done:
 "СОН ЗБЕРЕЖЕНО",
-
 
 sub:
 "Цей сон увійшов до спільного архіву.",
 
-
 error:
 "Сон не вдалося зберегти.",
-
 
 retry:
 "СПРОБУВАТИ ЩЕ РАЗ",
 
-
 invite:
 "Приходь на наш performance зі своїм сном."
 
-
 }
 
-
 };
-
 
 
 /* =========================================================
@@ -3798,44 +3161,31 @@ invite:
 
 const state = {
 
-
 lang:null,
 
+mode:"start",
 
-mode:
-"start",
+introStep:0,
 
+questionIndex:0,
 
-introStep:
-0,
+totalQuestions:9,
 
+answers:[],
 
-questionIndex:
-0,
+generatedQuestions:[],
 
+nickname:"",
 
-totalQuestions:
-9,
+dreamColorName:"",
 
-
-answers:
-[],
-
-
-generatedQuestions:
-[],
-
-
-nickname:
-"",
-
-
-dreamColorName:
-""
-
+dreamColor:{
+  r:220,
+  g:220,
+  b:220
+}
 
 };
-
 
 
 /* =========================================================
@@ -3847,24 +3197,20 @@ const screen =
     "screen"
   );
 
-
 const progress =
   document.getElementById(
     "progress"
   );
-
 
 const depthLabel =
   document.getElementById(
     "depthLabel"
   );
 
-
 const ghostLayer =
   document.getElementById(
     "ghostLayer"
   );
-
 
 
 /* =========================================================
@@ -3873,41 +3219,30 @@ const ghostLayer =
 
 function escapeHtml(value){
 
-
   return String(
     value || ""
   )
   .replace(
-
     /[&<>"']/g,
-
     c=>({
 
       "&":"&amp;",
-
       "<":"&lt;",
-
       ">":"&gt;",
-
       "\"":"&quot;",
-
       "'":"&#039;"
 
     }[c])
-
   );
 
 }
 
 
-
 function randomItem(array){
-
 
   return array[
     Math.floor(
-      Math.random()
-      *
+      Math.random() *
       array.length
     )
   ];
@@ -3915,9 +3250,7 @@ function randomItem(array){
 }
 
 
-
 function normalizeText(text){
-
 
   return String(
     text || ""
@@ -3931,13 +3264,488 @@ function normalizeText(text){
 }
 
 
+/* =========================================================
+   COLOR PARSER
+   ========================================================= */
+
+function parseDreamColor(name){
+
+  const s =
+    String(
+      name || ""
+    )
+    .toLowerCase()
+    .trim();
+
+
+  const map = {
+
+    /* PL */
+
+    "niebieski":[65,115,195],
+    "niebieska":[65,115,195],
+    "błękitny":[85,160,215],
+    "błękit":[85,160,215],
+    "granatowy":[43,68,135],
+    "granat":[43,68,135],
+    "turkusowy":[50,160,160],
+    "turkus":[50,160,160],
+    "zielony":[70,145,100],
+    "zieleń":[70,145,100],
+    "czerwony":[190,65,72],
+    "czerwień":[190,65,72],
+    "bordowy":[135,45,62],
+    "bordo":[135,45,62],
+    "różowy":[205,100,150],
+    "róż":[205,100,150],
+    "fioletowy":[135,80,185],
+    "fiolet":[135,80,185],
+    "purpurowy":[155,70,150],
+    "purpura":[155,70,150],
+    "pomarańczowy":[205,120,55],
+    "żółty":[215,180,75],
+    "złoty":[195,150,75],
+    "srebrny":[175,180,190],
+    "szary":[160,160,160],
+    "grafitowy":[105,108,114],
+    "biały":[220,220,215],
+    "czarny":[90,90,90],
+    "brązowy":[135,90,70],
+
+    /* ENG */
+
+    "blue":[65,115,195],
+    "navy":[43,68,135],
+    "cyan":[75,160,200],
+    "turquoise":[50,160,160],
+    "green":[70,145,100],
+    "red":[190,65,72],
+    "burgundy":[135,45,62],
+    "pink":[205,100,150],
+    "purple":[135,80,185],
+    "violet":[135,80,185],
+    "orange":[205,120,55],
+    "yellow":[215,180,75],
+    "gold":[195,150,75],
+    "silver":[175,180,190],
+    "grey":[160,160,160],
+    "gray":[160,160,160],
+    "white":[220,220,215],
+    "black":[90,90,90],
+    "brown":[135,90,70],
+
+    /* UKR */
+
+    "синій":[65,115,195],
+    "блакитний":[85,160,215],
+    "темно-синій":[43,68,135],
+    "бірюзовий":[50,160,160],
+    "зелений":[70,145,100],
+    "червоний":[190,65,72],
+    "бордовий":[135,45,62],
+    "рожевий":[205,100,150],
+    "фіолетовий":[135,80,185],
+    "пурпуровий":[155,70,150],
+    "помаранчевий":[205,120,55],
+    "жовтий":[215,180,75],
+    "золотий":[195,150,75],
+    "срібний":[175,180,190],
+    "сірий":[160,160,160],
+    "графітовий":[105,108,114],
+    "білий":[220,220,215],
+    "чорний":[90,90,90],
+    "коричневий":[135,90,70]
+
+  };
+
+
+  for(
+    const key
+    in map
+  ){
+
+    if(
+      s.includes(
+        key
+      )
+    ){
+
+      return {
+        r:map[key][0],
+        g:map[key][1],
+        b:map[key][2]
+      };
+
+    }
+
+  }
+
+
+  return {
+    r:180,
+    g:180,
+    b:180
+  };
+
+}
+
+
+/* =========================================================
+   APPLY SUN COLOR
+   ========================================================= */
+
+function applySunColor(){
+
+  const c =
+    state.dreamColor
+    ||
+    {
+      r:220,
+      g:220,
+      b:220
+    };
+
+
+  document
+  .documentElement
+  .style
+  .setProperty(
+    "--sun-r",
+    c.r
+  );
+
+
+  document
+  .documentElement
+  .style
+  .setProperty(
+    "--sun-g",
+    c.g
+  );
+
+
+  document
+  .documentElement
+  .style
+  .setProperty(
+    "--sun-b",
+    c.b
+  );
+
+}
+
+
+/* =========================================================
+   DREAM COSMOS
+   ========================================================= */
+
+function updateDreamCosmos(){
+
+  /*
+  Before questions:
+  sun stays far left.
+  */
+
+  if(
+    state.mode !==
+    "questions"
+  ){
+
+    return;
+
+  }
+
+
+  const i =
+    state.questionIndex;
+
+
+  const level =
+    getDreamLevel();
+
+
+  /*
+  0 -> 8
+  */
+
+  const p =
+    Math.max(
+      0,
+      Math.min(
+        1,
+        i / 8
+      )
+    );
+
+
+  /*
+  SUN:
+  13% -> 50%
+  56% -> 50%
+  1 -> 2.45
+  */
+
+  const sunX =
+    13 +
+    p * 37;
+
+
+  const sunY =
+    56 -
+    p * 6;
+
+
+  const sunScale =
+    1 +
+    p * 1.45;
+
+
+  const sunOpacity =
+    .55 +
+    p * .18;
+
+
+  document
+  .documentElement
+  .style
+  .setProperty(
+    "--sun-x",
+    sunX + "%"
+  );
+
+
+  document
+  .documentElement
+  .style
+  .setProperty(
+    "--sun-y",
+    sunY + "%"
+  );
+
+
+  document
+  .documentElement
+  .style
+  .setProperty(
+    "--sun-scale",
+    sunScale
+  );
+
+
+  document
+  .documentElement
+  .style
+  .setProperty(
+    "--sun-opacity",
+    sunOpacity
+  );
+
+
+  /*
+  TRAUM 0
+  Moon invisible.
+  */
+
+  if(
+    level === 0
+  ){
+
+    document
+    .documentElement
+    .style
+    .setProperty(
+      "--moon-opacity",
+      "0"
+    );
+
+
+    document
+    .documentElement
+    .style
+    .setProperty(
+      "--moon-x",
+      "86%"
+    );
+
+
+    document
+    .documentElement
+    .style
+    .setProperty(
+      "--moon-y",
+      "45%"
+    );
+
+
+    document
+    .documentElement
+    .style
+    .setProperty(
+      "--moon-scale",
+      ".62"
+    );
+
+
+    return;
+
+  }
+
+
+  /*
+  TRAUM 1
+  Moon appears from right.
+  Questions 3,4,5
+  */
+
+  if(
+    level === 1
+  ){
+
+    const local =
+      Math.max(
+        0,
+        Math.min(
+          1,
+          (i-3)/2
+        )
+      );
+
+
+    const moonX =
+      82 -
+      local * 23;
+
+
+    const moonY =
+      43 +
+      local * 5;
+
+
+    const moonScale =
+      .66 +
+      local * .21;
+
+
+    document
+    .documentElement
+    .style
+    .setProperty(
+      "--moon-opacity",
+      ".88"
+    );
+
+
+    document
+    .documentElement
+    .style
+    .setProperty(
+      "--moon-x",
+      moonX + "%"
+    );
+
+
+    document
+    .documentElement
+    .style
+    .setProperty(
+      "--moon-y",
+      moonY + "%"
+    );
+
+
+    document
+    .documentElement
+    .style
+    .setProperty(
+      "--moon-scale",
+      moonScale
+    );
+
+
+    return;
+
+  }
+
+
+  /*
+  TRAUM 2
+  Moon converges with sun.
+  Questions 6,7,8.
+  */
+
+  const local =
+    Math.max(
+      0,
+      Math.min(
+        1,
+        (i-6)/2
+      )
+    );
+
+
+  /*
+  Current sun itself is already moving.
+  Moon is pushed toward 50/50.
+  */
+
+  const moonX =
+    60 -
+    local * 10;
+
+
+  const moonY =
+    48 +
+    local * 2;
+
+
+  const moonScale =
+    .90 +
+    local * .18;
+
+
+  document
+  .documentElement
+  .style
+  .setProperty(
+    "--moon-opacity",
+    ".97"
+  );
+
+
+  document
+  .documentElement
+  .style
+  .setProperty(
+    "--moon-x",
+    moonX + "%"
+  );
+
+
+  document
+  .documentElement
+  .style
+  .setProperty(
+    "--moon-y",
+    moonY + "%"
+  );
+
+
+  document
+  .documentElement
+  .style
+  .setProperty(
+    "--moon-scale",
+    moonScale
+  );
+
+}
+
 
 /* =========================================================
    MODE
    ========================================================= */
 
 function setVisualMode(mode){
-
 
   state.mode =
     mode;
@@ -3947,9 +3755,7 @@ function setVisualMode(mode){
   .body
   .classList
   .toggle(
-
     "questionMode",
-
     [
       "questions",
       "nickname",
@@ -3960,11 +3766,9 @@ function setVisualMode(mode){
     .includes(
       mode
     )
-
   );
 
 }
-
 
 
 /* =========================================================
@@ -3977,23 +3781,16 @@ let transitionRunning =
 
 function transition(fn){
 
-
   if(
     transitionRunning
   ){
-
     return;
-
   }
 
 
   transitionRunning =
     true;
 
-
-  /*
-  Previous thought slowly disappears.
-  */
 
   screen
   .classList
@@ -4003,37 +3800,19 @@ function transition(fn){
 
 
   setTimeout(
-
     ()=>{
 
-
-      /*
-      Keep just the landscape
-      for a short moment.
-      */
-
       setTimeout(
-
         ()=>{
-
 
           fn();
 
 
-          /*
-          Two animation frames make sure
-          new screen is initially invisible.
-          */
-
           requestAnimationFrame(
-
             ()=>{
 
-
               requestAnimationFrame(
-
                 ()=>{
-
 
                   screen
                   .classList
@@ -4043,44 +3822,30 @@ function transition(fn){
 
 
                   setTimeout(
-
                     ()=>{
 
                       transitionRunning =
                         false;
 
                     },
-
                     1850
-
                   );
 
-
                 }
-
               );
 
-
             }
-
           );
 
-
         },
-
         400
-
       );
 
-
     },
-
     1800
-
   );
 
 }
-
 
 
 /* =========================================================
@@ -4088,7 +3853,6 @@ function transition(fn){
    ========================================================= */
 
 function renderStart(){
-
 
   setVisualMode(
     "start"
@@ -4105,67 +3869,39 @@ function renderStart(){
 
   screen.innerHTML = `
 
-
 <div class="eyebrow">
-
 TRAUM / DREAM ARCHIVE
-
 </div>
 
-
 <h1>
-
 TRAUM
 <br>
 SIM
-
 </h1>
 
-
 <p class="sub">
-
 choose language / wybierz język / оберіть мову
-
 </p>
-
 
 <div class="langs">
 
-
-<button
-onclick="chooseLanguage('PL')"
->
-
+<button onclick="chooseLanguage('PL')">
 PL
-
 </button>
 
-
-<button
-onclick="chooseLanguage('ENG')"
->
-
+<button onclick="chooseLanguage('ENG')">
 ENG
-
 </button>
 
-
-<button
-onclick="chooseLanguage('UKR')"
->
-
+<button onclick="chooseLanguage('UKR')">
 УКР
-
 </button>
-
 
 </div>
-
 
 `;
 
 }
-
 
 
 /* =========================================================
@@ -4174,13 +3910,10 @@ onclick="chooseLanguage('UKR')"
 
 function chooseLanguage(lang){
 
-
   if(
     transitionRunning
   ){
-
     return;
-
   }
 
 
@@ -4212,6 +3945,53 @@ function chooseLanguage(lang){
     "";
 
 
+  state.dreamColor =
+    {
+      r:220,
+      g:220,
+      b:220
+    };
+
+
+  applySunColor();
+
+
+  document
+  .documentElement
+  .style
+  .setProperty(
+    "--sun-x",
+    "13%"
+  );
+
+
+  document
+  .documentElement
+  .style
+  .setProperty(
+    "--sun-y",
+    "56%"
+  );
+
+
+  document
+  .documentElement
+  .style
+  .setProperty(
+    "--sun-scale",
+    "1"
+  );
+
+
+  document
+  .documentElement
+  .style
+  .setProperty(
+    "--moon-opacity",
+    "0"
+  );
+
+
   transition(
     renderIntro
   );
@@ -4219,13 +3999,11 @@ function chooseLanguage(lang){
 }
 
 
-
 /* =========================================================
    INTRO
    ========================================================= */
 
 function renderIntro(){
-
 
   setVisualMode(
     "intro"
@@ -4251,25 +4029,21 @@ function renderIntro(){
 
 
   const last =
-    state.introStep
-    ===
+    state.introStep ===
     slides.length-1;
 
 
   progress.textContent =
-
     `${String(
       state.introStep+1
-    )
-    .padStart(
+    ).padStart(
       2,
       "0"
     )}
     /
     ${String(
       slides.length
-    )
-    .padStart(
+    ).padStart(
       2,
       "0"
     )}`;
@@ -4280,95 +4054,62 @@ function renderIntro(){
 
 
   if(
-    slide.type
-    ===
+    slide.type ===
     "color"
   ){
 
-
     screen.innerHTML = `
 
-
 <div class="eyebrow">
-
 ${slide.label}
-
 </div>
-
 
 <h2>
-
 ${slide.title}
-
 </h2>
 
-
 <div class="introText">
-
 ${slide.text}
-
 </div>
 
-
 <input
-
 id="dreamColorInput"
-
 type="text"
-
 autocomplete="off"
-
 spellcheck="false"
-
 placeholder="${copy.colorPlaceholder}"
-
 value="${escapeHtml(
   state.dreamColorName
 )}"
-
 >
 
-
 <div class="colorHint">
-
 ${slide.meta}
-
 </div>
 
-
 <div class="actions">
-
 
 <button
 class="back"
 onclick="introBack()"
 >
-
 ${copy.back}
-
 </button>
-
 
 <button
 class="next"
 onclick="introNext()"
 >
-
 ${copy.next}
-
 </button>
 
-
 </div>
-
 
 `;
 
 
     setTimeout(
-
       ()=>{
-
 
         const field =
           document
@@ -4379,26 +4120,13 @@ ${copy.next}
 
         if(field){
 
-
           field.focus();
 
 
-          /*
-          IMPORTANT:
-
-          We only save text.
-
-          NOTHING in the background changes here.
-          This prevents Safari GPU repaint.
-          */
-
           field
           .addEventListener(
-
             "input",
-
             ()=>{
-
 
               state.dreamColorName =
                 field
@@ -4406,89 +4134,63 @@ ${copy.next}
                 .trim();
 
 
+              state.dreamColor =
+                parseDreamColor(
+                  state.dreamColorName
+                );
+
+
+              applySunColor();
+
             }
-
           );
-
 
         }
 
-
       },
-
       300
-
     );
 
-
   }
-
   else{
-
 
     screen.innerHTML = `
 
-
 <div class="eyebrow">
-
 ${slide.label}
-
 </div>
-
 
 <h2>
-
 ${slide.title}
-
 </h2>
 
-
 <div class="introText">
-
 ${slide.text}
-
 </div>
-
 
 <div class="introMeta">
-
 ${slide.meta}
-
 </div>
 
-
 <div class="actions">
-
 
 <button
 class="back"
 onclick="introBack()"
 >
-
 ${copy.back}
-
 </button>
-
 
 <button
 class="next"
 onclick="introNext()"
 >
-
-${last
-?
-copy.begin
-:
-copy.next}
-
+${last ? copy.begin : copy.next}
 </button>
-
 
 </div>
 
-
 `;
-
 
   }
 
@@ -4500,37 +4202,29 @@ copy.next}
 }
 
 
-
 /* =========================================================
    INTRO NAV
    ========================================================= */
 
 function introBack(){
 
-
   if(
     transitionRunning
   ){
-
     return;
-
   }
 
 
   if(
-    state.introStep
-    ===
+    state.introStep ===
     0
   ){
-
 
     transition(
       renderStart
     );
 
-
     return;
-
 
   }
 
@@ -4548,16 +4242,12 @@ function introBack(){
 }
 
 
-
 function introNext(){
-
 
   if(
     transitionRunning
   ){
-
     return;
-
   }
 
 
@@ -4571,11 +4261,9 @@ function introNext(){
 
 
   if(
-    state.introStep
-    <
+    state.introStep <
     slides.length-1
   ){
-
 
     state.introStep++;
 
@@ -4584,11 +4272,8 @@ function introNext(){
       renderIntro
     );
 
-
   }
-
   else{
-
 
     state.questionIndex =
       0;
@@ -4598,10 +4283,8 @@ function introNext(){
       !state.generatedQuestions[0]
     ){
 
-
       state.generatedQuestions[0] =
         generateOpeningQuestion();
-
 
     }
 
@@ -4610,11 +4293,9 @@ function introNext(){
       renderQuestion
     );
 
-
   }
 
 }
-
 
 
 /* =========================================================
@@ -4622,7 +4303,6 @@ function introNext(){
    ========================================================= */
 
 function saveColorField(){
-
 
   const field =
     document
@@ -4634,9 +4314,7 @@ function saveColorField(){
   if(
     !field
   ){
-
     return;
-
   }
 
 
@@ -4645,8 +4323,16 @@ function saveColorField(){
     .value
     .trim();
 
-}
 
+  state.dreamColor =
+    parseDreamColor(
+      state.dreamColorName
+    );
+
+
+  applySunColor();
+
+}
 
 
 /* =========================================================
@@ -4655,70 +4341,53 @@ function saveColorField(){
 
 function generateOpeningQuestion(){
 
-
   if(
-    state.lang
-    ===
+    state.lang ===
     "PL"
   ){
 
-
     return {
-
 
       category:
         "POCZĄTEK",
 
-
       question:
         "Przywołaj jeden sen, który został z Tobą dłużej niż inne. Opowiedz o pierwszej scenie, obrazie albo sytuacji, która właśnie teraz wraca do pamięci."
 
-
     };
-
 
   }
 
 
   if(
-    state.lang
-    ===
+    state.lang ===
     "UKR"
   ){
 
-
     return {
-
 
       category:
         "ПОЧАТОК",
 
-
       question:
         "Згадай один сон, який залишився в пам’яті довше за інші. Опиши першу сцену, образ або ситуацію, що повертається просто зараз."
 
-
     };
-
 
   }
 
 
   return {
 
-
     category:
       "BEGINNING",
-
 
     question:
       "Remember one dream that stayed with you longer than the others. Describe the first scene, image or situation that returns to you now."
 
-
   };
 
 }
-
 
 
 /* =========================================================
@@ -4726,7 +4395,6 @@ function generateOpeningQuestion(){
    ========================================================= */
 
 function extractFragment(text){
-
 
   const cleaned =
     normalizeText(
@@ -4737,9 +4405,7 @@ function extractFragment(text){
   if(
     !cleaned
   ){
-
     return "";
-
   }
 
 
@@ -4752,40 +4418,31 @@ function extractFragment(text){
 
 
   if(
-    words.length
-    <=
+    words.length <=
     8
   ){
 
-
     return cleaned;
-
 
   }
 
 
-  const startOptions =
-  [
-
+  const startOptions = [
 
     0,
-
 
     Math.floor(
       words.length*.20
     ),
 
-
     Math.floor(
       words.length*.40
     ),
-
 
     Math.max(
       0,
       words.length-8
     )
-
 
   ];
 
@@ -4808,13 +4465,11 @@ function extractFragment(text){
 }
 
 
-
 /* =========================================================
    THEMES
    ========================================================= */
 
 function detectThemes(text){
-
 
   const t =
     String(
@@ -4827,285 +4482,130 @@ function detectThemes(text){
     [];
 
 
-  const dictionaries =
-  {
-
+  const dictionaries = {
 
 PL:{
 
-
 person:[
-"mama",
-"matka",
-"ojciec",
-"tata",
-"babcia",
-"dziadek",
-"mężczyzna",
-"kobieta",
-"człowiek",
-"osoba",
-"dziecko",
-"przyjaciel",
-"przyjaciółka",
-"ktoś",
-"ludzie"
+"mama","matka","ojciec","tata",
+"babcia","dziadek","mężczyzna",
+"kobieta","człowiek","osoba",
+"dziecko","przyjaciel","przyjaciółka",
+"ktoś","ludzie"
 ],
-
 
 place:[
-"dom",
-"pokój",
-"mieszkanie",
-"ulica",
-"miasto",
-"las",
-"szkoła",
-"hotel",
-"budynek",
-"korytarz",
-"piwnica",
-"morze",
-"plaża",
-"góra",
-"ogród"
+"dom","pokój","mieszkanie","ulica",
+"miasto","las","szkoła","hotel",
+"budynek","korytarz","piwnica",
+"morze","plaża","góra","ogród"
 ],
-
 
 water:[
-"woda",
-"morze",
-"ocean",
-"rzeka",
-"jezioro",
-"deszcz",
-"basen",
-"fala"
+"woda","morze","ocean","rzeka",
+"jezioro","deszcz","basen","fala"
 ],
-
 
 fear:[
-"strach",
-"bałem",
-"bałam",
-"lęk",
-"przeraż",
-"niepokój",
-"groza"
+"strach","bałem","bałam",
+"lęk","przeraż","niepokój","groza"
 ],
-
 
 body:[
-"ciało",
-"ręka",
-"ręce",
-"noga",
-"nogi",
-"twarz",
-"oczy",
-"usta",
-"głowa",
-"skóra",
-"krew"
+"ciało","ręka","ręce","noga","nogi",
+"twarz","oczy","usta","głowa",
+"skóra","krew"
 ],
 
-
 door:[
-"drzwi",
-"okno",
-"schody",
-"korytarz",
-"tunel",
-"przejście",
-"brama"
+"drzwi","okno","schody","korytarz",
+"tunel","przejście","brama"
 ]
 
-
 },
-
 
 
 ENG:{
 
-
 person:[
-"mother",
-"mom",
-"father",
-"dad",
-"grandmother",
-"grandfather",
-"man",
-"woman",
-"person",
-"child",
-"friend",
-"someone",
-"people"
+"mother","mom","father","dad",
+"grandmother","grandfather",
+"man","woman","person","child",
+"friend","someone","people"
 ],
-
 
 place:[
-"house",
-"room",
-"apartment",
-"street",
-"city",
-"forest",
-"school",
-"hotel",
-"building",
-"corridor",
-"basement",
-"sea",
-"beach",
-"mountain",
-"garden"
+"house","room","apartment","street",
+"city","forest","school","hotel",
+"building","corridor","basement",
+"sea","beach","mountain","garden"
 ],
-
 
 water:[
-"water",
-"sea",
-"ocean",
-"river",
-"lake",
-"rain",
-"pool",
-"wave"
+"water","sea","ocean","river",
+"lake","rain","pool","wave"
 ],
-
 
 fear:[
-"fear",
-"afraid",
-"terrified",
-"anxiety",
-"horror"
+"fear","afraid","terrified",
+"anxiety","horror"
 ],
-
 
 body:[
-"body",
-"hand",
-"hands",
-"leg",
-"legs",
-"face",
-"eyes",
-"mouth",
-"head",
-"skin",
-"blood"
+"body","hand","hands","leg","legs",
+"face","eyes","mouth","head",
+"skin","blood"
 ],
 
-
 door:[
-"door",
-"window",
-"stairs",
-"corridor",
-"tunnel",
-"passage",
-"gate"
+"door","window","stairs","corridor",
+"tunnel","passage","gate"
 ]
-
 
 },
 
 
-
 UKR:{
 
-
 person:[
-"мама",
-"мати",
-"батько",
-"тато",
-"бабуся",
-"дідусь",
-"чоловік",
-"жінка",
-"людина",
-"дитина",
-"друг",
-"подруга",
-"хтось",
-"люди"
+"мама","мати","батько","тато",
+"бабуся","дідусь","чоловік",
+"жінка","людина","дитина",
+"друг","подруга","хтось","люди"
 ],
-
 
 place:[
-"дім",
-"будинок",
-"кімната",
-"квартира",
-"вулиця",
-"місто",
-"ліс",
-"школа",
-"готель",
-"коридор",
-"підвал",
-"море",
-"пляж",
-"гора",
-"сад"
+"дім","будинок","кімната","квартира",
+"вулиця","місто","ліс","школа",
+"готель","коридор","підвал",
+"море","пляж","гора","сад"
 ],
-
 
 water:[
-"вода",
-"море",
-"океан",
-"річка",
-"озеро",
-"дощ",
-"басейн",
-"хвиля"
+"вода","море","океан","річка",
+"озеро","дощ","басейн","хвиля"
 ],
-
 
 fear:[
-"страх",
-"жах",
-"тривога",
-"тривожно",
-"темрява"
+"страх","жах","тривога",
+"тривожно","темрява"
 ],
-
 
 body:[
-"тіло",
-"рука",
-"руки",
-"нога",
-"ноги",
-"обличчя",
-"очі",
-"рот",
-"голова",
-"шкіра",
-"кров"
+"тіло","рука","руки","нога","ноги",
+"обличчя","очі","рот","голова",
+"шкіра","кров"
 ],
 
-
 door:[
-"двері",
-"вікно",
-"сходи",
-"коридор",
-"тунель",
-"прохід",
-"брама"
+"двері","вікно","сходи",
+"коридор","тунель",
+"прохід","брама"
 ]
-
 
 }
 
-
-  };
+};
 
 
   const dict =
@@ -5121,29 +4621,21 @@ door:[
     in dict
   ){
 
-
     if(
-
       dict[type]
       .some(
-
-        word=>
+        word =>
           t.includes(
             word
           )
-
       )
-
     ){
-
 
       result.push(
         type
       );
 
-
     }
-
 
   }
 
@@ -5153,13 +4645,11 @@ door:[
 }
 
 
-
 /* =========================================================
-   ADAPTIVE QUESTION
+   ADAPTIVE
    ========================================================= */
 
 function generateAdaptiveQuestion(){
-
 
   const i =
     state.questionIndex;
@@ -5173,10 +4663,10 @@ function generateAdaptiveQuestion(){
 
   const previousAnswer =
     previous
-      ?
-      previous.answer
-      :
-      "";
+    ?
+    previous.answer
+    :
+    "";
 
 
   const fragment =
@@ -5195,12 +4685,10 @@ function generateAdaptiveQuestion(){
     i <= 2
   ){
 
-
     return generateLayerOneQuestion(
       fragment,
       themes
     );
-
 
   }
 
@@ -5209,12 +4697,10 @@ function generateAdaptiveQuestion(){
     i <= 5
   ){
 
-
     return generateLayerTwoQuestion(
       fragment,
       themes
     );
-
 
   }
 
@@ -5227,7 +4713,6 @@ function generateAdaptiveQuestion(){
 }
 
 
-
 /* =========================================================
    LAYER 1
    ========================================================= */
@@ -5236,7 +4721,6 @@ function generateLayerOneQuestion(
   fragment,
   themes
 ){
-
 
   const f =
     fragment
@@ -5255,59 +4739,35 @@ function generateLayerOneQuestion(
 
 
   if(
-    state.lang
-    ===
+    state.lang ===
     "PL"
   ){
 
-
-    const pool =
-    [
-
+    const pool = [
 
       {
-
-        category:
-          "PRZESTRZEŃ",
-
+        category:"PRZESTRZEŃ",
         question:
           `Zatrzymaj się przy „${f}”. Jak wyglądało otoczenie? Opisz światło, skalę, materiał, temperaturę albo jeden detal, który szczególnie pamiętasz.`
-
       },
 
-
       {
-
-        category:
-          "PAMIĘĆ",
-
+        category:"PAMIĘĆ",
         question:
           `Kiedy wracasz teraz do „${f}”, co pojawia się obok tego obrazu, choć wcześniej o tym nie było mowy?`
-
       },
 
-
       {
-
-        category:
-          "ODCZUCIE",
-
+        category:"ODCZUCIE",
         question:
           `Nie opowiadaj jeszcze, co wydarzyło się dalej. Jak reagowało Twoje ciało w chwili „${f}”?`
-
       },
 
-
       {
-
-        category:
-          "KADR",
-
+        category:"KADR",
         question:
           `Gdyby można było zatrzymać „${f}” w jednym nieruchomym kadrze, co znajdowałoby się na jego obrzeżach?`
-
       }
-
 
     ];
 
@@ -5318,19 +4778,13 @@ function generateLayerOneQuestion(
       )
     ){
 
-
       pool.push(
         {
-
-          category:
-            "OBECNOŚĆ",
-
+          category:"OBECNOŚĆ",
           question:
             "W opisie pojawia się ktoś jeszcze. Zamiast mówić tylko, kim była ta osoba, opisz atmosferę, którą wnosiła do snu."
-
         }
       );
-
 
     }
 
@@ -5341,19 +4795,13 @@ function generateLayerOneQuestion(
       )
     ){
 
-
       pool.push(
         {
-
-          category:
-            "MIEJSCE",
-
+          category:"MIEJSCE",
           question:
             "Spróbuj ponownie wejść do tego miejsca. Co było w nim znajome, a co nie mogłoby istnieć w rzeczywistości?"
-
         }
       );
-
 
     }
 
@@ -5362,65 +4810,39 @@ function generateLayerOneQuestion(
       pool
     );
 
-
   }
-
 
 
   if(
-    state.lang
-    ===
+    state.lang ===
     "UKR"
   ){
 
-
-    const pool =
-    [
-
+    const pool = [
 
       {
-
-        category:
-          "ПРОСТІР",
-
+        category:"ПРОСТІР",
         question:
           `Затримайся біля «${f}». Яким було оточення? Опиши світло, масштаб, матеріал, температуру або одну деталь, що запам’яталася найбільше.`
-
       },
 
-
       {
-
-        category:
-          "ПАМ’ЯТЬ",
-
+        category:"ПАМ’ЯТЬ",
         question:
           `Коли зараз повертаєшся до «${f}», що з’являється поруч із цим образом, хоча раніше про це не було згадки?`
-
       },
 
-
       {
-
-        category:
-          "ВІДЧУТТЯ",
-
+        category:"ВІДЧУТТЯ",
         question:
           `Поки що не переходь до наступних подій. Яким було відчуття тіла в момент «${f}»?`
-
       },
 
-
       {
-
-        category:
-          "КАДР",
-
+        category:"КАДР",
         question:
           `Якби «${f}» можна було зупинити в одному нерухомому кадрі, що знаходилося б біля країв цього зображення?`
-
       }
-
 
     ];
 
@@ -5431,19 +4853,13 @@ function generateLayerOneQuestion(
       )
     ){
 
-
       pool.push(
         {
-
-          category:
-            "ПРИСУТНІСТЬ",
-
+          category:"ПРИСУТНІСТЬ",
           question:
             "В описі з’являється ще хтось. Замість того щоб лише назвати цю людину, опиши атмосферу, яку її присутність створювала у сні."
-
         }
       );
-
 
     }
 
@@ -5454,19 +4870,13 @@ function generateLayerOneQuestion(
       )
     ){
 
-
       pool.push(
         {
-
-          category:
-            "МІСЦЕ",
-
+          category:"МІСЦЕ",
           question:
             "Спробуй знову увійти в це місце. Що в ньому було знайомим, а що не могло б існувати в реальності?"
-
         }
       );
-
 
     }
 
@@ -5475,58 +4885,34 @@ function generateLayerOneQuestion(
       pool
     );
 
-
   }
 
 
-
-  const pool =
-  [
-
+  const pool = [
 
     {
-
-      category:
-        "SPACE",
-
+      category:"SPACE",
       question:
         `Stay with “${f}”. What surrounded it? Describe the light, scale, material, temperature or one detail that remains unusually clear.`
-
     },
 
-
     {
-
-      category:
-        "MEMORY",
-
+      category:"MEMORY",
       question:
         `When you return to “${f}” now, what appears beside the image that you did not mention before?`
-
     },
 
-
     {
-
-      category:
-        "SENSATION",
-
+      category:"SENSATION",
       question:
         `Do not tell me what happened next yet. What did your body feel during “${f}”?`
-
     },
 
-
     {
-
-      category:
-        "FRAME",
-
+      category:"FRAME",
       question:
         `If “${f}” could become one still frame, what would exist near the edges of the image?`
-
     }
-
 
   ];
 
@@ -5537,19 +4923,13 @@ function generateLayerOneQuestion(
     )
   ){
 
-
     pool.push(
       {
-
-        category:
-          "PRESENCE",
-
+        category:"PRESENCE",
         question:
           "Someone else appears in the description. Rather than simply identifying them, describe the atmosphere their presence created in the dream."
-
       }
     );
-
 
   }
 
@@ -5561,7 +4941,6 @@ function generateLayerOneQuestion(
 }
 
 
-
 /* =========================================================
    LAYER 2
    ========================================================= */
@@ -5570,7 +4949,6 @@ function generateLayerTwoQuestion(
   fragment,
   themes
 ){
-
 
   const f =
     fragment
@@ -5589,70 +4967,41 @@ function generateLayerTwoQuestion(
 
 
   if(
-    state.lang
-    ===
+    state.lang ===
     "PL"
   ){
 
-
-    const pool =
-    [
-
+    const pool = [
 
       {
-
-        category:
-          "PRZEMIANA",
-
+        category:"PRZEMIANA",
         question:
           `Wyobraź sobie, że „${f}” nie jest stałe. Co zaczęłoby zmieniać formę, gdyby sen trwał jeszcze kilka minut?`
-
       },
 
-
       {
-
-        category:
-          "POZA KADREM",
-
+        category:"POZA KADREM",
         question:
           "Co mogło istnieć tuż poza tym, co pamiętasz — coś niewidocznego, ale wyraźnie obecnego?"
-
       },
 
-
       {
-
-        category:
-          "LOGIKA SNU",
-
+        category:"LOGIKA SNU",
         question:
           "Która część tego snu wydawała się zupełnie normalna podczas śnienia, a dopiero po przebudzeniu staje się niemożliwa?"
-
       },
 
-
       {
-
-        category:
-          "RELACJA",
-
+        category:"RELACJA",
         question:
           `Gdyby „${f}” mogło coś przekazać bez używania słów, co próbowałoby Ci pokazać?`
-
       },
 
-
       {
-
-        category:
-          "CZAS",
-
+        category:"CZAS",
         question:
           "Czy wydarzenia naprawdę następowały po sobie? Opisz, jak zachowywał się czas wewnątrz tego snu."
-
       }
-
 
     ];
 
@@ -5663,19 +5012,13 @@ function generateLayerTwoQuestion(
       )
     ){
 
-
       pool.push(
         {
-
-          category:
-            "WODA",
-
+          category:"WODA",
           question:
             "W Twoim śnie pojawia się woda. Czy zachowywała się jak przestrzeń, granica, siła, zagrożenie czy coś zupełnie innego?"
-
         }
       );
-
 
     }
 
@@ -5686,19 +5029,13 @@ function generateLayerTwoQuestion(
       )
     ){
 
-
       pool.push(
         {
-
-          category:
-            "PRZEJŚCIE",
-
+          category:"PRZEJŚCIE",
           question:
             "Pojawia się motyw przejścia. Co mogłoby znajdować się po drugiej stronie, nawet jeśli we śnie nigdy tam nie dotarłeś?"
-
         }
       );
-
 
     }
 
@@ -5707,76 +5044,45 @@ function generateLayerTwoQuestion(
       pool
     );
 
-
   }
 
 
-
   if(
-    state.lang
-    ===
+    state.lang ===
     "UKR"
   ){
 
-
-    const pool =
-    [
-
+    const pool = [
 
       {
-
-        category:
-          "ЗМІНА",
-
+        category:"ЗМІНА",
         question:
           `Уяви, що «${f}» не є сталим. Що почало б змінювати форму, якби сон тривав ще кілька хвилин?`
-
       },
 
-
       {
-
-        category:
-          "ПОЗА КАДРОМ",
-
+        category:"ПОЗА КАДРОМ",
         question:
           "Що могло існувати просто за межами того, що залишилося в пам’яті — щось невидиме, але відчутно присутнє?"
-
       },
 
-
       {
-
-        category:
-          "ЛОГІКА СНУ",
-
+        category:"ЛОГІКА СНУ",
         question:
           "Яка частина цього сну здавалася цілком нормальною під час сновидіння, але після пробудження стала неможливою?"
-
       },
 
-
       {
-
-        category:
-          "ЗВ’ЯЗОК",
-
+        category:"ЗВ’ЯЗОК",
         question:
           `Якби «${f}» могло щось передати без слів, що воно намагалося б показати?`
-
       },
 
-
       {
-
-        category:
-          "ЧАС",
-
+        category:"ЧАС",
         question:
           "Чи справді події відбувалися одна за одною? Опиши, як поводився час усередині цього сну."
-
       }
-
 
     ];
 
@@ -5785,79 +5091,46 @@ function generateLayerTwoQuestion(
       pool
     );
 
-
   }
 
 
-
-  const pool =
-  [
-
-
-    {
-
-      category:
-        "TRANSFORMATION",
-
-      question:
-        `Imagine that “${f}” is not fixed. What might begin changing shape if the dream continued for several more minutes?`
-
-    },
-
-
-    {
-
-      category:
-        "OUTSIDE THE FRAME",
-
-      question:
-        "What might have existed just beyond what you remember — something unseen but unmistakably present?"
-
-    },
-
-
-    {
-
-      category:
-        "DREAM LOGIC",
-
-      question:
-        "Which part of the dream felt completely normal while dreaming, but became impossible only after waking?"
-
-    },
-
-
-    {
-
-      category:
-        "RELATION",
-
-      question:
-        `If “${f}” could communicate without using words, what might it be trying to show you?`
-
-    },
-
-
-    {
-
-      category:
-        "TIME",
-
-      question:
-        "Did the events really happen one after another? Describe how time behaved inside this dream."
-
-    }
-
-
-  ];
-
-
   return randomItem(
-    pool
+    [
+
+      {
+        category:"TRANSFORMATION",
+        question:
+          `Imagine that “${f}” is not fixed. What might begin changing shape if the dream continued for several more minutes?`
+      },
+
+      {
+        category:"OUTSIDE THE FRAME",
+        question:
+          "What might have existed just beyond what you remember — something unseen but unmistakably present?"
+      },
+
+      {
+        category:"DREAM LOGIC",
+        question:
+          "Which part of the dream felt completely normal while dreaming, but became impossible only after waking?"
+      },
+
+      {
+        category:"RELATION",
+        question:
+          `If “${f}” could communicate without using words, what might it be trying to show you?`
+      },
+
+      {
+        category:"TIME",
+        question:
+          "Did the events really happen one after another? Describe how time behaved inside this dream."
+      }
+
+    ]
   );
 
 }
-
 
 
 /* =========================================================
@@ -5868,7 +5141,6 @@ function generateLayerThreeQuestion(
   fragment,
   themes
 ){
-
 
   const f =
     fragment
@@ -5887,236 +5159,143 @@ function generateLayerThreeQuestion(
 
 
   if(
-    state.lang
-    ===
+    state.lang ===
     "PL"
   ){
 
-
     return randomItem(
-    [
+      [
 
+        {
+          category:"PAMIĘĆ",
+          question:
+            `Kiedy czytasz teraz własne słowa „${f}”, czy nadal masz pewność, że sen wyglądał właśnie tak? Co zdążyło zmienić się w pamięci podczas tej rozmowy?`
+        },
 
-      {
+        {
+          category:"DRUGI SEN",
+          question:
+            "Wyobraź sobie, że wszystko, co dotąd zostało opisane, było tylko snem wewnątrz innego snu. Co pojawiłoby się po przebudzeniu z tej pierwszej warstwy?"
+        },
 
-        category:
-          "PAMIĘĆ",
+        {
+          category:"TOŻSAMOŚĆ",
+          question:
+            "Usuń na chwilę siebie z tego snu. Co nadal by się wydarzało, gdyby nie było Cię w tej historii?"
+        },
 
-        question:
-          `Kiedy czytasz teraz własne słowa „${f}”, czy nadal masz pewność, że sen wyglądał właśnie tak? Co zdążyło zmienić się w pamięci podczas tej rozmowy?`
+        {
+          category:"ŚLAD",
+          question:
+            "Gdyby z całego snu można było zachować tylko jeden obraz, gest, przedmiot albo zdanie — co powinno pozostać?"
+        },
 
-      },
+        {
+          category:"ODWRÓCENIE",
+          question:
+            "A jeśli to nie Ty obserwowałeś ten sen? Co w tej historii mogło obserwować Ciebie?"
+        },
 
+        {
+          category:"PRZESUNIĘCIE",
+          question:
+            `Zmień jedną rzecz we fragmencie „${f}”. Co musiałoby się zmienić, aby cały sen nagle zaczął znaczyć coś zupełnie innego?`
+        }
 
-      {
-
-        category:
-          "DRUGI SEN",
-
-        question:
-          "Wyobraź sobie, że wszystko, co dotąd zostało opisane, było tylko snem wewnątrz innego snu. Co pojawiłoby się po przebudzeniu z tej pierwszej warstwy?"
-
-      },
-
-
-      {
-
-        category:
-          "TOŻSAMOŚĆ",
-
-        question:
-          "Usuń na chwilę siebie z tego snu. Co nadal by się wydarzało, gdyby nie było Cię w tej historii?"
-
-      },
-
-
-      {
-
-        category:
-          "ŚLAD",
-
-        question:
-          "Gdyby z całego snu można było zachować tylko jeden obraz, gest, przedmiot albo zdanie — co powinno pozostać?"
-
-      },
-
-
-      {
-
-        category:
-          "ODWRÓCENIE",
-
-        question:
-          "A jeśli to nie Ty obserwowałeś ten sen? Co w tej historii mogło obserwować Ciebie?"
-
-      },
-
-
-      {
-
-        category:
-          "PRZESUNIĘCIE",
-
-        question:
-          `Zmień jedną rzecz we fragmencie „${f}”. Co musiałoby się zmienić, aby cały sen nagle zaczął znaczyć coś zupełnie innego?`
-
-      }
-
-
-    ]
+      ]
     );
 
-
   }
-
 
 
   if(
-    state.lang
-    ===
+    state.lang ===
     "UKR"
   ){
 
-
     return randomItem(
-    [
+      [
 
+        {
+          category:"ПАМ’ЯТЬ",
+          question:
+            `Коли зараз читаєш власні слова «${f}», чи залишається впевненість, що сон виглядав саме так? Що вже встигло змінитися в пам’яті протягом цієї розмови?`
+        },
 
-      {
+        {
+          category:"ІНШИЙ СОН",
+          question:
+            "Уяви, що все описане досі було лише сном усередині іншого сну. Що могло б з’явитися після пробудження з цього першого шару?"
+        },
 
-        category:
-          "ПАМ’ЯТЬ",
+        {
+          category:"ПРИСУТНІСТЬ",
+          question:
+            "Уяви цей сон без своєї присутності. Що продовжувало б відбуватися, якби в цій історії не було спостерігача?"
+        },
 
-        question:
-          `Коли зараз читаєш власні слова «${f}», чи залишається впевненість, що сон виглядав саме так? Що вже встигло змінитися в пам’яті протягом цієї розмови?`
+        {
+          category:"СЛІД",
+          question:
+            "Якби з усього сну можна було залишити лише один образ, жест, предмет або речення — що мало б залишитися?"
+        },
 
-      },
+        {
+          category:"ПОГЛЯД",
+          question:
+            "Уяви, що сон також може дивитися у відповідь. Що в цій історії могло бути тим поглядом?"
+        }
 
-
-      {
-
-        category:
-          "ІНШИЙ СОН",
-
-        question:
-          "Уяви, що все описане досі було лише сном усередині іншого сну. Що могло б з’явитися після пробудження з цього першого шару?"
-
-      },
-
-
-      {
-
-        category:
-          "ПРИСУТНІСТЬ",
-
-        question:
-          "Уяви цей сон без своєї присутності. Що продовжувало б відбуватися, якби в цій історії не було спостерігача?"
-
-      },
-
-
-      {
-
-        category:
-          "СЛІД",
-
-        question:
-          "Якби з усього сну можна було залишити лише один образ, жест, предмет або речення — що мало б залишитися?"
-
-      },
-
-
-      {
-
-        category:
-          "ПОГЛЯД",
-
-        question:
-          "Уяви, що сон також може дивитися у відповідь. Що в цій історії могло бути тим поглядом?"
-
-      }
-
-
-    ]
+      ]
     );
-
 
   }
 
 
-
   return randomItem(
-  [
+    [
 
+      {
+        category:"MEMORY",
+        question:
+          `When you read your own words “${f}” now, are you still certain the dream looked exactly like that? What has already changed in your memory during this conversation?`
+      },
 
-    {
+      {
+        category:"SECOND DREAM",
+        question:
+          "Imagine everything described so far was only a dream contained inside another dream. What might appear after waking from the first layer?"
+      },
 
-      category:
-        "MEMORY",
+      {
+        category:"IDENTITY",
+        question:
+          "Remove yourself from the dream for a moment. What would continue happening if you were no longer inside the story?"
+      },
 
-      question:
-        `When you read your own words “${f}” now, are you still certain the dream looked exactly like that? What has already changed in your memory during this conversation?`
+      {
+        category:"TRACE",
+        question:
+          "If you could preserve only one image, gesture, object or sentence from the entire dream, what should remain?"
+      },
 
-    },
+      {
+        category:"REVERSAL",
+        question:
+          "What if you were not the one observing this dream? What in the story might have been observing you?"
+      }
 
-
-    {
-
-      category:
-        "SECOND DREAM",
-
-      question:
-        "Imagine everything described so far was only a dream contained inside another dream. What might appear after waking from the first layer?"
-
-    },
-
-
-    {
-
-      category:
-        "IDENTITY",
-
-      question:
-        "Remove yourself from the dream for a moment. What would continue happening if you were no longer inside the story?"
-
-    },
-
-
-    {
-
-      category:
-        "TRACE",
-
-      question:
-        "If you could preserve only one image, gesture, object or sentence from the entire dream, what should remain?"
-
-    },
-
-
-    {
-
-      category:
-        "REVERSAL",
-
-      question:
-        "What if you were not the one observing this dream? What in the story might have been observing you?"
-
-    }
-
-
-  ]
+    ]
   );
 
 }
 
 
-
 /* =========================================================
-   CURRENT QUESTION
+   QUESTION HELPERS
    ========================================================= */
 
 function getCurrentQuestion(){
-
 
   return state
   .generatedQuestions[
@@ -6126,33 +5305,21 @@ function getCurrentQuestion(){
 }
 
 
-
-/* =========================================================
-   LEVEL
-   ========================================================= */
-
 function getDreamLevel(){
 
-
   if(
-    state.questionIndex
-    <=
+    state.questionIndex <=
     2
   ){
-
     return 0;
-
   }
 
 
   if(
-    state.questionIndex
-    <=
+    state.questionIndex <=
     5
   ){
-
     return 1;
-
   }
 
 
@@ -6161,17 +5328,18 @@ function getDreamLevel(){
 }
 
 
-
 /* =========================================================
-   QUESTION
+   RENDER QUESTION
    ========================================================= */
 
 function renderQuestion(){
 
-
   setVisualMode(
     "questions"
   );
+
+
+  updateDreamCosmos();
 
 
   const copy =
@@ -6184,12 +5352,8 @@ function renderQuestion(){
     getCurrentQuestion();
 
 
-  if(
-    !q
-  ){
-
+  if(!q){
     return;
-
   }
 
 
@@ -6204,19 +5368,16 @@ function renderQuestion(){
 
 
   progress.textContent =
-
     `${String(
       state.questionIndex+1
-    )
-    .padStart(
+    ).padStart(
       2,
       "0"
     )}
     /
     ${String(
       state.totalQuestions
-    )
-    .padStart(
+    ).padStart(
       2,
       "0"
     )}`;
@@ -6231,11 +5392,9 @@ function renderQuestion(){
 
 
   if(
-    state.questionIndex
-    >
+    state.questionIndex >
     0
   ){
-
 
     const previous =
       state.answers[
@@ -6244,11 +5403,9 @@ function renderQuestion(){
 
 
     if(
-      previous
-      &&
+      previous &&
       previous.answer
     ){
-
 
       const fragment =
         extractFragment(
@@ -6258,52 +5415,38 @@ function renderQuestion(){
 
       if(fragment){
 
-
         trace = `
 
 <div class="contextTrace">
-
 ${escapeHtml(
   fragment
 )}
-
 </div>
 
 `;
 
-
       }
 
-
     }
-
 
   }
 
 
   screen.innerHTML = `
 
-
 <div class="eyebrow">
-
 ${escapeHtml(
   q.category
 )}
-
 </div>
 
-
 <h2>
-
 ${escapeHtml(
   q.question
 )}
-
 </h2>
 
-
 ${trace}
-
 
 <textarea
 id="answer"
@@ -6316,32 +5459,23 @@ placeholder="${copy.placeholder}"
   ""
 )}</textarea>
 
-
 <div class="actions">
-
 
 <button
 class="back"
 onclick="questionBack()"
 >
-
 ${copy.back}
-
 </button>
-
 
 <button
 class="next"
 onclick="questionNext()"
 >
-
 ${copy.next}
-
 </button>
 
-
 </div>
-
 
 `;
 
@@ -6350,9 +5484,7 @@ ${copy.next}
 
 
   setTimeout(
-
     ()=>{
-
 
       document
       .getElementById(
@@ -6360,15 +5492,11 @@ ${copy.next}
       )
       ?.focus();
 
-
     },
-
     350
-
   );
 
 }
-
 
 
 /* =========================================================
@@ -6377,7 +5505,6 @@ ${copy.next}
 
 function saveCurrentAnswer(){
 
-
   const field =
     document
     .getElementById(
@@ -6385,12 +5512,8 @@ function saveCurrentAnswer(){
     );
 
 
-  if(
-    !field
-  ){
-
+  if(!field){
     return;
-
   }
 
 
@@ -6404,29 +5527,23 @@ function saveCurrentAnswer(){
   =
   {
 
-
     level:
       getDreamLevel(),
-
 
     category:
       q.category,
 
-
     question:
       q.question,
-
 
     answer:
       normalizeText(
         field.value
       )
 
-
   };
 
 }
-
 
 
 /* =========================================================
@@ -6435,15 +5552,11 @@ function saveCurrentAnswer(){
 
 function questionNext(){
 
-
   if(
-    transitionRunning
-    ||
+    transitionRunning ||
     dreamShiftRunning
   ){
-
     return;
-
   }
 
 
@@ -6457,11 +5570,9 @@ function questionNext(){
 
 
   if(
-    !current
-    ||
+    !current ||
     !current.answer
   ){
-
 
     const field =
       document
@@ -6472,7 +5583,6 @@ function questionNext(){
 
     if(field){
 
-
       field.focus();
 
 
@@ -6481,54 +5591,41 @@ function questionNext(){
 
 
       setTimeout(
-
         ()=>{
-
 
           field.style.borderBottomColor =
             "rgba(255,255,255,.20)";
 
-
         },
-
         900
-
       );
-
 
     }
 
 
     return;
 
-
   }
 
 
   if(
-    state.questionIndex
-    ===
+    state.questionIndex ===
     state.totalQuestions-1
   ){
-
 
     transition(
       renderNickname
     );
 
-
     return;
-
 
   }
 
 
   if(
-    state.questionIndex
-    ===
+    state.questionIndex ===
     2
   ){
-
 
     state.questionIndex++;
 
@@ -6539,15 +5636,16 @@ function questionNext(){
       ]
     ){
 
-
       state.generatedQuestions[
         state.questionIndex
       ]
       =
       generateAdaptiveQuestion();
 
-
     }
+
+
+    updateDreamCosmos();
 
 
     runDreamShift(
@@ -6557,16 +5655,13 @@ function questionNext(){
 
     return;
 
-
   }
 
 
   if(
-    state.questionIndex
-    ===
+    state.questionIndex ===
     5
   ){
-
 
     state.questionIndex++;
 
@@ -6577,15 +5672,16 @@ function questionNext(){
       ]
     ){
 
-
       state.generatedQuestions[
         state.questionIndex
       ]
       =
       generateAdaptiveQuestion();
 
-
     }
+
+
+    updateDreamCosmos();
 
 
     runDreamShift(
@@ -6594,7 +5690,6 @@ function questionNext(){
 
 
     return;
-
 
   }
 
@@ -6608,15 +5703,16 @@ function questionNext(){
     ]
   ){
 
-
     state.generatedQuestions[
       state.questionIndex
     ]
     =
     generateAdaptiveQuestion();
 
-
   }
+
+
+  updateDreamCosmos();
 
 
   transition(
@@ -6626,22 +5722,17 @@ function questionNext(){
 }
 
 
-
 /* =========================================================
    BACK
    ========================================================= */
 
 function questionBack(){
 
-
   if(
-    transitionRunning
-    ||
+    transitionRunning ||
     dreamShiftRunning
   ){
-
     return;
-
   }
 
 
@@ -6649,19 +5740,15 @@ function questionBack(){
 
 
   if(
-    state.questionIndex
-    ===
+    state.questionIndex ===
     0
   ){
-
 
     state.introStep =
       INTRO[
         state.lang
       ]
-      .length
-      -
-      1;
+      .length-1;
 
 
     transition(
@@ -6671,11 +5758,13 @@ function questionBack(){
 
     return;
 
-
   }
 
 
   state.questionIndex--;
+
+
+  updateDreamCosmos();
 
 
   transition(
@@ -6683,7 +5772,6 @@ function questionBack(){
   );
 
 }
-
 
 
 /* =========================================================
@@ -6696,13 +5784,10 @@ let dreamShiftRunning =
 
 function runDreamShift(level){
 
-
   if(
     dreamShiftRunning
   ){
-
     return;
-
   }
 
 
@@ -6760,112 +5845,80 @@ function runDreamShift(level){
 
 
   if(
-    level
-    ===
+    level ===
     1
   ){
 
-
     if(
-      state.lang
-      ===
+      state.lang ===
       "PL"
     ){
-
 
       main.textContent =
         "ZAMKNIJ OCZY JESZCZE RAZ";
 
-
       sub.textContent =
-        "to samo wspomnienie może prowadzić głębiej";
-
+        "coś właśnie przesłoniło światło";
 
     }
-
     else if(
-      state.lang
-      ===
+      state.lang ===
       "UKR"
     ){
-
 
       main.textContent =
         "ЗАПЛЮЩ ОЧІ ЩЕ РАЗ";
 
-
       sub.textContent =
-        "той самий спогад може вести глибше";
-
+        "щось щойно закрило світло";
 
     }
-
     else{
-
 
       main.textContent =
         "CLOSE YOUR EYES AGAIN";
 
-
       sub.textContent =
-        "the same memory can lead deeper";
-
+        "something has just crossed the light";
 
     }
 
-
   }
-
   else{
 
-
     if(
-      state.lang
-      ===
+      state.lang ===
       "PL"
     ){
-
 
       main.textContent =
         "SEN PAMIĘTA";
 
-
       sub.textContent =
-        "niektóre obrazy wracają inaczej";
-
+        "światło nie zniknęło — zostało zasłonięte";
 
     }
-
     else if(
-      state.lang
-      ===
+      state.lang ===
       "UKR"
     ){
-
 
       main.textContent =
         "СОН ПАМ’ЯТАЄ";
 
-
       sub.textContent =
-        "деякі образи повертаються інакше";
-
+        "світло не зникло — його лише закрито";
 
     }
-
     else{
-
 
       main.textContent =
         "THE DREAM REMEMBERS";
 
-
       sub.textContent =
-        "some images return differently";
-
+        "the light did not disappear — it was only covered";
 
     }
-
 
   }
 
@@ -6878,9 +5931,7 @@ function runDreamShift(level){
 
 
   setTimeout(
-
     ()=>{
-
 
       main
       .classList
@@ -6895,139 +5946,98 @@ function runDreamShift(level){
         "shiftFade"
       );
 
-
     },
-
     3400
-
   );
 
 
   setTimeout(
-
     ()=>{
 
-
       if(
-        level
-        ===
+        level ===
         1
       ){
 
-
         if(
-          state.lang
-          ===
+          state.lang ===
           "PL"
         ){
-
 
           main.textContent =
             "NIE SZUKAJ POCZĄTKU";
 
-
           sub.textContent =
-            "po prostu wejdź w następną scenę";
-
+            "pozwól zaćmieniu prowadzić dalej";
 
         }
-
         else if(
-          state.lang
-          ===
+          state.lang ===
           "UKR"
         ){
-
 
           main.textContent =
             "НЕ ШУКАЙ ПОЧАТКУ";
 
-
           sub.textContent =
-            "просто увійди в наступну сцену";
-
+            "дозволь затемненню вести далі";
 
         }
-
         else{
-
 
           main.textContent =
             "DO NOT LOOK FOR THE BEGINNING";
 
-
           sub.textContent =
-            "simply enter the next scene";
-
+            "let the eclipse lead you further";
 
         }
 
-
       }
-
       else{
 
-
         if(
-          state.lang
-          ===
+          state.lang ===
           "PL"
         ){
 
-
           main.textContent =
-            "TERAZ SEN PATRZY NA CIEBIE";
-
+            "TERAZ ZOSTAŁA TYLKO KORONA";
 
           sub.textContent =
-            "zostań jeszcze chwilę";
-
+            "kolor nadal tam jest";
 
         }
-
         else if(
-          state.lang
-          ===
+          state.lang ===
           "UKR"
         ){
 
-
           main.textContent =
-            "ТЕПЕР СОН ДИВИТЬСЯ У ВІДПОВІДЬ";
-
+            "ТЕПЕР ЗАЛИШИЛАСЯ ЛИШЕ КОРОНА";
 
           sub.textContent =
-            "залишся ще трохи";
-
+            "колір усе ще там";
 
         }
-
         else{
 
-
           main.textContent =
-            "NOW THE DREAM LOOKS BACK";
-
+            "ONLY THE CORONA REMAINS";
 
           sub.textContent =
-            "stay a little longer";
-
+            "the colour is still there";
 
         }
-
 
       }
 
 
       requestAnimationFrame(
-
         ()=>{
 
-
           requestAnimationFrame(
-
             ()=>{
-
 
               main
               .classList
@@ -7042,28 +6052,19 @@ function runDreamShift(level){
                 "shiftFade"
               );
 
-
             }
-
           );
 
-
         }
-
       );
 
-
     },
-
     5100
-
   );
 
 
   setTimeout(
-
     ()=>{
-
 
       main
       .classList
@@ -7078,18 +6079,13 @@ function runDreamShift(level){
         "shiftFade"
       );
 
-
     },
-
     8200
-
   );
 
 
   setTimeout(
-
     ()=>{
-
 
       overlay
       .classList
@@ -7109,29 +6105,20 @@ function runDreamShift(level){
 
 
       setTimeout(
-
         ()=>{
-
 
           dreamShiftRunning =
             false;
 
-
         },
-
         900
-
       );
 
-
     },
-
     10400
-
   );
 
 }
-
 
 
 /* =========================================================
@@ -7140,50 +6127,35 @@ function runDreamShift(level){
 
 function spawnPreviousAnswerGhost(){
 
-
   if(
-    state.questionIndex
-    ===
+    state.questionIndex ===
     0
   ){
-
     return;
-
   }
 
 
   const previous =
     state.answers
     .filter(
-
-      a=>
-
-        a
-        &&
-        a.answer
-        &&
-        a.answer.length
-        >
-        2
-
+      a =>
+        a &&
+        a.answer &&
+        a.answer.length > 2
     );
 
 
   if(
     !previous.length
   ){
-
     return;
-
   }
 
 
   if(
-    Math.random()
-    >
+    Math.random() >
     .57
   ){
-
 
     const a =
       randomItem(
@@ -7202,11 +6174,9 @@ function spawnPreviousAnswerGhost(){
       true
     );
 
-
   }
 
 }
-
 
 
 /* =========================================================
@@ -7214,7 +6184,6 @@ function spawnPreviousAnswerGhost(){
    ========================================================= */
 
 function renderNickname(){
-
 
   setVisualMode(
     "nickname"
@@ -7240,110 +6209,74 @@ function renderNickname(){
 
 
   if(
-    state.lang
-    ===
+    state.lang ===
     "PL"
   ){
-
 
     eyebrow =
       "KTO ŚNIŁ?";
 
-
   }
-
   else if(
-    state.lang
-    ===
+    state.lang ===
     "UKR"
   ){
 
-
     eyebrow =
       "КОМУ НАСНИВСЯ ЦЕЙ СОН?";
-
 
   }
 
 
   screen.innerHTML = `
 
-
 <div class="eyebrow">
-
 ${eyebrow}
-
 </div>
 
-
 <h2>
-
 ${copy.nicknameTitle}
-
 </h2>
 
-
 <p class="sub">
-
 ${copy.nicknameMeta}
-
 </p>
 
-
 <input
-
 id="nickname"
-
 type="text"
-
 maxlength="40"
-
 autocomplete="off"
-
 spellcheck="false"
-
 placeholder="${copy.nicknamePlaceholder}"
-
 value="${escapeHtml(
   state.nickname
 )}"
-
 >
 
-
 <div class="actions">
-
 
 <button
 class="back"
 onclick="nicknameBack()"
 >
-
 ${copy.back}
-
 </button>
-
 
 <button
 class="next"
 onclick="saveDream()"
 >
-
 ${copy.nicknameSubmit}
-
 </button>
 
-
 </div>
-
 
 `;
 
 
   setTimeout(
-
     ()=>{
-
 
       document
       .getElementById(
@@ -7351,15 +6284,11 @@ ${copy.nicknameSubmit}
       )
       ?.focus();
 
-
     },
-
     350
-
   );
 
 }
-
 
 
 /* =========================================================
@@ -7368,13 +6297,10 @@ ${copy.nicknameSubmit}
 
 function nicknameBack(){
 
-
   if(
     transitionRunning
   ){
-
     return;
-
   }
 
 
@@ -7387,20 +6313,19 @@ function nicknameBack(){
 
   if(field){
 
-
     state.nickname =
       field
       .value
       .trim();
 
-
   }
 
 
   state.questionIndex =
-    state.totalQuestions
-    -
-    1;
+    state.totalQuestions-1;
+
+
+  updateDreamCosmos();
 
 
   transition(
@@ -7410,20 +6335,16 @@ function nicknameBack(){
 }
 
 
-
 /* =========================================================
-   SAVE DREAM
+   SAVE
    ========================================================= */
 
 async function saveDream(){
 
-
   if(
     transitionRunning
   ){
-
     return;
-
   }
 
 
@@ -7434,12 +6355,7 @@ async function saveDream(){
     );
 
 
-  /*
-  Keep nickname during retry.
-  */
-
   if(field){
-
 
     const value =
       field
@@ -7449,13 +6365,10 @@ async function saveDream(){
 
     if(value){
 
-
       state.nickname =
         value;
 
-
     }
-
 
   }
 
@@ -7464,10 +6377,8 @@ async function saveDream(){
     !state.nickname
   ){
 
-
     state.nickname =
       "ANONYMOUS";
-
 
   }
 
@@ -7478,52 +6389,39 @@ async function saveDream(){
     ];
 
 
-  const payload =
-  {
-
+  const payload = {
 
     nickname:
       state.nickname,
 
-
     language:
       state.lang,
-
 
     dreamColor:
       state.dreamColorName,
 
-
     answers:
       state.answers,
 
-
     dream:
-
       state.answers
       .map(
-
-        a=>
-
+        a =>
           a
           ?
           a.answer
           :
           ""
-
       )
       .join(
         "\n\n"
       )
 
-
   };
 
 
   transition(
-
     ()=>{
-
 
       setVisualMode(
         "saving"
@@ -7540,68 +6438,44 @@ async function saveDream(){
 
       screen.innerHTML = `
 
-
 <div class="eyebrow">
-
 TRAUM SIM
-
 </div>
 
-
 <h2>
-
 ${copy.saving}
-
 </h2>
 
-
 <p class="sub">
-
 ...
-
 </p>
-
 
 `;
 
-
     }
-
   );
 
 
   try{
 
-
     const response =
       await fetch(
-
         API_URL,
-
         {
 
-
-          method:
-            "POST",
-
+          method:"POST",
 
           headers:{
-
             "Content-Type":
               "text/plain;charset=utf-8"
-
           },
 
-
           body:
-
             JSON.stringify(
               payload
             )
 
-
         }
-
       );
 
 
@@ -7609,15 +6483,10 @@ ${copy.saving}
       !response.ok
     ){
 
-
       throw new Error(
-
-        "HTTP "
-        +
+        "HTTP " +
         response.status
-
       );
-
 
     }
 
@@ -7630,15 +6499,10 @@ ${copy.saving}
       !data.ok
     ){
 
-
       throw new Error(
-
-        data.error
-        ||
+        data.error ||
         "Backend error"
-
       );
-
 
     }
 
@@ -7647,11 +6511,8 @@ ${copy.saving}
       data.dreamId
     );
 
-
   }
-
   catch(error){
-
 
     console.error(
       "TRAUM SAVE ERROR",
@@ -7661,11 +6522,9 @@ ${copy.saving}
 
     renderError();
 
-
   }
 
 }
-
 
 
 /* =========================================================
@@ -7673,7 +6532,6 @@ ${copy.saving}
    ========================================================= */
 
 function renderSaved(id){
-
 
   const copy =
     UI[
@@ -7684,28 +6542,22 @@ function renderSaved(id){
   const show =
     ()=>{
 
-
       if(
         transitionRunning
       ){
-
 
         setTimeout(
           show,
           200
         );
 
-
         return;
-
 
       }
 
 
       transition(
-
         ()=>{
-
 
           setVisualMode(
             "saved"
@@ -7714,27 +6566,17 @@ function renderSaved(id){
 
           screen.innerHTML = `
 
-
 <div class="eyebrow">
-
 TRAUM SIM
-
 </div>
 
-
 <h2>
-
 ${copy.done}
-
 </h2>
 
-
 <p class="sub">
-
 ${copy.sub}
-
 </p>
-
 
 <div class="received">
 
@@ -7750,23 +6592,16 @@ ${escapeHtml(
 
 </div>
 
-
 `;
 
-
         }
-
       );
 
 
       setTimeout(
-
         startFinalSequence,
-
         6500
-
       );
-
 
     };
 
@@ -7776,13 +6611,11 @@ ${escapeHtml(
 }
 
 
-
 /* =========================================================
    ERROR
    ========================================================= */
 
 function renderError(){
-
 
   const copy =
     UI[
@@ -7794,37 +6627,27 @@ function renderError(){
 
 
   if(
-    state.lang
-    ===
+    state.lang ===
     "PL"
   ){
-
 
     message =
       "Połączenie z archiwum zostało przerwane.";
 
-
   }
-
   else if(
-    state.lang
-    ===
+    state.lang ===
     "UKR"
   ){
-
 
     message =
       "З’єднання з архівом перервано.";
 
-
   }
-
   else{
-
 
     message =
       "The connection to the archive was interrupted.";
-
 
   }
 
@@ -7832,28 +6655,22 @@ function renderError(){
   const show =
     ()=>{
 
-
       if(
         transitionRunning
       ){
-
 
         setTimeout(
           show,
           200
         );
 
-
         return;
-
 
       }
 
 
       transition(
-
         ()=>{
-
 
           setVisualMode(
             "error"
@@ -7862,54 +6679,35 @@ function renderError(){
 
           screen.innerHTML = `
 
-
 <div class="eyebrow">
-
 TRAUM SIM
-
 </div>
 
-
 <h2>
-
 ${copy.error}
-
 </h2>
 
-
 <p class="sub">
-
 ${message}
-
 </p>
-
 
 <div class="actions">
 
-
 <span></span>
-
 
 <button
 class="next"
 onclick="saveDream()"
 >
-
 ${copy.retry}
-
 </button>
-
 
 </div>
 
-
 `;
 
-
         }
-
       );
-
 
     };
 
@@ -7919,13 +6717,11 @@ ${copy.retry}
 }
 
 
-
 /* =========================================================
    FINAL
    ========================================================= */
 
 function startFinalSequence(){
-
 
   const ui =
     document
@@ -7963,9 +6759,7 @@ function startFinalSequence(){
 
 
   setTimeout(
-
     ()=>{
-
 
       bloom
       .classList
@@ -7980,25 +6774,19 @@ function startFinalSequence(){
         "active"
       );
 
-
     },
-
     1300
-
   );
 
 
   setTimeout(
-
     ()=>{
-
 
       document
       .getElementById(
         "finalTitle"
       )
       .textContent =
-
         UI[
           state.lang
         ]
@@ -8011,18 +6799,13 @@ function startFinalSequence(){
         "active"
       );
 
-
     },
-
     7500
-
   );
 
 
   setTimeout(
-
     ()=>{
-
 
       bloom.style.display =
         "none";
@@ -8031,15 +6814,11 @@ function startFinalSequence(){
       whiteout.style.display =
         "none";
 
-
     },
-
     8150
-
   );
 
 }
-
 
 
 /* =========================================================
@@ -8051,13 +6830,10 @@ function ghost(
   answer=false
 ){
 
-
   if(
     !text
   ){
-
     return;
-
   }
 
 
@@ -8069,12 +6845,11 @@ function ghost(
 
 
   e.className =
-
     answer
-      ?
-      "ghost answerGhost"
-      :
-      "ghost";
+    ?
+    "ghost answerGhost"
+    :
+    "ghost";
 
 
   e.textContent =
@@ -8082,11 +6857,8 @@ function ghost(
 
 
   e.style.left =
-
     (
-      Math.random()
-      *
-      55
+      Math.random()*55
       -
       5
     )
@@ -8095,11 +6867,8 @@ function ghost(
 
 
   e.style.top =
-
     (
-      Math.random()
-      *
-      75
+      Math.random()*75
       +
       8
     )
@@ -8108,13 +6877,10 @@ function ghost(
 
 
   e.style.animationDuration =
-
     (
       31
       +
-      Math.random()
-      *
-      25
+      Math.random()*25
     )
     +
     "s";
@@ -8127,32 +6893,26 @@ function ghost(
 
 
   setTimeout(
-
     ()=>{
-
 
       e.remove();
 
-
     },
-
     58000
-
   );
 
 }
-
 
 
 /* =========================================================
    INIT
    ========================================================= */
 
+applySunColor();
+
 renderStart();
 
-
 </script>
-
 
 </body>
 
