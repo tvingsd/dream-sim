@@ -1,24 +1,5944 @@
-#screen{
+<!DOCTYPE html>
+<html lang="pl">
 
-  position:relative;
+<head>
 
-  transition:
-    opacity 1.25s ease,
-    transform 1.45s ease,
-    filter 1.25s ease;
+<meta charset="UTF-8">
 
+<meta
+  name="viewport"
+  content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover"
+>
+
+<meta name="theme-color" content="#000000">
+
+<title>TRAUM SIM — PATCHLAB 2026</title>
+
+<style>
+
+:root{
+  --vh:1vh;
+  --white:#f5f5f2;
+  --muted:rgba(255,255,255,.50);
+  --line:rgba(255,255,255,.19);
+
+  --shadow:
+    0 1px 2px rgba(0,0,0,.94),
+    0 4px 18px rgba(0,0,0,.42);
+
+  --dreamRGB:185,185,185;
+}
+
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+html,
+body{
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  background:#000;
+  color:var(--white);
+
+  font-family:
+    Helvetica,
+    Arial,
+    sans-serif;
+
+  -webkit-font-smoothing:antialiased;
+  -webkit-text-size-adjust:none;
+}
+
+body{
+  min-height:calc(var(--vh) * 100);
 }
 
 
-#screen.fade{
+/* =========================================================
+   DREAM WORLD
+   ========================================================= */
+
+#dreamWorld{
+  position:fixed;
+  inset:0;
+  z-index:0;
+  overflow:hidden;
+  pointer-events:none;
+  background:#000;
+  opacity:.91;
+
+  animation:
+    dreamFocus
+    139s
+    ease-in-out
+    infinite;
+}
+
+#dreamSvg{
+  position:absolute;
+
+  width:114%;
+  height:114%;
+
+  left:-7%;
+  top:-7%;
+
+  overflow:visible;
+
+  background:#000;
+
+  animation:
+    dreamWorldBreath
+    211s
+    ease-in-out
+    infinite
+    alternate;
+}
+
+.dreamInk{
+  fill:rgb(var(--dreamRGB));
+
+  transition:
+    fill
+    8s
+    ease;
+}
+
+.inkGhost{opacity:.07;}
+.inkSoft{opacity:.115;}
+.inkLight{opacity:.16;}
+.inkMedium{opacity:.14;}
+.inkMain{opacity:.19;}
+.inkDark{opacity:.10;}
+.inkCore{opacity:.075;}
+.inkWater{opacity:.12;}
+
+#rorschachBack{
+  transform-origin:800px 500px;
+
+  animation:
+    backMorph
+    243s
+    cubic-bezier(.45,0,.55,1)
+    infinite
+    alternate;
+}
+
+#rorschachMid{
+  transform-origin:800px 500px;
+
+  animation:
+    midMorph
+    187s
+    cubic-bezier(.45,0,.55,1)
+    infinite
+    alternate;
+}
+
+#rorschachFront{
+  transform-origin:800px 500px;
+
+  animation:
+    frontMorph
+    163s
+    cubic-bezier(.45,0,.55,1)
+    infinite
+    alternate;
+}
+
+#waterLayer{
+  transform-origin:800px 500px;
+
+  animation:
+    waterMorph
+    271s
+    cubic-bezier(.45,0,.55,1)
+    infinite
+    alternate;
+}
+
+
+/* =========================================================
+   GRAPHITE
+   ========================================================= */
+
+#graphite{
+  position:fixed;
+  inset:0;
+  z-index:1;
+
+  pointer-events:none;
+
+  background:
+    radial-gradient(
+      ellipse at 50% 48%,
+      rgba(72,72,72,.03) 0%,
+      rgba(32,32,32,.065) 40%,
+      rgba(8,8,8,.18) 72%,
+      rgba(0,0,0,.52) 100%
+    );
+
+  opacity:.42;
+
+  transition:
+    opacity
+    3.2s
+    ease;
+}
+
+body.questionMode #graphite{
+  opacity:.72;
+}
+
+#readingShadow{
+  position:fixed;
+  inset:0;
+  z-index:2;
+
+  pointer-events:none;
 
   opacity:0;
 
-  transform:
-    translateY(10px)
-    scale(1.008);
+  background:
+    radial-gradient(
+      ellipse at 50% 48%,
+      rgba(0,0,0,.02) 0%,
+      rgba(0,0,0,.10) 40%,
+      rgba(0,0,0,.40) 78%,
+      rgba(0,0,0,.64) 100%
+    );
+
+  transition:
+    opacity
+    2.8s
+    ease;
+}
+
+body.questionMode #readingShadow{
+  opacity:.59;
+}
+
+
+/* =========================================================
+   VEIL
+   ========================================================= */
+
+#veil{
+  position:fixed;
+  inset:-18%;
+  z-index:3;
+
+  pointer-events:none;
+
+  opacity:.40;
+
+  mix-blend-mode:screen;
+
+  background:
+    radial-gradient(
+      circle at 25% 43%,
+      rgba(255,255,255,.022),
+      transparent 27%
+    ),
+
+    radial-gradient(
+      circle at 74% 57%,
+      rgba(255,255,255,.017),
+      transparent 30%
+    );
+
+  animation:
+    veilBreath
+    89s
+    ease-in-out
+    infinite
+    alternate;
+}
+
+
+/* =========================================================
+   GHOSTS
+   ========================================================= */
+
+#ghostLayer{
+  position:fixed;
+  inset:0;
+  z-index:5;
+  pointer-events:none;
+  overflow:hidden;
+}
+
+.ghost{
+  position:absolute;
+  max-width:90vw;
+  white-space:nowrap;
+
+  font-size:
+    clamp(
+      25px,
+      8vw,
+      112px
+    );
+
+  line-height:.9;
+  letter-spacing:-.05em;
+
+  color:
+    rgba(255,255,255,.023);
 
   filter:
-    blur(13px);
+    blur(15px);
+
+  animation:
+    ghostMove
+    linear
+    forwards;
+}
+
+.answerGhost{
+  color:
+    rgba(255,255,255,.042);
+
+  filter:
+    blur(17px);
+}
+
+
+/* =========================================================
+   GRAIN
+   ========================================================= */
+
+#grain{
+  position:fixed;
+  inset:-50%;
+  z-index:7;
+
+  pointer-events:none;
+
+  opacity:.019;
+
+  background-image:url(
+    "data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.83' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"
+  );
+
+  animation:
+    grainMove
+    .36s
+    steps(2)
+    infinite;
+}
+
+
+/* =========================================================
+   UI
+   ========================================================= */
+
+#ui{
+  position:fixed;
+  inset:0;
+  z-index:20;
+
+  height:calc(var(--vh) * 100);
+
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+
+  padding:
+    max(24px,env(safe-area-inset-top))
+    max(24px,env(safe-area-inset-right))
+    max(24px,env(safe-area-inset-bottom))
+    max(24px,env(safe-area-inset-left));
+
+  transition:
+    opacity
+    1.8s
+    ease;
+}
+
+#ui.hide{
+  opacity:0;
+  pointer-events:none;
+}
+
+.top,
+.bottom{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+
+  gap:20px;
+
+  font-size:10px;
+  letter-spacing:.22em;
+  text-transform:uppercase;
+
+  color:var(--muted);
+
+  text-shadow:var(--shadow);
+}
+
+
+/* =========================================================
+   SCREEN
+   ========================================================= */
+
+#screenWrap{
+  width:min(960px,100%);
+  margin:auto;
+  position:relative;
+}
+
+#screenWrap::before{
+  content:"";
+  position:absolute;
+  z-index:-1;
+
+  inset:-80px -90px;
+
+  pointer-events:none;
+
+  opacity:.48;
+
+  filter:blur(30px);
+
+  background:
+    radial-gradient(
+      ellipse,
+      rgba(0,0,0,.52),
+      rgba(0,0,0,.20) 62%,
+      rgba(0,0,0,0) 83%
+    );
+}
+
+
+/* =========================================================
+   NEW DREAM CROSSFADE
+   ========================================================= */
+
+#screen{
+  position:relative;
+  opacity:1;
+
+  transition:
+    opacity
+    1.8s
+    cubic-bezier(.45,0,.25,1);
+
+  will-change:opacity;
+}
+
+#screen.fade{
+  opacity:0;
+}
+
+
+/* components fade slightly earlier */
+
+#screen h2,
+#screen h1,
+#screen .introText,
+#screen .introMeta,
+#screen textarea,
+#screen input,
+#screen .actions,
+#screen .eyebrow,
+#screen .contextTrace,
+#screen .sub,
+#screen .received{
+  transition:
+    opacity
+    1.6s
+    ease;
+}
+
+#screen.fade h2,
+#screen.fade h1,
+#screen.fade .introText,
+#screen.fade .introMeta,
+#screen.fade textarea,
+#screen.fade input,
+#screen.fade .actions,
+#screen.fade .eyebrow,
+#screen.fade .contextTrace,
+#screen.fade .sub,
+#screen.fade .received{
+  opacity:.08;
+}
+
+
+/* =========================================================
+   TYPOGRAPHY
+   ========================================================= */
+
+.eyebrow{
+  margin-bottom:24px;
+
+  font-size:10px;
+  letter-spacing:.24em;
+  text-transform:uppercase;
+
+  color:
+    rgba(255,255,255,.54);
+
+  text-shadow:var(--shadow);
+}
+
+h1{
+  font-size:
+    clamp(
+      56px,
+      13vw,
+      116px
+    );
+
+  line-height:.84;
+  letter-spacing:-.055em;
+
+  font-weight:400;
+
+  text-shadow:var(--shadow);
+}
+
+h2{
+  max-width:930px;
+
+  font-size:
+    clamp(
+      30px,
+      7vw,
+      64px
+    );
+
+  line-height:1.02;
+  letter-spacing:-.038em;
+
+  font-weight:400;
+
+  text-shadow:var(--shadow);
+}
+
+.introText{
+  max-width:740px;
+
+  margin-top:28px;
+
+  font-size:
+    clamp(
+      18px,
+      2.8vw,
+      29px
+    );
+
+  line-height:1.35;
+  letter-spacing:-.015em;
+
+  text-shadow:var(--shadow);
+}
+
+.introMeta{
+  max-width:680px;
+
+  margin-top:27px;
+
+  font-size:12px;
+  line-height:1.65;
+
+  color:
+    rgba(255,255,255,.54);
+
+  text-shadow:var(--shadow);
+}
+
+.sub{
+  max-width:650px;
+
+  margin-top:22px;
+
+  font-size:14px;
+  line-height:1.55;
+
+  color:
+    rgba(255,255,255,.56);
+
+  text-shadow:var(--shadow);
+}
+
+.contextTrace{
+  max-width:640px;
+
+  margin-top:22px;
+
+  font-size:11px;
+  line-height:1.55;
+
+  letter-spacing:.06em;
+
+  color:
+    rgba(255,255,255,.28);
+
+  text-shadow:var(--shadow);
+}
+
+
+/* =========================================================
+   LANGUAGE
+   ========================================================= */
+
+.langs{
+  display:grid;
+
+  grid-template-columns:
+    1fr 1fr 1fr;
+
+  gap:1px;
+
+  margin-top:52px;
+
+  background:
+    rgba(255,255,255,.16);
+}
+
+button{
+  appearance:none;
+
+  border:0;
+
+  background:
+    rgba(0,0,0,.80);
+
+  color:#fff;
+
+  font:inherit;
+
+  cursor:pointer;
+
+  text-shadow:var(--shadow);
+}
+
+.langs button{
+  height:82px;
+  font-size:13px;
+  letter-spacing:.18em;
+}
+
+button:hover{
+  background:#fff;
+  color:#000;
+  text-shadow:none;
+}
+
+
+/* =========================================================
+   INPUTS
+   ========================================================= */
+
+textarea,
+input{
+  width:100%;
+
+  border:0;
+
+  border-bottom:
+    1px solid
+    rgba(255,255,255,.19);
+
+  outline:0;
+
+  background:
+    rgba(0,0,0,.07);
+
+  color:#fff;
+
+  font:inherit;
+
+  caret-color:#fff;
+
+  border-radius:0;
+
+  text-shadow:var(--shadow);
+}
+
+textarea{
+  min-height:210px;
+
+  margin-top:30px;
+
+  padding:
+    16px 0 20px;
+
+  resize:none;
+
+  font-size:
+    clamp(
+      20px,
+      4.2vw,
+      33px
+    );
+
+  line-height:1.38;
+}
+
+input{
+  margin-top:34px;
+
+  padding:
+    18px 0 20px;
+
+  font-size:
+    clamp(
+      25px,
+      5vw,
+      44px
+    );
+
+  letter-spacing:-.02em;
+}
+
+textarea::placeholder,
+input::placeholder{
+  color:
+    rgba(255,255,255,.17);
+}
+
+
+/* =========================================================
+   ACTIONS
+   ========================================================= */
+
+.actions{
+  margin-top:34px;
+
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+
+  gap:18px;
+}
+
+.back,
+.next{
+  font-size:10px;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+}
+
+.back{
+  background:transparent;
+  color:var(--muted);
+  padding:16px 0;
+}
+
+.next{
+  min-width:150px;
+
+  padding:
+    17px 20px;
+
+  border:
+    1px solid
+    rgba(255,255,255,.26);
+
+  transition:.42s;
+}
+
+.received{
+  margin-top:34px;
+
+  font-size:11px;
+  letter-spacing:.21em;
+  text-transform:uppercase;
+
+  color:
+    rgba(255,255,255,.56);
+
+  text-shadow:var(--shadow);
+}
+
+.colorHint{
+  margin-top:15px;
+
+  font-size:10px;
+  line-height:1.5;
+
+  letter-spacing:.15em;
+  text-transform:uppercase;
+
+  color:
+    rgba(255,255,255,.36);
+
+  text-shadow:var(--shadow);
+}
+
+
+/* =========================================================
+   DREAM SHIFT
+   ========================================================= */
+
+#dreamShift{
+  position:fixed;
+  inset:0;
+  z-index:150;
+
+  pointer-events:none;
+
+  display:flex;
+  justify-content:center;
+  align-items:center;
+
+  opacity:0;
+  background:#000;
+}
+
+#dreamShift.active{
+  animation:
+    dreamShift
+    10.4s
+    ease
+    forwards;
+}
+
+.dreamShiftWrap{
+  width:min(760px,88vw);
+  text-align:center;
+}
+
+#dreamShiftMain{
+  font-size:
+    clamp(
+      38px,
+      9vw,
+      92px
+    );
+
+  line-height:.9;
+  letter-spacing:-.055em;
+
+  font-weight:400;
+
+  text-shadow:var(--shadow);
+}
+
+#dreamShiftSub{
+  margin-top:28px;
+
+  font-size:10px;
+  line-height:1.6;
+
+  letter-spacing:.22em;
+  text-transform:uppercase;
+
+  color:
+    rgba(255,255,255,.48);
+
+  text-shadow:var(--shadow);
+}
+
+
+/* new phrase dissolve */
+
+#dreamShiftMain,
+#dreamShiftSub{
+  opacity:1;
+
+  transition:
+    opacity
+    1.65s
+    ease;
+}
+
+#dreamShiftMain.shiftFade,
+#dreamShiftSub.shiftFade{
+  opacity:0;
+}
+
+
+/* =========================================================
+   FINAL
+   ========================================================= */
+
+#whiteBloom{
+  position:fixed;
+
+  inset:-30%;
+
+  z-index:200;
+
+  pointer-events:none;
+
+  opacity:0;
+
+  transform:scale(.2);
+
+  filter:blur(60px);
+
+  background:
+    radial-gradient(
+      circle at 50% 50%,
+      rgba(255,255,255,1) 0%,
+      rgba(255,255,255,.96) 16%,
+      rgba(255,255,255,.63) 35%,
+      rgba(255,255,255,.14) 55%,
+      rgba(255,255,255,0) 74%
+    );
+}
+
+#whiteBloom.active{
+  animation:
+    bloom
+    5.9s
+    cubic-bezier(.22,.62,.22,1)
+    forwards;
+}
+
+#whiteout{
+  position:fixed;
+  inset:0;
+  z-index:201;
+
+  pointer-events:none;
+
+  opacity:0;
+
+  background:#fff;
+}
+
+#whiteout.active{
+  animation:
+    whiteout
+    6s
+    cubic-bezier(.22,.62,.22,1)
+    forwards;
+}
+
+#finalInvite{
+  position:fixed;
+  inset:0;
+  z-index:220;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  background:#000;
+
+  opacity:0;
+
+  pointer-events:none;
+
+  padding:
+    max(30px,env(safe-area-inset-top))
+    max(28px,env(safe-area-inset-right))
+    max(30px,env(safe-area-inset-bottom))
+    max(28px,env(safe-area-inset-left));
+}
+
+#finalInvite.active{
+  animation:
+    finalIn
+    2.9s
+    ease
+    forwards;
+}
+
+.finalGrid{
+  width:min(1100px,100%);
+
+  display:grid;
+
+  grid-template-columns:
+    minmax(180px,280px)
+    1fr;
+
+  gap:
+    clamp(
+      50px,
+      8vw,
+      120px
+    );
+
+  align-items:end;
+}
+
+.logoBlock img{
+  display:block;
+  width:min(100%,260px);
+  height:auto;
+}
+
+.finalCopy{
+  max-width:760px;
+}
+
+.finalLabel{
+  margin-bottom:32px;
+
+  font-size:10px;
+  letter-spacing:.24em;
+  text-transform:uppercase;
+
+  color:
+    rgba(255,255,255,.42);
+}
+
+#finalTitle{
+  font-size:
+    clamp(
+      32px,
+      5.8vw,
+      70px
+    );
+
+  line-height:1.02;
+  letter-spacing:-.04em;
+
+  font-weight:400;
+}
+
+.finalRule{
+  width:100%;
+  height:1px;
+
+  margin:
+    42px 0 24px;
+
+  background:
+    rgba(255,255,255,.21);
+}
+
+.finalDetails{
+  display:flex;
+  justify-content:space-between;
+  gap:30px;
+
+  font-size:11px;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+
+  color:
+    rgba(255,255,255,.63);
+}
+
+
+/* =========================================================
+   ANIMATIONS
+   ========================================================= */
+
+@keyframes dreamWorldBreath{
+  0%{transform:scale(1);}
+  50%{transform:scale(1.015);}
+  100%{transform:scale(1.03);}
+}
+
+@keyframes backMorph{
+  0%{
+    transform:scaleX(.95) scaleY(1.04);
+    opacity:.78;
+  }
+
+  22%{
+    transform:scaleX(1.02) scaleY(.98);
+    opacity:.90;
+  }
+
+  49%{
+    transform:scaleX(.98) scaleY(1.06);
+    opacity:.80;
+  }
+
+  74%{
+    transform:scaleX(1.055) scaleY(.95);
+    opacity:.93;
+  }
+
+  100%{
+    transform:scaleX(.965) scaleY(1.025);
+    opacity:.80;
+  }
+}
+
+@keyframes midMorph{
+  0%{
+    transform:scaleX(1.03) scaleY(.95);
+    opacity:.76;
+  }
+
+  32%{
+    transform:scaleX(.95) scaleY(1.045);
+    opacity:.94;
+  }
+
+  64%{
+    transform:scaleX(1.05) scaleY(.98);
+    opacity:.81;
+  }
+
+  100%{
+    transform:scaleX(.98) scaleY(1.055);
+    opacity:.90;
+  }
+}
+
+@keyframes frontMorph{
+  0%{
+    transform:scaleX(1.02) scaleY(.97);
+    opacity:.91;
+  }
+
+  30%{
+    transform:scaleX(.95) scaleY(1.05);
+    opacity:.74;
+  }
+
+  63%{
+    transform:scaleX(1.045) scaleY(.96);
+    opacity:.96;
+  }
+
+  100%{
+    transform:scaleX(.98) scaleY(1.035);
+    opacity:.82;
+  }
+}
+
+@keyframes waterMorph{
+  0%{
+    transform:scaleX(.91) scaleY(1.08);
+    opacity:.21;
+  }
+
+  39%{
+    transform:scaleX(1.09) scaleY(.92);
+    opacity:.38;
+  }
+
+  73%{
+    transform:scaleX(.96) scaleY(1.04);
+    opacity:.25;
+  }
+
+  100%{
+    transform:scaleX(1.05) scaleY(.95);
+    opacity:.33;
+  }
+}
+
+@keyframes dreamFocus{
+  0%{
+    filter:
+      blur(14px)
+      contrast(111%);
+  }
+
+  15%{
+    filter:
+      blur(11px)
+      contrast(118%);
+  }
+
+  32%{
+    filter:
+      blur(5px)
+      contrast(135%);
+  }
+
+  43%{
+    filter:
+      blur(2.5px)
+      contrast(149%);
+  }
+
+  52%{
+    filter:
+      blur(4px)
+      contrast(141%);
+  }
+
+  68%{
+    filter:
+      blur(10px)
+      contrast(120%);
+  }
+
+  82%{
+    filter:
+      blur(17px)
+      contrast(108%);
+  }
+
+  92%{
+    filter:
+      blur(7px)
+      contrast(131%);
+  }
+
+  100%{
+    filter:
+      blur(14px)
+      contrast(111%);
+  }
+}
+
+@keyframes veilBreath{
+  from{
+    transform:
+      translate3d(-.7%,.4%,0)
+      scale(1);
+  }
+
+  to{
+    transform:
+      translate3d(1%,-.7%,0)
+      scale(1.018);
+  }
+}
+
+@keyframes grainMove{
+  0%{transform:translate(0,0)}
+  25%{transform:translate(3%,-3%)}
+  50%{transform:translate(-4%,2%)}
+  75%{transform:translate(2%,4%)}
+  100%{transform:translate(-2%,-4%)}
+}
+
+@keyframes ghostMove{
+  0%{
+    opacity:0;
+
+    transform:
+      translate3d(-1vw,1vh,0)
+      scale(.99);
+
+    filter:blur(17px);
+  }
+
+  20%{opacity:1;}
+
+  74%{opacity:.60;}
+
+  100%{
+    opacity:0;
+
+    transform:
+      translate3d(2vw,-1.5vh,0)
+      scale(1.025);
+
+    filter:blur(31px);
+  }
+}
+
+
+/* overlay itself now only softly enters/exits */
+
+@keyframes dreamShift{
+  0%{
+    opacity:0;
+  }
+
+  13%{
+    opacity:1;
+  }
+
+  87%{
+    opacity:1;
+  }
+
+  100%{
+    opacity:0;
+  }
+}
+
+@keyframes bloom{
+  0%{
+    opacity:0;
+    transform:scale(.2);
+  }
+
+  42%{opacity:.14;}
+
+  74%{
+    opacity:.62;
+    transform:scale(1);
+  }
+
+  100%{
+    opacity:1;
+    transform:scale(1.9);
+  }
+}
+
+@keyframes whiteout{
+  0%{opacity:0}
+  58%{opacity:.05}
+  82%{opacity:.34}
+  100%{opacity:1}
+}
+
+@keyframes finalIn{
+  0%{
+    opacity:0;
+    filter:blur(12px);
+    transform:scale(1.01);
+  }
+
+  100%{
+    opacity:1;
+    filter:blur(0);
+    transform:scale(1);
+  }
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media(max-width:700px){
+
+  #ui{
+    padding:
+      max(18px,env(safe-area-inset-top))
+      max(18px,env(safe-area-inset-right))
+      max(18px,env(safe-area-inset-bottom))
+      max(18px,env(safe-area-inset-left));
+  }
+
+  h1{
+    font-size:
+      clamp(
+        54px,
+        19vw,
+        84px
+      );
+  }
+
+  h2{
+    font-size:
+      clamp(
+        27px,
+        8.4vw,
+        43px
+      );
+  }
+
+  .introText{
+    font-size:
+      clamp(
+        19px,
+        6vw,
+        29px
+      );
+  }
+
+  textarea{
+    min-height:
+      clamp(
+        165px,
+        29dvh,
+        260px
+      );
+
+    font-size:
+      clamp(
+        18px,
+        5.6vw,
+        26px
+      );
+  }
+
+  .langs{
+    margin-top:36px;
+  }
+
+  .langs button{
+    height:70px;
+    font-size:11px;
+  }
+
+  .actions{
+    margin-top:24px;
+  }
+
+  .next{
+    min-width:128px;
+  }
+
+  .finalGrid{
+    display:flex;
+    flex-direction:column;
+
+    align-items:flex-start;
+    justify-content:center;
+
+    gap:44px;
+  }
+
+  .logoBlock img{
+    width:min(52vw,190px);
+  }
+
+  #finalTitle{
+    font-size:
+      clamp(
+        31px,
+        9vw,
+        46px
+      );
+  }
+
+  .finalDetails{
+    flex-direction:column;
+    gap:8px;
+  }
 
 }
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- ======================================================
+     DREAM WORLD
+     ====================================================== -->
+
+<div id="dreamWorld">
+
+<svg
+id="dreamSvg"
+viewBox="0 0 1600 1000"
+preserveAspectRatio="xMidYMid slice"
+xmlns="http://www.w3.org/2000/svg"
+>
+
+<defs>
+
+<filter
+id="dreamFilterA"
+x="-50%"
+y="-50%"
+width="200%"
+height="200%"
+>
+
+<feTurbulence
+type="fractalNoise"
+baseFrequency="0.0035 0.008"
+numOctaves="3"
+seed="12"
+result="noiseA"
+>
+
+<animate
+attributeName="baseFrequency"
+dur="197s"
+values="
+0.0035 0.008;
+0.0060 0.0045;
+0.0028 0.0100;
+0.0050 0.0060;
+0.0035 0.008
+"
+repeatCount="indefinite"
+/>
+
+</feTurbulence>
+
+<feDisplacementMap
+in="SourceGraphic"
+in2="noiseA"
+scale="120"
+xChannelSelector="R"
+yChannelSelector="G"
+>
+
+<animate
+attributeName="scale"
+dur="181s"
+values="
+82;
+142;
+96;
+165;
+74;
+120
+"
+repeatCount="indefinite"
+/>
+
+</feDisplacementMap>
+
+<feGaussianBlur stdDeviation="6">
+
+<animate
+attributeName="stdDeviation"
+dur="173s"
+values="
+12;
+6;
+2.5;
+8;
+15;
+5;
+12
+"
+repeatCount="indefinite"
+/>
+
+</feGaussianBlur>
+
+</filter>
+
+
+<filter
+id="dreamFilterB"
+x="-50%"
+y="-50%"
+width="200%"
+height="200%"
+>
+
+<feTurbulence
+type="turbulence"
+baseFrequency="0.002 0.006"
+numOctaves="4"
+seed="31"
+result="noiseB"
+>
+
+<animate
+attributeName="baseFrequency"
+dur="263s"
+values="
+0.002 0.006;
+0.0045 0.003;
+0.0028 0.009;
+0.005 0.004;
+0.002 0.006
+"
+repeatCount="indefinite"
+/>
+
+</feTurbulence>
+
+<feDisplacementMap
+in="SourceGraphic"
+in2="noiseB"
+scale="95"
+xChannelSelector="B"
+yChannelSelector="R"
+>
+
+<animate
+attributeName="scale"
+dur="227s"
+values="
+60;
+112;
+78;
+148;
+88;
+60
+"
+repeatCount="indefinite"
+/>
+
+</feDisplacementMap>
+
+<feGaussianBlur stdDeviation="8">
+
+<animate
+attributeName="stdDeviation"
+dur="211s"
+values="
+15;
+9;
+4;
+2;
+7;
+13;
+15
+"
+repeatCount="indefinite"
+/>
+
+</feGaussianBlur>
+
+</filter>
+
+
+<filter
+id="watercolour"
+x="-40%"
+y="-40%"
+width="180%"
+height="180%"
+>
+
+<feTurbulence
+type="fractalNoise"
+baseFrequency=".012"
+numOctaves="3"
+seed="7"
+result="paper"
+/>
+
+<feDisplacementMap
+in="SourceGraphic"
+in2="paper"
+scale="20"
+>
+
+<animate
+attributeName="scale"
+dur="239s"
+values="
+12;
+26;
+16;
+31;
+12
+"
+repeatCount="indefinite"
+/>
+
+</feDisplacementMap>
+
+<feGaussianBlur stdDeviation="2.5"/>
+
+</filter>
+
+
+<radialGradient
+id="blackFade"
+cx="50%"
+cy="50%"
+r="68%"
+>
+
+<stop
+offset="0%"
+stop-color="#000"
+stop-opacity="0"
+/>
+
+<stop
+offset="61%"
+stop-color="#000"
+stop-opacity=".10"
+/>
+
+<stop
+offset="82%"
+stop-color="#000"
+stop-opacity=".35"
+/>
+
+<stop
+offset="100%"
+stop-color="#000"
+stop-opacity=".82"
+/>
+
+</radialGradient>
+
+</defs>
+
+
+<rect
+x="0"
+y="0"
+width="1600"
+height="1000"
+fill="#000"
+/>
+
+
+<g
+id="rorschachBack"
+filter="url(#dreamFilterB)"
+>
+
+<g>
+
+<ellipse
+cx="390"
+cy="505"
+rx="480"
+ry="220"
+class="dreamInk inkGhost"
+/>
+
+<ellipse
+cx="480"
+cy="350"
+rx="360"
+ry="235"
+class="dreamInk inkSoft"
+/>
+
+<ellipse
+cx="450"
+cy="655"
+rx="420"
+ry="260"
+class="dreamInk inkMedium"
+/>
+
+<ellipse
+cx="640"
+cy="500"
+rx="180"
+ry="465"
+class="dreamInk inkDark"
+/>
+
+<ellipse
+cx="535"
+cy="500"
+rx="265"
+ry="370"
+class="dreamInk inkSoft"
+/>
+
+</g>
+
+
+<g
+transform="translate(1600 0) scale(-1 1)"
+>
+
+<ellipse
+cx="390"
+cy="505"
+rx="480"
+ry="220"
+class="dreamInk inkGhost"
+/>
+
+<ellipse
+cx="480"
+cy="350"
+rx="360"
+ry="235"
+class="dreamInk inkSoft"
+/>
+
+<ellipse
+cx="450"
+cy="655"
+rx="420"
+ry="260"
+class="dreamInk inkMedium"
+/>
+
+<ellipse
+cx="640"
+cy="500"
+rx="180"
+ry="465"
+class="dreamInk inkDark"
+/>
+
+<ellipse
+cx="535"
+cy="500"
+rx="265"
+ry="370"
+class="dreamInk inkSoft"
+/>
+
+</g>
+
+</g>
+
+
+<g
+id="rorschachMid"
+filter="url(#dreamFilterA)"
+>
+
+<g>
+
+<ellipse
+cx="575"
+cy="500"
+rx="300"
+ry="410"
+class="dreamInk inkMedium"
+/>
+
+<ellipse
+cx="490"
+cy="310"
+rx="250"
+ry="155"
+class="dreamInk inkLight"
+/>
+
+<ellipse
+cx="485"
+cy="690"
+rx="285"
+ry="175"
+class="dreamInk inkMain"
+/>
+
+<ellipse
+cx="680"
+cy="265"
+rx="120"
+ry="245"
+class="dreamInk inkDark"
+/>
+
+<ellipse
+cx="650"
+cy="735"
+rx="130"
+ry="220"
+class="dreamInk inkCore"
+/>
+
+</g>
+
+
+<g
+transform="translate(1600 0) scale(-1 1)"
+>
+
+<ellipse
+cx="575"
+cy="500"
+rx="300"
+ry="410"
+class="dreamInk inkMedium"
+/>
+
+<ellipse
+cx="490"
+cy="310"
+rx="250"
+ry="155"
+class="dreamInk inkLight"
+/>
+
+<ellipse
+cx="485"
+cy="690"
+rx="285"
+ry="175"
+class="dreamInk inkMain"
+/>
+
+<ellipse
+cx="680"
+cy="265"
+rx="120"
+ry="245"
+class="dreamInk inkDark"
+/>
+
+<ellipse
+cx="650"
+cy="735"
+rx="130"
+ry="220"
+class="dreamInk inkCore"
+/>
+
+</g>
+
+</g>
+
+
+<g
+id="rorschachFront"
+filter="url(#dreamFilterA)"
+>
+
+<g>
+
+<ellipse
+cx="675"
+cy="500"
+rx="230"
+ry="385"
+class="dreamInk inkMain"
+/>
+
+<ellipse
+cx="590"
+cy="390"
+rx="190"
+ry="140"
+class="dreamInk inkLight"
+/>
+
+<ellipse
+cx="590"
+cy="620"
+rx="225"
+ry="175"
+class="dreamInk inkMain"
+/>
+
+<ellipse
+cx="720"
+cy="205"
+rx="90"
+ry="185"
+class="dreamInk inkDark"
+/>
+
+<ellipse
+cx="725"
+cy="800"
+rx="95"
+ry="170"
+class="dreamInk inkCore"
+/>
+
+</g>
+
+
+<g
+transform="translate(1600 0) scale(-1 1)"
+>
+
+<ellipse
+cx="675"
+cy="500"
+rx="230"
+ry="385"
+class="dreamInk inkMain"
+/>
+
+<ellipse
+cx="590"
+cy="390"
+rx="190"
+ry="140"
+class="dreamInk inkLight"
+/>
+
+<ellipse
+cx="590"
+cy="620"
+rx="225"
+ry="175"
+class="dreamInk inkMain"
+/>
+
+<ellipse
+cx="720"
+cy="205"
+rx="90"
+ry="185"
+class="dreamInk inkDark"
+/>
+
+<ellipse
+cx="725"
+cy="800"
+rx="95"
+ry="170"
+class="dreamInk inkCore"
+/>
+
+</g>
+
+</g>
+
+
+<g
+id="waterLayer"
+filter="url(#watercolour)"
+>
+
+<ellipse
+cx="800"
+cy="500"
+rx="610"
+ry="175"
+class="dreamInk inkWater"
+/>
+
+<ellipse
+cx="800"
+cy="500"
+rx="245"
+ry="475"
+class="dreamInk inkWater"
+/>
+
+<ellipse
+cx="800"
+cy="500"
+rx="430"
+ry="290"
+class="dreamInk inkGhost"
+/>
+
+</g>
+
+
+<rect
+x="0"
+y="0"
+width="1600"
+height="1000"
+fill="url(#blackFade)"
+/>
+
+</svg>
+
+</div>
+
+
+<div id="graphite"></div>
+
+<div id="readingShadow"></div>
+
+<div id="veil"></div>
+
+<div id="ghostLayer"></div>
+
+<div id="grain"></div>
+
+
+<!-- DREAM SHIFT -->
+
+<div id="dreamShift">
+
+<div class="dreamShiftWrap">
+
+<div id="dreamShiftMain"></div>
+
+<div id="dreamShiftSub"></div>
+
+</div>
+
+</div>
+
+
+<div id="whiteBloom"></div>
+
+<div id="whiteout"></div>
+
+
+<!-- FINAL -->
+
+<div id="finalInvite">
+
+<div class="finalGrid">
+
+<div class="logoBlock">
+
+<img
+src="patchlab_2026_header_1.png"
+alt="Patchlab Festival 2026"
+>
+
+</div>
+
+
+<div class="finalCopy">
+
+<div class="finalLabel">
+TRAUM SIM / PATCHLAB 2026
+</div>
+
+<div id="finalTitle"></div>
+
+<div class="finalRule"></div>
+
+<div class="finalDetails">
+
+<div>15.10.2026</div>
+
+<div>HEVRE</div>
+
+<div>KRAKÓW</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- UI -->
+
+<div id="ui">
+
+<div class="top">
+
+<span>TRAUM SIM</span>
+
+<span id="progress"></span>
+
+</div>
+
+
+<div id="screenWrap">
+
+<main id="screen"></main>
+
+</div>
+
+
+<div class="bottom">
+
+<span>PATCHLAB 2026</span>
+
+<span id="depthLabel">
+TRAUM
+</span>
+
+</div>
+
+</div>
+
+
+<script>
+
+
+/* =========================================================
+   BACKEND
+   ========================================================= */
+
+const API_URL =
+"https://script.google.com/macros/s/AKfycbzU_GDYcK7nC4aGNVxmQd4fojRBacX1UR076Ox-lCI8KrGV1YVN7G_mwGT-6UFzOhJY3g/exec";
+
+
+/* =========================================================
+   VIEWPORT
+   ========================================================= */
+
+function setVH(){
+
+  const h =
+    window.visualViewport
+    ?
+    window.visualViewport.height
+    :
+    window.innerHeight;
+
+  document
+  .documentElement
+  .style
+  .setProperty(
+    "--vh",
+    (h*.01)+"px"
+  );
+
+}
+
+setVH();
+
+window.addEventListener(
+  "resize",
+  setVH
+);
+
+if(window.visualViewport){
+
+  window.visualViewport.addEventListener(
+    "resize",
+    setVH
+  );
+
+}
+
+
+/* =========================================================
+   INTRO
+   ========================================================= */
+
+const INTRO = {
+
+PL:[
+
+{
+type:"text",
+label:"TRAUM / 01",
+title:"Sen nie jest filmem.",
+text:"Sen nie musi mieć początku ani końca. Pamięć miesza miejsca, ludzi, czas i emocje w rzeczywistość, która przez chwilę wydaje się całkowicie naturalna.",
+meta:"Nie próbuj jeszcze niczego wyjaśniać. Pozwól temu po prostu wrócić."
+},
+
+{
+type:"text",
+label:"TRAUM / 02",
+title:"Pamięć rekonstruuje.",
+text:"To, co pamiętasz po przebudzeniu, nie musi być dokładnym zapisem snu. Sam akt przypominania może go zmieniać.",
+meta:"Za chwilę TRAUM SIM zacznie podążać za tym, co opisujesz."
+},
+
+{
+type:"color",
+label:"TRAUM / 03",
+title:"Jaki kolor mają Twoje najlepsze sny?",
+text:"Nie zastanawiaj się długo. Wpisz pierwszy kolor, który pojawił się w Twojej głowie.",
+meta:"Od tej chwili TRAUM SIM spróbuje śnić właśnie tym kolorem."
+},
+
+{
+type:"text",
+label:"TRAUM / 04",
+title:"Opowiedz. Nie interpretuj.",
+text:"Nie musisz znać znaczenia snu. Opisz to, co pamiętasz: przestrzeń, osobę, sytuację, uczucie albo jeden obraz.",
+meta:"Każda odpowiedź zmieni następne pytanie."
+}
+
+],
+
+
+ENG:[
+
+{
+type:"text",
+label:"TRAUM / 01",
+title:"A dream is not a film.",
+text:"A dream does not need a beginning or an end. Memory mixes places, people, time and emotion into a reality that briefly feels completely natural.",
+meta:"Do not explain anything yet. Simply allow it to return."
+},
+
+{
+type:"text",
+label:"TRAUM / 02",
+title:"Memory reconstructs.",
+text:"What you remember after waking may not be an exact recording of the dream. The act of remembering can change it.",
+meta:"In a moment TRAUM SIM will begin to follow what you describe."
+},
+
+{
+type:"color",
+label:"TRAUM / 03",
+title:"What colour do your best dreams have?",
+text:"Do not think too long. Type the first colour that appeared in your mind.",
+meta:"From now on TRAUM SIM will try to dream in that colour."
+},
+
+{
+type:"text",
+label:"TRAUM / 04",
+title:"Describe. Do not interpret.",
+text:"You do not need to understand the dream. Describe what remains: a space, a person, an event, a feeling or a single image.",
+meta:"Every answer will change the next question."
+}
+
+],
+
+
+UKR:[
+
+{
+type:"text",
+label:"TRAUM / 01",
+title:"Сон — це не фільм.",
+text:"Сон не обов’язково має початок чи кінець. Пам’ять змішує місця, людей, час та емоції у реальність, яка на мить здається абсолютно природною.",
+meta:"Поки що не намагайся нічого пояснювати. Просто дозволь цьому повернутися."
+},
+
+{
+type:"text",
+label:"TRAUM / 02",
+title:"Пам’ять реконструює.",
+text:"Те, що залишається в пам’яті після пробудження, не обов’язково є точним записом сну. Сам процес пригадування може його змінювати.",
+meta:"За мить TRAUM SIM почне слідувати за тим, що з’являється в описі."
+},
+
+{
+type:"color",
+label:"TRAUM / 03",
+title:"Якого кольору найкращі сни?",
+text:"Не думай довго. Напиши перший колір, який з’являється в уяві.",
+meta:"Відтепер TRAUM SIM спробує бачити сни саме цим кольором."
+},
+
+{
+type:"text",
+label:"TRAUM / 04",
+title:"Описуй. Не пояснюй.",
+text:"Не потрібно шукати значення сну. Опиши те, що залишилося: простір, людину, ситуацію, відчуття або один образ.",
+meta:"Кожна відповідь змінюватиме наступне запитання."
+}
+
+]
+
+};
+
+
+/* =========================================================
+   UI
+   ========================================================= */
+
+const UI = {
+
+PL:{
+
+back:"WSTECZ",
+next:"DALEJ",
+begin:"WEJDŹ W SEN",
+
+placeholder:
+"opisz to własnymi słowami...",
+
+colorPlaceholder:
+"np. granatowy, fioletowy, czerwony...",
+
+nicknameTitle:
+"Jak mamy zapamiętać osobę, która śniła?",
+
+nicknameMeta:
+"Możesz użyć pseudonimu. Nie musisz podawać prawdziwego imienia.",
+
+nicknamePlaceholder:
+"NICKNAME",
+
+nicknameSubmit:
+"ZAPISZ SEN",
+
+saving:
+"ZAPISUJĘ SEN",
+
+done:
+"SEN ZAPISANY",
+
+sub:
+"Twój sen wszedł do wspólnego archiwum.",
+
+error:
+"Sen nie został zapisany.",
+
+retry:
+"SPRÓBUJ PONOWNIE",
+
+invite:
+"Zapraszamy na nasz performance ze swoim snem."
+
+},
+
+
+ENG:{
+
+back:"BACK",
+next:"NEXT",
+begin:"ENTER DREAM",
+
+placeholder:
+"describe it in your own words...",
+
+colorPlaceholder:
+"e.g. blue, violet, red...",
+
+nicknameTitle:
+"How should the dreamer be remembered?",
+
+nicknameMeta:
+"You may use a nickname. You do not need to provide your real name.",
+
+nicknamePlaceholder:
+"NICKNAME",
+
+nicknameSubmit:
+"SAVE DREAM",
+
+saving:
+"SAVING DREAM",
+
+done:
+"DREAM RECEIVED",
+
+sub:
+"Your dream has entered the collective archive.",
+
+error:
+"The dream could not be saved.",
+
+retry:
+"TRY AGAIN",
+
+invite:
+"Join our performance with your dream."
+
+},
+
+
+UKR:{
+
+back:"НАЗАД",
+next:"ДАЛІ",
+begin:"УВІЙТИ У СОН",
+
+placeholder:
+"опиши це своїми словами...",
+
+colorPlaceholder:
+"наприклад: синій, фіолетовий, червоний...",
+
+nicknameTitle:
+"Як нам запам’ятати людину, якій наснився цей сон?",
+
+nicknameMeta:
+"Можна використати псевдонім. Справжнє ім’я вказувати не обов’язково.",
+
+nicknamePlaceholder:
+"NICKNAME",
+
+nicknameSubmit:
+"ЗБЕРЕГТИ СОН",
+
+saving:
+"ЗБЕРІГАЮ СОН",
+
+done:
+"СОН ЗБЕРЕЖЕНО",
+
+sub:
+"Цей сон увійшов до спільного архіву.",
+
+error:
+"Сон не вдалося зберегти.",
+
+retry:
+"СПРОБУВАТИ ЩЕ РАЗ",
+
+invite:
+"Приходь на наш performance зі своїм сном."
+
+}
+
+};
+
+
+/* =========================================================
+   STATE
+   ========================================================= */
+
+const state = {
+
+lang:null,
+
+mode:"start",
+
+introStep:0,
+
+questionIndex:0,
+
+totalQuestions:9,
+
+answers:[],
+
+generatedQuestions:[],
+
+nickname:"",
+
+dreamColorName:"",
+
+dreamColor:{
+  r:185,
+  g:185,
+  b:185
+}
+
+};
+
+
+const screen =
+document.getElementById(
+  "screen"
+);
+
+const progress =
+document.getElementById(
+  "progress"
+);
+
+const depthLabel =
+document.getElementById(
+  "depthLabel"
+);
+
+const ghostLayer =
+document.getElementById(
+  "ghostLayer"
+);
+
+
+/* =========================================================
+   HELPERS
+   ========================================================= */
+
+function escapeHtml(value){
+
+  return String(
+    value || ""
+  )
+  .replace(
+    /[&<>"']/g,
+    c=>({
+
+      "&":"&amp;",
+      "<":"&lt;",
+      ">":"&gt;",
+      "\"":"&quot;",
+      "'":"&#039;"
+
+    }[c])
+  );
+
+}
+
+
+function randomItem(array){
+
+  return array[
+    Math.floor(
+      Math.random() *
+      array.length
+    )
+  ];
+
+}
+
+
+function normalizeText(text){
+
+  return String(
+    text || ""
+  )
+  .replace(
+    /\s+/g,
+    " "
+  )
+  .trim();
+
+}
+
+
+/* =========================================================
+   COLOR
+   ========================================================= */
+
+function applyDreamColor(){
+
+  const c =
+    state.dreamColor
+    ||
+    {
+      r:185,
+      g:185,
+      b:185
+    };
+
+
+  document
+  .documentElement
+  .style
+  .setProperty(
+    "--dreamRGB",
+    `${c.r},${c.g},${c.b}`
+  );
+
+}
+
+
+/* =========================================================
+   MODE
+   ========================================================= */
+
+function setVisualMode(mode){
+
+  state.mode =
+    mode;
+
+
+  document
+  .body
+  .classList
+  .toggle(
+    "questionMode",
+    [
+      "questions",
+      "nickname",
+      "saving",
+      "saved",
+      "error"
+    ]
+    .includes(
+      mode
+    )
+  );
+
+}
+
+
+/* =========================================================
+   DREAM CROSSFADE
+   ========================================================= */
+
+let transitionRunning =
+false;
+
+
+function transition(fn){
+
+  if(
+    transitionRunning
+  ){
+    return;
+  }
+
+
+  transitionRunning =
+    true;
+
+
+  /*
+  PHASE 01
+  Old thought dissolves.
+  */
+
+  screen
+  .classList
+  .add(
+    "fade"
+  );
+
+
+  setTimeout(
+
+    ()=>{
+
+      /*
+      PHASE 02
+
+      Keep only the Rorschach visible.
+      This is the little breathing gap.
+      */
+
+      setTimeout(
+
+        ()=>{
+
+          /*
+          Replace content while invisible.
+          */
+
+          fn();
+
+
+          /*
+          Two frames force browser to keep
+          the new content at opacity 0 before fade-in.
+          */
+
+          requestAnimationFrame(
+
+            ()=>{
+
+              requestAnimationFrame(
+
+                ()=>{
+
+                  screen
+                  .classList
+                  .remove(
+                    "fade"
+                  );
+
+
+                  setTimeout(
+
+                    ()=>{
+
+                      transitionRunning =
+                        false;
+
+                    },
+
+                    1900
+
+                  );
+
+                }
+
+              );
+
+            }
+
+          );
+
+        },
+
+        420
+
+      );
+
+    },
+
+    1800
+
+  );
+
+}
+
+
+/* =========================================================
+   START
+   ========================================================= */
+
+function renderStart(){
+
+  setVisualMode(
+    "start"
+  );
+
+
+  progress.textContent =
+    "";
+
+
+  depthLabel.textContent =
+    "TRAUM";
+
+
+  screen.innerHTML = `
+
+<div class="eyebrow">
+TRAUM / DREAM ARCHIVE
+</div>
+
+<h1>
+TRAUM
+<br>
+SIM
+</h1>
+
+<p class="sub">
+choose language / wybierz język / оберіть мову
+</p>
+
+<div class="langs">
+
+<button onclick="chooseLanguage('PL')">
+PL
+</button>
+
+<button onclick="chooseLanguage('ENG')">
+ENG
+</button>
+
+<button onclick="chooseLanguage('UKR')">
+УКР
+</button>
+
+</div>
+
+`;
+
+}
+
+
+/* =========================================================
+   LANGUAGE
+   ========================================================= */
+
+function chooseLanguage(lang){
+
+  state.lang =
+    lang;
+
+
+  state.introStep =
+    0;
+
+
+  state.questionIndex =
+    0;
+
+
+  state.answers =
+    [];
+
+
+  state.generatedQuestions =
+    [];
+
+
+  state.nickname =
+    "";
+
+
+  state.dreamColorName =
+    "";
+
+
+  state.dreamColor =
+    {
+      r:185,
+      g:185,
+      b:185
+    };
+
+
+  applyDreamColor();
+
+
+  transition(
+    renderIntro
+  );
+
+}
+
+
+/* =========================================================
+   INTRO
+   ========================================================= */
+
+function renderIntro(){
+
+  setVisualMode(
+    "intro"
+  );
+
+
+  const slides =
+    INTRO[
+      state.lang
+    ];
+
+
+  const slide =
+    slides[
+      state.introStep
+    ];
+
+
+  const copy =
+    UI[
+      state.lang
+    ];
+
+
+  const last =
+    state.introStep ===
+    slides.length-1;
+
+
+  progress.textContent =
+    `${String(
+      state.introStep+1
+    ).padStart(
+      2,
+      "0"
+    )}
+    /
+    ${String(
+      slides.length
+    ).padStart(
+      2,
+      "0"
+    )}`;
+
+
+  depthLabel.textContent =
+    "TRAUM";
+
+
+  if(
+    slide.type ===
+    "color"
+  ){
+
+    screen.innerHTML = `
+
+<div class="eyebrow">
+${slide.label}
+</div>
+
+<h2>
+${slide.title}
+</h2>
+
+<div class="introText">
+${slide.text}
+</div>
+
+<input
+id="dreamColorInput"
+type="text"
+autocomplete="off"
+spellcheck="false"
+placeholder="${copy.colorPlaceholder}"
+value="${escapeHtml(
+  state.dreamColorName
+)}"
+>
+
+<div class="colorHint">
+${slide.meta}
+</div>
+
+<div class="actions">
+
+<button
+class="back"
+onclick="introBack()"
+>
+${copy.back}
+</button>
+
+<button
+class="next"
+onclick="introNext()"
+>
+${copy.next}
+</button>
+
+</div>
+
+`;
+
+
+    setTimeout(
+      ()=>{
+
+        const field =
+          document
+          .getElementById(
+            "dreamColorInput"
+          );
+
+
+        if(field){
+
+          field.focus();
+
+
+          field
+          .addEventListener(
+
+            "input",
+
+            ()=>{
+
+              state.dreamColorName =
+                field
+                .value
+                .trim();
+
+
+              state.dreamColor =
+                parseDreamColor(
+                  state.dreamColorName
+                );
+
+
+              applyDreamColor();
+
+            }
+
+          );
+
+        }
+
+      },
+      350
+    );
+
+  }
+  else{
+
+    screen.innerHTML = `
+
+<div class="eyebrow">
+${slide.label}
+</div>
+
+<h2>
+${slide.title}
+</h2>
+
+<div class="introText">
+${slide.text}
+</div>
+
+<div class="introMeta">
+${slide.meta}
+</div>
+
+<div class="actions">
+
+<button
+class="back"
+onclick="introBack()"
+>
+${copy.back}
+</button>
+
+<button
+class="next"
+onclick="introNext()"
+>
+${last ? copy.begin : copy.next}
+</button>
+
+</div>
+
+`;
+
+  }
+
+
+  ghost(
+    slide.title
+  );
+
+}
+
+
+/* =========================================================
+   INTRO NAV
+   ========================================================= */
+
+function introBack(){
+
+  if(
+    state.introStep ===
+    0
+  ){
+
+    transition(
+      renderStart
+    );
+
+    return;
+
+  }
+
+
+  saveColorField();
+
+
+  state.introStep--;
+
+
+  transition(
+    renderIntro
+  );
+
+}
+
+
+function introNext(){
+
+  saveColorField();
+
+
+  const slides =
+    INTRO[
+      state.lang
+    ];
+
+
+  if(
+    state.introStep <
+    slides.length-1
+  ){
+
+    state.introStep++;
+
+
+    transition(
+      renderIntro
+    );
+
+  }
+  else{
+
+    state.questionIndex =
+      0;
+
+
+    if(
+      !state.generatedQuestions[0]
+    ){
+
+      state.generatedQuestions[0] =
+        generateOpeningQuestion();
+
+    }
+
+
+    transition(
+      renderQuestion
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   COLOR FIELD
+   ========================================================= */
+
+function saveColorField(){
+
+  const field =
+    document
+    .getElementById(
+      "dreamColorInput"
+    );
+
+
+  if(!field){
+    return;
+  }
+
+
+  state.dreamColorName =
+    field.value.trim();
+
+
+  state.dreamColor =
+    parseDreamColor(
+      state.dreamColorName
+    );
+
+
+  applyDreamColor();
+
+}
+
+
+/* =========================================================
+   COLOR PARSER
+   ========================================================= */
+
+function parseDreamColor(name){
+
+  const s =
+    String(
+      name || ""
+    )
+    .toLowerCase()
+    .trim();
+
+
+  const map = {
+
+    /* PL */
+
+    "niebieski":[65,115,195],
+    "niebieska":[65,115,195],
+
+    "błękitny":[85,160,215],
+    "błękit":[85,160,215],
+
+    "granatowy":[43,68,135],
+    "granat":[43,68,135],
+
+    "turkusowy":[50,160,160],
+    "turkus":[50,160,160],
+
+    "zielony":[70,145,100],
+    "zieleń":[70,145,100],
+
+    "czerwony":[190,65,72],
+    "czerwień":[190,65,72],
+
+    "bordowy":[135,45,62],
+    "bordo":[135,45,62],
+
+    "różowy":[205,100,150],
+    "róż":[205,100,150],
+
+    "fioletowy":[135,80,185],
+    "fiolet":[135,80,185],
+
+    "purpurowy":[155,70,150],
+
+    "pomarańczowy":[205,120,55],
+
+    "żółty":[215,180,75],
+
+    "złoty":[195,150,75],
+
+    "srebrny":[175,180,190],
+
+    "szary":[160,160,160],
+
+    "grafitowy":[105,108,114],
+
+    "biały":[220,220,215],
+
+    "czarny":[95,95,95],
+
+    "brązowy":[135,90,70],
+
+
+    /* EN */
+
+    "blue":[65,115,195],
+    "navy":[43,68,135],
+    "cyan":[75,160,200],
+    "turquoise":[50,160,160],
+    "green":[70,145,100],
+    "red":[190,65,72],
+    "burgundy":[135,45,62],
+    "pink":[205,100,150],
+    "purple":[135,80,185],
+    "violet":[135,80,185],
+    "orange":[205,120,55],
+    "yellow":[215,180,75],
+    "gold":[195,150,75],
+    "silver":[175,180,190],
+    "grey":[160,160,160],
+    "gray":[160,160,160],
+    "white":[220,220,215],
+    "black":[95,95,95],
+    "brown":[135,90,70],
+
+
+    /* UKR */
+
+    "синій":[65,115,195],
+    "блакитний":[85,160,215],
+    "темно-синій":[43,68,135],
+    "бірюзовий":[50,160,160],
+    "зелений":[70,145,100],
+    "червоний":[190,65,72],
+    "бордовий":[135,45,62],
+    "рожевий":[205,100,150],
+    "фіолетовий":[135,80,185],
+    "пурпуровий":[155,70,150],
+    "помаранчевий":[205,120,55],
+    "жовтий":[215,180,75],
+    "золотий":[195,150,75],
+    "срібний":[175,180,190],
+    "сірий":[160,160,160],
+    "графітовий":[105,108,114],
+    "білий":[220,220,215],
+    "чорний":[95,95,95],
+    "коричневий":[135,90,70]
+
+  };
+
+
+  for(
+    const key
+    in map
+  ){
+
+    if(
+      s.includes(
+        key
+      )
+    ){
+
+      return {
+        r:map[key][0],
+        g:map[key][1],
+        b:map[key][2]
+      };
+
+    }
+
+  }
+
+
+  return {
+    r:175,
+    g:175,
+    b:175
+  };
+
+}
+
+
+/* =========================================================
+   OPENING QUESTION
+   ========================================================= */
+
+function generateOpeningQuestion(){
+
+  if(
+    state.lang ===
+    "PL"
+  ){
+
+    return {
+
+      category:"POCZĄTEK",
+
+      question:
+        "Przywołaj jeden sen, który został z Tobą dłużej niż inne. Opowiedz o pierwszej scenie, obrazie albo sytuacji, która właśnie teraz wraca do pamięci."
+
+    };
+
+  }
+
+
+  if(
+    state.lang ===
+    "UKR"
+  ){
+
+    return {
+
+      category:"ПОЧАТОК",
+
+      question:
+        "Згадай один сон, який залишився в пам’яті довше за інші. Опиши першу сцену, образ або ситуацію, що повертається просто зараз."
+
+    };
+
+  }
+
+
+  return {
+
+    category:"BEGINNING",
+
+    question:
+      "Remember one dream that stayed with you longer than the others. Describe the first scene, image or situation that returns to you now."
+
+  };
+
+}
+
+
+/* =========================================================
+   EXTRACT
+   ========================================================= */
+
+function extractFragment(text){
+
+  const cleaned =
+    normalizeText(
+      text
+    );
+
+
+  if(
+    !cleaned
+  ){
+    return "";
+  }
+
+
+  const words =
+    cleaned
+    .split(/\s+/)
+    .filter(Boolean);
+
+
+  if(
+    words.length <=
+    8
+  ){
+
+    return cleaned;
+
+  }
+
+
+  const startOptions = [
+
+    0,
+
+    Math.floor(
+      words.length*.20
+    ),
+
+    Math.floor(
+      words.length*.40
+    ),
+
+    Math.max(
+      0,
+      words.length-8
+    )
+
+  ];
+
+
+  const start =
+    randomItem(
+      startOptions
+    );
+
+
+  return words
+  .slice(
+    start,
+    start+8
+  )
+  .join(" ");
+
+}
+
+
+/* =========================================================
+   THEMES
+   ========================================================= */
+
+function detectThemes(text){
+
+  const t =
+    String(
+      text || ""
+    )
+    .toLowerCase();
+
+
+  const result =
+    [];
+
+
+  const dictionaries = {
+
+PL:{
+
+person:[
+"mama","matka","ojciec","tata",
+"babcia","dziadek","mężczyzna",
+"kobieta","człowiek","osoba",
+"dziecko","przyjaciel","przyjaciółka",
+"ktoś","ludzie"
+],
+
+place:[
+"dom","pokój","mieszkanie","ulica",
+"miasto","las","szkoła","hotel",
+"budynek","korytarz","piwnica",
+"morze","plaża","góra","ogród"
+],
+
+water:[
+"woda","morze","ocean","rzeka",
+"jezioro","deszcz","basen","fala"
+],
+
+fear:[
+"strach","bałem","bałam",
+"lęk","przeraż","niepokój","groza"
+],
+
+body:[
+"ciało","ręka","ręce","noga","nogi",
+"twarz","oczy","usta","głowa",
+"skóra","krew"
+],
+
+animal:[
+"pies","kot","ptak","koń","wąż",
+"zwierzę","owad","ryba","wilk"
+],
+
+door:[
+"drzwi","okno","schody","korytarz",
+"tunel","przejście","brama"
+]
+
+},
+
+
+ENG:{
+
+person:[
+"mother","mom","father","dad",
+"grandmother","grandfather",
+"man","woman","person","child",
+"friend","someone","people"
+],
+
+place:[
+"house","room","apartment","street",
+"city","forest","school","hotel",
+"building","corridor","basement",
+"sea","beach","mountain","garden"
+],
+
+water:[
+"water","sea","ocean","river",
+"lake","rain","pool","wave"
+],
+
+fear:[
+"fear","afraid","terrified",
+"anxiety","horror"
+],
+
+body:[
+"body","hand","hands","leg","legs",
+"face","eyes","mouth","head",
+"skin","blood"
+],
+
+animal:[
+"dog","cat","bird","horse","snake",
+"animal","insect","fish","wolf"
+],
+
+door:[
+"door","window","stairs","corridor",
+"tunnel","passage","gate"
+]
+
+},
+
+
+UKR:{
+
+person:[
+"мама","мати","батько","тато",
+"бабуся","дідусь","чоловік",
+"жінка","людина","дитина",
+"друг","подруга","хтось","люди"
+],
+
+place:[
+"дім","будинок","кімната","квартира",
+"вулиця","місто","ліс","школа",
+"готель","коридор","підвал",
+"море","пляж","гора","сад"
+],
+
+water:[
+"вода","море","океан","річка",
+"озеро","дощ","басейн","хвиля"
+],
+
+fear:[
+"страх","жах","тривога",
+"тривожно","темрява"
+],
+
+body:[
+"тіло","рука","руки","нога","ноги",
+"обличчя","очі","рот","голова",
+"шкіра","кров"
+],
+
+animal:[
+"собака","кіт","птах","кінь",
+"змія","тварина","комаха",
+"риба","вовк"
+],
+
+door:[
+"двері","вікно","сходи",
+"коридор","тунель",
+"прохід","брама"
+]
+
+}
+
+};
+
+
+  const dict =
+    dictionaries[
+      state.lang
+    ]
+    ||
+    dictionaries.ENG;
+
+
+  for(
+    const type
+    in dict
+  ){
+
+    if(
+      dict[type]
+      .some(
+        word =>
+          t.includes(
+            word
+          )
+      )
+    ){
+
+      result.push(
+        type
+      );
+
+    }
+
+  }
+
+
+  return result;
+
+}
+
+
+/* =========================================================
+   ADAPTIVE
+   ========================================================= */
+
+function generateAdaptiveQuestion(){
+
+  const i =
+    state.questionIndex;
+
+
+  const previous =
+    state.answers[
+      i-1
+    ];
+
+
+  const previousAnswer =
+    previous
+    ?
+    previous.answer
+    :
+    "";
+
+
+  const fragment =
+    extractFragment(
+      previousAnswer
+    );
+
+
+  const themes =
+    detectThemes(
+      previousAnswer
+    );
+
+
+  if(
+    i <= 2
+  ){
+
+    return generateLayerOneQuestion(
+      fragment,
+      themes
+    );
+
+  }
+
+
+  if(
+    i <= 5
+  ){
+
+    return generateLayerTwoQuestion(
+      fragment,
+      themes
+    );
+
+  }
+
+
+  return generateLayerThreeQuestion(
+    fragment,
+    themes
+  );
+
+}
+
+
+/* =========================================================
+   LAYER 1
+   ========================================================= */
+
+function generateLayerOneQuestion(
+  fragment,
+  themes
+){
+
+  const f =
+    fragment
+    ||
+    (
+      state.lang==="PL"
+      ?
+      "ten fragment snu"
+      :
+      state.lang==="UKR"
+      ?
+      "цей фрагмент сну"
+      :
+      "this part of the dream"
+    );
+
+
+  if(
+    state.lang ===
+    "PL"
+  ){
+
+    const pool = [
+
+      {
+        category:"PRZESTRZEŃ",
+        question:
+          `Zatrzymaj się przy „${f}”. Jak wyglądało otoczenie? Opisz światło, skalę, materiał, temperaturę albo jeden detal, który szczególnie pamiętasz.`
+      },
+
+      {
+        category:"PAMIĘĆ",
+        question:
+          `Kiedy wracasz teraz do „${f}”, co pojawia się obok tego obrazu, choć wcześniej o tym nie było mowy?`
+      },
+
+      {
+        category:"ODCZUCIE",
+        question:
+          `Nie opowiadaj jeszcze, co wydarzyło się dalej. Jak reagowało Twoje ciało w chwili „${f}”?`
+      },
+
+      {
+        category:"KADR",
+        question:
+          `Gdyby można było zatrzymać „${f}” w jednym nieruchomym kadrze, co znajdowałoby się na jego obrzeżach?`
+      }
+
+    ];
+
+
+    if(
+      themes.includes(
+        "person"
+      )
+    ){
+
+      pool.push(
+        {
+          category:"OBECNOŚĆ",
+          question:
+            "W opisie pojawia się ktoś jeszcze. Zamiast mówić tylko, kim była ta osoba, opisz atmosferę, którą wnosiła do snu."
+        }
+      );
+
+    }
+
+
+    if(
+      themes.includes(
+        "place"
+      )
+    ){
+
+      pool.push(
+        {
+          category:"MIEJSCE",
+          question:
+            "Spróbuj ponownie wejść do tego miejsca. Co było w nim znajome, a co nie mogłoby istnieć w rzeczywistości?"
+        }
+      );
+
+    }
+
+
+    return randomItem(
+      pool
+    );
+
+  }
+
+
+  if(
+    state.lang ===
+    "UKR"
+  ){
+
+    const pool = [
+
+      {
+        category:"ПРОСТІР",
+        question:
+          `Затримайся біля «${f}». Яким було оточення? Опиши світло, масштаб, матеріал, температуру або одну деталь, що запам’яталася найбільше.`
+      },
+
+      {
+        category:"ПАМ’ЯТЬ",
+        question:
+          `Коли зараз повертаєшся до «${f}», що з’являється поруч із цим образом, хоча раніше про це не було згадки?`
+      },
+
+      {
+        category:"ВІДЧУТТЯ",
+        question:
+          `Поки що не переходь до наступних подій. Яким було відчуття тіла в момент «${f}»?`
+      },
+
+      {
+        category:"КАДР",
+        question:
+          `Якби «${f}» можна було зупинити в одному нерухомому кадрі, що знаходилося б біля країв цього зображення?`
+      }
+
+    ];
+
+
+    if(
+      themes.includes(
+        "person"
+      )
+    ){
+
+      pool.push(
+        {
+          category:"ПРИСУТНІСТЬ",
+          question:
+            "В описі з’являється ще хтось. Замість того щоб лише назвати цю людину, опиши атмосферу, яку її присутність створювала у сні."
+        }
+      );
+
+    }
+
+
+    if(
+      themes.includes(
+        "place"
+      )
+    ){
+
+      pool.push(
+        {
+          category:"МІСЦЕ",
+          question:
+            "Спробуй знову увійти в це місце. Що в ньому було знайомим, а що не могло б існувати в реальності?"
+        }
+      );
+
+    }
+
+
+    return randomItem(
+      pool
+    );
+
+  }
+
+
+  const pool = [
+
+    {
+      category:"SPACE",
+      question:
+        `Stay with “${f}”. What surrounded it? Describe the light, scale, material, temperature or one detail that remains unusually clear.`
+    },
+
+    {
+      category:"MEMORY",
+      question:
+        `When you return to “${f}” now, what appears beside the image that you did not mention before?`
+    },
+
+    {
+      category:"SENSATION",
+      question:
+        `Do not tell me what happened next yet. What did your body feel during “${f}”?`
+    },
+
+    {
+      category:"FRAME",
+      question:
+        `If “${f}” could become one still frame, what would exist near the edges of the image?`
+    }
+
+  ];
+
+
+  if(
+    themes.includes(
+      "person"
+    )
+  ){
+
+    pool.push(
+      {
+        category:"PRESENCE",
+        question:
+          "Someone else appears in the description. Rather than simply identifying them, describe the atmosphere their presence created in the dream."
+      }
+    );
+
+  }
+
+
+  return randomItem(
+    pool
+  );
+
+}
+
+
+/* =========================================================
+   LAYER 2
+   ========================================================= */
+
+function generateLayerTwoQuestion(
+  fragment,
+  themes
+){
+
+  const f =
+    fragment
+    ||
+    (
+      state.lang==="PL"
+      ?
+      "to wspomnienie"
+      :
+      state.lang==="UKR"
+      ?
+      "цей спогад"
+      :
+      "this memory"
+    );
+
+
+  if(
+    state.lang ===
+    "PL"
+  ){
+
+    const pool = [
+
+      {
+        category:"PRZEMIANA",
+        question:
+          `Wyobraź sobie, że „${f}” nie jest stałe. Co zaczęłoby zmieniać formę, gdyby sen trwał jeszcze kilka minut?`
+      },
+
+      {
+        category:"POZA KADREM",
+        question:
+          "Co mogło istnieć tuż poza tym, co pamiętasz — coś niewidocznego, ale wyraźnie obecnego?"
+      },
+
+      {
+        category:"LOGIKA SNU",
+        question:
+          "Która część tego snu wydawała się zupełnie normalna podczas śnienia, a dopiero po przebudzeniu staje się niemożliwa?"
+      },
+
+      {
+        category:"RELACJA",
+        question:
+          `Gdyby „${f}” mogło coś przekazać bez używania słów, co próbowałoby Ci pokazać?`
+      },
+
+      {
+        category:"CZAS",
+        question:
+          "Czy wydarzenia naprawdę następowały po sobie? Opisz, jak zachowywał się czas wewnątrz tego snu."
+      }
+
+    ];
+
+
+    if(
+      themes.includes(
+        "water"
+      )
+    ){
+
+      pool.push(
+        {
+          category:"WODA",
+          question:
+            "W Twoim śnie pojawia się woda. Czy zachowywała się jak przestrzeń, granica, siła, zagrożenie czy coś zupełnie innego?"
+        }
+      );
+
+    }
+
+
+    if(
+      themes.includes(
+        "door"
+      )
+    ){
+
+      pool.push(
+        {
+          category:"PRZEJŚCIE",
+          question:
+            "Pojawia się motyw przejścia. Co mogłoby znajdować się po drugiej stronie, nawet jeśli we śnie nigdy tam nie dotarłeś?"
+        }
+      );
+
+    }
+
+
+    if(
+      themes.includes(
+        "fear"
+      )
+    ){
+
+      pool.push(
+        {
+          category:"NAPIĘCIE",
+          question:
+            "Nie opisuj samego strachu. Spróbuj opisać jego źródło — gdzie istniało napięcie, zanim stało się emocją?"
+        }
+      );
+
+    }
+
+
+    return randomItem(
+      pool
+    );
+
+  }
+
+
+  if(
+    state.lang ===
+    "UKR"
+  ){
+
+    const pool = [
+
+      {
+        category:"ЗМІНА",
+        question:
+          `Уяви, що «${f}» не є сталим. Що почало б змінювати форму, якби сон тривав ще кілька хвилин?`
+      },
+
+      {
+        category:"ПОЗА КАДРОМ",
+        question:
+          "Що могло існувати просто за межами того, що залишилося в пам’яті — щось невидиме, але відчутно присутнє?"
+      },
+
+      {
+        category:"ЛОГІКА СНУ",
+        question:
+          "Яка частина цього сну здавалася цілком нормальною під час сновидіння, але після пробудження стала неможливою?"
+      },
+
+      {
+        category:"ЗВ’ЯЗОК",
+        question:
+          `Якби «${f}» могло щось передати без слів, що воно намагалося б показати?`
+      },
+
+      {
+        category:"ЧАС",
+        question:
+          "Чи справді події відбувалися одна за одною? Опиши, як поводився час усередині цього сну."
+      }
+
+    ];
+
+
+    if(
+      themes.includes(
+        "water"
+      )
+    ){
+
+      pool.push(
+        {
+          category:"ВОДА",
+          question:
+            "У цьому сні з’являється вода. Вона була простором, межею, силою, загрозою чи чимось зовсім іншим?"
+        }
+      );
+
+    }
+
+
+    if(
+      themes.includes(
+        "door"
+      )
+    ){
+
+      pool.push(
+        {
+          category:"ПЕРЕХІД",
+          question:
+            "У сні з’являється мотив переходу. Що могло бути по той бік, навіть якщо дістатися туди не вдалося?"
+        }
+      );
+
+    }
+
+
+    if(
+      themes.includes(
+        "fear"
+      )
+    ){
+
+      pool.push(
+        {
+          category:"НАПРУЖЕННЯ",
+          question:
+            "Не описуй сам страх. Спробуй описати його джерело — де знаходилося напруження ще до того, як стало емоцією?"
+        }
+      );
+
+    }
+
+
+    return randomItem(
+      pool
+    );
+
+  }
+
+
+  const pool = [
+
+    {
+      category:"TRANSFORMATION",
+      question:
+        `Imagine that “${f}” is not fixed. What might begin changing shape if the dream continued for several more minutes?`
+    },
+
+    {
+      category:"OUTSIDE THE FRAME",
+      question:
+        "What might have existed just beyond what you remember — something unseen but unmistakably present?"
+    },
+
+    {
+      category:"DREAM LOGIC",
+      question:
+        "Which part of the dream felt completely normal while dreaming, but became impossible only after waking?"
+    },
+
+    {
+      category:"RELATION",
+      question:
+        `If “${f}” could communicate without using words, what might it be trying to show you?`
+    },
+
+    {
+      category:"TIME",
+      question:
+        "Did the events really happen one after another? Describe how time behaved inside this dream."
+    }
+
+  ];
+
+
+  if(
+    themes.includes(
+      "fear"
+    )
+  ){
+
+    pool.push(
+      {
+        category:"TENSION",
+        question:
+          "Do not describe the fear itself. Describe its source — where did the tension exist before it became an emotion?"
+      }
+    );
+
+  }
+
+
+  return randomItem(
+    pool
+  );
+
+}
+
+
+/* =========================================================
+   LAYER 3
+   ========================================================= */
+
+function generateLayerThreeQuestion(
+  fragment,
+  themes
+){
+
+  const f =
+    fragment
+    ||
+    (
+      state.lang==="PL"
+      ?
+      "ten fragment"
+      :
+      state.lang==="UKR"
+      ?
+      "цей фрагмент"
+      :
+      "this fragment"
+    );
+
+
+  if(
+    state.lang ===
+    "PL"
+  ){
+
+    return randomItem(
+      [
+
+        {
+          category:"PAMIĘĆ",
+          question:
+            `Kiedy czytasz teraz własne słowa „${f}”, czy nadal masz pewność, że sen wyglądał właśnie tak? Co zdążyło zmienić się w pamięci podczas tej rozmowy?`
+        },
+
+        {
+          category:"DRUGI SEN",
+          question:
+            "Wyobraź sobie, że wszystko, co dotąd zostało opisane, było tylko snem wewnątrz innego snu. Co pojawiłoby się po przebudzeniu z tej pierwszej warstwy?"
+        },
+
+        {
+          category:"TOŻSAMOŚĆ",
+          question:
+            "Usuń na chwilę siebie z tego snu. Co nadal by się wydarzało, gdyby nie było Cię w tej historii?"
+        },
+
+        {
+          category:"ŚLAD",
+          question:
+            "Gdyby z całego snu można było zachować tylko jeden obraz, gest, przedmiot albo zdanie — co powinno pozostać?"
+        },
+
+        {
+          category:"ODWRÓCENIE",
+          question:
+            "A jeśli to nie Ty obserwowałeś ten sen? Co w tej historii mogło obserwować Ciebie?"
+        },
+
+        {
+          category:"PRZESUNIĘCIE",
+          question:
+            `Zmień jedną rzecz we fragmencie „${f}”. Co musiałoby się zmienić, aby cały sen nagle zaczął znaczyć coś zupełnie innego?`
+        }
+
+      ]
+    );
+
+  }
+
+
+  if(
+    state.lang ===
+    "UKR"
+  ){
+
+    return randomItem(
+      [
+
+        {
+          category:"ПАМ’ЯТЬ",
+          question:
+            `Коли зараз читаєш власні слова «${f}», чи залишається впевненість, що сон виглядав саме так? Що вже встигло змінитися в пам’яті протягом цієї розмови?`
+        },
+
+        {
+          category:"ІНШИЙ СОН",
+          question:
+            "Уяви, що все описане досі було лише сном усередині іншого сну. Що могло б з’явитися після пробудження з цього першого шару?"
+        },
+
+        {
+          category:"ПРИСУТНІСТЬ",
+          question:
+            "Уяви цей сон без своєї присутності. Що продовжувало б відбуватися, якби в цій історії не було спостерігача?"
+        },
+
+        {
+          category:"СЛІД",
+          question:
+            "Якби з усього сну можна було залишити лише один образ, жест, предмет або речення — що мало б залишитися?"
+        },
+
+        {
+          category:"ПОГЛЯД",
+          question:
+            "Уяви, що сон також може дивитися у відповідь. Що в цій історії могло бути тим поглядом?"
+        },
+
+        {
+          category:"ЗСУВ",
+          question:
+            `Зміни одну деталь у фрагменті «${f}». Що мало б змінитися, щоб увесь сон раптом почав означати щось зовсім інше?`
+        }
+
+      ]
+    );
+
+  }
+
+
+  return randomItem(
+    [
+
+      {
+        category:"MEMORY",
+        question:
+          `When you read your own words “${f}” now, are you still certain the dream looked exactly like that? What has already changed in your memory during this conversation?`
+      },
+
+      {
+        category:"SECOND DREAM",
+        question:
+          "Imagine everything described so far was only a dream contained inside another dream. What might appear after waking from the first layer?"
+      },
+
+      {
+        category:"IDENTITY",
+        question:
+          "Remove yourself from the dream for a moment. What would continue happening if you were no longer inside the story?"
+      },
+
+      {
+        category:"TRACE",
+        question:
+          "If you could preserve only one image, gesture, object or sentence from the entire dream, what should remain?"
+      },
+
+      {
+        category:"REVERSAL",
+        question:
+          "What if you were not the one observing this dream? What in the story might have been observing you?"
+      },
+
+      {
+        category:"SHIFT",
+        question:
+          `Change one thing inside “${f}”. What would need to change for the entire dream to suddenly mean something completely different?`
+      }
+
+    ]
+  );
+
+}
+
+
+/* =========================================================
+   CURRENT QUESTION
+   ========================================================= */
+
+function getCurrentQuestion(){
+
+  return state
+  .generatedQuestions[
+    state.questionIndex
+  ];
+
+}
+
+
+/* =========================================================
+   DREAM LEVEL
+   ========================================================= */
+
+function getDreamLevel(){
+
+  if(
+    state.questionIndex <=
+    2
+  ){
+    return 0;
+  }
+
+
+  if(
+    state.questionIndex <=
+    5
+  ){
+    return 1;
+  }
+
+
+  return 2;
+
+}
+
+
+/* =========================================================
+   RENDER QUESTION
+   ========================================================= */
+
+function renderQuestion(){
+
+  setVisualMode(
+    "questions"
+  );
+
+
+  const copy =
+    UI[
+      state.lang
+    ];
+
+
+  const q =
+    getCurrentQuestion();
+
+
+  if(!q){
+    return;
+  }
+
+
+  const saved =
+    state.answers[
+      state.questionIndex
+    ];
+
+
+  const level =
+    getDreamLevel();
+
+
+  progress.textContent =
+    `${String(
+      state.questionIndex+1
+    ).padStart(
+      2,
+      "0"
+    )}
+    /
+    ${String(
+      state.totalQuestions
+    ).padStart(
+      2,
+      "0"
+    )}`;
+
+
+  depthLabel.textContent =
+    `TRAUM ${level}`;
+
+
+  let trace =
+    "";
+
+
+  if(
+    state.questionIndex >
+    0
+  ){
+
+    const previous =
+      state.answers[
+        state.questionIndex-1
+      ];
+
+
+    if(
+      previous &&
+      previous.answer
+    ){
+
+      const fragment =
+        extractFragment(
+          previous.answer
+        );
+
+
+      if(fragment){
+
+        trace = `
+
+<div class="contextTrace">
+${escapeHtml(
+  fragment
+)}
+</div>
+
+`;
+
+      }
+
+    }
+
+  }
+
+
+  screen.innerHTML = `
+
+<div class="eyebrow">
+${escapeHtml(
+  q.category
+)}
+</div>
+
+<h2>
+${escapeHtml(
+  q.question
+)}
+</h2>
+
+${trace}
+
+<textarea
+id="answer"
+placeholder="${copy.placeholder}"
+>${escapeHtml(
+  saved
+  ?
+  saved.answer
+  :
+  ""
+)}</textarea>
+
+<div class="actions">
+
+<button
+class="back"
+onclick="questionBack()"
+>
+${copy.back}
+</button>
+
+<button
+class="next"
+onclick="questionNext()"
+>
+${copy.next}
+</button>
+
+</div>
+
+`;
+
+
+  spawnPreviousAnswerGhost();
+
+
+  setTimeout(
+    ()=>{
+
+      document
+      .getElementById(
+        "answer"
+      )
+      ?.focus();
+
+    },
+    450
+  );
+
+}
+
+
+/* =========================================================
+   SAVE ANSWER
+   ========================================================= */
+
+function saveCurrentAnswer(){
+
+  const field =
+    document
+    .getElementById(
+      "answer"
+    );
+
+
+  if(!field){
+    return;
+  }
+
+
+  const q =
+    getCurrentQuestion();
+
+
+  state.answers[
+    state.questionIndex
+  ]
+  =
+  {
+
+    level:
+      getDreamLevel(),
+
+    category:
+      q.category,
+
+    question:
+      q.question,
+
+    answer:
+      normalizeText(
+        field.value
+      )
+
+  };
+
+}
+
+
+/* =========================================================
+   NEXT
+   ========================================================= */
+
+function questionNext(){
+
+  if(
+    transitionRunning
+  ){
+    return;
+  }
+
+
+  saveCurrentAnswer();
+
+
+  const current =
+    state.answers[
+      state.questionIndex
+    ];
+
+
+  if(
+    !current ||
+    !current.answer
+  ){
+
+    const field =
+      document
+      .getElementById(
+        "answer"
+      );
+
+
+    if(field){
+
+      field.focus();
+
+      field.style.borderBottomColor =
+        "rgba(255,255,255,.68)";
+
+
+      setTimeout(
+        ()=>{
+
+          field.style.borderBottomColor =
+            "rgba(255,255,255,.19)";
+
+        },
+        900
+      );
+
+    }
+
+
+    return;
+
+  }
+
+
+  if(
+    state.questionIndex ===
+    state.totalQuestions-1
+  ){
+
+    transition(
+      renderNickname
+    );
+
+    return;
+
+  }
+
+
+  if(
+    state.questionIndex ===
+    2
+  ){
+
+    state.questionIndex++;
+
+
+    if(
+      !state.generatedQuestions[
+        state.questionIndex
+      ]
+    ){
+
+      state.generatedQuestions[
+        state.questionIndex
+      ]
+      =
+      generateAdaptiveQuestion();
+
+    }
+
+
+    runDreamShift(
+      1
+    );
+
+
+    return;
+
+  }
+
+
+  if(
+    state.questionIndex ===
+    5
+  ){
+
+    state.questionIndex++;
+
+
+    if(
+      !state.generatedQuestions[
+        state.questionIndex
+      ]
+    ){
+
+      state.generatedQuestions[
+        state.questionIndex
+      ]
+      =
+      generateAdaptiveQuestion();
+
+    }
+
+
+    runDreamShift(
+      2
+    );
+
+
+    return;
+
+  }
+
+
+  state.questionIndex++;
+
+
+  if(
+    !state.generatedQuestions[
+      state.questionIndex
+    ]
+  ){
+
+    state.generatedQuestions[
+      state.questionIndex
+    ]
+    =
+    generateAdaptiveQuestion();
+
+  }
+
+
+  transition(
+    renderQuestion
+  );
+
+}
+
+
+/* =========================================================
+   BACK
+   ========================================================= */
+
+function questionBack(){
+
+  if(
+    transitionRunning
+  ){
+    return;
+  }
+
+
+  saveCurrentAnswer();
+
+
+  if(
+    state.questionIndex ===
+    0
+  ){
+
+    state.introStep =
+      INTRO[
+        state.lang
+      ]
+      .length-1;
+
+
+    transition(
+      renderIntro
+    );
+
+
+    return;
+
+  }
+
+
+  state.questionIndex--;
+
+
+  transition(
+    renderQuestion
+  );
+
+}
+
+
+/* =========================================================
+   DREAM SHIFT
+   ========================================================= */
+
+let dreamShiftRunning =
+false;
+
+
+function runDreamShift(level){
+
+  if(
+    dreamShiftRunning
+  ){
+    return;
+  }
+
+
+  dreamShiftRunning =
+    true;
+
+
+  const overlay =
+    document
+    .getElementById(
+      "dreamShift"
+    );
+
+
+  const main =
+    document
+    .getElementById(
+      "dreamShiftMain"
+    );
+
+
+  const sub =
+    document
+    .getElementById(
+      "dreamShiftSub"
+    );
+
+
+  const ui =
+    document
+    .getElementById(
+      "ui"
+    );
+
+
+  main.classList.remove(
+    "shiftFade"
+  );
+
+  sub.classList.remove(
+    "shiftFade"
+  );
+
+
+  ui
+  .classList
+  .add(
+    "hide"
+  );
+
+
+  if(
+    level ===
+    1
+  ){
+
+    if(
+      state.lang ===
+      "PL"
+    ){
+
+      main.textContent =
+        "ZAMKNIJ OCZY JESZCZE RAZ";
+
+      sub.textContent =
+        "to samo wspomnienie może prowadzić głębiej";
+
+    }
+    else if(
+      state.lang ===
+      "UKR"
+    ){
+
+      main.textContent =
+        "ЗАПЛЮЩ ОЧІ ЩЕ РАЗ";
+
+      sub.textContent =
+        "той самий спогад може вести глибше";
+
+    }
+    else{
+
+      main.textContent =
+        "CLOSE YOUR EYES AGAIN";
+
+      sub.textContent =
+        "the same memory can lead deeper";
+
+    }
+
+  }
+  else{
+
+    if(
+      state.lang ===
+      "PL"
+    ){
+
+      main.textContent =
+        "SEN PAMIĘTA";
+
+      sub.textContent =
+        "niektóre obrazy wracają inaczej";
+
+    }
+    else if(
+      state.lang ===
+      "UKR"
+    ){
+
+      main.textContent =
+        "СОН ПАМ’ЯТАЄ";
+
+      sub.textContent =
+        "деякі образи повертаються інакше";
+
+    }
+    else{
+
+      main.textContent =
+        "THE DREAM REMEMBERS";
+
+      sub.textContent =
+        "some images return differently";
+
+    }
+
+  }
+
+
+  overlay
+  .classList
+  .add(
+    "active"
+  );
+
+
+  /*
+  Slowly fade first sentence.
+  */
+
+  setTimeout(
+    ()=>{
+
+      main.classList.add(
+        "shiftFade"
+      );
+
+      sub.classList.add(
+        "shiftFade"
+      );
+
+    },
+    3500
+  );
+
+
+  /*
+  Replace phrase only while invisible.
+  */
+
+  setTimeout(
+    ()=>{
+
+      if(
+        level ===
+        1
+      ){
+
+        if(
+          state.lang ===
+          "PL"
+        ){
+
+          main.textContent =
+            "NIE SZUKAJ POCZĄTKU";
+
+          sub.textContent =
+            "po prostu wejdź w następną scenę";
+
+        }
+        else if(
+          state.lang ===
+          "UKR"
+        ){
+
+          main.textContent =
+            "НЕ ШУКАЙ ПОЧАТКУ";
+
+          sub.textContent =
+            "просто увійди в наступну сцену";
+
+        }
+        else{
+
+          main.textContent =
+            "DO NOT LOOK FOR THE BEGINNING";
+
+          sub.textContent =
+            "simply enter the next scene";
+
+        }
+
+      }
+      else{
+
+        if(
+          state.lang ===
+          "PL"
+        ){
+
+          main.textContent =
+            "TERAZ SEN PATRZY NA CIEBIE";
+
+          sub.textContent =
+            "zostań jeszcze chwilę";
+
+        }
+        else if(
+          state.lang ===
+          "UKR"
+        ){
+
+          main.textContent =
+            "ТЕПЕР СОН ДИВИТЬСЯ У ВІДПОВІДЬ";
+
+          sub.textContent =
+            "залишся ще трохи";
+
+        }
+        else{
+
+          main.textContent =
+            "NOW THE DREAM LOOKS BACK";
+
+          sub.textContent =
+            "stay a little longer";
+
+        }
+
+      }
+
+
+      requestAnimationFrame(
+        ()=>{
+
+          requestAnimationFrame(
+            ()=>{
+
+              main.classList.remove(
+                "shiftFade"
+              );
+
+              sub.classList.remove(
+                "shiftFade"
+              );
+
+            }
+          );
+
+        }
+      );
+
+    },
+    5300
+  );
+
+
+  /*
+  Fade second sentence again before leaving.
+  */
+
+  setTimeout(
+    ()=>{
+
+      main.classList.add(
+        "shiftFade"
+      );
+
+      sub.classList.add(
+        "shiftFade"
+      );
+
+    },
+    8300
+  );
+
+
+  /*
+  Return to UI.
+  */
+
+  setTimeout(
+    ()=>{
+
+      overlay
+      .classList
+      .remove(
+        "active"
+      );
+
+
+      renderQuestion();
+
+
+      ui
+      .classList
+      .remove(
+        "hide"
+      );
+
+
+      setTimeout(
+        ()=>{
+
+          dreamShiftRunning =
+            false;
+
+        },
+        1000
+      );
+
+    },
+    10400
+  );
+
+}
+
+
+/* =========================================================
+   ANSWER GHOST
+   ========================================================= */
+
+function spawnPreviousAnswerGhost(){
+
+  if(
+    state.questionIndex ===
+    0
+  ){
+    return;
+  }
+
+
+  const previous =
+    state.answers
+    .filter(
+      a =>
+        a &&
+        a.answer &&
+        a.answer.length > 2
+    );
+
+
+  if(
+    !previous.length
+  ){
+    return;
+  }
+
+
+  if(
+    Math.random() >
+    .52
+  ){
+
+    const a =
+      randomItem(
+        previous
+      );
+
+
+    const fragment =
+      extractFragment(
+        a.answer
+      );
+
+
+    ghost(
+      fragment,
+      true
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   NICKNAME
+   ========================================================= */
+
+function renderNickname(){
+
+  setVisualMode(
+    "nickname"
+  );
+
+
+  progress.textContent =
+    "";
+
+
+  depthLabel.textContent =
+    "WAKE ?";
+
+
+  const copy =
+    UI[
+      state.lang
+    ];
+
+
+  let eyebrow =
+    "WHO DREAMED THIS?";
+
+
+  if(
+    state.lang ===
+    "PL"
+  ){
+
+    eyebrow =
+      "KTO ŚNIŁ?";
+
+  }
+  else if(
+    state.lang ===
+    "UKR"
+  ){
+
+    eyebrow =
+      "КОМУ НАСНИВСЯ ЦЕЙ СОН?";
+
+  }
+
+
+  screen.innerHTML = `
+
+<div class="eyebrow">
+${eyebrow}
+</div>
+
+<h2>
+${copy.nicknameTitle}
+</h2>
+
+<p class="sub">
+${copy.nicknameMeta}
+</p>
+
+<input
+id="nickname"
+type="text"
+maxlength="40"
+autocomplete="off"
+spellcheck="false"
+placeholder="${copy.nicknamePlaceholder}"
+value="${escapeHtml(
+  state.nickname
+)}"
+>
+
+<div class="actions">
+
+<button
+class="back"
+onclick="nicknameBack()"
+>
+${copy.back}
+</button>
+
+<button
+class="next"
+onclick="saveDream()"
+>
+${copy.nicknameSubmit}
+</button>
+
+</div>
+
+`;
+
+
+  setTimeout(
+    ()=>{
+
+      document
+      .getElementById(
+        "nickname"
+      )
+      ?.focus();
+
+    },
+    400
+  );
+
+}
+
+
+/* =========================================================
+   NICK BACK
+   ========================================================= */
+
+function nicknameBack(){
+
+  if(
+    transitionRunning
+  ){
+    return;
+  }
+
+
+  const field =
+    document
+    .getElementById(
+      "nickname"
+    );
+
+
+  if(field){
+
+    state.nickname =
+      field
+      .value
+      .trim();
+
+  }
+
+
+  state.questionIndex =
+    state.totalQuestions-1;
+
+
+  transition(
+    renderQuestion
+  );
+
+}
+
+
+/* =========================================================
+   SAVE DREAM
+   ========================================================= */
+
+async function saveDream(){
+
+  if(
+    transitionRunning
+  ){
+    return;
+  }
+
+
+  const field =
+    document
+    .getElementById(
+      "nickname"
+    );
+
+
+  if(field){
+
+    const value =
+      field
+      .value
+      .trim();
+
+
+    if(value){
+
+      state.nickname =
+        value;
+
+    }
+
+  }
+
+
+  if(
+    !state.nickname
+  ){
+
+    state.nickname =
+      "ANONYMOUS";
+
+  }
+
+
+  const copy =
+    UI[
+      state.lang
+    ];
+
+
+  const payload = {
+
+    nickname:
+      state.nickname,
+
+    language:
+      state.lang,
+
+    dreamColor:
+      state.dreamColorName,
+
+    answers:
+      state.answers,
+
+    dream:
+      state.answers
+      .map(
+        a =>
+          a
+          ?
+          a.answer
+          :
+          ""
+      )
+      .join(
+        "\n\n"
+      )
+
+  };
+
+
+  transition(
+    ()=>{
+
+      setVisualMode(
+        "saving"
+      );
+
+
+      progress.textContent =
+        "";
+
+
+      depthLabel.textContent =
+        "ARCHIVE";
+
+
+      screen.innerHTML = `
+
+<div class="eyebrow">
+TRAUM SIM
+</div>
+
+<h2>
+${copy.saving}
+</h2>
+
+<p class="sub">
+...
+</p>
+
+`;
+
+    }
+  );
+
+
+  try{
+
+    const response =
+      await fetch(
+        API_URL,
+        {
+
+          method:"POST",
+
+          headers:{
+            "Content-Type":
+              "text/plain;charset=utf-8"
+          },
+
+          body:
+            JSON.stringify(
+              payload
+            )
+
+        }
+      );
+
+
+    if(
+      !response.ok
+    ){
+
+      throw new Error(
+        "HTTP " +
+        response.status
+      );
+
+    }
+
+
+    const data =
+      await response.json();
+
+
+    if(
+      !data.ok
+    ){
+
+      throw new Error(
+        data.error ||
+        "Backend error"
+      );
+
+    }
+
+
+    renderSaved(
+      data.dreamId
+    );
+
+  }
+  catch(error){
+
+    console.error(
+      "TRAUM SAVE ERROR",
+      error
+    );
+
+
+    renderError();
+
+  }
+
+}
+
+
+/* =========================================================
+   SAVED
+   ========================================================= */
+
+function renderSaved(id){
+
+  const copy =
+    UI[
+      state.lang
+    ];
+
+
+  /*
+  Fetch may return while first transition is still busy.
+  Wait until it is released.
+  */
+
+  const show =
+    ()=>{
+
+      if(
+        transitionRunning
+      ){
+
+        setTimeout(
+          show,
+          250
+        );
+
+        return;
+
+      }
+
+
+      transition(
+        ()=>{
+
+          setVisualMode(
+            "saved"
+          );
+
+
+          screen.innerHTML = `
+
+<div class="eyebrow">
+TRAUM SIM
+</div>
+
+<h2>
+${copy.done}
+</h2>
+
+<p class="sub">
+${copy.sub}
+</p>
+
+<div class="received">
+
+${escapeHtml(
+  id || ""
+)}
+
+&nbsp;&nbsp;/&nbsp;&nbsp;
+
+${escapeHtml(
+  state.nickname
+)}
+
+</div>
+
+`;
+
+        }
+      );
+
+
+      setTimeout(
+        startFinalSequence,
+        6800
+      );
+
+    };
+
+
+  show();
+
+}
+
+
+/* =========================================================
+   ERROR
+   ========================================================= */
+
+function renderError(){
+
+  const copy =
+    UI[
+      state.lang
+    ];
+
+
+  let message;
+
+
+  if(
+    state.lang ===
+    "PL"
+  ){
+
+    message =
+      "Połączenie z archiwum zostało przerwane.";
+
+  }
+  else if(
+    state.lang ===
+    "UKR"
+  ){
+
+    message =
+      "З’єднання з архівом перервано.";
+
+  }
+  else{
+
+    message =
+      "The connection to the archive was interrupted.";
+
+  }
+
+
+  const show =
+    ()=>{
+
+      if(
+        transitionRunning
+      ){
+
+        setTimeout(
+          show,
+          250
+        );
+
+        return;
+
+      }
+
+
+      transition(
+        ()=>{
+
+          setVisualMode(
+            "error"
+          );
+
+
+          screen.innerHTML = `
+
+<div class="eyebrow">
+TRAUM SIM
+</div>
+
+<h2>
+${copy.error}
+</h2>
+
+<p class="sub">
+${message}
+</p>
+
+<div class="actions">
+
+<span></span>
+
+<button
+class="next"
+onclick="saveDream()"
+>
+${copy.retry}
+</button>
+
+</div>
+
+`;
+
+        }
+      );
+
+    };
+
+
+  show();
+
+}
+
+
+/* =========================================================
+   FINAL
+   ========================================================= */
+
+function startFinalSequence(){
+
+  const ui =
+    document
+    .getElementById(
+      "ui"
+    );
+
+
+  const bloom =
+    document
+    .getElementById(
+      "whiteBloom"
+    );
+
+
+  const whiteout =
+    document
+    .getElementById(
+      "whiteout"
+    );
+
+
+  const final =
+    document
+    .getElementById(
+      "finalInvite"
+    );
+
+
+  ui
+  .classList
+  .add(
+    "hide"
+  );
+
+
+  setTimeout(
+    ()=>{
+
+      bloom
+      .classList
+      .add(
+        "active"
+      );
+
+
+      whiteout
+      .classList
+      .add(
+        "active"
+      );
+
+    },
+    1300
+  );
+
+
+  setTimeout(
+    ()=>{
+
+      document
+      .getElementById(
+        "finalTitle"
+      )
+      .textContent =
+        UI[
+          state.lang
+        ]
+        .invite;
+
+
+      final
+      .classList
+      .add(
+        "active"
+      );
+
+    },
+    7500
+  );
+
+
+  setTimeout(
+    ()=>{
+
+      bloom.style.display =
+        "none";
+
+
+      whiteout.style.display =
+        "none";
+
+    },
+    8150
+  );
+
+}
+
+
+/* =========================================================
+   GHOST
+   ========================================================= */
+
+function ghost(
+  text,
+  answer=false
+){
+
+  if(!text){
+    return;
+  }
+
+
+  const e =
+    document
+    .createElement(
+      "div"
+    );
+
+
+  e.className =
+    answer
+    ?
+    "ghost answerGhost"
+    :
+    "ghost";
+
+
+  e.textContent =
+    text;
+
+
+  e.style.left =
+    (
+      Math.random()*55
+      -
+      5
+    )
+    +
+    "vw";
+
+
+  e.style.top =
+    (
+      Math.random()*75
+      +
+      8
+    )
+    +
+    "vh";
+
+
+  e.style.animationDuration =
+    (
+      26
+      +
+      Math.random()*24
+    )
+    +
+    "s";
+
+
+  ghostLayer
+  .appendChild(
+    e
+  );
+
+
+  setTimeout(
+    ()=>{
+
+      e.remove();
+
+    },
+    52000
+  );
+
+}
+
+
+/* =========================================================
+   INIT
+   ========================================================= */
+
+applyDreamColor();
+
+renderStart();
+
+</script>
+
+</body>
+
+</html>
