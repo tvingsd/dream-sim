@@ -1,1843 +1,5095 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-  <meta charset="UTF-8" />
-  <meta
-    name="viewport"
-    content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover"
-  />
-  <meta name="theme-color" content="#000000" />
-  <title>TRAUM SIM — PATCHLAB 2026</title>
-
-  <style>
-    :root{
-      --vh:1vh;
-      --fg:#f5f5f2;
-      --muted:rgba(255,255,255,.48);
-      --line:rgba(255,255,255,.16);
-      --shadow:0 1px 2px rgba(0,0,0,.82), 0 0 18px rgba(0,0,0,.22);
-    }
-
-    *{
-      box-sizing:border-box;
-      margin:0;
-      padding:0;
-    }
-
-    html,body{
-      width:100%;
-      height:100%;
-      overflow:hidden;
-      background:#000;
-      color:var(--fg);
-      font-family:Helvetica, Arial, sans-serif;
-      -webkit-font-smoothing:antialiased;
-      -webkit-text-size-adjust:none;
-    }
-
-    body{
-      min-height:calc(var(--vh) * 100);
-    }
-
-    /* =========================================================
-       BACKGROUND WORLD
-       ========================================================= */
-
-    #dreamCanvas{
-      position:fixed;
-      inset:0;
-      width:100%;
-      height:100%;
-      z-index:0;
-      opacity:.82;
-      filter:blur(10px) contrast(112%) saturate(0%);
-      transform:scale(1.03);
-      transition:
-        opacity 2.5s ease,
-        filter 3.5s ease,
-        transform 7s ease;
-    }
-
-    #canvasDimmer{
-      position:fixed;
-      inset:0;
-      z-index:1;
-      pointer-events:none;
-      background:
-        radial-gradient(circle at 50% 50%, rgba(0,0,0,.10), rgba(0,0,0,.34) 58%, rgba(0,0,0,.54) 100%),
-        linear-gradient(180deg, rgba(0,0,0,.24), rgba(0,0,0,.40));
-      opacity:1;
-      transition:opacity 1.8s ease, background 2.4s ease;
-    }
-
-    #questionTint{
-      position:fixed;
-      inset:0;
-      z-index:2;
-      pointer-events:none;
-      opacity:0;
-      background:
-        radial-gradient(circle at 50% 50%, rgba(98,98,98,.10) 0%, rgba(46,46,46,.20) 32%, rgba(18,18,18,.46) 65%, rgba(0,0,0,.76) 100%),
-        linear-gradient(135deg, rgba(80,80,80,.14), rgba(0,0,0,0) 30%, rgba(52,52,52,.12) 55%, rgba(0,0,0,.24) 100%);
-      transition:opacity 1.8s ease;
-    }
-
-    #questionTint.active{
-      opacity:1;
-    }
-
-    #veil{
-      position:fixed;
-      inset:-14%;
-      z-index:3;
-      pointer-events:none;
-      mix-blend-mode:screen;
-      opacity:.70;
-      background:
-        radial-gradient(circle at 50% 40%, rgba(255,255,255,.038), transparent 26%),
-        radial-gradient(circle at 28% 68%, rgba(255,255,255,.02), transparent 24%),
-        radial-gradient(circle at 80% 55%, rgba(255,255,255,.015), transparent 26%);
-      animation:veilMove 34s ease-in-out infinite alternate;
-    }
-
-    #grain{
-      position:fixed;
-      inset:-50%;
-      z-index:4;
-      pointer-events:none;
-      opacity:.03;
-      background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-      animation:grainMove .26s steps(2) infinite;
-    }
-
-    /* =========================================================
-       GHOST LAYER
-       ========================================================= */
-
-    #ghostLayer{
-      position:fixed;
-      inset:0;
-      z-index:5;
-      pointer-events:none;
-      overflow:hidden;
-    }
-
-    .ghost{
-      position:absolute;
-      max-width:90vw;
-      white-space:nowrap;
-      color:rgba(255,255,255,.038);
-      filter:blur(11px);
-      letter-spacing:-.05em;
-      line-height:.9;
-      font-size:clamp(26px, 8vw, 114px);
-      animation:ghostMove linear forwards;
-      text-shadow:none;
-    }
-
-    .ghost.answerGhost{
-      color:rgba(255,255,255,.056);
-      filter:blur(13px);
-    }
-
-    /* =========================================================
-       UI
-       ========================================================= */
-
-    #ui{
-      position:fixed;
-      inset:0;
-      z-index:20;
-      height:calc(var(--vh) * 100);
-      display:flex;
-      flex-direction:column;
-      justify-content:space-between;
-      padding:
-        max(24px, env(safe-area-inset-top))
-        max(24px, env(safe-area-inset-right))
-        max(24px, env(safe-area-inset-bottom))
-        max(24px, env(safe-area-inset-left));
-      transition:opacity 1.3s ease, filter 1.4s ease;
-    }
-
-    #ui.hide{
-      opacity:0;
-      filter:blur(12px);
-      pointer-events:none;
-    }
-
-    .top,
-    .bottom{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:20px;
-      font-size:10px;
-      letter-spacing:.22em;
-      text-transform:uppercase;
-      color:var(--muted);
-      text-shadow:var(--shadow);
-    }
-
-    #screenWrap{
-      width:min(980px,100%);
-      margin:auto;
-      position:relative;
-    }
-
-    #screenWrap::before{
-      content:"";
-      position:absolute;
-      inset:-24px -28px -24px -28px;
-      z-index:0;
-      pointer-events:none;
-      background:
-        radial-gradient(circle at 50% 45%, rgba(0,0,0,.24), rgba(0,0,0,.38) 58%, rgba(0,0,0,.16) 100%);
-      opacity:.42;
-      filter:blur(18px);
-      transition:opacity 1.2s ease;
-    }
-
-    #screen{
-      position:relative;
-      z-index:1;
-      width:100%;
-      transition:
-        opacity 1.2s ease,
-        transform 1.4s ease,
-        filter 1.2s ease;
-    }
-
-    #screen.fade{
-      opacity:0;
-      transform:translateY(10px) scale(1.01);
-      filter:blur(12px);
-    }
-
-    .eyebrow{
-      margin-bottom:24px;
-      font-size:10px;
-      letter-spacing:.24em;
-      text-transform:uppercase;
-      color:var(--muted);
-      text-shadow:var(--shadow);
-    }
-
-    h1{
-      font-weight:400;
-      font-size:clamp(54px, 13vw, 116px);
-      line-height:.84;
-      letter-spacing:-.055em;
-      text-shadow:var(--shadow);
-    }
-
-    h2{
-      max-width:920px;
-      font-weight:400;
-      font-size:clamp(30px, 7vw, 64px);
-      line-height:1.02;
-      letter-spacing:-.038em;
-      text-shadow:var(--shadow);
-    }
-
-    .introText{
-      max-width:730px;
-      margin-top:28px;
-      font-size:clamp(18px, 2.8vw, 29px);
-      line-height:1.34;
-      letter-spacing:-.015em;
-      text-shadow:var(--shadow);
-    }
-
-    .introMeta{
-      max-width:680px;
-      margin-top:26px;
-      color:rgba(255,255,255,.52);
-      font-size:12px;
-      line-height:1.65;
-      text-shadow:var(--shadow);
-    }
-
-    .sub{
-      max-width:650px;
-      margin-top:22px;
-      color:rgba(255,255,255,.52);
-      font-size:14px;
-      line-height:1.55;
-      text-shadow:var(--shadow);
-    }
-
-    .received{
-      margin-top:34px;
-      color:rgba(255,255,255,.55);
-      font-size:11px;
-      letter-spacing:.2em;
-      text-transform:uppercase;
-      text-shadow:var(--shadow);
-    }
-
-    /* language */
-
-    .langs{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:1px;
-      margin-top:52px;
-      background:var(--line);
-    }
-
-    button{
-      appearance:none;
-      border:0;
-      background:rgba(0,0,0,.82);
-      color:#fff;
-      font:inherit;
-      cursor:pointer;
-      text-shadow:var(--shadow);
-    }
-
-    .langs button{
-      height:82px;
-      font-size:13px;
-      letter-spacing:.18em;
-    }
-
-    button:hover{
-      background:#fff;
-      color:#000;
-      text-shadow:none;
-    }
-
-    /* dreamy typography */
-
-    .dreamword{
-      display:inline-block;
-      transition:
-        opacity 5s ease,
-        filter 5s ease,
-        transform 5s ease;
-    }
-
-    .dreamword.blur{
-      opacity:.70;
-      filter:blur(7px);
-    }
-
-    .dreamword.deepblur{
-      opacity:.34;
-      filter:blur(13px);
-    }
-
-    .dreamword.float{
-      transform:translateY(-.06em);
-    }
-
-    /* inputs */
-
-    textarea,
-    input{
-      width:100%;
-      border:0;
-      border-bottom:1px solid rgba(255,255,255,.18);
-      outline:0;
-      background:rgba(0,0,0,.08);
-      color:#fff;
-      font:inherit;
-      caret-color:#fff;
-      border-radius:0;
-      text-shadow:var(--shadow);
-      box-shadow:inset 0 -1px 0 rgba(255,255,255,.05);
-    }
-
-    textarea{
-      min-height:190px;
-      margin-top:30px;
-      padding:16px 0 20px;
-      resize:none;
-      font-size:clamp(20px, 4.4vw, 34px);
-      line-height:1.35;
-    }
-
-    input{
-      margin-top:34px;
-      padding:18px 0 20px;
-      font-size:clamp(24px, 5vw, 44px);
-      letter-spacing:-.02em;
-    }
-
-    textarea::placeholder,
-    input::placeholder{
-      color:rgba(255,255,255,.16);
-    }
-
-    .actions{
-      margin-top:34px;
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:18px;
-    }
-
-    .back,
-    .next{
-      text-transform:uppercase;
-      letter-spacing:.18em;
-      font-size:10px;
-    }
-
-    .back{
-      background:transparent;
-      color:var(--muted);
-      padding:16px 0;
-    }
-
-    .next{
-      min-width:150px;
-      padding:17px 20px;
-      border:1px solid rgba(255,255,255,.25);
-      transition:.4s;
-    }
-
-    /* false awakening */
-
-    #falseWake{
-      position:fixed;
-      inset:0;
-      z-index:140;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      background:#000;
-      color:#fff;
-      opacity:0;
-      pointer-events:none;
-    }
-
-    #falseWake.active{
-      animation:falseWakeSequence 8.2s ease forwards;
-    }
-
-    .falseWakeContent{
-      width:min(760px,88vw);
-      text-align:center;
-    }
-
-    .falseWakeMain{
-      font-size:clamp(38px, 9vw, 92px);
-      line-height:.9;
-      letter-spacing:-.055em;
-      font-weight:400;
-      text-shadow:var(--shadow);
-    }
-
-    .falseWakeSub{
-      margin-top:28px;
-      font-size:10px;
-      letter-spacing:.22em;
-      text-transform:uppercase;
-      color:rgba(255,255,255,.45);
-      text-shadow:var(--shadow);
-    }
-
-    /* white bloom */
-
-    #whiteBloom{
-      position:fixed;
-      inset:-30%;
-      z-index:200;
-      pointer-events:none;
-      opacity:0;
-      transform:scale(.22);
-      filter:blur(60px);
-      background:
-        radial-gradient(circle at 50% 50%,
-          rgba(255,255,255,1) 0%,
-          rgba(255,255,255,.96) 16%,
-          rgba(255,255,255,.63) 35%,
-          rgba(255,255,255,.14) 55%,
-          rgba(255,255,255,0) 74%);
-    }
-
-    #whiteBloom.active{
-      animation:bloom 5.8s cubic-bezier(.22,.62,.22,1) forwards;
-    }
-
-    #whiteout{
-      position:fixed;
-      inset:0;
-      z-index:201;
-      background:#fff;
-      pointer-events:none;
-      opacity:0;
-    }
-
-    #whiteout.active{
-      animation:whiteout 5.9s cubic-bezier(.22,.62,.22,1) forwards;
-    }
-
-    /* final */
-
-    #finalInvite{
-      position:fixed;
-      inset:0;
-      z-index:220;
-      background:#000;
-      color:#fff;
-      opacity:0;
-      pointer-events:none;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:
-        max(30px, env(safe-area-inset-top))
-        max(28px, env(safe-area-inset-right))
-        max(30px, env(safe-area-inset-bottom))
-        max(28px, env(safe-area-inset-left));
-    }
-
-    #finalInvite.active{
-      animation:finalIn 2.8s ease forwards;
-    }
-
-    .finalGrid{
-      width:min(1100px,100%);
-      display:grid;
-      grid-template-columns:minmax(180px,280px) 1fr;
-      gap:clamp(50px, 8vw, 120px);
-      align-items:end;
-    }
-
-    .logoBlock img{
-      display:block;
-      width:min(100%,260px);
-      height:auto;
-    }
-
-    .finalCopy{
-      max-width:760px;
-    }
-
-    .finalLabel{
-      margin-bottom:32px;
-      font-size:10px;
-      letter-spacing:.24em;
-      text-transform:uppercase;
-      color:rgba(255,255,255,.42);
-      text-shadow:var(--shadow);
-    }
-
-    #finalTitle{
-      font-size:clamp(32px, 5.8vw, 70px);
-      line-height:1.02;
-      letter-spacing:-.04em;
-      font-weight:400;
-      text-shadow:var(--shadow);
-    }
-
-    .finalRule{
-      width:100%;
-      height:1px;
-      background:rgba(255,255,255,.21);
-      margin:42px 0 24px;
-    }
-
-    .finalDetails{
-      display:flex;
-      justify-content:space-between;
-      gap:30px;
-      font-size:11px;
-      letter-spacing:.18em;
-      text-transform:uppercase;
-      color:rgba(255,255,255,.63);
-      text-shadow:var(--shadow);
-    }
-
-    /* keyframes */
-
-    @keyframes veilMove{
-      from{
-        transform:translate(-1.6%,0) scale(1);
-      }
-      to{
-        transform:translate(2.4%,-1.7%) scale(1.05);
-        filter:blur(12px);
-      }
-    }
-
-    @keyframes grainMove{
-      0%{transform:translate(0,0)}
-      25%{transform:translate(3%,-3%)}
-      50%{transform:translate(-4%,2%)}
-      75%{transform:translate(2%,4%)}
-      100%{transform:translate(-2%,-4%)}
-    }
-
-    @keyframes ghostMove{
-      0%{
-        opacity:0;
-        transform:translate(-2vw,2vh) scale(.97);
-        filter:blur(14px);
-      }
-      18%{opacity:1}
-      72%{opacity:.68}
-      100%{
-        opacity:0;
-        transform:translate(4vw,-3vh) scale(1.05);
-        filter:blur(27px);
-      }
-    }
-
-    @keyframes falseWakeSequence{
-      0%{opacity:0; filter:blur(20px)}
-      18%{opacity:1; filter:blur(0)}
-      76%{opacity:1; filter:blur(0)}
-      100%{opacity:0; filter:blur(18px)}
-    }
-
-    @keyframes bloom{
-      0%{opacity:0; transform:scale(.20)}
-      42%{opacity:.14}
-      74%{opacity:.62; transform:scale(1)}
-      100%{opacity:1; transform:scale(1.9)}
-    }
-
-    @keyframes whiteout{
-      0%{opacity:0}
-      58%{opacity:.05}
-      82%{opacity:.34}
-      100%{opacity:1}
-    }
-
-    @keyframes finalIn{
-      0%{
-        opacity:0;
-        filter:blur(12px);
-        transform:scale(1.012);
-      }
-      100%{
-        opacity:1;
-        filter:blur(0);
-        transform:scale(1);
-      }
-    }
-
-    /* mobile */
-
-    @media(max-width:700px){
-      #ui{
-        padding:
-          max(18px, env(safe-area-inset-top))
-          max(18px, env(safe-area-inset-right))
-          max(18px, env(safe-area-inset-bottom))
-          max(18px, env(safe-area-inset-left));
-      }
-
-      h1{
-        font-size:clamp(54px, 19vw, 84px);
-      }
-
-      h2{
-        font-size:clamp(28px, 8.8vw, 44px);
-      }
-
-      .introText{
-        font-size:clamp(19px, 6vw, 29px);
-      }
-
-      textarea{
-        min-height:clamp(145px, 25dvh, 225px);
-        font-size:clamp(19px, 6vw, 27px);
-      }
-
-      .langs{
-        margin-top:36px;
-      }
-
-      .langs button{
-        height:70px;
-      }
-
-      .actions{
-        margin-top:24px;
-      }
-
-      .next{
-        min-width:128px;
-      }
-
-      .finalGrid{
-        display:flex;
-        flex-direction:column;
-        align-items:flex-start;
-        justify-content:center;
-        gap:45px;
-      }
-
-      .logoBlock img{
-        width:min(52vw,190px);
-      }
-
-      #finalTitle{
-        font-size:clamp(31px, 9vw, 46px);
-      }
-
-      .finalRule{
-        margin:32px 0 20px;
-      }
-
-      .finalDetails{
-        flex-direction:column;
-        gap:8px;
-      }
-    }
-  </style>
+
+<meta charset="UTF-8">
+
+<meta
+  name="viewport"
+  content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover"
+>
+
+<meta name="theme-color" content="#000000">
+
+<title>TRAUM SIM — PATCHLAB 2026</title>
+
+<style>
+
+:root{
+  --vh:1vh;
+  --white:#f5f5f2;
+  --muted:rgba(255,255,255,.48);
+  --line:rgba(255,255,255,.18);
+
+  --shadow:
+    0 1px 2px rgba(0,0,0,.92),
+    0 4px 18px rgba(0,0,0,.35);
+}
+
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+html,
+body{
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  background:#000;
+  color:var(--white);
+
+  font-family:
+    Helvetica,
+    Arial,
+    sans-serif;
+
+  -webkit-font-smoothing:antialiased;
+  -webkit-text-size-adjust:none;
+}
+
+body{
+  min-height:calc(var(--vh) * 100);
+}
+
+
+/* =========================================================
+   DREAM CANVAS
+   ========================================================= */
+
+#dreamCanvas{
+  position:fixed;
+  inset:0;
+  z-index:0;
+
+  width:100%;
+  height:100%;
+
+  background:#000;
+
+  opacity:.86;
+
+  filter:
+    blur(8px)
+    contrast(122%);
+
+  transition:
+    filter 8s ease,
+    opacity 8s ease;
+}
+
+
+/* =========================================================
+   GRAPHITE FIELD
+   ========================================================= */
+
+#graphite{
+  position:fixed;
+  inset:0;
+  z-index:1;
+
+  pointer-events:none;
+
+  background:
+    radial-gradient(
+      ellipse at 50% 50%,
+      rgba(82,82,82,.06) 0%,
+      rgba(43,43,43,.11) 35%,
+      rgba(15,15,15,.26) 68%,
+      rgba(0,0,0,.63) 100%
+    );
+
+  opacity:.48;
+
+  transition:
+    opacity 3s ease;
+}
+
+body.questionMode #graphite{
+  opacity:.87;
+}
+
+
+/* =========================================================
+   READING SHADOW
+   ========================================================= */
+
+#readingShadow{
+  position:fixed;
+  inset:0;
+  z-index:2;
+
+  pointer-events:none;
+
+  opacity:0;
+
+  background:
+    radial-gradient(
+      ellipse at 50% 48%,
+      rgba(0,0,0,.06) 0%,
+      rgba(0,0,0,.20) 43%,
+      rgba(0,0,0,.50) 78%,
+      rgba(0,0,0,.68) 100%
+    );
+
+  transition:
+    opacity 2.7s ease;
+}
+
+body.questionMode #readingShadow{
+  opacity:.64;
+}
+
+
+/* =========================================================
+   ATMOSPHERE
+   ========================================================= */
+
+#veil{
+  position:fixed;
+  inset:-18%;
+  z-index:3;
+
+  pointer-events:none;
+
+  opacity:.48;
+
+  mix-blend-mode:screen;
+
+  background:
+    radial-gradient(
+      circle at 26% 43%,
+      rgba(255,255,255,.025),
+      transparent 27%
+    ),
+
+    radial-gradient(
+      circle at 74% 55%,
+      rgba(255,255,255,.020),
+      transparent 29%
+    );
+
+  animation:
+    veilBreath
+    58s
+    ease-in-out
+    infinite
+    alternate;
+}
+
+
+/* =========================================================
+   GRAIN
+   ========================================================= */
+
+#grain{
+  position:fixed;
+  inset:-50%;
+  z-index:7;
+
+  pointer-events:none;
+
+  opacity:.023;
+
+  background-image:url(
+    "data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.83' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"
+  );
+
+  animation:
+    grain
+    .33s
+    steps(2)
+    infinite;
+}
+
+
+/* =========================================================
+   GHOSTS
+   ========================================================= */
+
+#ghostLayer{
+  position:fixed;
+  inset:0;
+  z-index:5;
+
+  pointer-events:none;
+
+  overflow:hidden;
+}
+
+.ghost{
+  position:absolute;
+
+  max-width:90vw;
+
+  font-size:
+    clamp(
+      25px,
+      8vw,
+      112px
+    );
+
+  line-height:.9;
+
+  letter-spacing:-.05em;
+
+  white-space:nowrap;
+
+  color:rgba(255,255,255,.028);
+
+  filter:blur(13px);
+
+  animation:
+    ghostMove
+    linear
+    forwards;
+}
+
+.answerGhost{
+  color:rgba(255,255,255,.050);
+  filter:blur(15px);
+}
+
+
+/* =========================================================
+   UI
+   ========================================================= */
+
+#ui{
+  position:fixed;
+  inset:0;
+  z-index:20;
+
+  height:
+    calc(
+      var(--vh)
+      *
+      100
+    );
+
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+
+  padding:
+    max(24px,env(safe-area-inset-top))
+    max(24px,env(safe-area-inset-right))
+    max(24px,env(safe-area-inset-bottom))
+    max(24px,env(safe-area-inset-left));
+
+  transition:
+    opacity 1.5s ease,
+    filter 1.5s ease;
+}
+
+#ui.hide{
+  opacity:0;
+  filter:blur(14px);
+  pointer-events:none;
+}
+
+
+/* =========================================================
+   TOP / BOTTOM
+   ========================================================= */
+
+.top,
+.bottom{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+
+  gap:20px;
+
+  font-size:10px;
+  letter-spacing:.22em;
+  text-transform:uppercase;
+
+  color:var(--muted);
+
+  text-shadow:var(--shadow);
+}
+
+
+/* =========================================================
+   SCREEN
+   ========================================================= */
+
+#screenWrap{
+  width:min(960px,100%);
+  margin:auto;
+
+  position:relative;
+}
+
+#screenWrap::before{
+  content:"";
+
+  position:absolute;
+
+  z-index:-1;
+
+  inset:-80px -90px;
+
+  pointer-events:none;
+
+  opacity:.54;
+
+  filter:blur(30px);
+
+  background:
+    radial-gradient(
+      ellipse,
+      rgba(0,0,0,.52),
+      rgba(0,0,0,.22) 62%,
+      rgba(0,0,0,0) 82%
+    );
+}
+
+#screen{
+  position:relative;
+
+  transition:
+    opacity 1.25s ease,
+    transform 1.45s ease,
+    filter 1.25s ease;
+}
+
+#screen.fade{
+  opacity:0;
+
+  transform:
+    translateY(10px)
+    scale(1.008);
+
+  filter:blur(13px);
+}
+
+
+/* =========================================================
+   TYPOGRAPHY
+   ========================================================= */
+
+.eyebrow{
+  margin-bottom:24px;
+
+  font-size:10px;
+  letter-spacing:.24em;
+  text-transform:uppercase;
+
+  color:rgba(255,255,255,.52);
+
+  text-shadow:var(--shadow);
+}
+
+h1{
+  font-size:
+    clamp(
+      56px,
+      13vw,
+      116px
+    );
+
+  line-height:.84;
+  letter-spacing:-.055em;
+
+  font-weight:400;
+
+  text-shadow:var(--shadow);
+}
+
+h2{
+  max-width:930px;
+
+  font-size:
+    clamp(
+      30px,
+      7vw,
+      64px
+    );
+
+  line-height:1.02;
+  letter-spacing:-.038em;
+
+  font-weight:400;
+
+  text-shadow:var(--shadow);
+}
+
+.introText{
+  max-width:740px;
+
+  margin-top:28px;
+
+  font-size:
+    clamp(
+      18px,
+      2.8vw,
+      29px
+    );
+
+  line-height:1.35;
+  letter-spacing:-.015em;
+
+  text-shadow:var(--shadow);
+}
+
+.introMeta{
+  max-width:680px;
+
+  margin-top:27px;
+
+  font-size:12px;
+  line-height:1.65;
+
+  color:rgba(255,255,255,.52);
+
+  text-shadow:var(--shadow);
+}
+
+.sub{
+  max-width:650px;
+
+  margin-top:22px;
+
+  font-size:14px;
+  line-height:1.55;
+
+  color:rgba(255,255,255,.54);
+
+  text-shadow:var(--shadow);
+}
+
+
+/* =========================================================
+   LANGUAGE
+   ========================================================= */
+
+.langs{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+
+  gap:1px;
+
+  margin-top:52px;
+
+  background:rgba(255,255,255,.16);
+}
+
+button{
+  appearance:none;
+
+  border:0;
+
+  background:rgba(0,0,0,.80);
+
+  color:#fff;
+
+  font:inherit;
+
+  cursor:pointer;
+
+  text-shadow:var(--shadow);
+}
+
+.langs button{
+  height:82px;
+
+  font-size:13px;
+
+  letter-spacing:.18em;
+}
+
+button:hover{
+  background:#fff;
+  color:#000;
+  text-shadow:none;
+}
+
+
+/* =========================================================
+   INPUT
+   ========================================================= */
+
+textarea,
+input{
+  width:100%;
+
+  border:0;
+
+  border-bottom:
+    1px solid
+    rgba(255,255,255,.19);
+
+  outline:0;
+
+  background:rgba(0,0,0,.08);
+
+  color:#fff;
+
+  font:inherit;
+
+  caret-color:#fff;
+
+  border-radius:0;
+
+  text-shadow:var(--shadow);
+}
+
+textarea{
+  min-height:190px;
+
+  margin-top:30px;
+
+  padding:
+    16px
+    0
+    20px;
+
+  resize:none;
+
+  font-size:
+    clamp(
+      20px,
+      4.4vw,
+      34px
+    );
+
+  line-height:1.35;
+}
+
+input{
+  margin-top:34px;
+
+  padding:
+    18px
+    0
+    20px;
+
+  font-size:
+    clamp(
+      25px,
+      5vw,
+      44px
+    );
+
+  letter-spacing:-.02em;
+}
+
+textarea::placeholder,
+input::placeholder{
+  color:rgba(255,255,255,.17);
+}
+
+
+/* =========================================================
+   QUESTION WORDS — ALWAYS CLEAR
+   ========================================================= */
+
+.dreamword{
+  display:inline-block;
+  filter:none !important;
+  opacity:1 !important;
+  transform:none !important;
+}
+
+
+/* =========================================================
+   ACTIONS
+   ========================================================= */
+
+.actions{
+  margin-top:34px;
+
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+
+  gap:18px;
+}
+
+.back,
+.next{
+  font-size:10px;
+
+  letter-spacing:.18em;
+
+  text-transform:uppercase;
+}
+
+.back{
+  background:transparent;
+
+  color:var(--muted);
+
+  padding:16px 0;
+}
+
+.next{
+  min-width:150px;
+
+  padding:
+    17px
+    20px;
+
+  border:
+    1px solid
+    rgba(255,255,255,.26);
+
+  transition:.42s;
+}
+
+.received{
+  margin-top:34px;
+
+  font-size:11px;
+
+  letter-spacing:.21em;
+
+  text-transform:uppercase;
+
+  color:rgba(255,255,255,.56);
+
+  text-shadow:var(--shadow);
+}
+
+
+/* =========================================================
+   COLOR QUESTION
+   ========================================================= */
+
+.colorQuestionInput{
+  text-transform:none;
+}
+
+.colorHint{
+  margin-top:15px;
+
+  font-size:10px;
+  line-height:1.5;
+
+  letter-spacing:.15em;
+  text-transform:uppercase;
+
+  color:rgba(255,255,255,.35);
+
+  text-shadow:var(--shadow);
+}
+
+
+/* =========================================================
+   DREAM SHIFT
+   ========================================================= */
+
+#dreamShift{
+  position:fixed;
+  inset:0;
+  z-index:150;
+
+  pointer-events:none;
+
+  display:flex;
+  justify-content:center;
+  align-items:center;
+
+  opacity:0;
+
+  background:#000;
+}
+
+#dreamShift.active{
+  animation:
+    dreamShift
+    9.5s
+    ease
+    forwards;
+}
+
+.dreamShiftWrap{
+  width:min(760px,88vw);
+  text-align:center;
+}
+
+#dreamShiftMain{
+  font-size:
+    clamp(
+      38px,
+      9vw,
+      92px
+    );
+
+  line-height:.9;
+  letter-spacing:-.055em;
+
+  font-weight:400;
+
+  text-shadow:var(--shadow);
+}
+
+#dreamShiftSub{
+  margin-top:28px;
+
+  font-size:10px;
+
+  letter-spacing:.22em;
+  line-height:1.6;
+
+  text-transform:uppercase;
+
+  color:rgba(255,255,255,.48);
+
+  text-shadow:var(--shadow);
+}
+
+
+/* =========================================================
+   WHITE OUT
+   ========================================================= */
+
+#whiteBloom{
+  position:fixed;
+
+  inset:-30%;
+
+  z-index:200;
+
+  pointer-events:none;
+
+  opacity:0;
+
+  transform:scale(.2);
+
+  filter:blur(60px);
+
+  background:
+    radial-gradient(
+      circle at 50% 50%,
+      rgba(255,255,255,1) 0%,
+      rgba(255,255,255,.96) 16%,
+      rgba(255,255,255,.63) 35%,
+      rgba(255,255,255,.14) 55%,
+      rgba(255,255,255,0) 74%
+    );
+}
+
+#whiteBloom.active{
+  animation:
+    bloom
+    5.9s
+    cubic-bezier(.22,.62,.22,1)
+    forwards;
+}
+
+#whiteout{
+  position:fixed;
+
+  inset:0;
+
+  z-index:201;
+
+  pointer-events:none;
+
+  opacity:0;
+
+  background:#fff;
+}
+
+#whiteout.active{
+  animation:
+    whiteout
+    6s
+    cubic-bezier(.22,.62,.22,1)
+    forwards;
+}
+
+
+/* =========================================================
+   FINAL
+   ========================================================= */
+
+#finalInvite{
+  position:fixed;
+
+  inset:0;
+
+  z-index:220;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  background:#000;
+
+  opacity:0;
+
+  pointer-events:none;
+
+  padding:
+    max(30px,env(safe-area-inset-top))
+    max(28px,env(safe-area-inset-right))
+    max(30px,env(safe-area-inset-bottom))
+    max(28px,env(safe-area-inset-left));
+}
+
+#finalInvite.active{
+  animation:
+    finalIn
+    2.9s
+    ease
+    forwards;
+}
+
+.finalGrid{
+  width:min(1100px,100%);
+
+  display:grid;
+
+  grid-template-columns:
+    minmax(180px,280px)
+    1fr;
+
+  gap:
+    clamp(
+      50px,
+      8vw,
+      120px
+    );
+
+  align-items:end;
+}
+
+.logoBlock img{
+  display:block;
+
+  width:min(100%,260px);
+
+  height:auto;
+}
+
+.finalCopy{
+  max-width:760px;
+}
+
+.finalLabel{
+  margin-bottom:32px;
+
+  font-size:10px;
+
+  letter-spacing:.24em;
+
+  text-transform:uppercase;
+
+  color:rgba(255,255,255,.42);
+}
+
+#finalTitle{
+  font-size:
+    clamp(
+      32px,
+      5.8vw,
+      70px
+    );
+
+  line-height:1.02;
+
+  letter-spacing:-.04em;
+
+  font-weight:400;
+}
+
+.finalRule{
+  height:1px;
+
+  width:100%;
+
+  margin:
+    42px
+    0
+    24px;
+
+  background:rgba(255,255,255,.21);
+}
+
+.finalDetails{
+  display:flex;
+  justify-content:space-between;
+
+  gap:30px;
+
+  font-size:11px;
+
+  letter-spacing:.18em;
+
+  text-transform:uppercase;
+
+  color:rgba(255,255,255,.63);
+}
+
+
+/* =========================================================
+   KEYFRAMES
+   ========================================================= */
+
+@keyframes veilBreath{
+  from{
+    transform:
+      translate3d(-1%,.5%,0)
+      scale(1);
+  }
+
+  to{
+    transform:
+      translate3d(1.2%,-.8%,0)
+      scale(1.025);
+  }
+}
+
+@keyframes grain{
+  0%{transform:translate(0,0)}
+  25%{transform:translate(3%,-3%)}
+  50%{transform:translate(-4%,2%)}
+  75%{transform:translate(2%,4%)}
+  100%{transform:translate(-2%,-4%)}
+}
+
+@keyframes ghostMove{
+  0%{
+    opacity:0;
+
+    transform:
+      translate3d(-1vw,1vh,0)
+      scale(.99);
+
+    filter:blur(16px);
+  }
+
+  20%{
+    opacity:1;
+  }
+
+  74%{
+    opacity:.64;
+  }
+
+  100%{
+    opacity:0;
+
+    transform:
+      translate3d(2vw,-1.5vh,0)
+      scale(1.03);
+
+    filter:blur(29px);
+  }
+}
+
+@keyframes dreamShift{
+  0%{
+    opacity:0;
+    filter:blur(22px);
+  }
+
+  18%{
+    opacity:1;
+    filter:blur(0);
+  }
+
+  78%{
+    opacity:1;
+    filter:blur(0);
+  }
+
+  100%{
+    opacity:0;
+    filter:blur(20px);
+  }
+}
+
+@keyframes bloom{
+  0%{
+    opacity:0;
+    transform:scale(.2);
+  }
+
+  42%{
+    opacity:.14;
+  }
+
+  74%{
+    opacity:.62;
+    transform:scale(1);
+  }
+
+  100%{
+    opacity:1;
+    transform:scale(1.9);
+  }
+}
+
+@keyframes whiteout{
+  0%{opacity:0}
+  58%{opacity:.05}
+  82%{opacity:.34}
+  100%{opacity:1}
+}
+
+@keyframes finalIn{
+  0%{
+    opacity:0;
+
+    filter:blur(12px);
+
+    transform:scale(1.01);
+  }
+
+  100%{
+    opacity:1;
+
+    filter:blur(0);
+
+    transform:scale(1);
+  }
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media(max-width:700px){
+
+  #ui{
+    padding:
+      max(18px,env(safe-area-inset-top))
+      max(18px,env(safe-area-inset-right))
+      max(18px,env(safe-area-inset-bottom))
+      max(18px,env(safe-area-inset-left));
+  }
+
+  h1{
+    font-size:
+      clamp(
+        54px,
+        19vw,
+        84px
+      );
+  }
+
+  h2{
+    font-size:
+      clamp(
+        28px,
+        8.8vw,
+        44px
+      );
+  }
+
+  .introText{
+    font-size:
+      clamp(
+        19px,
+        6vw,
+        29px
+      );
+  }
+
+  textarea{
+    min-height:
+      clamp(
+        145px,
+        25dvh,
+        225px
+      );
+
+    font-size:
+      clamp(
+        19px,
+        6vw,
+        27px
+      );
+  }
+
+  .langs{
+    margin-top:36px;
+  }
+
+  .langs button{
+    height:70px;
+    font-size:11px;
+  }
+
+  .actions{
+    margin-top:24px;
+  }
+
+  .next{
+    min-width:128px;
+  }
+
+  .finalGrid{
+    display:flex;
+    flex-direction:column;
+
+    align-items:flex-start;
+    justify-content:center;
+
+    gap:44px;
+  }
+
+  .logoBlock img{
+    width:min(52vw,190px);
+  }
+
+  #finalTitle{
+    font-size:
+      clamp(
+        31px,
+        9vw,
+        46px
+      );
+  }
+
+  .finalDetails{
+    flex-direction:column;
+    gap:8px;
+  }
+
+}
+
+</style>
+
 </head>
+
 <body>
 
-  <canvas id="dreamCanvas"></canvas>
-  <div id="canvasDimmer"></div>
-  <div id="questionTint"></div>
-  <div id="veil"></div>
-  <div id="grain"></div>
-  <div id="ghostLayer"></div>
+<canvas id="dreamCanvas"></canvas>
 
-  <div id="falseWake">
-    <div class="falseWakeContent">
-      <div class="falseWakeMain" id="falseWakeMain"></div>
-      <div class="falseWakeSub" id="falseWakeSub"></div>
-    </div>
+<div id="graphite"></div>
+
+<div id="readingShadow"></div>
+
+<div id="veil"></div>
+
+<div id="ghostLayer"></div>
+
+<div id="grain"></div>
+
+
+<div id="dreamShift">
+
+  <div class="dreamShiftWrap">
+
+    <div id="dreamShiftMain"></div>
+
+    <div id="dreamShiftSub"></div>
+
   </div>
 
-  <div id="whiteBloom"></div>
-  <div id="whiteout"></div>
+</div>
 
-  <div id="finalInvite">
-    <div class="finalGrid">
-      <div class="logoBlock">
-        <img src="patchlab_2026_header_1.png" alt="Patchlab Festival 2026">
+
+<div id="whiteBloom"></div>
+
+<div id="whiteout"></div>
+
+
+<div id="finalInvite">
+
+  <div class="finalGrid">
+
+    <div class="logoBlock">
+
+      <img
+        src="patchlab_2026_header_1.png"
+        alt="Patchlab Festival 2026"
+      >
+
+    </div>
+
+    <div class="finalCopy">
+
+      <div class="finalLabel">
+        TRAUM SIM / PATCHLAB 2026
       </div>
-      <div class="finalCopy">
-        <div class="finalLabel">TRAUM SIM / PATCHLAB 2026</div>
-        <div id="finalTitle"></div>
-        <div class="finalRule"></div>
-        <div class="finalDetails">
-          <div>15.10.2026</div>
-          <div>HEVRE</div>
-          <div>KRAKÓW</div>
-        </div>
+
+      <div id="finalTitle"></div>
+
+      <div class="finalRule"></div>
+
+      <div class="finalDetails">
+
+        <div>15.10.2026</div>
+
+        <div>HEVRE</div>
+
+        <div>KRAKÓW</div>
+
       </div>
+
     </div>
+
   </div>
 
-  <div id="ui">
-    <div class="top">
-      <span>TRAUM SIM</span>
-      <span id="progress"></span>
-    </div>
+</div>
 
-    <div id="screenWrap">
-      <main id="screen"></main>
-    </div>
 
-    <div class="bottom">
-      <span>PATCHLAB 2026</span>
-      <span id="depthLabel">TRAUM 0</span>
-    </div>
+<div id="ui">
+
+  <div class="top">
+
+    <span>
+      TRAUM SIM
+    </span>
+
+    <span id="progress"></span>
+
   </div>
 
-  <script>
-    /* =========================================================
-       BACKEND
-       ========================================================= */
-    const API_URL =
-      "https://script.google.com/macros/s/AKfycbzU_GDYcK7nC4aGNVxmQd4fojRBacX1UR076Ox-lCI8KrGV1YVN7G_mwGT-6UFzOhJY3g/exec";
-
-    /* =========================================================
-       VIEWPORT
-       ========================================================= */
-    function setVH(){
-      const h = window.visualViewport ? window.visualViewport.height : window.innerHeight;
-      document.documentElement.style.setProperty("--vh", (h * 0.01) + "px");
-    }
-
-    setVH();
-    window.addEventListener("resize", setVH);
-    if(window.visualViewport){
-      window.visualViewport.addEventListener("resize", setVH);
-    }
-
-    /* =========================================================
-       COPY
-       ========================================================= */
-    const INTRO = {
-      PL:[
-        {
-          label:"TRAUM / 01",
-          title:"Sen nie jest filmem.",
-          text:"Podczas snu mózg nadal pracuje. Fragmenty pamięci, emocji, miejsc, osób i doświadczeń zostają ponownie połączone w rzeczywistość, która w chwili śnienia może wydawać się całkowicie prawdziwa.",
-          meta:"Nie istnieje jeden naukowy słownik symboli snu. Znaczenie obrazu zależy od osoby, pamięci, emocji i kontekstu."
-        },
-        {
-          label:"TRAUM / 02",
-          title:"Pamięć nie odtwarza. Pamięć rekonstruuje.",
-          text:"Sen może połączyć dom z dzieciństwa z pokojem widzianym wczoraj, nadać znajomej osobie inną twarz albo pozwolić ci wiedzieć coś, czego nikt wcześniej nie powiedział.",
-          meta:"To, co podczas czuwania byłoby sprzecznością, we śnie często zostaje zaakceptowane bez pytania."
-        },
-        {
-          label:"TRAUM / 03",
-          title:"Niektóre sny zmieniły rzeczywistość.",
-          text:"Mary Shelley opisywała obraz pomiędzy snem a jawą, który stał się zalążkiem Frankensteina. Otto Loewi przypisywał snowi projekt eksperymentu dotyczącego chemicznego przekazywania sygnałów nerwowych. Paul McCartney opowiadał, że melodia Yesterday pojawiła się podczas snu.",
-          meta:"Sen potrafi działać jak generator: bierze istniejące fragmenty i układa je w konfigurację, której wcześniej nie było."
-        },
-        {
-          label:"TRAUM / 04",
-          title:"Nie próbuj interpretować.",
-          text:"Przypomnij sobie tylko to, co zostało. Obraz. Uczucie. Osobę. Miejsce. Przejście. Coś niemożliwego.",
-          meta:"Nie szukamy poprawnego znaczenia. Szukamy śladu."
-        }
-      ],
-      ENG:[
-        {
-          label:"TRAUM / 01",
-          title:"A dream is not a film.",
-          text:"During sleep the brain continues working. Fragments of memory, emotion, places, people and experience are recombined into a reality that can feel completely real while it is happening.",
-          meta:"There is no single scientific dictionary of dream symbols. Meaning depends on the dreamer, memory, emotion and context."
-        },
-        {
-          label:"TRAUM / 02",
-          title:"Memory does not replay. Memory reconstructs.",
-          text:"A dream can merge a childhood home with a room seen yesterday, give a familiar person another face, or allow you to know something nobody ever told you.",
-          meta:"What would be a contradiction while awake often requires no explanation inside a dream."
-        },
-        {
-          label:"TRAUM / 03",
-          title:"Some dreams changed reality.",
-          text:"Mary Shelley described a waking vision that became the seed of Frankenstein. Otto Loewi credited a dream with the design of an experiment concerning chemical neurotransmission. Paul McCartney has said that the melody of Yesterday came to him in a dream.",
-          meta:"Dreaming can behave like a generator: recombining existing fragments into a configuration that did not exist before."
-        },
-        {
-          label:"TRAUM / 04",
-          title:"Do not interpret.",
-          text:"Simply remember what remained. An image. A feeling. A person. A place. A passage. Something impossible.",
-          meta:"We are not looking for the correct meaning. We are looking for a trace."
-        }
-      ]
-    };
-
-    const QUESTIONS_PL = {
-      0:[
-        { group:"PAMIĘĆ", question:"Który szczegół snu pamiętasz bez żadnego wysiłku?" },
-        { group:"MIEJSCE", question:"Czy miejsce było prawdziwym miejscem, czy kilkoma miejscami połączonymi w jedno?" },
-        { group:"EMOCJA", question:"Jakie uczucie pamiętasz wyraźniej niż same wydarzenia?" },
-        { group:"OBECNOŚĆ", question:"Kto był tam z tobą?" },
-        { group:"CIAŁO", question:"Czy patrzyłeś własnymi oczami, czy obserwowałeś siebie z zewnątrz?" },
-        { group:"ŚLAD DNIA", question:"Co z ostatnich dni mogło przedostać się do tego snu?" }
-      ],
-      1:[
-        { group:"CIEŃ", question:"Co cię ścigało — i co mogłoby się wydarzyć, gdybyś przestał uciekać?" },
-        { group:"CIEŃ", question:"Która postać była całkowicie obca, a jednak zachowywała się trochę jak ty?" },
-        { group:"MASKA", question:"Czy byłeś sobą, czy osobą, którą inni mieli za ciebie?" },
-        { group:"ARCHETYP", question:"Czy pojawiły się drzwi, schody, woda, dom, las albo droga?" },
-        { group:"CENTRUM", question:"Czy istniało miejsce albo rzecz, do której wszystko zdawało się prowadzić?" },
-        { group:"PRÓG", question:"Co znajdowało się po drugiej stronie?" }
-      ],
-      2:[
-        { group:"TOŻSAMOŚĆ", question:"Kto śnił — ty, czy ktoś, kto tylko wyglądał jak ty?" },
-        { group:"ŚWIADOMOŚĆ", question:"Czy teraz pamiętasz ten sen tak samo jak na początku?" },
-        { group:"CZAS", question:"Czy ta historia wydarzyła się wcześniej, czy właśnie teraz?" },
-        { group:"ODBICIE", question:"Jeżeli jedna z twoich wcześniejszych odpowiedzi nie była prawdziwa — która?" },
-        { group:"SYSTEM", question:"Czy jesteś pewien, że opisujesz swój sen?" },
-        { group:"SYSTEM", question:"Kto teraz pamięta ten sen — ty czy TRAUM SIM?" }
-      ]
-    };
-
-    const QUESTIONS_EN = {
-      0:[
-        { group:"MEMORY", question:"Which detail of the dream do you remember without trying?" },
-        { group:"PLACE", question:"Was the place real, or several places merged into one?" },
-        { group:"EMOTION", question:"Which feeling do you remember more clearly than the events?" },
-        { group:"PRESENCE", question:"Who was there with you?" },
-        { group:"BODY", question:"Were you looking through your own eyes or watching yourself from outside?" },
-        { group:"DAY TRACE", question:"What from the last few days might have entered the dream?" }
-      ],
-      1:[
-        { group:"SHADOW", question:"What was chasing you — and what might happen if you stopped running?" },
-        { group:"SHADOW", question:"Which stranger behaved a little too much like you?" },
-        { group:"MASK", question:"Were you yourself, or the person others believed you were?" },
-        { group:"ARCHETYPE", question:"Did you encounter a door, staircase, water, house, forest or road?" },
-        { group:"CENTER", question:"Was there somewhere or something everything seemed to lead toward?" },
-        { group:"THRESHOLD", question:"What was on the other side?" }
-      ],
-      2:[
-        { group:"IDENTITY", question:"Who was dreaming — you, or someone who only looked like you?" },
-        { group:"AWARENESS", question:"Do you remember the dream the same way you did at the beginning?" },
-        { group:"TIME", question:"Did this story happen before, or is it happening now?" },
-        { group:"REFLECTION", question:"If one of your earlier answers was not true, which one?" },
-        { group:"SYSTEM", question:"Are you sure you are describing your dream?" },
-        { group:"SYSTEM", question:"Who remembers the dream now — you or TRAUM SIM?" }
-      ]
-    };
-
-    const UI = {
-      PL:{
-        back:"WSTECZ",
-        next:"DALEJ",
-        begin:"WEJDŹ W SEN",
-        submit:"DALEJ",
-        placeholder:"napisz to, co zostało...",
-        saving:"ZAPISUJĘ SEN",
-        done:"SEN ZAPISANY",
-        sub:"Twoje wspomnienie weszło do symulacji.",
-        nicknameTitle:"Jak mamy zapamiętać śniącego?",
-        nicknameMeta:"Możesz użyć pseudonimu. Nie musisz podawać prawdziwego imienia.",
-        nicknamePlaceholder:"NICKNAME",
-        nicknameSubmit:"ZAPISZ SEN",
-        error:"Sen nie został zapisany.",
-        retry:"SPRÓBUJ PONOWNIE",
-        invite:"Zapraszamy na nasz performance ze swoim snem."
-      },
-      ENG:{
-        back:"BACK",
-        next:"NEXT",
-        begin:"ENTER DREAM",
-        submit:"CONTINUE",
-        placeholder:"write what remained...",
-        saving:"SAVING DREAM",
-        done:"DREAM RECEIVED",
-        sub:"Your memory has entered the simulation.",
-        nicknameTitle:"How should the dreamer be remembered?",
-        nicknameMeta:"You may use a nickname. You do not need to provide your real name.",
-        nicknamePlaceholder:"NICKNAME",
-        nicknameSubmit:"SAVE DREAM",
-        error:"The dream could not be saved.",
-        retry:"TRY AGAIN",
-        invite:"Join our performance with your dream."
-      }
-    };
-
-    /* =========================================================
-       STATE
-       ========================================================= */
-    const state = {
-      lang:null,
-      mode:"start",
-      introStep:0,
-      level:0,
-      levelQuestion:0,
-      questionsByLevel:{0:[],1:[],2:[]},
-      answers:[],
-      nickname:""
-    };
-
-    const screen = document.getElementById("screen");
-    const progress = document.getElementById("progress");
-    const depthLabel = document.getElementById("depthLabel");
-    const ghostLayer = document.getElementById("ghostLayer");
-    const questionTint = document.getElementById("questionTint");
-
-    /* =========================================================
-       HELPERS
-       ========================================================= */
-    function shuffle(arr){
-      const a = [...arr];
-      for(let i = a.length - 1; i > 0; i--){
-        const j = Math.floor(Math.random() * (i + 1));
-        [a[i], a[j]] = [a[j], a[i]];
-      }
-      return a;
-    }
-
-    function escapeHtml(value){
-      return String(value || "").replace(/[&<>"']/g, char => ({
-        "&":"&amp;",
-        "<":"&lt;",
-        ">":"&gt;",
-        "\"":"&quot;",
-        "'":"&#039;"
-      }[char]));
-    }
-
-    function prepareQuestions(){
-      const bank = state.lang === "PL" ? QUESTIONS_PL : QUESTIONS_EN;
-      state.questionsByLevel[0] = shuffle(bank[0]).slice(0, 3);
-      state.questionsByLevel[1] = shuffle(bank[1]).slice(0, 3);
-      state.questionsByLevel[2] = shuffle(bank[2]).slice(0, 3);
-    }
-
-    function transition(fn){
-      screen.classList.add("fade");
-      setTimeout(() => {
-        fn();
-        requestAnimationFrame(() => {
-          screen.classList.remove("fade");
-        });
-      }, 720);
-    }
-
-    function setVisualMode(mode){
-      state.mode = mode;
-
-      if(mode === "questions" || mode === "nickname" || mode === "saving" || mode === "saved" || mode === "error"){
-        questionTint.classList.add("active");
-      }else{
-        questionTint.classList.remove("active");
-      }
-
-      if(mode === "questions"){
-        dreamFX.targetDim = .95;
-        dreamFX.targetContrast = 120;
-        dreamFX.targetBlur = 12;
-        dreamFX.targetOpacity = .84;
-      }else if(mode === "intro"){
-        dreamFX.targetDim = .86;
-        dreamFX.targetContrast = 114;
-        dreamFX.targetBlur = 11;
-        dreamFX.targetOpacity = .81;
-      }else if(mode === "start"){
-        dreamFX.targetDim = .82;
-        dreamFX.targetContrast = 110;
-        dreamFX.targetBlur = 10;
-        dreamFX.targetOpacity = .80;
-      }else if(mode === "nickname" || mode === "saving" || mode === "saved"){
-        dreamFX.targetDim = .96;
-        dreamFX.targetContrast = 124;
-        dreamFX.targetBlur = 13;
-        dreamFX.targetOpacity = .85;
-      }else{
-        dreamFX.targetDim = .88;
-        dreamFX.targetContrast = 114;
-        dreamFX.targetBlur = 11;
-        dreamFX.targetOpacity = .82;
-      }
-    }
-
-    function surrealize(text){
-      if(!text) return "";
-      return text.split(" ").map(word => {
-        let cls = "dreamword";
-        const r = Math.random();
-        if(r < .06) cls += " deepblur";
-        else if(r < .18) cls += " blur";
-        if(Math.random() < .05) cls += " float";
-        return `<span class="${cls}">${escapeHtml(word)}</span>`;
-      }).join(" ");
-    }
-
-    function currentQuestion(){
-      return state.questionsByLevel[state.level][state.levelQuestion];
-    }
-
-    function globalQuestionIndex(){
-      return (state.level * 3) + state.levelQuestion;
-    }
-
-    function questionWithEcho(item){
-      if(state.level === 0) return item.question;
-
-      const previous = state.answers.filter(a => a && a.answer && a.answer.trim().length > 2);
-      if(!previous.length) return item.question;
-
-      if(Math.random() > .62){
-        const source = previous[Math.floor(Math.random() * previous.length)];
-        const fragment = source.answer.split(/\s+/).slice(0, 7).join(" ");
-
-        if(state.lang === "PL"){
-          const variants = [
-            `Powiedziałeś wcześniej: „${fragment}”. Czy nadal tak to pamiętasz?`,
-            `„${fragment}” — czy to należało do pierwszego snu?`,
-            `Jeżeli „${fragment}” było prawdą, co wydarzyło się chwilę wcześniej?`
-          ];
-          return variants[Math.floor(Math.random() * variants.length)];
-        }else{
-          const variants = [
-            `Earlier you said: “${fragment}”. Do you still remember it that way?`,
-            `“${fragment}” — did that belong to the first dream?`,
-            `If “${fragment}” was true, what happened immediately before it?`
-          ];
-          return variants[Math.floor(Math.random() * variants.length)];
-        }
-      }
-
-      return item.question;
-    }
-
-    /* =========================================================
-       RENDER
-       ========================================================= */
-    function renderStart(){
-      setVisualMode("start");
-      progress.textContent = "";
-      depthLabel.textContent = "TRAUM 0";
-
-      screen.innerHTML = `
-        <div class="eyebrow">TRAUM / DREAM ARCHIVE</div>
-        <h1>TRAUM<br>SIM</h1>
-        <p class="sub">choose language / wybierz język</p>
-        <div class="langs">
-          <button onclick="chooseLanguage('PL')">PL</button>
-          <button onclick="chooseLanguage('ENG')">ENG</button>
-        </div>
-      `;
-    }
-
-    function chooseLanguage(lang){
-      state.lang = lang;
-      state.introStep = 0;
-      state.level = 0;
-      state.levelQuestion = 0;
-      state.answers = [];
-      state.nickname = "";
-      prepareQuestions();
-      transition(renderIntro);
-    }
-
-    function renderIntro(){
-      setVisualMode("intro");
-
-      const slides = INTRO[state.lang];
-      const slide = slides[state.introStep];
-      const copy = UI[state.lang];
-      const last = state.introStep === slides.length - 1;
-
-      progress.textContent =
-        `${String(state.introStep + 1).padStart(2,"0")} / ${String(slides.length).padStart(2,"0")}`;
-      depthLabel.textContent = "TRAUM 0";
-
-      screen.innerHTML = `
-        <div class="eyebrow">${slide.label}</div>
-        <h2>${slide.title}</h2>
-        <div class="introText">${slide.text}</div>
-        <div class="introMeta">${slide.meta}</div>
-        <div class="actions">
-          <button class="back" onclick="introBack()">${copy.back}</button>
-          <button class="next" onclick="introNext()">${last ? copy.begin : copy.next}</button>
-        </div>
-      `;
-
-      ghost(slide.title);
-    }
-
-    function introBack(){
-      if(state.introStep === 0){
-        transition(renderStart);
-        return;
-      }
-      state.introStep--;
-      transition(renderIntro);
-    }
-
-    function introNext(){
-      const slides = INTRO[state.lang];
-      if(state.introStep < slides.length - 1){
-        state.introStep++;
-        transition(renderIntro);
-      }else{
-        state.level = 0;
-        state.levelQuestion = 0;
-        transition(renderQuestion);
-      }
-    }
-
-    let blurTimer = null;
-
-    function renderQuestion(){
-      setVisualMode("questions");
-
-      const item = currentQuestion();
-      const copy = UI[state.lang];
-      if(!item) return;
-
-      const gIndex = globalQuestionIndex();
-      const displayQuestion = questionWithEcho(item);
-      const saved = state.answers[gIndex];
-
-      progress.textContent = `${String(gIndex + 1).padStart(2,"0")} / 09`;
-      depthLabel.textContent = `TRAUM ${state.level}`;
-
-      screen.innerHTML = `
-        <div class="eyebrow">${escapeHtml(item.group)}</div>
-        <h2>${surrealize(displayQuestion)}</h2>
-
-        <textarea
-          id="answer"
-          placeholder="${copy.placeholder}"
-        >${escapeHtml(saved ? saved.answer : "")}</textarea>
-
-        <div class="actions">
-          <button class="back" onclick="questionBack()">${copy.back}</button>
-          <button class="next" onclick="questionNext()">${gIndex === 8 ? copy.submit : copy.next}</button>
-        </div>
-      `;
-
-      animateBlur();
-      ghost(item.group);
-      spawnPreviousAnswerGhost();
-
-      setTimeout(() => {
-        const el = document.getElementById("answer");
-        if(el) el.focus();
-      }, 400);
-    }
-
-    function animateBlur(){
-      if(blurTimer) clearInterval(blurTimer);
-
-      blurTimer = setInterval(() => {
-        const words = [...document.querySelectorAll(".dreamword")];
-        if(!words.length) return;
-        const word = words[Math.floor(Math.random() * words.length)];
-        if(Math.random() > .64){
-          word.classList.toggle("blur");
-        }else if(Math.random() > .82){
-          word.classList.toggle("deepblur");
-        }
-      }, 3800 + Math.random() * 2200);
-    }
-
-    function saveCurrentAnswer(){
-      const input = document.getElementById("answer");
-      if(!input) return;
-
-      const gIndex = globalQuestionIndex();
-      const item = currentQuestion();
-      const existing = state.answers[gIndex];
-
-      state.answers[gIndex] = {
-        level: state.level,
-        category: item.group,
-        question: existing ? existing.question : item.question,
-        answer: input.value.trim()
-      };
-    }
-
-    function questionBack(){
-      saveCurrentAnswer();
-
-      if(state.level === 0 && state.levelQuestion === 0){
-        state.introStep = INTRO[state.lang].length - 1;
-        transition(renderIntro);
-        return;
-      }
-
-      if(state.levelQuestion > 0){
-        state.levelQuestion--;
-      }else{
-        state.level--;
-        state.levelQuestion = 2;
-        updateDepthVisuals();
-      }
-
-      transition(renderQuestion);
-    }
-
-    function questionNext(){
-      saveCurrentAnswer();
-
-      const gIndex = globalQuestionIndex();
-
-      if(gIndex === 8){
-        transition(renderNickname);
-        return;
-      }
-
-      if(state.level === 0 && state.levelQuestion === 2){
-        runFalseAwakening(1);
-        return;
-      }
-
-      if(state.level === 1 && state.levelQuestion === 2){
-        runFalseAwakening(2);
-        return;
-      }
-
-      state.levelQuestion++;
-      transition(renderQuestion);
-    }
-
-    function renderNickname(){
-      setVisualMode("nickname");
-
-      progress.textContent = "";
-      depthLabel.textContent = "WAKE ?";
-
-      const copy = UI[state.lang];
-
-      screen.innerHTML = `
-        <div class="eyebrow">WHO DREAMED THIS?</div>
-        <h2>${copy.nicknameTitle}</h2>
-        <p class="sub">${copy.nicknameMeta}</p>
-
-        <input
-          id="nickname"
-          type="text"
-          maxlength="40"
-          autocomplete="off"
-          spellcheck="false"
-          placeholder="${copy.nicknamePlaceholder}"
-          value="${escapeHtml(state.nickname)}"
-        >
-
-        <div class="actions">
-          <button class="back" onclick="nicknameBack()">${copy.back}</button>
-          <button class="next" onclick="saveDream()">${copy.nicknameSubmit}</button>
-        </div>
-      `;
-
-      ghost("WHO DREAMED THIS?");
-
-      setTimeout(() => {
-        const el = document.getElementById("nickname");
-        if(el) el.focus();
-      }, 400);
-    }
-
-    function nicknameBack(){
-      const nick = document.getElementById("nickname");
-      if(nick) state.nickname = nick.value.trim();
-
-      state.level = 2;
-      state.levelQuestion = 2;
-      transition(renderQuestion);
-    }
-
-    async function saveDream(){
-      const nicknameInput = document.getElementById("nickname");
-      state.nickname = nicknameInput ? nicknameInput.value.trim() : "";
-      if(!state.nickname) state.nickname = "ANONYMOUS";
-
-      const copy = UI[state.lang];
-
-      const payload = {
-        nickname: state.nickname,
-        language: state.lang,
-        answers: state.answers,
-        dream: state.answers.map(entry => entry ? entry.answer : "").join("\n\n")
-      };
-
-      transition(() => {
-        setVisualMode("saving");
-        progress.textContent = "";
-        depthLabel.textContent = "ARCHIVE";
-
-        screen.innerHTML = `
-          <div class="eyebrow">TRAUM SIM</div>
-          <h2>${copy.saving}</h2>
-          <p class="sub">...</p>
-        `;
-      });
-
-      try{
-        const response = await fetch(API_URL, {
-          method:"POST",
-          headers:{ "Content-Type":"text/plain;charset=utf-8" },
-          body:JSON.stringify(payload)
-        });
-
-        if(!response.ok){
-          throw new Error("HTTP " + response.status);
-        }
-
-        const data = await response.json();
-
-        if(!data.ok){
-          throw new Error(data.error || "Backend error");
-        }
-
-        renderSaved(data.dreamId);
-      }catch(error){
-        console.error("DREAM SAVE ERROR", error);
-        renderError();
-      }
-    }
-
-    function renderSaved(id){
-      transition(() => {
-        setVisualMode("saved");
-        const copy = UI[state.lang];
-
-        screen.innerHTML = `
-          <div class="eyebrow">TRAUM SIM</div>
-          <h2>${copy.done}</h2>
-          <p class="sub">${copy.sub}</p>
-          <div class="received">
-            ${escapeHtml(id || "")}
-            &nbsp;&nbsp;/&nbsp;&nbsp;
-            ${escapeHtml(state.nickname)}
-          </div>
-        `;
-      });
-
-      setTimeout(startFinalSequence, 4600);
-    }
-
-    function renderError(){
-      transition(() => {
-        setVisualMode("error");
-        const copy = UI[state.lang];
-
-        screen.innerHTML = `
-          <div class="eyebrow">TRAUM SIM</div>
-          <h2>${copy.error}</h2>
-          <p class="sub">
-            ${state.lang === "PL"
-              ? "Połączenie z archiwum zostało przerwane."
-              : "The connection to the archive was interrupted."}
-          </p>
-          <div class="actions">
-            <span></span>
-            <button class="next" onclick="saveDream()">${copy.retry}</button>
-          </div>
-        `;
-      });
-    }
-
-    /* =========================================================
-       FALSE AWAKENING
-       ========================================================= */
-    function runFalseAwakening(targetLevel){
-      const overlay = document.getElementById("falseWake");
-      const main = document.getElementById("falseWakeMain");
-      const sub = document.getElementById("falseWakeSub");
-      const ui = document.getElementById("ui");
-
-      ui.classList.add("hide");
-
-      if(targetLevel === 1){
-        main.textContent = "TRAUM SIM";
-        sub.textContent = state.lang === "PL" ? "SESJA UTRACONA" : "SESSION LOST";
-      }else{
-        main.textContent = state.lang === "PL" ? "OBUDZIŁEŚ SIĘ" : "YOU WOKE UP";
-        sub.textContent = state.lang === "PL" ? "ale coś nadal pamięta" : "but something still remembers";
-      }
-
-      overlay.classList.add("active");
-
-      setTimeout(() => {
-        if(targetLevel === 1){
-          sub.textContent = state.lang === "PL"
-            ? "SESJA ODNALEZIONA · JUŻ TU BYŁEŚ"
-            : "SESSION FOUND · YOU HAVE BEEN HERE";
-        }else{
-          sub.textContent = state.lang === "PL"
-            ? "TO NIE BYŁO PRZEBUDZENIE"
-            : "THAT WAS NOT WAKING";
-        }
-      }, 3600);
-
-      setTimeout(() => {
-        overlay.classList.remove("active");
-        state.level = targetLevel;
-        state.levelQuestion = 0;
-        updateDepthVisuals();
-        renderQuestion();
-        ui.classList.remove("hide");
-      }, 8200);
-    }
-
-    function updateDepthVisuals(){
-      if(state.level === 0){
-        dreamFX.levelContrast = 112;
-        dreamFX.levelBlur = 10;
-      }else if(state.level === 1){
-        dreamFX.levelContrast = 118;
-        dreamFX.levelBlur = 11.5;
-      }else{
-        dreamFX.levelContrast = 124;
-        dreamFX.levelBlur = 13;
-      }
-    }
-
-    /* =========================================================
-       FINAL
-       ========================================================= */
-    function startFinalSequence(){
-      const ui = document.getElementById("ui");
-      const bloom = document.getElementById("whiteBloom");
-      const whiteout = document.getElementById("whiteout");
-      const final = document.getElementById("finalInvite");
-
-      ui.classList.add("hide");
-
-      setTimeout(() => {
-        bloom.classList.add("active");
-        whiteout.classList.add("active");
-      }, 1300);
-
-      setTimeout(() => {
-        document.getElementById("finalTitle").textContent = UI[state.lang].invite;
-        final.classList.add("active");
-      }, 7300);
-
-      setTimeout(() => {
-        bloom.style.display = "none";
-        whiteout.style.display = "none";
-      }, 7900);
-    }
-
-    /* =========================================================
-       GHOSTS
-       ========================================================= */
-    function ghost(text, answer = false){
-      if(!text) return;
-
-      const el = document.createElement("div");
-      el.className = answer ? "ghost answerGhost" : "ghost";
-      el.textContent = text;
-      el.style.left = ((Math.random() * 55) - 5) + "vw";
-      el.style.top = ((Math.random() * 75) + 8) + "vh";
-      el.style.animationDuration = (15 + Math.random() * 14) + "s";
-
-      ghostLayer.appendChild(el);
-
-      setTimeout(() => el.remove(), 30000);
-    }
-
-    function spawnPreviousAnswerGhost(){
-      if(state.level === 0) return;
-
-      const previous = state.answers.filter(entry => entry && entry.answer && entry.answer.length > 2);
-      if(!previous.length) return;
-
-      if(Math.random() > .56){
-        const entry = previous[Math.floor(Math.random() * previous.length)];
-        const fragment = entry.answer.split(/\s+/).slice(0, 8).join(" ");
-        ghost(fragment, true);
-      }
-    }
-
-    const ghostWords = [
-      "REMEMBER",
-      "WHO IS DREAMING",
-      "NOT HERE",
-      "AGAIN",
-      "THE OTHER SIDE",
-      "YOU HAVE BEEN HERE",
-      "NO BEGINNING",
-      "NOT YET",
-      "WAKE",
-      "ALMOST",
-      "TRAUM",
-      "SESSION FOUND",
-      "WHO REMEMBERS?"
+  <div id="screenWrap">
+
+    <main id="screen"></main>
+
+  </div>
+
+  <div class="bottom">
+
+    <span>
+      PATCHLAB 2026
+    </span>
+
+    <span id="depthLabel">
+      TRAUM 0
+    </span>
+
+  </div>
+
+</div>
+
+
+<script>
+
+/* =========================================================
+   BACKEND
+   ========================================================= */
+
+const API_URL =
+"https://script.google.com/macros/s/AKfycbzU_GDYcK7nC4aGNVxmQd4fojRBacX1UR076Ox-lCI8KrGV1YVN7G_mwGT-6UFzOhJY3g/exec";
+
+
+/* =========================================================
+   VIEWPORT
+   ========================================================= */
+
+function setVH(){
+
+  const h =
+    window.visualViewport
+      ? window.visualViewport.height
+      : window.innerHeight;
+
+  document
+    .documentElement
+    .style
+    .setProperty(
+      "--vh",
+      (h * .01) + "px"
+    );
+
+}
+
+setVH();
+
+window.addEventListener(
+  "resize",
+  setVH
+);
+
+if(window.visualViewport){
+
+  window.visualViewport.addEventListener(
+    "resize",
+    setVH
+  );
+
+}
+
+
+/* =========================================================
+   INTRO
+   ========================================================= */
+
+const INTRO = {
+
+PL:[
+
+{
+type:"text",
+label:"TRAUM / 01",
+title:"Sen nie jest filmem.",
+text:"Podczas snu mózg nadal pracuje. Fragmenty pamięci, emocji, miejsc, osób i doświadczeń zostają ponownie połączone w rzeczywistość, która w chwili śnienia może wydawać się całkowicie prawdziwa.",
+meta:"Nie istnieje jeden naukowy słownik symboli snu. Znaczenie obrazu zależy od osoby, pamięci, emocji i kontekstu."
+},
+
+{
+type:"text",
+label:"TRAUM / 02",
+title:"Pamięć nie odtwarza. Pamięć rekonstruuje.",
+text:"Sen może połączyć dom z dzieciństwa z pokojem widzianym wczoraj, nadać znajomej osobie inną twarz albo pozwolić ci wiedzieć coś, czego nikt wcześniej nie powiedział.",
+meta:"To, co podczas czuwania byłoby sprzecznością, we śnie często zostaje zaakceptowane bez pytania."
+},
+
+{
+type:"color",
+label:"TRAUM / 03",
+title:"Jaki kolor mają twoje najlepsze sny?",
+text:"Nie zastanawiaj się długo. Wpisz pierwszy kolor, który pojawił się w twojej głowie.",
+meta:"Od tej chwili TRAUM SIM spróbuje śnić właśnie tym kolorem."
+},
+
+{
+type:"text",
+label:"TRAUM / 04",
+title:"Nie próbuj interpretować.",
+text:"Przypomnij sobie tylko to, co zostało. Obraz. Uczucie. Osobę. Miejsce. Przejście. Coś niemożliwego.",
+meta:"Nie szukamy poprawnego znaczenia. Szukamy śladu."
+}
+
+],
+
+
+ENG:[
+
+{
+type:"text",
+label:"TRAUM / 01",
+title:"A dream is not a film.",
+text:"During sleep the brain continues working. Fragments of memory, emotion, places, people and experience are recombined into a reality that can feel completely real while it is happening.",
+meta:"There is no single scientific dictionary of dream symbols. Meaning depends on the dreamer, memory, emotion and context."
+},
+
+{
+type:"text",
+label:"TRAUM / 02",
+title:"Memory does not replay. Memory reconstructs.",
+text:"A dream can merge a childhood home with a room seen yesterday, give a familiar person another face, or allow you to know something nobody ever told you.",
+meta:"What would be a contradiction while awake often requires no explanation inside a dream."
+},
+
+{
+type:"color",
+label:"TRAUM / 03",
+title:"What colour do your best dreams have?",
+text:"Do not think too long. Type the first colour that appeared in your mind.",
+meta:"From now on TRAUM SIM will try to dream in that colour."
+},
+
+{
+type:"text",
+label:"TRAUM / 04",
+title:"Do not interpret.",
+text:"Simply remember what remained. An image. A feeling. A person. A place. A passage. Something impossible.",
+meta:"We are not looking for the correct meaning. We are looking for a trace."
+}
+
+],
+
+
+UKR:[
+
+{
+type:"text",
+label:"TRAUM / 01",
+title:"Сон — це не фільм.",
+text:"Під час сну мозок продовжує працювати. Фрагменти пам’яті, емоцій, місць, людей і переживань поєднуються у реальність, яка під час сновидіння може здаватися абсолютно справжньою.",
+meta:"Не існує єдиного наукового словника символів сну. Значення образу залежить від людини, пам’яті, емоцій і контексту."
+},
+
+{
+type:"text",
+label:"TRAUM / 02",
+title:"Пам’ять не відтворює. Пам’ять реконструює.",
+text:"Сон може поєднати дім із дитинства з кімнатою, яку ти бачив учора, дати знайомій людині чуже обличчя або дозволити тобі знати щось, чого ніхто ніколи не говорив.",
+meta:"Те, що у стані неспання було б суперечністю, уві сні часто не потребує жодного пояснення."
+},
+
+{
+type:"color",
+label:"TRAUM / 03",
+title:"Якого кольору твої найкращі сни?",
+text:"Не думай довго. Напиши перший колір, який з’явився у твоїй голові.",
+meta:"Відтепер TRAUM SIM спробує бачити сни саме цим кольором."
+},
+
+{
+type:"text",
+label:"TRAUM / 04",
+title:"Не намагайся тлумачити.",
+text:"Просто згадай те, що залишилося. Образ. Відчуття. Людину. Місце. Перехід. Щось неможливе.",
+meta:"Ми не шукаємо правильного значення. Ми шукаємо слід."
+}
+
+]
+
+};
+
+
+/* =========================================================
+   QUESTIONS PL
+   ========================================================= */
+
+const QUESTIONS_PL = {
+
+0:[
+
+{
+group:"PAMIĘĆ",
+question:"Który szczegół snu pamiętasz bez żadnego wysiłku?"
+},
+
+{
+group:"MIEJSCE",
+question:"Czy miejsce było prawdziwym miejscem, czy kilkoma miejscami połączonymi w jedno?"
+},
+
+{
+group:"EMOCJA",
+question:"Jakie uczucie pamiętasz wyraźniej niż same wydarzenia?"
+},
+
+{
+group:"OBECNOŚĆ",
+question:"Kto był tam z tobą?"
+},
+
+{
+group:"CIAŁO",
+question:"Czy patrzyłeś własnymi oczami, czy obserwowałeś siebie z zewnątrz?"
+}
+
+],
+
+1:[
+
+{
+group:"CIEŃ",
+question:"Co cię ścigało — i co mogłoby się wydarzyć, gdybyś przestał uciekać?"
+},
+
+{
+group:"MASKA",
+question:"Czy byłeś sobą, czy osobą, którą inni mieli za ciebie?"
+},
+
+{
+group:"ARCHETYP",
+question:"Czy pojawiły się drzwi, schody, woda, dom, las albo droga?"
+},
+
+{
+group:"CENTRUM",
+question:"Czy istniało miejsce albo rzecz, do której wszystko zdawało się prowadzić?"
+},
+
+{
+group:"PRÓG",
+question:"Co znajdowało się po drugiej stronie?"
+}
+
+],
+
+2:[
+
+{
+group:"TOŻSAMOŚĆ",
+question:"Kto śnił — ty, czy ktoś, kto tylko wyglądał jak ty?"
+},
+
+{
+group:"ŚWIADOMOŚĆ",
+question:"Czy teraz pamiętasz ten sen tak samo jak na początku?"
+},
+
+{
+group:"ODBICIE",
+question:"Jeżeli jedna z twoich wcześniejszych odpowiedzi nie była prawdziwa — która?"
+},
+
+{
+group:"SYSTEM",
+question:"Czy jesteś pewien, że opisujesz swój sen?"
+},
+
+{
+group:"SYSTEM",
+question:"Kto teraz pamięta ten sen — ty czy TRAUM SIM?"
+}
+
+]
+
+};
+
+
+/* =========================================================
+   QUESTIONS EN
+   ========================================================= */
+
+const QUESTIONS_EN = {
+
+0:[
+
+{
+group:"MEMORY",
+question:"Which detail of the dream do you remember without trying?"
+},
+
+{
+group:"PLACE",
+question:"Was the place real, or several places merged into one?"
+},
+
+{
+group:"EMOTION",
+question:"Which feeling do you remember more clearly than the events?"
+},
+
+{
+group:"PRESENCE",
+question:"Who was there with you?"
+},
+
+{
+group:"BODY",
+question:"Were you looking through your own eyes or watching yourself from outside?"
+}
+
+],
+
+1:[
+
+{
+group:"SHADOW",
+question:"What was chasing you — and what might happen if you stopped running?"
+},
+
+{
+group:"MASK",
+question:"Were you yourself, or the person others believed you were?"
+},
+
+{
+group:"ARCHETYPE",
+question:"Did you encounter a door, staircase, water, house, forest or road?"
+},
+
+{
+group:"CENTER",
+question:"Was there somewhere or something everything seemed to lead toward?"
+},
+
+{
+group:"THRESHOLD",
+question:"What was on the other side?"
+}
+
+],
+
+2:[
+
+{
+group:"IDENTITY",
+question:"Who was dreaming — you, or someone who only looked like you?"
+},
+
+{
+group:"AWARENESS",
+question:"Do you remember the dream the same way you did at the beginning?"
+},
+
+{
+group:"REFLECTION",
+question:"If one of your earlier answers was not true, which one?"
+},
+
+{
+group:"SYSTEM",
+question:"Are you sure you are describing your dream?"
+},
+
+{
+group:"SYSTEM",
+question:"Who remembers the dream now — you or TRAUM SIM?"
+}
+
+]
+
+};
+
+
+/* =========================================================
+   QUESTIONS UKR
+   ========================================================= */
+
+const QUESTIONS_UKR = {
+
+0:[
+
+{
+group:"ПАМ’ЯТЬ",
+question:"Яку деталь сну ти пам’ятаєш без жодних зусиль?"
+},
+
+{
+group:"МІСЦЕ",
+question:"Це було справжнє місце чи кілька місць, з’єднаних в одне?"
+},
+
+{
+group:"ЕМОЦІЯ",
+question:"Яке відчуття ти пам’ятаєш чіткіше за самі події?"
+},
+
+{
+group:"ПРИСУТНІСТЬ",
+question:"Хто був там разом із тобою?"
+},
+
+{
+group:"ТІЛО",
+question:"Ти дивився власними очима чи спостерігав за собою збоку?"
+}
+
+],
+
+1:[
+
+{
+group:"ТІНЬ",
+question:"Що переслідувало тебе — і що сталося б, якби ти перестав тікати?"
+},
+
+{
+group:"МАСКА",
+question:"Ти був собою чи тим, за кого тебе приймали інші?"
+},
+
+{
+group:"АРХЕТИП",
+question:"Чи були там двері, сходи, вода, дім, ліс або дорога?"
+},
+
+{
+group:"ЦЕНТР",
+question:"Чи було місце або предмет, до якого наче вело все інше?"
+},
+
+{
+group:"ПОРІГ",
+question:"Що було по той бік?"
+}
+
+],
+
+2:[
+
+{
+group:"ІДЕНТИЧНІСТЬ",
+question:"Хто бачив цей сон — ти чи хтось, хто лише виглядав як ти?"
+},
+
+{
+group:"СВІДОМІСТЬ",
+question:"Ти зараз пам’ятаєш цей сон так само, як на початку?"
+},
+
+{
+group:"ВІДОБРАЖЕННЯ",
+question:"Якби одна з твоїх попередніх відповідей була неправдою — яка саме?"
+},
+
+{
+group:"СИСТЕМА",
+question:"Ти впевнений, що описуєш саме свій сон?"
+},
+
+{
+group:"СИСТЕМА",
+question:"Хто тепер пам’ятає цей сон — ти чи TRAUM SIM?"
+}
+
+]
+
+};
+
+
+/* =========================================================
+   UI COPY
+   ========================================================= */
+
+const UI = {
+
+PL:{
+
+back:"WSTECZ",
+next:"DALEJ",
+begin:"WEJDŹ W SEN",
+
+placeholder:"napisz to, co zostało...",
+
+colorPlaceholder:"np. granatowy, fioletowy, czerwony...",
+
+nicknameTitle:"Jak mamy zapamiętać śniącego?",
+nicknameMeta:"Możesz użyć pseudonimu. Nie musisz podawać prawdziwego imienia.",
+nicknamePlaceholder:"NICKNAME",
+nicknameSubmit:"ZAPISZ SEN",
+
+saving:"ZAPISUJĘ SEN",
+done:"SEN ZAPISANY",
+sub:"Twoje wspomnienie weszło do symulacji.",
+
+error:"Sen nie został zapisany.",
+retry:"SPRÓBUJ PONOWNIE",
+
+invite:"Zapraszamy na nasz performance ze swoim snem."
+
+},
+
+ENG:{
+
+back:"BACK",
+next:"NEXT",
+begin:"ENTER DREAM",
+
+placeholder:"write what remained...",
+
+colorPlaceholder:"e.g. blue, violet, red...",
+
+nicknameTitle:"How should the dreamer be remembered?",
+nicknameMeta:"You may use a nickname. You do not need to provide your real name.",
+nicknamePlaceholder:"NICKNAME",
+nicknameSubmit:"SAVE DREAM",
+
+saving:"SAVING DREAM",
+done:"DREAM RECEIVED",
+sub:"Your memory has entered the simulation.",
+
+error:"The dream could not be saved.",
+retry:"TRY AGAIN",
+
+invite:"Join our performance with your dream."
+
+},
+
+UKR:{
+
+back:"НАЗАД",
+next:"ДАЛІ",
+begin:"УВІЙТИ У СОН",
+
+placeholder:"напиши те, що залишилося...",
+
+colorPlaceholder:"наприклад: синій, фіолетовий, червоний...",
+
+nicknameTitle:"Як нам запам’ятати того, хто бачив цей сон?",
+nicknameMeta:"Можеш використати псевдонім. Не обов’язково вказувати справжнє ім’я.",
+nicknamePlaceholder:"NICKNAME",
+nicknameSubmit:"ЗБЕРЕГТИ СОН",
+
+saving:"ЗБЕРІГАЮ СОН",
+done:"СОН ЗБЕРЕЖЕНО",
+sub:"Твій спогад увійшов у симуляцію.",
+
+error:"Сон не вдалося зберегти.",
+retry:"СПРОБУВАТИ ЩЕ РАЗ",
+
+invite:"Приходь на наш performance зі своїм сном."
+
+}
+
+};
+
+
+/* =========================================================
+   STATE
+   ========================================================= */
+
+const state = {
+
+lang:null,
+
+mode:"start",
+
+introStep:0,
+
+level:0,
+
+levelQuestion:0,
+
+questionsByLevel:{
+  0:[],
+  1:[],
+  2:[]
+},
+
+answers:[],
+
+nickname:"",
+
+dreamColorName:"",
+
+dreamColor:{
+  r:180,
+  g:180,
+  b:180
+}
+
+};
+
+
+const screen =
+  document.getElementById(
+    "screen"
+  );
+
+const progress =
+  document.getElementById(
+    "progress"
+  );
+
+const depthLabel =
+  document.getElementById(
+    "depthLabel"
+  );
+
+const ghostLayer =
+  document.getElementById(
+    "ghostLayer"
+  );
+
+
+/* =========================================================
+   HELPERS
+   ========================================================= */
+
+function shuffle(array){
+
+  const a =
+    [...array];
+
+  for(
+    let i=a.length-1;
+    i>0;
+    i--
+  ){
+
+    const j =
+      Math.floor(
+        Math.random() *
+        (i+1)
+      );
+
+    [
+      a[i],
+      a[j]
+    ]
+    =
+    [
+      a[j],
+      a[i]
     ];
 
-    setInterval(() => {
-      if(Math.random() > .58){
-        ghost(ghostWords[Math.floor(Math.random() * ghostWords.length)]);
-      }
-    }, 7600);
+  }
 
-    /* =========================================================
-       DREAM ENGINE — SLOW MORPHING RORSCHACH FIELD
-       ========================================================= */
-    const canvas = document.getElementById("dreamCanvas");
-    const ctx = canvas.getContext("2d");
+  return a;
 
-    let W = 0;
-    let H = 0;
-    let DPR = 1;
+}
 
-    const dreamFX = {
-      targetDim:.82,
-      targetContrast:110,
-      targetBlur:10,
-      targetOpacity:.80,
-      levelContrast:112,
-      levelBlur:10
-    };
 
-    const sceneA = { shapes:[] };
-    const sceneB = { shapes:[] };
-    let morphStart = performance.now();
-    const MORPH_DURATION = 85000; // bardzo wolny morph
-    let initialized = false;
+function escapeHtml(value){
 
-    function resizeCanvas(){
-      W = window.innerWidth;
-      H = window.innerHeight;
-      DPR = Math.min(window.devicePixelRatio || 1, 1.5);
+  return String(
+    value || ""
+  )
+  .replace(
+    /[&<>"']/g,
+    c=>({
 
-      canvas.width = W * DPR;
-      canvas.height = H * DPR;
-      canvas.style.width = W + "px";
-      canvas.style.height = H + "px";
+      "&":"&amp;",
+      "<":"&lt;",
+      ">":"&gt;",
+      "\"":"&quot;",
+      "'":"&#039;"
 
-      ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+    }[c])
+  );
 
-      if(!initialized){
-        sceneA.shapes = generateScene();
-        sceneB.shapes = generateScene();
-        initialized = true;
-      }else{
-        sceneA.shapes = generateScene();
-        sceneB.shapes = generateScene();
-      }
-    }
+}
 
-    window.addEventListener("resize", resizeCanvas);
 
-    function rand(min, max){
-      return min + Math.random() * (max - min);
-    }
+/* =========================================================
+   QUESTIONS PREP
+   ========================================================= */
 
-    function generateShape(index){
-      const baseScale = Math.min(W, H);
+function prepareQuestions(){
 
-      return {
-        centerY: rand(H * 0.18, H * 0.82),
-        centerJitter: rand(10, 55),
-        radius: rand(baseScale * 0.16, baseScale * 0.44),
-        stretchX: rand(0.95, 2.45),
-        stretchY: rand(0.58, 1.55),
-        phase1: rand(0, Math.PI * 2),
-        phase2: rand(0, Math.PI * 2),
-        phase3: rand(0, Math.PI * 2),
-        phase4: rand(0, Math.PI * 2),
-        lobe1: rand(1.4, 4.8),
-        lobe2: rand(2.5, 8.2),
-        lobe3: rand(5.5, 12.0),
-        amplitude1: rand(0.06, 0.16),
-        amplitude2: rand(0.03, 0.11),
-        amplitude3: rand(0.01, 0.06),
-        flow1: rand(0.000014, 0.000034),
-        flow2: rand(0.000008, 0.000024),
-        flow3: rand(0.000004, 0.000018),
-        flow4: rand(0.000003, 0.00001),
-        toneOuter: rand(96, 148),
-        toneMain: rand(68, 130),
-        toneInner: rand(38, 92),
-        toneCore: rand(18, 54),
-        alphaOuter: rand(0.032, 0.060),
-        alphaMain: rand(0.045, 0.095),
-        alphaInner: rand(0.030, 0.064),
-        alphaCore: rand(0.018, 0.050),
-        seed:index,
-        nested: Math.random() > 0.48
-      };
-    }
+  let bank;
 
-    function generateScene(){
-      const level = state.level || 0;
-      const count = level === 0 ? 5 : level === 1 ? 7 : 9;
-      const arr = [];
-      for(let i = 0; i < count; i++){
-        arr.push(generateShape(i));
-      }
-      return arr;
-    }
+  if(
+    state.lang==="PL"
+  ){
 
-    function lerp(a,b,t){
-      return a + (b - a) * t;
-    }
+    bank =
+      QUESTIONS_PL;
 
-    function easeInOut(t){
-      return t < 0.5 ? 2*t*t : 1 - Math.pow(-2*t + 2, 2) / 2;
-    }
+  }
+  else if(
+    state.lang==="UKR"
+  ){
 
-    function interpolateShape(a, b, t){
-      return {
-        centerY: lerp(a.centerY, b.centerY, t),
-        centerJitter: lerp(a.centerJitter, b.centerJitter, t),
-        radius: lerp(a.radius, b.radius, t),
-        stretchX: lerp(a.stretchX, b.stretchX, t),
-        stretchY: lerp(a.stretchY, b.stretchY, t),
-        phase1: lerp(a.phase1, b.phase1, t),
-        phase2: lerp(a.phase2, b.phase2, t),
-        phase3: lerp(a.phase3, b.phase3, t),
-        phase4: lerp(a.phase4, b.phase4, t),
-        lobe1: lerp(a.lobe1, b.lobe1, t),
-        lobe2: lerp(a.lobe2, b.lobe2, t),
-        lobe3: lerp(a.lobe3, b.lobe3, t),
-        amplitude1: lerp(a.amplitude1, b.amplitude1, t),
-        amplitude2: lerp(a.amplitude2, b.amplitude2, t),
-        amplitude3: lerp(a.amplitude3, b.amplitude3, t),
-        flow1: lerp(a.flow1, b.flow1, t),
-        flow2: lerp(a.flow2, b.flow2, t),
-        flow3: lerp(a.flow3, b.flow3, t),
-        flow4: lerp(a.flow4, b.flow4, t),
-        toneOuter: lerp(a.toneOuter, b.toneOuter, t),
-        toneMain: lerp(a.toneMain, b.toneMain, t),
-        toneInner: lerp(a.toneInner, b.toneInner, t),
-        toneCore: lerp(a.toneCore, b.toneCore, t),
-        alphaOuter: lerp(a.alphaOuter, b.alphaOuter, t),
-        alphaMain: lerp(a.alphaMain, b.alphaMain, t),
-        alphaInner: lerp(a.alphaInner, b.alphaInner, t),
-        alphaCore: lerp(a.alphaCore, b.alphaCore, t),
-        seed: a.seed,
-        nested: t < 0.5 ? a.nested : b.nested
-      };
-    }
+    bank =
+      QUESTIONS_UKR;
 
-    function buildHalfPoints(shape, time, scale = 1){
-      const centerX = W * 0.5;
-      const centerY =
-        shape.centerY +
-        Math.sin(time * shape.flow4 * 1000 + shape.phase4) * shape.centerJitter;
+  }
+  else{
 
-      const count = 180;
-      const pts = [];
+    bank =
+      QUESTIONS_EN;
 
-      for(let i = 0; i <= count; i++){
-        const p = i / count;
-        const angle = -Math.PI * 0.5 + p * Math.PI;
+  }
 
-        const r1 = Math.sin(angle * shape.lobe1 + time * shape.flow1 * 1000 + shape.phase1) * shape.amplitude1;
-        const r2 = Math.cos(angle * shape.lobe2 - time * shape.flow2 * 1000 + shape.phase2) * shape.amplitude2;
-        const r3 = Math.sin(angle * shape.lobe3 + time * shape.flow3 * 1000 + shape.phase3) * shape.amplitude3;
-        const breath = Math.sin(time * 0.000018 + shape.phase1) * 0.018;
-        const radius = shape.radius * (1 + r1 + r2 + r3 + breath) * scale;
 
-        const x = Math.cos(angle) * radius * shape.stretchX;
-        const y = Math.sin(angle) * radius * shape.stretchY;
+  state.questionsByLevel[0] =
+    shuffle(
+      bank[0]
+    )
+    .slice(
+      0,
+      3
+    );
 
-        pts.push({
-          x: centerX - x,
-          y: centerY + y
-        });
-      }
 
-      return { centerX, centerY, pts };
-    }
+  state.questionsByLevel[1] =
+    shuffle(
+      bank[1]
+    )
+    .slice(
+      0,
+      3
+    );
 
-    function drawMirroredPath(shape, time, scale = 1, asymmetry = 0){
-      const data = buildHalfPoints(shape, time, scale);
-      const cx = data.centerX;
-      const pts = data.pts;
 
-      ctx.beginPath();
-      ctx.moveTo(cx, data.centerY - (shape.radius * 0.12 * scale));
+  state.questionsByLevel[2] =
+    shuffle(
+      bank[2]
+    )
+    .slice(
+      0,
+      3
+    );
 
-      for(const p of pts){
-        ctx.lineTo(p.x, p.y);
-      }
+}
 
-      for(let i = pts.length - 1; i >= 0; i--){
-        const p = pts[i];
-        const mirroredX = cx + (cx - p.x) + asymmetry;
-        ctx.lineTo(mirroredX, p.y);
-      }
 
-      ctx.closePath();
-    }
+/* =========================================================
+   MODE
+   ========================================================= */
 
-    function fillShape(shape, time, scale, tone, alpha, asymmetry){
-      drawMirroredPath(shape, time, scale, asymmetry);
-      ctx.fillStyle = `rgba(${tone},${tone},${tone},${alpha})`;
-      ctx.fill();
-    }
+function setVisualMode(mode){
 
-    function drawComplexShape(shape, time){
-      const asym = state.level === 2
-        ? Math.sin(time * 0.00005 + shape.phase2) * 6
-        : 0;
+  state.mode =
+    mode;
 
-      fillShape(shape, time, 1.36, shape.toneOuter, shape.alphaOuter, asym * 0.3);
-      fillShape(shape, time + 7000, 1.08, shape.toneMain, shape.alphaMain, asym * 0.55);
-      fillShape(shape, time + 15000, 0.78, shape.toneInner, shape.alphaInner, asym * 0.82);
-      fillShape(shape, time + 26000, 0.54, shape.toneCore, shape.alphaCore, asym);
 
-      if(state.level >= 1 && shape.nested){
-        fillShape(shape, time + 37000, 0.32, Math.min(180, shape.toneMain + 28), shape.alphaInner * 0.28, asym * 1.1);
-      }
-    }
+  document
+    .body
+    .classList
+    .toggle(
+      "questionMode",
+      [
+        "questions",
+        "nickname",
+        "saving",
+        "saved",
+        "error"
+      ]
+      .includes(
+        mode
+      )
+    );
 
-    function updateScenes(now){
-      const raw = (now - morphStart) / MORPH_DURATION;
-      if(raw >= 1){
-        morphStart = now;
-        sceneA.shapes = sceneB.shapes.map((_, i) => sceneB.shapes[i]);
-        sceneB.shapes = generateScene();
-        return 0;
-      }
-      return easeInOut(Math.max(0, Math.min(1, raw)));
-    }
+}
 
-    function drawBackgroundGradient(time){
-      const shift = (Math.sin(time * 0.00002) + 1) * 0.5;
-      const topTone = Math.round(lerp(6, 18, shift));
-      const midTone = Math.round(lerp(12, 28, shift));
-      const botTone = Math.round(lerp(2, 12, shift));
 
-      const g = ctx.createLinearGradient(0, 0, 0, H);
-      g.addColorStop(0, `rgba(${topTone},${topTone},${topTone},0.28)`);
-      g.addColorStop(0.5, `rgba(${midTone},${midTone},${midTone},0.18)`);
-      g.addColorStop(1, `rgba(${botTone},${botTone},${botTone},0.26)`);
-      ctx.fillStyle = g;
-      ctx.fillRect(0, 0, W, H);
-    }
+/* =========================================================
+   TRANSITION
+   ========================================================= */
 
-    function drawFold(){
-      const fold = ctx.createLinearGradient(W * 0.42, 0, W * 0.58, 0);
-      fold.addColorStop(0, "rgba(0,0,0,0)");
-      fold.addColorStop(0.5, state.mode === "questions"
-        ? "rgba(170,170,170,.032)"
-        : "rgba(155,155,155,.020)");
-      fold.addColorStop(1, "rgba(0,0,0,0)");
-      ctx.fillStyle = fold;
-      ctx.fillRect(W * 0.37, 0, W * 0.26, H);
-    }
+function transition(fn){
 
-    function animateCanvas(now){
-      if(!initialized){
-        requestAnimationFrame(animateCanvas);
-        return;
-      }
+  screen
+    .classList
+    .add(
+      "fade"
+    );
 
-      const t = updateScenes(now);
 
-      ctx.fillStyle = "rgba(0,0,0,0.020)";
-      ctx.fillRect(0, 0, W, H);
-      drawBackgroundGradient(now);
+  setTimeout(
+    ()=>{
 
-      ctx.globalCompositeOperation = "screen";
+      fn();
 
-      const maxCount = Math.max(sceneA.shapes.length, sceneB.shapes.length);
-      for(let i = 0; i < maxCount; i++){
-        const a = sceneA.shapes[i % sceneA.shapes.length];
-        const b = sceneB.shapes[i % sceneB.shapes.length];
-        const s = interpolateShape(a, b, t);
-        drawComplexShape(s, now);
-      }
+      requestAnimationFrame(
+        ()=>{
 
-      if(state.level >= 1){
-        ctx.save();
-        ctx.translate(W * 0.5, H * 0.5);
-        const nestedScale = 0.72 + Math.sin(now * 0.000016) * 0.03;
-        ctx.scale(nestedScale, nestedScale);
-        ctx.translate(-W * 0.5, -H * 0.5);
+          screen
+            .classList
+            .remove(
+              "fade"
+            );
 
-        const nestedCount = state.level === 1 ? 2 : 3;
-        for(let i = 0; i < nestedCount; i++){
-          const a = sceneA.shapes[i % sceneA.shapes.length];
-          const b = sceneB.shapes[i % sceneB.shapes.length];
-          const s = interpolateShape(a, b, t);
-          fillShape(s, now + 48000, 0.36, 152, 0.040, 0);
-          fillShape(s, now + 62000, 0.24, 78, 0.032, 0);
+        }
+      );
+
+    },
+    720
+  );
+
+}
+
+
+/* =========================================================
+   START
+   ========================================================= */
+
+function renderStart(){
+
+  setVisualMode(
+    "start"
+  );
+
+
+  progress
+    .textContent =
+    "";
+
+
+  depthLabel
+    .textContent =
+    "TRAUM 0";
+
+
+  screen
+    .innerHTML = `
+
+<div class="eyebrow">
+TRAUM / DREAM ARCHIVE
+</div>
+
+<h1>
+TRAUM
+<br>
+SIM
+</h1>
+
+<p class="sub">
+choose language / wybierz język / оберіть мову
+</p>
+
+<div class="langs">
+
+<button onclick="chooseLanguage('PL')">
+PL
+</button>
+
+<button onclick="chooseLanguage('ENG')">
+ENG
+</button>
+
+<button onclick="chooseLanguage('UKR')">
+УКР
+</button>
+
+</div>
+
+`;
+
+}
+
+
+/* =========================================================
+   LANGUAGE
+   ========================================================= */
+
+function chooseLanguage(lang){
+
+  state.lang =
+    lang;
+
+  state.introStep =
+    0;
+
+  state.level =
+    0;
+
+  state.levelQuestion =
+    0;
+
+  state.answers =
+    [];
+
+  state.nickname =
+    "";
+
+  state.dreamColorName =
+    "";
+
+  state.dreamColor = {
+    r:180,
+    g:180,
+    b:180
+  };
+
+
+  prepareQuestions();
+
+
+  transition(
+    renderIntro
+  );
+
+}
+
+
+/* =========================================================
+   INTRO
+   ========================================================= */
+
+function renderIntro(){
+
+  setVisualMode(
+    "intro"
+  );
+
+
+  const slides =
+    INTRO[
+      state.lang
+    ];
+
+
+  const slide =
+    slides[
+      state.introStep
+    ];
+
+
+  const copy =
+    UI[
+      state.lang
+    ];
+
+
+  const last =
+    state.introStep ===
+    slides.length-1;
+
+
+  progress.textContent =
+    `${String(
+      state.introStep+1
+    ).padStart(
+      2,
+      "0"
+    )}
+    /
+    ${String(
+      slides.length
+    ).padStart(
+      2,
+      "0"
+    )}`;
+
+
+  depthLabel.textContent =
+    "TRAUM 0";
+
+
+  if(
+    slide.type ===
+    "color"
+  ){
+
+    screen.innerHTML = `
+
+<div class="eyebrow">
+${slide.label}
+</div>
+
+<h2>
+${slide.title}
+</h2>
+
+<div class="introText">
+${slide.text}
+</div>
+
+<input
+class="colorQuestionInput"
+id="dreamColorInput"
+type="text"
+autocomplete="off"
+spellcheck="false"
+placeholder="${copy.colorPlaceholder}"
+value="${escapeHtml(
+  state.dreamColorName
+)}"
+>
+
+<div class="colorHint">
+${slide.meta}
+</div>
+
+<div class="actions">
+
+<button
+class="back"
+onclick="introBack()"
+>
+${copy.back}
+</button>
+
+<button
+class="next"
+onclick="introNext()"
+>
+${copy.next}
+</button>
+
+</div>
+
+`;
+
+
+    setTimeout(
+      ()=>{
+
+        const field =
+          document
+            .getElementById(
+              "dreamColorInput"
+            );
+
+        if(field){
+
+          field.focus();
+
+          field.addEventListener(
+            "input",
+            ()=>{
+
+              state.dreamColorName =
+                field.value.trim();
+
+              state.dreamColor =
+                parseDreamColor(
+                  state.dreamColorName
+                );
+
+            }
+          );
+
         }
 
-        ctx.restore();
-      }
+      },
+      350
+    );
 
-      ctx.globalCompositeOperation = "source-over";
-      drawFold();
+  }
+  else{
 
-      /* canvas visual tuning */
-      const finalContrast = Math.round((dreamFX.targetContrast + dreamFX.levelContrast) * 0.5);
-      const finalBlur = ((dreamFX.targetBlur + dreamFX.levelBlur) * 0.5).toFixed(1);
+    screen.innerHTML = `
 
-      canvas.style.opacity = String(dreamFX.targetOpacity);
-      canvas.style.filter = `blur(${finalBlur}px) contrast(${finalContrast}%) saturate(0%)`;
+<div class="eyebrow">
+${slide.label}
+</div>
 
-      requestAnimationFrame(animateCanvas);
+<h2>
+${slide.title}
+</h2>
+
+<div class="introText">
+${slide.text}
+</div>
+
+<div class="introMeta">
+${slide.meta}
+</div>
+
+<div class="actions">
+
+<button
+class="back"
+onclick="introBack()"
+>
+${copy.back}
+</button>
+
+<button
+class="next"
+onclick="introNext()"
+>
+${last ? copy.begin : copy.next}
+</button>
+
+</div>
+
+`;
+
+  }
+
+
+  ghost(
+    slide.title
+  );
+
+}
+
+
+/* =========================================================
+   INTRO NAV
+   ========================================================= */
+
+function introBack(){
+
+  if(
+    state.introStep ===
+    0
+  ){
+
+    transition(
+      renderStart
+    );
+
+    return;
+
+  }
+
+
+  saveColorField();
+
+
+  state.introStep--;
+
+
+  transition(
+    renderIntro
+  );
+
+}
+
+
+function introNext(){
+
+  saveColorField();
+
+
+  const slides =
+    INTRO[
+      state.lang
+    ];
+
+
+  if(
+    state.introStep <
+    slides.length-1
+  ){
+
+    state.introStep++;
+
+    transition(
+      renderIntro
+    );
+
+  }
+  else{
+
+    state.level =
+      0;
+
+    state.levelQuestion =
+      0;
+
+    transition(
+      renderQuestion
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   COLOR FIELD
+   ========================================================= */
+
+function saveColorField(){
+
+  const field =
+    document
+      .getElementById(
+        "dreamColorInput"
+      );
+
+
+  if(!field){
+    return;
+  }
+
+
+  state.dreamColorName =
+    field.value.trim();
+
+
+  state.dreamColor =
+    parseDreamColor(
+      state.dreamColorName
+    );
+
+}
+
+
+/* =========================================================
+   COLOR PARSER
+   ========================================================= */
+
+function parseDreamColor(name){
+
+  const s =
+    String(
+      name || ""
+    )
+    .toLowerCase()
+    .trim();
+
+
+  const map = {
+
+    /* PL */
+
+    "niebieski":[70,120,190],
+    "niebieska":[70,120,190],
+
+    "błękitny":[90,160,210],
+    "błękit":[90,160,210],
+
+    "granatowy":[45,70,130],
+    "granat":[45,70,130],
+
+    "turkusowy":[55,160,155],
+    "turkus":[55,160,155],
+
+    "zielony":[75,145,100],
+    "zieleń":[75,145,100],
+
+    "butelkowy":[45,105,78],
+
+    "czerwony":[180,70,75],
+    "czerwień":[180,70,75],
+
+    "bordowy":[125,50,65],
+    "bordo":[125,50,65],
+
+    "różowy":[195,105,145],
+    "róż":[195,105,145],
+
+    "fioletowy":[130,90,175],
+    "fiolet":[130,90,175],
+
+    "purpurowy":[150,75,145],
+    "purpura":[150,75,145],
+
+    "pomarańczowy":[195,120,65],
+    "pomarańcz":[195,120,65],
+
+    "żółty":[205,175,85],
+    "żółć":[205,175,85],
+
+    "złoty":[190,155,85],
+    "złoto":[190,155,85],
+
+    "srebrny":[170,175,180],
+    "srebro":[170,175,180],
+
+    "szary":[150,150,150],
+    "szarość":[150,150,150],
+
+    "grafitowy":[95,100,105],
+    "grafit":[95,100,105],
+
+    "biały":[205,205,200],
+    "biel":[205,205,200],
+
+    "czarny":[80,80,80],
+    "czerń":[80,80,80],
+
+    "brązowy":[125,90,75],
+    "brąz":[125,90,75],
+
+
+    /* EN */
+
+    "blue":[70,120,190],
+
+    "navy":[45,70,130],
+
+    "cyan":[80,160,195],
+
+    "turquoise":[55,160,155],
+
+    "green":[75,145,100],
+
+    "red":[180,70,75],
+
+    "burgundy":[125,50,65],
+
+    "pink":[195,105,145],
+
+    "purple":[130,90,175],
+
+    "violet":[130,90,175],
+
+    "orange":[195,120,65],
+
+    "yellow":[205,175,85],
+
+    "gold":[190,155,85],
+
+    "silver":[170,175,180],
+
+    "grey":[150,150,150],
+
+    "gray":[150,150,150],
+
+    "white":[205,205,200],
+
+    "black":[80,80,80],
+
+    "brown":[125,90,75],
+
+
+    /* UKR */
+
+    "синій":[70,120,190],
+
+    "блакитний":[90,160,210],
+
+    "темно-синій":[45,70,130],
+
+    "бірюзовий":[55,160,155],
+
+    "зелений":[75,145,100],
+
+    "червоний":[180,70,75],
+
+    "бордовий":[125,50,65],
+
+    "рожевий":[195,105,145],
+
+    "фіолетовий":[130,90,175],
+
+    "пурпуровий":[150,75,145],
+
+    "помаранчевий":[195,120,65],
+
+    "жовтий":[205,175,85],
+
+    "золотий":[190,155,85],
+
+    "срібний":[170,175,180],
+
+    "сірий":[150,150,150],
+
+    "графітовий":[95,100,105],
+
+    "білий":[205,205,200],
+
+    "чорний":[80,80,80],
+
+    "коричневий":[125,90,75]
+
+  };
+
+
+  for(
+    const key
+    in map
+  ){
+
+    if(
+      s.includes(
+        key
+      )
+    ){
+
+      return {
+        r:map[key][0],
+        g:map[key][1],
+        b:map[key][2]
+      };
+
     }
 
-    /* =========================================================
-       INIT
-       ========================================================= */
-    resizeCanvas();
-    updateDepthVisuals();
-    renderStart();
-    requestAnimationFrame(animateCanvas);
-  </script>
+  }
+
+
+  return {
+    r:160,
+    g:160,
+    b:160
+  };
+
+}
+
+
+/* =========================================================
+   QUESTION HELPERS
+   ========================================================= */
+
+function currentQuestion(){
+
+  return state
+    .questionsByLevel[
+      state.level
+    ][
+      state.levelQuestion
+    ];
+
+}
+
+
+function globalQuestionIndex(){
+
+  return (
+    state.level *
+    3
+  )
+  +
+  state.levelQuestion;
+
+}
+
+
+/* =========================================================
+   QUESTION TEXT — ALWAYS CLEAR
+   ========================================================= */
+
+function surrealize(text){
+
+  if(!text){
+    return "";
+  }
+
+  return text
+    .split(" ")
+    .map(
+      word =>
+        `<span class="dreamword">${escapeHtml(word)}</span>`
+    )
+    .join(" ");
+
+}
+
+
+/* =========================================================
+   ECHO
+   ========================================================= */
+
+function questionWithEcho(item){
+
+  if(
+    state.level ===
+    0
+  ){
+
+    return item.question;
+
+  }
+
+
+  const previous =
+    state.answers
+    .filter(
+      a =>
+        a &&
+        a.answer &&
+        a.answer.length > 2
+    );
+
+
+  if(
+    !previous.length
+  ){
+
+    return item.question;
+
+  }
+
+
+  if(
+    Math.random() >
+    .66
+  ){
+
+    const source =
+      previous[
+        Math.floor(
+          Math.random() *
+          previous.length
+        )
+      ];
+
+
+    const fragment =
+      source.answer
+      .split(/\s+/)
+      .slice(
+        0,
+        7
+      )
+      .join(" ");
+
+
+    if(
+      state.lang ===
+      "PL"
+    ){
+
+      const variants = [
+
+        `Powiedziałeś wcześniej: „${fragment}”. Czy nadal tak to pamiętasz?`,
+
+        `„${fragment}” — czy to należało do pierwszego snu?`,
+
+        `Jeżeli „${fragment}” było prawdą, co znajdowało się tuż poza kadrem?`
+
+      ];
+
+
+      return variants[
+        Math.floor(
+          Math.random() *
+          variants.length
+        )
+      ];
+
+    }
+
+
+    if(
+      state.lang ===
+      "UKR"
+    ){
+
+      const variants = [
+
+        `Раніше ти сказав: «${fragment}». Ти досі пам’ятаєш це саме так?`,
+
+        `«${fragment}» — це належало до першого сну?`,
+
+        `Якщо «${fragment}» було правдою, що знаходилося просто за межами кадру?`
+
+      ];
+
+
+      return variants[
+        Math.floor(
+          Math.random() *
+          variants.length
+        )
+      ];
+
+    }
+
+
+    const variants = [
+
+      `Earlier you said: “${fragment}”. Do you still remember it that way?`,
+
+      `“${fragment}” — did that belong to the first dream?`,
+
+      `If “${fragment}” was true, what existed just outside the frame?`
+
+    ];
+
+
+    return variants[
+      Math.floor(
+        Math.random() *
+        variants.length
+      )
+    ];
+
+  }
+
+
+  return item.question;
+
+}
+
+
+/* =========================================================
+   QUESTION
+   ========================================================= */
+
+function renderQuestion(){
+
+  setVisualMode(
+    "questions"
+  );
+
+
+  const item =
+    currentQuestion();
+
+
+  const copy =
+    UI[
+      state.lang
+    ];
+
+
+  if(!item){
+    return;
+  }
+
+
+  const index =
+    globalQuestionIndex();
+
+
+  const saved =
+    state.answers[
+      index
+    ];
+
+
+  progress.textContent =
+    `${String(
+      index+1
+    ).padStart(
+      2,
+      "0"
+    )}
+    /
+    09`;
+
+
+  depthLabel.textContent =
+    `TRAUM ${state.level}`;
+
+
+  screen.innerHTML = `
+
+<div class="eyebrow">
+${escapeHtml(
+  item.group
+)}
+</div>
+
+<h2>
+${surrealize(
+  questionWithEcho(
+    item
+  )
+)}
+</h2>
+
+<textarea
+id="answer"
+placeholder="${copy.placeholder}"
+>${escapeHtml(
+  saved
+    ? saved.answer
+    : ""
+)}</textarea>
+
+<div class="actions">
+
+<button
+class="back"
+onclick="questionBack()"
+>
+${copy.back}
+</button>
+
+<button
+class="next"
+onclick="questionNext()"
+>
+${copy.next}
+</button>
+
+</div>
+
+`;
+
+
+  spawnPreviousAnswerGhost();
+
+
+  setTimeout(
+    ()=>{
+
+      document
+        .getElementById(
+          "answer"
+        )
+        ?.focus();
+
+    },
+    450
+  );
+
+}
+
+
+/* =========================================================
+   SAVE ANSWER
+   ========================================================= */
+
+function saveCurrentAnswer(){
+
+  const field =
+    document
+      .getElementById(
+        "answer"
+      );
+
+
+  if(!field){
+    return;
+  }
+
+
+  const index =
+    globalQuestionIndex();
+
+
+  const q =
+    currentQuestion();
+
+
+  const existing =
+    state.answers[
+      index
+    ];
+
+
+  state.answers[
+    index
+  ]
+  =
+  {
+
+    level:
+      state.level,
+
+    category:
+      q.group,
+
+    question:
+      existing
+        ? existing.question
+        : q.question,
+
+    answer:
+      field.value.trim()
+
+  };
+
+}
+
+
+/* =========================================================
+   BACK
+   ========================================================= */
+
+function questionBack(){
+
+  saveCurrentAnswer();
+
+
+  if(
+    state.level === 0 &&
+    state.levelQuestion === 0
+  ){
+
+    state.introStep =
+      INTRO[
+        state.lang
+      ]
+      .length - 1;
+
+
+    transition(
+      renderIntro
+    );
+
+
+    return;
+
+  }
+
+
+  if(
+    state.levelQuestion > 0
+  ){
+
+    state.levelQuestion--;
+
+  }
+  else{
+
+    state.level--;
+
+    state.levelQuestion =
+      2;
+
+    dreamEngine.depthTarget =
+      state.level;
+
+  }
+
+
+  transition(
+    renderQuestion
+  );
+
+}
+
+
+/* =========================================================
+   NEXT
+   ========================================================= */
+
+function questionNext(){
+
+  saveCurrentAnswer();
+
+
+  const index =
+    globalQuestionIndex();
+
+
+  if(
+    index ===
+    8
+  ){
+
+    transition(
+      renderNickname
+    );
+
+    return;
+
+  }
+
+
+  if(
+    state.level === 0 &&
+    state.levelQuestion === 2
+  ){
+
+    runDreamShift(
+      1
+    );
+
+    return;
+
+  }
+
+
+  if(
+    state.level === 1 &&
+    state.levelQuestion === 2
+  ){
+
+    runDreamShift(
+      2
+    );
+
+    return;
+
+  }
+
+
+  state.levelQuestion++;
+
+
+  transition(
+    renderQuestion
+  );
+
+}
+
+
+/* =========================================================
+   DREAM SHIFT
+   ========================================================= */
+
+function runDreamShift(level){
+
+  const overlay =
+    document
+      .getElementById(
+        "dreamShift"
+      );
+
+
+  const main =
+    document
+      .getElementById(
+        "dreamShiftMain"
+      );
+
+
+  const sub =
+    document
+      .getElementById(
+        "dreamShiftSub"
+      );
+
+
+  const ui =
+    document
+      .getElementById(
+        "ui"
+      );
+
+
+  ui
+    .classList
+    .add(
+      "hide"
+    );
+
+
+  if(
+    level ===
+    1
+  ){
+
+    if(
+      state.lang ===
+      "PL"
+    ){
+
+      main.textContent =
+        "NIE BUDŹ SIĘ";
+
+      sub.textContent =
+        "sen ma jeszcze jedną warstwę";
+
+    }
+    else if(
+      state.lang ===
+      "UKR"
+    ){
+
+      main.textContent =
+        "НЕ ПРОКИДАЙСЯ";
+
+      sub.textContent =
+        "сон має ще один шар";
+
+    }
+    else{
+
+      main.textContent =
+        "DON'T WAKE";
+
+      sub.textContent =
+        "the dream has another layer";
+
+    }
+
+  }
+  else{
+
+    if(
+      state.lang ===
+      "PL"
+    ){
+
+      main.textContent =
+        "SEN ŚNI SEN";
+
+      sub.textContent =
+        "wejdź jeszcze raz";
+
+    }
+    else if(
+      state.lang ===
+      "UKR"
+    ){
+
+      main.textContent =
+        "СОН БАЧИТЬ СОН";
+
+      sub.textContent =
+        "увійди ще раз";
+
+    }
+    else{
+
+      main.textContent =
+        "THE DREAM DREAMS";
+
+      sub.textContent =
+        "enter once more";
+
+    }
+
+  }
+
+
+  overlay
+    .classList
+    .add(
+      "active"
+    );
+
+
+  setTimeout(
+    ()=>{
+
+      if(
+        level ===
+        1
+      ){
+
+        if(
+          state.lang ===
+          "PL"
+        ){
+
+          main.textContent =
+            "JESTEŚ GŁĘBIEJ";
+
+          sub.textContent =
+            "to, co pamiętasz, zaczyna pamiętać ciebie";
+
+        }
+        else if(
+          state.lang ===
+          "UKR"
+        ){
+
+          main.textContent =
+            "ТИ ГЛИБШЕ";
+
+          sub.textContent =
+            "те, що ти пам’ятаєш, починає пам’ятати тебе";
+
+        }
+        else{
+
+          main.textContent =
+            "YOU ARE DEEPER";
+
+          sub.textContent =
+            "what you remember begins to remember you";
+
+        }
+
+      }
+      else{
+
+        if(
+          state.lang ===
+          "PL"
+        ){
+
+          main.textContent =
+            "NIE MA PIERWSZEGO SNU";
+
+          sub.textContent =
+            "jest tylko następny";
+
+        }
+        else if(
+          state.lang ===
+          "UKR"
+        ){
+
+          main.textContent =
+            "НЕМАЄ ПЕРШОГО СНУ";
+
+          sub.textContent =
+            "є лише наступний";
+
+        }
+        else{
+
+          main.textContent =
+            "THERE IS NO FIRST DREAM";
+
+          sub.textContent =
+            "there is only the next one";
+
+        }
+
+      }
+
+    },
+    4200
+  );
+
+
+  setTimeout(
+    ()=>{
+
+      overlay
+        .classList
+        .remove(
+          "active"
+        );
+
+
+      state.level =
+        level;
+
+
+      state.levelQuestion =
+        0;
+
+
+      dreamEngine.depthTarget =
+        level;
+
+
+      renderQuestion();
+
+
+      ui
+        .classList
+        .remove(
+          "hide"
+        );
+
+    },
+    9500
+  );
+
+}
+
+
+/* =========================================================
+   PREVIOUS ANSWERS
+   ========================================================= */
+
+function spawnPreviousAnswerGhost(){
+
+  if(
+    state.level ===
+    0
+  ){
+
+    return;
+
+  }
+
+
+  const previous =
+    state.answers
+    .filter(
+      a =>
+        a &&
+        a.answer &&
+        a.answer.length > 2
+    );
+
+
+  if(
+    !previous.length
+  ){
+
+    return;
+
+  }
+
+
+  if(
+    Math.random() >
+    .62
+  ){
+
+    const a =
+      previous[
+        Math.floor(
+          Math.random() *
+          previous.length
+        )
+      ];
+
+
+    const fragment =
+      a.answer
+      .split(/\s+/)
+      .slice(
+        0,
+        8
+      )
+      .join(" ");
+
+
+    ghost(
+      fragment,
+      true
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   NICKNAME
+   ========================================================= */
+
+function renderNickname(){
+
+  setVisualMode(
+    "nickname"
+  );
+
+
+  progress.textContent =
+    "";
+
+
+  depthLabel.textContent =
+    "WAKE ?";
+
+
+  const copy =
+    UI[
+      state.lang
+    ];
+
+
+  screen.innerHTML = `
+
+<div class="eyebrow">
+WHO DREAMED THIS?
+</div>
+
+<h2>
+${copy.nicknameTitle}
+</h2>
+
+<p class="sub">
+${copy.nicknameMeta}
+</p>
+
+<input
+id="nickname"
+type="text"
+maxlength="40"
+autocomplete="off"
+spellcheck="false"
+placeholder="${copy.nicknamePlaceholder}"
+value="${escapeHtml(
+  state.nickname
+)}"
+>
+
+<div class="actions">
+
+<button
+class="back"
+onclick="nicknameBack()"
+>
+${copy.back}
+</button>
+
+<button
+class="next"
+onclick="saveDream()"
+>
+${copy.nicknameSubmit}
+</button>
+
+</div>
+
+`;
+
+
+  setTimeout(
+    ()=>{
+
+      document
+        .getElementById(
+          "nickname"
+        )
+        ?.focus();
+
+    },
+    400
+  );
+
+}
+
+
+/* =========================================================
+   NICK BACK
+   ========================================================= */
+
+function nicknameBack(){
+
+  const field =
+    document
+      .getElementById(
+        "nickname"
+      );
+
+
+  if(field){
+
+    state.nickname =
+      field.value.trim();
+
+  }
+
+
+  state.level =
+    2;
+
+
+  state.levelQuestion =
+    2;
+
+
+  dreamEngine.depthTarget =
+    2;
+
+
+  transition(
+    renderQuestion
+  );
+
+}
+
+
+/* =========================================================
+   SAVE DREAM
+   ========================================================= */
+
+async function saveDream(){
+
+  const field =
+    document
+      .getElementById(
+        "nickname"
+      );
+
+
+  state.nickname =
+    field
+      ? field.value.trim()
+      : "";
+
+
+  if(
+    !state.nickname
+  ){
+
+    state.nickname =
+      "ANONYMOUS";
+
+  }
+
+
+  const copy =
+    UI[
+      state.lang
+    ];
+
+
+  const payload = {
+
+    nickname:
+      state.nickname,
+
+    language:
+      state.lang,
+
+    dreamColor:
+      state.dreamColorName,
+
+    answers:
+      state.answers,
+
+    dream:
+      state.answers
+      .map(
+        a =>
+          a
+            ? a.answer
+            : ""
+      )
+      .join(
+        "\n\n"
+      )
+
+  };
+
+
+  transition(
+    ()=>{
+
+      setVisualMode(
+        "saving"
+      );
+
+
+      progress.textContent =
+        "";
+
+
+      depthLabel.textContent =
+        "ARCHIVE";
+
+
+      screen.innerHTML = `
+
+<div class="eyebrow">
+TRAUM SIM
+</div>
+
+<h2>
+${copy.saving}
+</h2>
+
+<p class="sub">
+...
+</p>
+
+`;
+
+    }
+  );
+
+
+  try{
+
+    const response =
+      await fetch(
+        API_URL,
+        {
+
+          method:"POST",
+
+          headers:{
+            "Content-Type":
+              "text/plain;charset=utf-8"
+          },
+
+          body:
+            JSON.stringify(
+              payload
+            )
+
+        }
+      );
+
+
+    if(
+      !response.ok
+    ){
+
+      throw new Error(
+        "HTTP " +
+        response.status
+      );
+
+    }
+
+
+    const data =
+      await response.json();
+
+
+    if(
+      !data.ok
+    ){
+
+      throw new Error(
+        data.error ||
+        "Backend error"
+      );
+
+    }
+
+
+    renderSaved(
+      data.dreamId
+    );
+
+  }
+  catch(error){
+
+    console.error(
+      error
+    );
+
+
+    renderError();
+
+  }
+
+}
+
+
+/* =========================================================
+   SAVED
+   ========================================================= */
+
+function renderSaved(id){
+
+  const copy =
+    UI[
+      state.lang
+    ];
+
+
+  transition(
+    ()=>{
+
+      setVisualMode(
+        "saved"
+      );
+
+
+      screen.innerHTML = `
+
+<div class="eyebrow">
+TRAUM SIM
+</div>
+
+<h2>
+${copy.done}
+</h2>
+
+<p class="sub">
+${copy.sub}
+</p>
+
+<div class="received">
+
+${escapeHtml(
+  id || ""
+)}
+
+&nbsp;&nbsp;/&nbsp;&nbsp;
+
+${escapeHtml(
+  state.nickname
+)}
+
+</div>
+
+`;
+
+    }
+  );
+
+
+  setTimeout(
+    startFinalSequence,
+    4600
+  );
+
+}
+
+
+/* =========================================================
+   ERROR
+   ========================================================= */
+
+function renderError(){
+
+  const copy =
+    UI[
+      state.lang
+    ];
+
+
+  let message;
+
+
+  if(
+    state.lang ===
+    "PL"
+  ){
+
+    message =
+      "Połączenie z archiwum zostało przerwane.";
+
+  }
+  else if(
+    state.lang ===
+    "UKR"
+  ){
+
+    message =
+      "З’єднання з архівом було перервано.";
+
+  }
+  else{
+
+    message =
+      "The connection to the archive was interrupted.";
+
+  }
+
+
+  transition(
+    ()=>{
+
+      setVisualMode(
+        "error"
+      );
+
+
+      screen.innerHTML = `
+
+<div class="eyebrow">
+TRAUM SIM
+</div>
+
+<h2>
+${copy.error}
+</h2>
+
+<p class="sub">
+${message}
+</p>
+
+<div class="actions">
+
+<span></span>
+
+<button
+class="next"
+onclick="saveDream()"
+>
+${copy.retry}
+</button>
+
+</div>
+
+`;
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   FINAL
+   ========================================================= */
+
+function startFinalSequence(){
+
+  const ui =
+    document
+      .getElementById(
+        "ui"
+      );
+
+
+  const bloom =
+    document
+      .getElementById(
+        "whiteBloom"
+      );
+
+
+  const whiteout =
+    document
+      .getElementById(
+        "whiteout"
+      );
+
+
+  const final =
+    document
+      .getElementById(
+        "finalInvite"
+      );
+
+
+  ui
+    .classList
+    .add(
+      "hide"
+    );
+
+
+  setTimeout(
+    ()=>{
+
+      bloom
+        .classList
+        .add(
+          "active"
+        );
+
+
+      whiteout
+        .classList
+        .add(
+          "active"
+        );
+
+    },
+    1300
+  );
+
+
+  setTimeout(
+    ()=>{
+
+      document
+        .getElementById(
+          "finalTitle"
+        )
+        .textContent =
+        UI[
+          state.lang
+        ]
+        .invite;
+
+
+      final
+        .classList
+        .add(
+          "active"
+        );
+
+    },
+    7500
+  );
+
+
+  setTimeout(
+    ()=>{
+
+      bloom.style.display =
+        "none";
+
+
+      whiteout.style.display =
+        "none";
+
+    },
+    8150
+  );
+
+}
+
+
+/* =========================================================
+   GHOSTS
+   ========================================================= */
+
+function ghost(
+  text,
+  answer=false
+){
+
+  if(!text){
+    return;
+  }
+
+
+  const e =
+    document
+      .createElement(
+        "div"
+      );
+
+
+  e.className =
+    answer
+      ? "ghost answerGhost"
+      : "ghost";
+
+
+  e.textContent =
+    text;
+
+
+  e.style.left =
+    (
+      Math.random() *
+      55
+      -
+      5
+    )
+    +
+    "vw";
+
+
+  e.style.top =
+    (
+      Math.random() *
+      75
+      +
+      8
+    )
+    +
+    "vh";
+
+
+  e.style.animationDuration =
+    (
+      22
+      +
+      Math.random() *
+      18
+    )
+    +
+    "s";
+
+
+  ghostLayer
+    .appendChild(
+      e
+    );
+
+
+  setTimeout(
+    ()=>{
+
+      e.remove();
+
+    },
+    42000
+  );
+
+}
+
+
+/* =========================================================
+   WATERCOLOUR RORSCHACH ENGINE
+   ========================================================= */
+
+const canvas =
+  document
+    .getElementById(
+      "dreamCanvas"
+    );
+
+
+const ctx =
+  canvas
+    .getContext(
+      "2d"
+    );
+
+
+let W = 0;
+
+let H = 0;
+
+let DPR = 1;
+
+
+const dreamEngine = {
+
+  depth:0,
+
+  depthTarget:0,
+
+  focus:0
+
+};
+
+
+const organisms = [];
+
+
+/* =========================================================
+   RANDOM
+   ========================================================= */
+
+function rand(
+  a,
+  b
+){
+
+  return a +
+  Math.random() *
+  (
+    b-a
+  );
+
+}
+
+
+/* =========================================================
+   ORGANISM
+   ========================================================= */
+
+function makeOrganism(index){
+
+  const base =
+    Math.min(
+      W,
+      H
+    );
+
+
+  return {
+
+    y:
+      H *
+      rand(
+        .28,
+        .72
+      ),
+
+    radius:
+      base *
+      rand(
+        .23,
+        .48
+      ),
+
+    stretch:
+      rand(
+        1.25,
+        2.55
+      ),
+
+    height:
+      rand(
+        .60,
+        1.30
+      ),
+
+    lobe1:
+      rand(
+        1.2,
+        3.5
+      ),
+
+    lobe2:
+      rand(
+        3.5,
+        7.5
+      ),
+
+    lobe3:
+      rand(
+        7,
+        13
+      ),
+
+    amp1:
+      rand(
+        .05,
+        .15
+      ),
+
+    amp2:
+      rand(
+        .025,
+        .085
+      ),
+
+    amp3:
+      rand(
+        .01,
+        .045
+      ),
+
+    phase1:
+      rand(
+        0,
+        Math.PI*2
+      ),
+
+    phase2:
+      rand(
+        0,
+        Math.PI*2
+      ),
+
+    phase3:
+      rand(
+        0,
+        Math.PI*2
+      ),
+
+    phaseY:
+      rand(
+        0,
+        Math.PI*2
+      ),
+
+    speed1:
+      rand(
+        .010,
+        .022
+      ),
+
+    speed2:
+      rand(
+        .005,
+        .014
+      ),
+
+    speed3:
+      rand(
+        .0025,
+        .008
+      ),
+
+    speedY:
+      rand(
+        .004,
+        .010
+      ),
+
+    driftY:
+      rand(
+        4,
+        18
+      ),
+
+    index
+
+  };
+
+}
+
+
+/* =========================================================
+   RESIZE
+   ========================================================= */
+
+function resizeDream(){
+
+  W =
+    window.innerWidth;
+
+
+  H =
+    window.innerHeight;
+
+
+  DPR =
+    Math.min(
+      window.devicePixelRatio || 1,
+      1.5
+    );
+
+
+  canvas.width =
+    W * DPR;
+
+
+  canvas.height =
+    H * DPR;
+
+
+  ctx.setTransform(
+    DPR,
+    0,
+    0,
+    DPR,
+    0,
+    0
+  );
+
+
+  organisms.length =
+    0;
+
+
+  for(
+    let i=0;
+    i<7;
+    i++
+  ){
+
+    organisms.push(
+      makeOrganism(
+        i
+      )
+    );
+
+  }
+
+
+  ctx.fillStyle =
+    "#000";
+
+
+  ctx.fillRect(
+    0,
+    0,
+    W,
+    H
+  );
+
+}
+
+
+/* =========================================================
+   COLOUR
+   ========================================================= */
+
+function watercolorColor(
+  brightness,
+  alpha
+){
+
+  const c =
+    state.dreamColor;
+
+
+  const grey =
+    (
+      c.r +
+      c.g +
+      c.b
+    )
+    /
+    3;
+
+
+  const SAT =
+    .36;
+
+
+  let r =
+    grey +
+    (
+      c.r -
+      grey
+    )
+    *
+    SAT;
+
+
+  let g =
+    grey +
+    (
+      c.g -
+      grey
+    )
+    *
+    SAT;
+
+
+  let b =
+    grey +
+    (
+      c.b -
+      grey
+    )
+    *
+    SAT;
+
+
+  r =
+    Math.min(
+      255,
+      r *
+      brightness
+    );
+
+
+  g =
+    Math.min(
+      255,
+      g *
+      brightness
+    );
+
+
+  b =
+    Math.min(
+      255,
+      b *
+      brightness
+    );
+
+
+  return `rgba(
+    ${Math.round(r)},
+    ${Math.round(g)},
+    ${Math.round(b)},
+    ${alpha}
+  )`;
+
+}
+
+
+/* =========================================================
+   RADIUS
+   ========================================================= */
+
+function radiusAt(
+  o,
+  angle,
+  seconds,
+  scale
+){
+
+  const p1 =
+    Math.sin(
+      angle *
+      o.lobe1
+      +
+      seconds *
+      o.speed1
+      +
+      o.phase1
+    )
+    *
+    o.amp1;
+
+
+  const p2 =
+    Math.cos(
+      angle *
+      o.lobe2
+      -
+      seconds *
+      o.speed2
+      +
+      o.phase2
+    )
+    *
+    o.amp2;
+
+
+  const p3 =
+    Math.sin(
+      angle *
+      o.lobe3
+      +
+      seconds *
+      o.speed3
+      +
+      o.phase3
+    )
+    *
+    o.amp3;
+
+
+  const breath =
+    Math.sin(
+      seconds *
+      .036
+      +
+      o.phase1
+    )
+    *
+    .018;
+
+
+  return
+    o.radius
+    *
+    scale
+    *
+    (
+      1
+      +
+      p1
+      +
+      p2
+      +
+      p3
+      +
+      breath
+    );
+
+}
+
+
+/* =========================================================
+   PATH
+   ========================================================= */
+
+function createBlotPath(
+  o,
+  seconds,
+  scale,
+  microOffset=0
+){
+
+  const cx =
+    W *
+    .5;
+
+
+  const cy =
+    o.y
+    +
+    Math.sin(
+      seconds *
+      o.speedY
+      +
+      o.phaseY
+    )
+    *
+    o.driftY;
+
+
+  const steps =
+    190;
+
+
+  const left =
+    [];
+
+
+  for(
+    let i=0;
+    i<=steps;
+    i++
+  ){
+
+    const p =
+      i / steps;
+
+
+    const angle =
+      -Math.PI*.5
+      +
+      p *
+      Math.PI;
+
+
+    const radius =
+      radiusAt(
+        o,
+        angle,
+        seconds,
+        scale
+      );
+
+
+    const edge =
+      Math.sin(
+        angle*23
+        +
+        o.index*4.6
+        +
+        seconds*.006
+      )
+      *
+      microOffset;
+
+
+    const r =
+      radius *
+      (
+        1 +
+        edge
+      );
+
+
+    const x =
+      Math.cos(
+        angle
+      )
+      *
+      r
+      *
+      o.stretch;
+
+
+    const y =
+      Math.sin(
+        angle
+      )
+      *
+      r
+      *
+      o.height;
+
+
+    left.push(
+      {
+        x:
+          cx-x,
+
+        y:
+          cy+y
+      }
+    );
+
+  }
+
+
+  ctx.beginPath();
+
+
+  const first =
+    left[0];
+
+
+  ctx.moveTo(
+    first.x,
+    first.y
+  );
+
+
+  for(
+    const p
+    of
+    left
+  ){
+
+    ctx.lineTo(
+      p.x,
+      p.y
+    );
+
+  }
+
+
+  for(
+    let i=left.length-1;
+    i>=0;
+    i--
+  ){
+
+    const p =
+      left[i];
+
+
+    ctx.lineTo(
+      cx +
+      (
+        cx-p.x
+      ),
+      p.y
+    );
+
+  }
+
+
+  ctx.closePath();
+
+}
+
+
+/* =========================================================
+   LAYER
+   ========================================================= */
+
+function paintLayer(
+  o,
+  seconds,
+  scale,
+  brightness,
+  alpha,
+  edge
+){
+
+  createBlotPath(
+    o,
+    seconds,
+    scale,
+    edge
+  );
+
+
+  ctx.fillStyle =
+    watercolorColor(
+      brightness,
+      alpha
+    );
+
+
+  ctx.fill();
+
+}
+
+
+/* =========================================================
+   ORGANISM
+   ========================================================= */
+
+function paintOrganism(
+  o,
+  seconds
+){
+
+  paintLayer(
+    o,
+    seconds,
+    1.18,
+    1.18,
+    .036,
+    .010
+  );
+
+
+  paintLayer(
+    o,
+    seconds+29,
+    1.00,
+    .90,
+    .070,
+    .014
+  );
+
+
+  paintLayer(
+    o,
+    seconds+61,
+    .82,
+    .68,
+    .066,
+    .012
+  );
+
+
+  paintLayer(
+    o,
+    seconds+103,
+    .61,
+    .43,
+    .055,
+    .009
+  );
+
+
+  paintLayer(
+    o,
+    seconds+149,
+    .43,
+    .27,
+    .050,
+    .006
+  );
+
+
+  if(
+    dreamEngine.depth >
+    .75
+  ){
+
+    const strength =
+      Math.min(
+        1,
+        dreamEngine.depth -
+        .65
+      );
+
+
+    paintLayer(
+      o,
+      seconds+191,
+      .29,
+      .95,
+      .025 *
+      strength,
+      .008
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   FOCUS
+   ========================================================= */
+
+function updateFocus(seconds){
+
+  const waveA =
+    (
+      Math.sin(
+        seconds *
+        Math.PI*2 /
+        72
+      )
+      +
+      1
+    )
+    /
+    2;
+
+
+  const waveB =
+    (
+      Math.sin(
+        seconds *
+        Math.PI*2 /
+        183
+        +
+        1.9
+      )
+      +
+      1
+    )
+    /
+    2;
+
+
+  let focus =
+    waveA*.56
+    +
+    waveB*.44;
+
+
+  focus =
+    focus *
+    focus *
+    (
+      3 -
+      2*focus
+    );
+
+
+  dreamEngine.focus =
+    focus;
+
+
+  let blur =
+    17 -
+    focus*12;
+
+
+  if(
+    state.mode ===
+    "questions"
+  ){
+
+    blur +=
+      1.2;
+
+  }
+
+
+  const contrast =
+    112 +
+    focus*38;
+
+
+  const opacity =
+    .70 +
+    focus*.18;
+
+
+  canvas.style.filter =
+    `blur(${blur.toFixed(2)}px)
+    contrast(${contrast.toFixed(1)}%)`;
+
+
+  canvas.style.opacity =
+    opacity.toFixed(
+      3
+    );
+
+}
+
+
+/* =========================================================
+   DEPTH
+   ========================================================= */
+
+function updateDepth(){
+
+  dreamEngine.depth +=
+    (
+      dreamEngine.depthTarget -
+      dreamEngine.depth
+    )
+    *
+    .002;
+
+}
+
+
+/* =========================================================
+   DRAW
+   ========================================================= */
+
+function drawDream(timestamp){
+
+  const seconds =
+    timestamp /
+    1000;
+
+
+  updateDepth();
+
+
+  ctx.fillStyle =
+    "#000";
+
+
+  ctx.fillRect(
+    0,
+    0,
+    W,
+    H
+  );
+
+
+  const g =
+    ctx.createRadialGradient(
+      W*.5,
+      H*.5,
+      0,
+      W*.5,
+      H*.5,
+      Math.max(
+        W,
+        H
+      )
+      *
+      .72
+    );
+
+
+  g.addColorStop(
+    0,
+    "rgba(35,35,35,.24)"
+  );
+
+
+  g.addColorStop(
+    .50,
+    "rgba(13,13,13,.20)"
+  );
+
+
+  g.addColorStop(
+    1,
+    "rgba(0,0,0,1)"
+  );
+
+
+  ctx.fillStyle =
+    g;
+
+
+  ctx.fillRect(
+    0,
+    0,
+    W,
+    H
+  );
+
+
+  ctx.globalCompositeOperation =
+    "screen";
+
+
+  for(
+    const organism
+    of
+    organisms
+  ){
+
+    paintOrganism(
+      organism,
+      seconds
+    );
+
+  }
+
+
+  ctx.globalCompositeOperation =
+    "source-over";
+
+
+  const fold =
+    ctx.createLinearGradient(
+      W*.46,
+      0,
+      W*.54,
+      0
+    );
+
+
+  fold.addColorStop(
+    0,
+    "rgba(0,0,0,0)"
+  );
+
+
+  fold.addColorStop(
+    .5,
+    "rgba(115,115,115,.018)"
+  );
+
+
+  fold.addColorStop(
+    1,
+    "rgba(0,0,0,0)"
+  );
+
+
+  ctx.fillStyle =
+    fold;
+
+
+  ctx.fillRect(
+    W*.43,
+    0,
+    W*.14,
+    H
+  );
+
+
+  updateFocus(
+    seconds
+  );
+
+
+  requestAnimationFrame(
+    drawDream
+  );
+
+}
+
+
+/* =========================================================
+   INIT
+   ========================================================= */
+
+window.addEventListener(
+  "resize",
+  resizeDream
+);
+
+
+resizeDream();
+
+
+renderStart();
+
+
+requestAnimationFrame(
+  drawDream
+);
+
+</script>
+
 </body>
 </html>
