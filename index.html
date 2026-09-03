@@ -13,7 +13,13 @@
   --muted:rgba(255,255,255,.42);
   --line:rgba(255,255,255,.20);
 }
-*{box-sizing:border-box;margin:0;padding:0}
+
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
 html,body{
   width:100%;
   height:100%;
@@ -24,7 +30,10 @@ html,body{
   -webkit-font-smoothing:antialiased;
   -webkit-text-size-adjust:none;
 }
-body{min-height:calc(var(--vh)*100)}
+
+body{
+  min-height:calc(var(--vh)*100);
+}
 
 #dreamCanvas{
   position:fixed;
@@ -35,6 +44,7 @@ body{min-height:calc(var(--vh)*100)}
   opacity:.88;
   transform:scale(1.06);
 }
+
 #fog{
   position:fixed;
   inset:-20%;
@@ -46,6 +56,7 @@ body{min-height:calc(var(--vh)*100)}
   mix-blend-mode:screen;
   animation:fogMove 22s ease-in-out infinite alternate;
 }
+
 #grain{
   position:fixed;
   inset:-50%;
@@ -54,6 +65,7 @@ body{min-height:calc(var(--vh)*100)}
   background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   animation:grain .22s steps(2) infinite;
 }
+
 #ghostLayer{
   position:fixed;
   inset:0;
@@ -61,6 +73,7 @@ body{min-height:calc(var(--vh)*100)}
   pointer-events:none;
   overflow:hidden;
 }
+
 .ghost{
   position:absolute;
   font-size:clamp(26px,8vw,110px);
@@ -71,6 +84,7 @@ body{min-height:calc(var(--vh)*100)}
   white-space:nowrap;
   animation:ghostDrift linear forwards;
 }
+
 #ui{
   position:fixed;
   inset:0;
@@ -85,6 +99,7 @@ body{min-height:calc(var(--vh)*100)}
     max(24px,env(safe-area-inset-bottom))
     max(22px,env(safe-area-inset-left));
 }
+
 .top,.bottom{
   display:flex;
   justify-content:space-between;
@@ -94,16 +109,22 @@ body{min-height:calc(var(--vh)*100)}
   text-transform:uppercase;
   color:var(--muted);
 }
+
 #screen{
   width:min(900px,100%);
   margin:auto;
-  transition:opacity 1.25s ease,transform 1.45s ease,filter 1.25s ease;
+  transition:
+    opacity 1.25s ease,
+    transform 1.45s ease,
+    filter 1.25s ease;
 }
+
 #screen.fade{
   opacity:0;
   transform:translateY(11px) scale(1.012);
   filter:blur(12px);
 }
+
 .eyebrow{
   margin-bottom:24px;
   font-size:10px;
@@ -111,12 +132,14 @@ body{min-height:calc(var(--vh)*100)}
   color:var(--muted);
   text-transform:uppercase;
 }
+
 h1{
   font-weight:400;
   font-size:clamp(52px,12vw,108px);
   line-height:.84;
   letter-spacing:-.055em;
 }
+
 h2{
   font-weight:400;
   font-size:clamp(31px,7vw,64px);
@@ -124,6 +147,7 @@ h2{
   letter-spacing:-.035em;
   max-width:900px;
 }
+
 .sub{
   margin-top:22px;
   max-width:620px;
@@ -131,6 +155,7 @@ h2{
   font-size:14px;
   line-height:1.52;
 }
+
 .langs{
   display:grid;
   grid-template-columns:1fr 1fr;
@@ -138,6 +163,7 @@ h2{
   margin-top:50px;
   background:var(--line);
 }
+
 button{
   appearance:none;
   border:0;
@@ -146,30 +172,42 @@ button{
   font:inherit;
   cursor:pointer;
 }
+
 .langs button{
   height:82px;
   font-size:14px;
   letter-spacing:.17em;
 }
-.langs button:hover,.next:hover{background:#fff;color:#000}
+
+.langs button:hover,
+.next:hover{
+  background:#fff;
+  color:#000;
+}
+
 .question{
   position:relative;
 }
+
 .dreamword{
   display:inline-block;
   transition:filter 3s ease,opacity 3s ease;
 }
+
 .dreamword.blur{
   filter:blur(7px);
   opacity:.72;
 }
+
 .dreamword.deepblur{
   filter:blur(14px);
   opacity:.35;
 }
+
 .dreamword.float{
   transform:translateY(-.08em);
 }
+
 textarea{
   width:100%;
   min-height:190px;
@@ -186,7 +224,11 @@ textarea{
   line-height:1.35;
   caret-color:#fff;
 }
-textarea::placeholder{color:rgba(255,255,255,.16)}
+
+textarea::placeholder{
+  color:rgba(255,255,255,.16);
+}
+
 .actions{
   margin-top:34px;
   display:flex;
@@ -194,28 +236,39 @@ textarea::placeholder{color:rgba(255,255,255,.16)}
   justify-content:space-between;
   gap:16px;
 }
+
 .back,.next{
   text-transform:uppercase;
   letter-spacing:.17em;
   font-size:10px;
 }
+
 .back{
   color:var(--muted);
   background:transparent;
   padding:16px 0;
 }
+
 .next{
   border:1px solid rgba(255,255,255,.25);
   padding:17px 20px;
   min-width:150px;
   transition:.45s;
 }
+
 .received{
   margin-top:34px;
   color:var(--muted);
   font-size:11px;
   letter-spacing:.21em;
   text-transform:uppercase;
+}
+
+#errorBox{
+  margin-top:28px;
+  color:rgba(255,255,255,.55);
+  font-size:12px;
+  line-height:1.5;
 }
 
 #whiteBloom{
@@ -233,34 +286,59 @@ textarea::placeholder{color:rgba(255,255,255,.16)}
     rgba(255,255,255,.14) 55%,
     rgba(255,255,255,0) 72%);
 }
-#whiteBloom.active{animation:bloom 5s cubic-bezier(.22,.62,.22,1) forwards}
-#whiteout{
-  position:fixed;inset:0;z-index:201;pointer-events:none;
-  background:#fff;opacity:0;
+
+#whiteBloom.active{
+  animation:bloom 5s cubic-bezier(.22,.62,.22,1) forwards;
 }
-#whiteout.active{animation:whiteout 5.25s cubic-bezier(.22,.62,.22,1) forwards}
+
+#whiteout{
+  position:fixed;
+  inset:0;
+  z-index:201;
+  pointer-events:none;
+  background:#fff;
+  opacity:0;
+}
+
+#whiteout.active{
+  animation:whiteout 5.25s cubic-bezier(.22,.62,.22,1) forwards;
+}
 
 #finalInvite{
-  position:fixed;inset:0;z-index:220;
+  position:fixed;
+  inset:0;
+  z-index:220;
   min-height:calc(var(--vh)*100);
-  display:flex;align-items:center;justify-content:center;
+  display:flex;
+  align-items:center;
+  justify-content:center;
   text-align:center;
-  background:#000;color:#fff;
-  opacity:0;pointer-events:none;
+  background:#000;
+  color:#fff;
+  opacity:0;
+  pointer-events:none;
   padding:
     max(28px,env(safe-area-inset-top))
     max(22px,env(safe-area-inset-right))
     max(28px,env(safe-area-inset-bottom))
     max(22px,env(safe-area-inset-left));
 }
-#finalInvite.active{animation:finalIn 2.7s ease forwards}
-.finalWrap{width:min(900px,92vw)}
+
+#finalInvite.active{
+  animation:finalIn 2.7s ease forwards;
+}
+
+.finalWrap{
+  width:min(900px,92vw);
+}
+
 .patchlab{
   font-size:clamp(19px,3.2vw,34px);
   font-weight:700;
   letter-spacing:.2em;
   margin-bottom:34px;
 }
+
 .patchlab small{
   display:block;
   margin-top:9px;
@@ -269,12 +347,14 @@ textarea::placeholder{color:rgba(255,255,255,.16)}
   letter-spacing:.34em;
   color:rgba(255,255,255,.62);
 }
+
 #finalInvite h3{
   font-size:clamp(30px,6vw,66px);
   line-height:1.02;
   letter-spacing:-.035em;
   font-weight:400;
 }
+
 #finalInvite .details{
   margin-top:28px;
   font-size:clamp(10px,1.5vw,13px);
@@ -284,9 +364,15 @@ textarea::placeholder{color:rgba(255,255,255,.16)}
 }
 
 @keyframes fogMove{
-  from{transform:translate3d(-2%,0,0) scale(1)}
-  to{transform:translate3d(3%,-2%,0) scale(1.12);filter:blur(10px)}
+  from{
+    transform:translate3d(-2%,0,0) scale(1);
+  }
+  to{
+    transform:translate3d(3%,-2%,0) scale(1.12);
+    filter:blur(10px);
+  }
 }
+
 @keyframes grain{
   0%{transform:translate(0,0)}
   25%{transform:translate(3%,-3%)}
@@ -294,27 +380,70 @@ textarea::placeholder{color:rgba(255,255,255,.16)}
   75%{transform:translate(2%,4%)}
   100%{transform:translate(-2%,-4%)}
 }
+
 @keyframes ghostDrift{
-  0%{opacity:0;transform:translate3d(-4vw,3vh,0) scale(.97);filter:blur(12px)}
-  18%{opacity:1}
-  68%{opacity:.7}
-  100%{opacity:0;transform:translate3d(6vw,-4vh,0) scale(1.06);filter:blur(22px)}
+  0%{
+    opacity:0;
+    transform:translate3d(-4vw,3vh,0) scale(.97);
+    filter:blur(12px);
+  }
+  18%{
+    opacity:1;
+  }
+  68%{
+    opacity:.7;
+  }
+  100%{
+    opacity:0;
+    transform:translate3d(6vw,-4vh,0) scale(1.06);
+    filter:blur(22px);
+  }
 }
+
 @keyframes bloom{
-  0%{opacity:0;transform:scale(.2)}
-  40%{opacity:.16}
-  72%{opacity:.62;transform:scale(1)}
-  100%{opacity:1;transform:scale(1.9)}
+  0%{
+    opacity:0;
+    transform:scale(.2);
+  }
+  40%{
+    opacity:.16;
+  }
+  72%{
+    opacity:.62;
+    transform:scale(1);
+  }
+  100%{
+    opacity:1;
+    transform:scale(1.9);
+  }
 }
+
 @keyframes whiteout{
-  0%{opacity:0}
-  55%{opacity:.05}
-  80%{opacity:.36}
-  100%{opacity:1}
+  0%{
+    opacity:0;
+  }
+  55%{
+    opacity:.05;
+  }
+  80%{
+    opacity:.36;
+  }
+  100%{
+    opacity:1;
+  }
 }
+
 @keyframes finalIn{
-  0%{opacity:0;filter:blur(14px);transform:scale(1.015)}
-  100%{opacity:1;filter:blur(0);transform:scale(1)}
+  0%{
+    opacity:0;
+    filter:blur(14px);
+    transform:scale(1.015);
+  }
+  100%{
+    opacity:1;
+    filter:blur(0);
+    transform:scale(1);
+  }
 }
 
 @media(max-width:600px){
@@ -325,28 +454,73 @@ textarea::placeholder{color:rgba(255,255,255,.16)}
       max(18px,env(safe-area-inset-bottom))
       max(18px,env(safe-area-inset-left));
   }
-  h1{font-size:clamp(52px,18vw,82px)}
-  h2{font-size:clamp(29px,9vw,44px)}
-  textarea{min-height:clamp(160px,28dvh,235px);font-size:clamp(19px,6vw,27px)}
-  .langs{margin-top:36px}
-  .langs button{height:70px}
-  .actions{margin-top:24px}
-  .next{min-width:130px}
-  #finalInvite h3{font-size:clamp(28px,9vw,44px)}
+
+  h1{
+    font-size:clamp(52px,18vw,82px);
+  }
+
+  h2{
+    font-size:clamp(29px,9vw,44px);
+  }
+
+  textarea{
+    min-height:clamp(160px,28dvh,235px);
+    font-size:clamp(19px,6vw,27px);
+  }
+
+  .langs{
+    margin-top:36px;
+  }
+
+  .langs button{
+    height:70px;
+  }
+
+  .actions{
+    margin-top:24px;
+  }
+
+  .next{
+    min-width:130px;
+  }
+
+  #finalInvite h3{
+    font-size:clamp(28px,9vw,44px);
+  }
 }
+
 @media(orientation:landscape) and (max-height:520px){
-  textarea{min-height:100px}
-  .eyebrow{margin-bottom:12px}
-  .actions{margin-top:14px}
-  .patchlab{margin-bottom:18px}
-  #finalInvite h3{font-size:clamp(24px,7vh,38px)}
-  #finalInvite .details{margin-top:15px}
+  textarea{
+    min-height:100px;
+  }
+
+  .eyebrow{
+    margin-bottom:12px;
+  }
+
+  .actions{
+    margin-top:14px;
+  }
+
+  .patchlab{
+    margin-bottom:18px;
+  }
+
+  #finalInvite h3{
+    font-size:clamp(24px,7vh,38px);
+  }
+
+  #finalInvite .details{
+    margin-top:15px;
+  }
 }
 </style>
 </head>
+
 <body>
 
 <canvas id="dreamCanvas"></canvas>
+
 <div id="fog"></div>
 <div id="grain"></div>
 <div id="ghostLayer"></div>
@@ -356,13 +530,21 @@ textarea::placeholder{color:rgba(255,255,255,.16)}
 
 <div id="finalInvite">
   <div class="finalWrap">
-    <div class="patchlab">PATCHLAB<small>DIGITAL ART FESTIVAL</small></div>
+    <div class="patchlab">
+      PATCHLAB
+      <small>DIGITAL ART FESTIVAL</small>
+    </div>
+
     <h3 id="finalTitle"></h3>
-    <div class="details">15.10.2026 · HEVRE · KRAKÓW</div>
+
+    <div class="details">
+      15.10.2026 · HEVRE · KRAKÓW
+    </div>
   </div>
 </div>
 
 <div id="ui">
+
   <div class="top">
     <span>DREAM SIM</span>
     <span id="progress"></span>
@@ -374,20 +556,56 @@ textarea::placeholder{color:rgba(255,255,255,.16)}
     <span>PATCHLAB 2026</span>
     <span>DREAM ARCHIVE</span>
   </div>
+
 </div>
 
 <script>
-const API_URL="PASTE_YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE";
+
+/* =========================================================
+   GOOGLE APPS SCRIPT ENDPOINT
+   ========================================================= */
+
+const API_URL =
+"https://script.google.com/macros/s/AKfycbzU_GDYcK7nC4aGNVxmQd4fojRBacX1UR076Ox-lCI8KrGV1YVN7G_mwGT-6UFzOhJY3g/exec";
+
+
+/* =========================================================
+   VIEWPORT
+   ========================================================= */
 
 function setVH(){
-  const h=window.visualViewport?window.visualViewport.height:window.innerHeight;
-  document.documentElement.style.setProperty("--vh",(h*.01)+"px");
+  const h =
+    window.visualViewport
+      ? window.visualViewport.height
+      : window.innerHeight;
+
+  document.documentElement.style.setProperty(
+    "--vh",
+    (h * .01) + "px"
+  );
 }
+
 setVH();
-addEventListener("resize",setVH);
-if(window.visualViewport)window.visualViewport.addEventListener("resize",setVH);
+
+window.addEventListener(
+  "resize",
+  setVH
+);
+
+if(window.visualViewport){
+  window.visualViewport.addEventListener(
+    "resize",
+    setVH
+  );
+}
+
+
+/* =========================================================
+   QUESTIONS PL
+   ========================================================= */
 
 const QUESTIONS_PL=[
+
 ["MIEJSCE","Gdzie byłeś, zanim miejsce przypomniało sobie ciebie?"],
 ["MIEJSCE","Czy pokój był pokojem, czy tylko pamięcią o pokoju?"],
 ["MIEJSCE","W którym miejscu sen udawał rzeczywistość?"],
@@ -447,9 +665,16 @@ const QUESTIONS_PL=[
 ["TOŻSAMOŚĆ","Kto śnił: ty czy ktoś, kto wyglądał jak ty?"],
 ["TOŻSAMOŚĆ","Czy twoje imię działało w tym śnie?"],
 ["TOŻSAMOŚĆ","Czy ktoś pomylił cię z tobą samym?"]
+
 ];
 
+
+/* =========================================================
+   QUESTIONS ENG
+   ========================================================= */
+
 const QUESTIONS_EN=[
+
 ["PLACE","Where were you before the place remembered you?"],
 ["PLACE","Was the room a room, or only the memory of one?"],
 ["PLACE","Where did the dream pretend to be reality?"],
@@ -509,28 +734,48 @@ const QUESTIONS_EN=[
 ["IDENTITY","Who was dreaming: you, or someone who looked like you?"],
 ["IDENTITY","Did your name still work inside the dream?"],
 ["IDENTITY","Did someone mistake you for yourself?"]
+
 ];
 
+
+/* =========================================================
+   UI TEXT
+   ========================================================= */
+
 const uiText={
- PL:{
-  back:"WSTECZ",
-  next:"DALEJ",
-  submit:"ODDAJ SEN",
-  placeholder:"napisz to, co zostało...",
-  done:"SEN ZAPISANY",
-  sub:"Twoje wspomnienie weszło do symulacji.",
-  invite:"Zapraszamy na nasz performance<br>ze swoim snem."
- },
- ENG:{
-  back:"BACK",
-  next:"NEXT",
-  submit:"SUBMIT DREAM",
-  placeholder:"write what remained...",
-  done:"DREAM RECEIVED",
-  sub:"Your memory has entered the simulation.",
-  invite:"Join our performance<br>with your dream."
- }
+
+  PL:{
+    back:"WSTECZ",
+    next:"DALEJ",
+    submit:"ODDAJ SEN",
+    placeholder:"napisz to, co zostało...",
+    saving:"ZAPISUJĘ SEN...",
+    done:"SEN ZAPISANY",
+    sub:"Twoje wspomnienie weszło do symulacji.",
+    error:"Sen nie został zapisany.",
+    retry:"SPRÓBUJ PONOWNIE",
+    invite:"Zapraszamy na nasz performance<br>ze swoim snem."
+  },
+
+  ENG:{
+    back:"BACK",
+    next:"NEXT",
+    submit:"SUBMIT DREAM",
+    placeholder:"write what remained...",
+    saving:"SAVING DREAM...",
+    done:"DREAM RECEIVED",
+    sub:"Your memory has entered the simulation.",
+    error:"The dream could not be saved.",
+    retry:"TRY AGAIN",
+    invite:"Join our performance<br>with your dream."
+  }
+
 };
+
+
+/* =========================================================
+   STATE
+   ========================================================= */
 
 const state={
   lang:null,
@@ -540,71 +785,161 @@ const state={
   questions:[]
 };
 
-const screen=document.getElementById("screen");
-const progress=document.getElementById("progress");
-const ghostLayer=document.getElementById("ghostLayer");
+const screen =
+  document.getElementById("screen");
+
+const progress =
+  document.getElementById("progress");
+
+const ghostLayer =
+  document.getElementById("ghostLayer");
+
+
+/* =========================================================
+   QUESTION SYSTEM
+   ========================================================= */
 
 function shuffle(a){
-  return [...a].sort(()=>Math.random()-.5);
+  return [...a]
+    .sort(()=>Math.random()-.5);
 }
 
 function pickQuestions(lang){
-  const bank=lang==="PL"?QUESTIONS_PL:QUESTIONS_EN;
-  const shuffled=shuffle(bank);
+
+  const bank =
+    lang==="PL"
+      ? QUESTIONS_PL
+      : QUESTIONS_EN;
+
+  const shuffled =
+    shuffle(bank);
+
   const picked=[];
   const used=new Set();
 
   for(const q of shuffled){
-    if(!used.has(q[0]) || picked.length>4){
+
+    if(
+      !used.has(q[0]) ||
+      picked.length>4
+    ){
       picked.push(q);
       used.add(q[0]);
     }
-    if(picked.length===state.total)break;
+
+    if(
+      picked.length===
+      state.total
+    ){
+      break;
+    }
+
   }
+
   return picked;
 }
 
+
+/* =========================================================
+   TRANSITIONS
+   ========================================================= */
+
 function transition(fn){
+
   screen.classList.add("fade");
+
   setTimeout(()=>{
+
     fn();
+
     requestAnimationFrame(()=>{
       screen.classList.remove("fade");
     });
+
   },720);
+
 }
+
+
+/* =========================================================
+   START
+   ========================================================= */
 
 function renderStart(){
+
   progress.textContent="";
+
   screen.innerHTML=`
-    <div class="eyebrow">DREAM ARCHIVE / ARCHIWUM SNÓW</div>
-    <h1>DREAM<br>SIM</h1>
-    <p class="sub">choose language / wybierz język</p>
-    <div class="langs">
-      <button onclick="chooseLang('PL')">PL</button>
-      <button onclick="chooseLang('ENG')">ENG</button>
+
+    <div class="eyebrow">
+      DREAM ARCHIVE / ARCHIWUM SNÓW
     </div>
+
+    <h1>
+      DREAM<br>SIM
+    </h1>
+
+    <p class="sub">
+      choose language / wybierz język
+    </p>
+
+    <div class="langs">
+
+      <button onclick="chooseLang('PL')">
+        PL
+      </button>
+
+      <button onclick="chooseLang('ENG')">
+        ENG
+      </button>
+
+    </div>
+
   `;
+
 }
 
+
+/* =========================================================
+   LANGUAGE
+   ========================================================= */
+
 function chooseLang(lang){
+
   state.lang=lang;
   state.step=0;
   state.answers=[];
-  state.questions=pickQuestions(lang);
-  transition(renderQuestion);
+
+  state.questions=
+    pickQuestions(lang);
+
+  transition(
+    renderQuestion
+  );
+
 }
 
+
+/* =========================================================
+   SURREAL WORD EFFECT
+   ========================================================= */
+
 function surrealize(text){
-  const words=text.split(" ");
+
+  const words =
+    text.split(" ");
 
   return words.map((w)=>{
+
     let cls="dreamword";
-    const r=Math.random();
+
+    const r=
+      Math.random();
 
     if(r<.12){
       cls+=" deepblur";
-    }else if(r<.27){
+    }
+    else if(r<.27){
       cls+=" blur";
     }
 
@@ -612,22 +947,43 @@ function surrealize(text){
       cls+=" float";
     }
 
-    return `<span class="${cls}">${escapeHtml(w)} </span>`;
-  }).join("");
+    return `
+      <span class="${cls}">
+        ${escapeHtml(w)}
+      </span>
+    `;
+
+  }).join(" ");
+
 }
 
+
+/* =========================================================
+   QUESTION RENDER
+   ========================================================= */
+
 function renderQuestion(){
-  const t=uiText[state.lang];
-  const q=state.questions[state.step];
+
+  const t=
+    uiText[state.lang];
+
+  const q=
+    state.questions[state.step];
 
   progress.textContent=
     `${String(state.step+1).padStart(2,"0")} / ${String(state.total).padStart(2,"0")}`;
 
   screen.innerHTML=`
-    <div class="question">
-      <div class="eyebrow">${q[0]}</div>
 
-      <h2>${surrealize(q[1])}</h2>
+    <div class="question">
+
+      <div class="eyebrow">
+        ${q[0]}
+      </div>
+
+      <h2>
+        ${surrealize(q[1])}
+      </h2>
 
       <textarea
         id="answer"
@@ -635,145 +991,468 @@ function renderQuestion(){
       >${escapeHtml(state.answers[state.step]||"")}</textarea>
 
       <div class="actions">
-        <button class="back" onclick="goBack()">${t.back}</button>
 
-        <button class="next" onclick="goNext()">
-          ${state.step===state.total-1?t.submit:t.next}
+        <button
+          class="back"
+          onclick="goBack()"
+        >
+          ${t.back}
         </button>
+
+        <button
+          class="next"
+          onclick="goNext()"
+        >
+
+          ${
+            state.step===
+            state.total-1
+              ? t.submit
+              : t.next
+          }
+
+        </button>
+
       </div>
+
     </div>
+
   `;
 
   animateBlurWords();
+
   ghost(q[0]);
 
   setTimeout(()=>{
-    document.getElementById("answer")?.focus();
+
+    document
+      .getElementById("answer")
+      ?.focus();
+
   },500);
+
 }
+
+
+/* =========================================================
+   BLUR WORDS
+   ========================================================= */
 
 function animateBlurWords(){
-  const words=[...document.querySelectorAll(".dreamword")];
+
+  const words=
+    [...document.querySelectorAll(".dreamword")];
 
   setInterval(()=>{
-    if(!words.length)return;
 
-    const w=words[Math.floor(Math.random()*words.length)];
-    w.classList.toggle("blur");
+    if(!words.length){
+      return;
+    }
+
+    const w=
+      words[
+        Math.floor(
+          Math.random()*
+          words.length
+        )
+      ];
+
+    w.classList.toggle(
+      "blur"
+    );
+
   },1800+Math.random()*1000);
+
 }
 
+
+/* =========================================================
+   ANSWERS
+   ========================================================= */
+
 function saveAnswer(){
-  const el=document.getElementById("answer");
+
+  const el=
+    document.getElementById("answer");
 
   if(el){
-    state.answers[state.step]=el.value.trim();
+    state.answers[state.step]=
+      el.value.trim();
   }
+
 }
 
 function goBack(){
+
   saveAnswer();
 
   if(state.step===0){
+
     state.lang=null;
-    transition(renderStart);
+
+    transition(
+      renderStart
+    );
+
     return;
   }
 
   state.step--;
-  transition(renderQuestion);
+
+  transition(
+    renderQuestion
+  );
+
 }
 
 function goNext(){
+
   saveAnswer();
 
-  if(state.step<state.total-1){
+  if(
+    state.step<
+    state.total-1
+  ){
+
     state.step++;
-    transition(renderQuestion);
-  }else{
-    submitDream();
+
+    transition(
+      renderQuestion
+    );
+
   }
+  else{
+
+    submitDream();
+
+  }
+
 }
 
+
+/* =========================================================
+   SUBMIT TO GOOGLE
+   ========================================================= */
+
 async function submitDream(){
-  const t=uiText[state.lang];
+
+  const t=
+    uiText[state.lang];
 
   const payload={
-    language:state.lang,
-    answers:state.questions.map((q,i)=>({
-      category:q[0],
-      question:q[1],
-      answer:state.answers[i]||""
-    })),
-    dream:state.answers.join("\n\n")
+
+    language:
+      state.lang,
+
+    answers:
+      state.questions.map(
+        (q,i)=>({
+          category:q[0],
+          question:q[1],
+          answer:
+            state.answers[i] || ""
+        })
+      ),
+
+    dream:
+      state.answers.join(
+        "\n\n"
+      )
+
   };
 
+
   transition(()=>{
+
     progress.textContent="";
 
     screen.innerHTML=`
-      <div class="eyebrow">DREAM SIM</div>
-      <h2>${t.done}</h2>
-      <p class="sub">${t.sub}</p>
+
+      <div class="eyebrow">
+        DREAM SIM
+      </div>
+
+      <h2>
+        ${t.saving}
+      </h2>
+
+      <p class="sub">
+        ...
+      </p>
+
     `;
+
   });
 
+
   try{
-    if(!API_URL.includes("PASTE_YOUR")){
-      await fetch(API_URL,{
-        method:"POST",
-        headers:{
-          "Content-Type":"text/plain;charset=utf-8"
-        },
-        body:JSON.stringify(payload)
-      });
+
+    const response=
+      await fetch(
+        API_URL,
+        {
+          method:"POST",
+
+          headers:{
+            "Content-Type":
+            "text/plain;charset=utf-8"
+          },
+
+          body:
+            JSON.stringify(
+              payload
+            )
+        }
+      );
+
+
+    if(!response.ok){
+
+      throw new Error(
+        "HTTP " +
+        response.status
+      );
+
     }
-  }catch(e){
-    console.log("Dream save error:",e);
+
+
+    const data=
+      await response.json();
+
+
+    if(
+      !data.ok
+    ){
+
+      throw new Error(
+        data.error ||
+        "Backend error"
+      );
+
+    }
+
+
+    renderSaved(
+      data.dreamId
+    );
+
+  }
+  catch(error){
+
+    console.error(
+      "DREAM SAVE ERROR:",
+      error
+    );
+
+    renderSaveError(
+      error
+    );
+
   }
 
-  setTimeout(startFinalSequence,2500);
 }
+
+
+/* =========================================================
+   SUCCESS
+   ========================================================= */
+
+function renderSaved(dreamId){
+
+  const t=
+    uiText[state.lang];
+
+  transition(()=>{
+
+    screen.innerHTML=`
+
+      <div class="eyebrow">
+        DREAM SIM
+      </div>
+
+      <h2>
+        ${t.done}
+      </h2>
+
+      <p class="sub">
+        ${t.sub}
+      </p>
+
+      <div class="received">
+        ${dreamId || ""}
+      </div>
+
+    `;
+
+  });
+
+
+  setTimeout(
+    startFinalSequence,
+    2800
+  );
+
+}
+
+
+/* =========================================================
+   SAVE ERROR
+   ========================================================= */
+
+function renderSaveError(error){
+
+  const t=
+    uiText[state.lang];
+
+  transition(()=>{
+
+    screen.innerHTML=`
+
+      <div class="eyebrow">
+        DREAM SIM
+      </div>
+
+      <h2>
+        ${t.error}
+      </h2>
+
+      <div id="errorBox">
+        Połączenie z archiwum zostało przerwane.
+      </div>
+
+      <div class="actions">
+
+        <span></span>
+
+        <button
+          class="next"
+          onclick="submitDream()"
+        >
+          ${t.retry}
+        </button>
+
+      </div>
+
+    `;
+
+  });
+
+}
+
+
+/* =========================================================
+   FINAL WHITE BLOOM
+   ========================================================= */
 
 function startFinalSequence(){
-  const bloom=document.getElementById("whiteBloom");
-  const whiteout=document.getElementById("whiteout");
-  const final=document.getElementById("finalInvite");
 
-  document.getElementById("finalTitle").innerHTML=
-    uiText[state.lang].invite;
+  const bloom=
+    document.getElementById(
+      "whiteBloom"
+    );
 
-  bloom.classList.add("active");
-  whiteout.classList.add("active");
+  const whiteout=
+    document.getElementById(
+      "whiteout"
+    );
+
+  const final=
+    document.getElementById(
+      "finalInvite"
+    );
+
+
+  document
+    .getElementById(
+      "finalTitle"
+    )
+    .innerHTML=
+      uiText[state.lang]
+      .invite;
+
+
+  bloom.classList.add(
+    "active"
+  );
+
+  whiteout.classList.add(
+    "active"
+  );
+
 
   setTimeout(()=>{
-    final.classList.add("active");
+
+    final.classList.add(
+      "active"
+    );
+
   },5100);
 
+
   setTimeout(()=>{
-    bloom.style.display="none";
-    whiteout.style.display="none";
+
+    bloom.style.display=
+      "none";
+
+    whiteout.style.display=
+      "none";
+
   },5650);
+
 }
+
+
+/* =========================================================
+   GHOST TEXT
+   ========================================================= */
 
 function ghost(text){
-  const d=document.createElement("div");
-  d.className="ghost";
-  d.textContent=text;
 
-  d.style.left=(Math.random()*55-5)+"vw";
-  d.style.top=(Math.random()*75+8)+"vh";
-  d.style.animationDuration=(9+Math.random()*9)+"s";
+  const d=
+    document.createElement(
+      "div"
+    );
 
-  ghostLayer.appendChild(d);
+  d.className=
+    "ghost";
+
+  d.textContent=
+    text;
+
+  d.style.left=
+    (Math.random()*55-5)
+    +"vw";
+
+  d.style.top=
+    (Math.random()*75+8)
+    +"vh";
+
+  d.style.animationDuration=
+    (9+Math.random()*9)
+    +"s";
+
+  ghostLayer.appendChild(
+    d
+  );
 
   setTimeout(()=>{
+
     d.remove();
+
   },19000);
+
 }
 
+
+/* =========================================================
+   HTML ESCAPE
+   ========================================================= */
+
 function escapeHtml(s){
-  return String(s||"").replace(
+
+  return String(
+    s || ""
+  ).replace(
     /[&<>"']/g,
     m=>({
       "&":"&amp;",
@@ -783,9 +1462,16 @@ function escapeHtml(s){
       "'":"&#039;"
     }[m])
   );
+
 }
 
+
+/* =========================================================
+   AUTONOMOUS DREAM TRACES
+   ========================================================= */
+
 const traces=[
+
   "REMEMBER",
   "NOT HERE",
   "AGAIN",
@@ -796,99 +1482,239 @@ const traces=[
   "WHO WAS THERE",
   "DON'T LOOK BACK",
   "DREAM"
+
 ];
 
 setInterval(()=>{
-  if(Math.random()>.5){
+
+  if(
+    Math.random()>.5
+  ){
+
     ghost(
-      traces[Math.floor(Math.random()*traces.length)]
+      traces[
+        Math.floor(
+          Math.random()*
+          traces.length
+        )
+      ]
     );
+
   }
+
 },4200);
 
-const canvas=document.getElementById("dreamCanvas");
-const ctx=canvas.getContext("2d",{alpha:false});
 
-let W,H;
-let DPR=Math.min(devicePixelRatio||1,1.5);
-let blobs=[];
+/* =========================================================
+   GENERATIVE DREAM FIELD
+   ========================================================= */
 
-function resizeCanvas(){
-  W=innerWidth;
-  H=innerHeight;
-
-  canvas.width=W*DPR;
-  canvas.height=H*DPR;
-
-  ctx.setTransform(
-    DPR,0,0,DPR,0,0
+const canvas=
+  document.getElementById(
+    "dreamCanvas"
   );
 
-  blobs=Array.from({length:14},()=>({
-    x:Math.random()*W,
-    y:Math.random()*H,
-    r:Math.min(W,H)*(.08+Math.random()*.25),
-    vx:(Math.random()-.5)*.13,
-    vy:(Math.random()-.5)*.13,
-    ph:Math.random()*Math.PI*2,
-    sp:.001+Math.random()*.0022
-  }));
+const ctx=
+  canvas.getContext(
+    "2d",
+    {
+      alpha:false
+    }
+  );
+
+let W;
+let H;
+
+let DPR=
+  Math.min(
+    devicePixelRatio||1,
+    1.5
+  );
+
+let blobs=[];
+
+
+function resizeCanvas(){
+
+  W=
+    window.innerWidth;
+
+  H=
+    window.innerHeight;
+
+  canvas.width=
+    W*DPR;
+
+  canvas.height=
+    H*DPR;
+
+  ctx.setTransform(
+    DPR,
+    0,
+    0,
+    DPR,
+    0,
+    0
+  );
+
+
+  blobs=
+    Array.from(
+      {
+        length:14
+      },
+      ()=>({
+
+        x:
+          Math.random()*W,
+
+        y:
+          Math.random()*H,
+
+        r:
+          Math.min(W,H)*
+          (.08+Math.random()*.25),
+
+        vx:
+          (Math.random()-.5)*.13,
+
+        vy:
+          (Math.random()-.5)*.13,
+
+        ph:
+          Math.random()*
+          Math.PI*2,
+
+        sp:
+          .001+
+          Math.random()*.0022
+
+      })
+    );
+
 }
 
+
 function draw(t){
-  ctx.fillStyle="rgba(0,0,0,.045)";
-  ctx.fillRect(0,0,W,H);
 
-  ctx.globalCompositeOperation="screen";
+  ctx.fillStyle=
+    "rgba(0,0,0,.045)";
 
-  blobs.forEach((b,i)=>{
-    b.x+=b.vx+Math.sin(t*b.sp+b.ph)*.08;
-    b.y+=b.vy+Math.cos(t*b.sp*.8+b.ph)*.08;
+  ctx.fillRect(
+    0,
+    0,
+    W,
+    H
+  );
 
-    if(b.x<-b.r)b.x=W+b.r;
-    if(b.x>W+b.r)b.x=-b.r;
 
-    if(b.y<-b.r)b.y=H+b.r;
-    if(b.y>H+b.r)b.y=-b.r;
+  ctx.globalCompositeOperation=
+    "screen";
 
-    const rr=
-      b.r*(1+Math.sin(t*b.sp+b.ph)*.15);
 
-    const g=
-      ctx.createRadialGradient(
-        b.x,b.y,0,
-        b.x,b.y,rr
+  blobs.forEach(
+    (b,i)=>{
+
+      b.x+=
+        b.vx+
+        Math.sin(
+          t*b.sp+b.ph
+        )*.08;
+
+      b.y+=
+        b.vy+
+        Math.cos(
+          t*b.sp*.8+b.ph
+        )*.08;
+
+
+      if(
+        b.x<-b.r
+      ){
+        b.x=W+b.r;
+      }
+
+      if(
+        b.x>W+b.r
+      ){
+        b.x=-b.r;
+      }
+
+      if(
+        b.y<-b.r
+      ){
+        b.y=H+b.r;
+      }
+
+      if(
+        b.y>H+b.r
+      ){
+        b.y=-b.r;
+      }
+
+
+      const rr=
+        b.r*
+        (
+          1+
+          Math.sin(
+            t*b.sp+b.ph
+          )*.15
+        );
+
+
+      const g=
+        ctx.createRadialGradient(
+          b.x,
+          b.y,
+          0,
+          b.x,
+          b.y,
+          rr
+        );
+
+
+      const a=
+        .045+
+        (i%4)*.009;
+
+
+      g.addColorStop(
+        0,
+        `rgba(255,255,255,${a})`
       );
 
-    const a=.045+(i%4)*.009;
+      g.addColorStop(
+        .4,
+        `rgba(255,255,255,${a*.55})`
+      );
 
-    g.addColorStop(
-      0,
-      `rgba(255,255,255,${a})`
-    );
+      g.addColorStop(
+        1,
+        "rgba(255,255,255,0)"
+      );
 
-    g.addColorStop(
-      .4,
-      `rgba(255,255,255,${a*.55})`
-    );
 
-    g.addColorStop(
-      1,
-      "rgba(255,255,255,0)"
-    );
+      ctx.fillStyle=
+        g;
 
-    ctx.fillStyle=g;
+      ctx.beginPath();
 
-    ctx.beginPath();
-    ctx.arc(
-      b.x,
-      b.y,
-      rr,
-      0,
-      Math.PI*2
-    );
-    ctx.fill();
-  });
+      ctx.arc(
+        b.x,
+        b.y,
+        rr,
+        0,
+        Math.PI*2
+      );
+
+      ctx.fill();
+
+    }
+  );
+
+
+  /* VORTEX */
 
   ctx.save();
 
@@ -901,52 +1727,92 @@ function draw(t){
     t*.000035
   );
 
-  for(let i=0;i<8;i++){
+
+  for(
+    let i=0;
+    i<8;
+    i++
+  ){
+
     ctx.beginPath();
 
     const rad=
       Math.min(W,H)*
-      (.05+i*.035);
+      (
+        .05+
+        i*.035
+      );
+
 
     ctx.strokeStyle=
       `rgba(255,255,255,${.008+i*.002})`;
 
-    ctx.lineWidth=1;
+    ctx.lineWidth=
+      1;
+
 
     ctx.ellipse(
       0,
       0,
       rad*1.5,
       rad*.55,
-      Math.sin(t*.00009+i)*.4,
+      Math.sin(
+        t*.00009+i
+      )*.4,
       0,
       Math.PI*2
     );
 
     ctx.stroke();
+
   }
 
+
   ctx.restore();
+
 
   ctx.globalCompositeOperation=
     "source-over";
 
-  requestAnimationFrame(draw);
+
+  requestAnimationFrame(
+    draw
+  );
+
 }
 
-addEventListener(
+
+window.addEventListener(
   "resize",
   resizeCanvas
 );
 
+
 resizeCanvas();
 
-ctx.fillStyle="#000";
-ctx.fillRect(0,0,W,H);
 
-requestAnimationFrame(draw);
+ctx.fillStyle=
+  "#000";
+
+ctx.fillRect(
+  0,
+  0,
+  W,
+  H
+);
+
+
+requestAnimationFrame(
+  draw
+);
+
+
+/* =========================================================
+   START APP
+   ========================================================= */
 
 renderStart();
+
 </script>
 
 </body>
