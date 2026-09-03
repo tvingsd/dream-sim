@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="pl">
+
 <head>
+
 <meta charset="UTF-8">
 
 <meta
@@ -12,20 +14,37 @@
 
 <title>TRAUM SIM — PATCHLAB 2026</title>
 
+
 <style>
 
+/* =========================================================
+   ROOT
+   ========================================================= */
+
 :root{
+
   --vh:1vh;
 
   --white:#f5f5f2;
 
-  --muted:rgba(255,255,255,.50);
+  --muted:
+  rgba(255,255,255,.50);
 
-  --line:rgba(255,255,255,.19);
+  --line:
+  rgba(255,255,255,.19);
 
   --shadow:
     0 1px 2px rgba(0,0,0,.94),
     0 4px 18px rgba(0,0,0,.42);
+
+  /*
+  Default Rorschach colour.
+  Changed by user's dream colour.
+  */
+
+  --dreamRGB:
+  185,185,185;
+
 }
 
 
@@ -34,69 +53,278 @@
    ========================================================= */
 
 *{
+
   box-sizing:border-box;
+
   margin:0;
+
   padding:0;
+
 }
+
 
 html,
 body{
+
   width:100%;
+
   height:100%;
 
   overflow:hidden;
 
   background:#000;
 
-  color:var(--white);
+  color:
+  var(--white);
 
   font-family:
-    Helvetica,
-    Arial,
-    sans-serif;
+  Helvetica,
+  Arial,
+  sans-serif;
 
-  -webkit-font-smoothing:antialiased;
-  -webkit-text-size-adjust:none;
+  -webkit-font-smoothing:
+  antialiased;
+
+  -webkit-text-size-adjust:
+  none;
+
 }
+
 
 body{
-  min-height:calc(var(--vh) * 100);
+
+  min-height:
+  calc(
+    var(--vh)
+    *
+    100
+  );
+
 }
+
 
 
 /* =========================================================
-   DREAM CANVAS
+   =========================================================
+   DREAM WORLD
+   INDEPENDENT SVG BACKGROUND
+   =========================================================
    ========================================================= */
 
-#dreamCanvas{
+#dreamWorld{
+
   position:fixed;
 
   inset:0;
 
   z-index:0;
 
-  width:100%;
-  height:100%;
+  overflow:hidden;
+
+  pointer-events:none;
 
   background:#000;
 
-  opacity:.90;
+  opacity:.91;
 
-  filter:
-    blur(8px)
-    contrast(125%);
+  /*
+  Very long focus cycle.
+  */
 
-  will-change:
-    filter,
-    opacity;
+  animation:
+  dreamFocus
+  139s
+  ease-in-out
+  infinite;
+
 }
 
 
 /* =========================================================
-   GRAPHITE
+   SVG
+   ========================================================= */
+
+#dreamSvg{
+
+  position:absolute;
+
+  width:114%;
+  height:114%;
+
+  left:-7%;
+  top:-7%;
+
+  overflow:visible;
+
+  background:#000;
+
+  /*
+  Almost imperceptible full-world breathing.
+  NO ROTATION.
+  */
+
+  animation:
+  dreamWorldBreath
+  211s
+  ease-in-out
+  infinite
+  alternate;
+
+}
+
+
+
+/* =========================================================
+   PIGMENT
+   ========================================================= */
+
+.dreamInk{
+
+  fill:
+  rgb(
+    var(--dreamRGB)
+  );
+
+  transition:
+  fill
+  8s
+  ease;
+
+}
+
+
+.inkGhost{
+
+  opacity:.07;
+
+}
+
+
+.inkSoft{
+
+  opacity:.115;
+
+}
+
+
+.inkLight{
+
+  opacity:.16;
+
+}
+
+
+.inkMedium{
+
+  opacity:.14;
+
+}
+
+
+.inkMain{
+
+  opacity:.19;
+
+}
+
+
+.inkDark{
+
+  opacity:.10;
+
+}
+
+
+.inkCore{
+
+  opacity:.075;
+
+}
+
+
+.inkWater{
+
+  opacity:.12;
+
+}
+
+
+
+/* =========================================================
+   RORSCHACH LAYERS
+   ========================================================= */
+
+#rorschachBack{
+
+  transform-origin:
+  800px
+  500px;
+
+  animation:
+  backMorph
+  243s
+  cubic-bezier(.45,0,.55,1)
+  infinite
+  alternate;
+
+}
+
+
+#rorschachMid{
+
+  transform-origin:
+  800px
+  500px;
+
+  animation:
+  midMorph
+  187s
+  cubic-bezier(.45,0,.55,1)
+  infinite
+  alternate;
+
+}
+
+
+#rorschachFront{
+
+  transform-origin:
+  800px
+  500px;
+
+  animation:
+  frontMorph
+  163s
+  cubic-bezier(.45,0,.55,1)
+  infinite
+  alternate;
+
+}
+
+
+#waterLayer{
+
+  transform-origin:
+  800px
+  500px;
+
+  animation:
+  waterMorph
+  271s
+  cubic-bezier(.45,0,.55,1)
+  infinite
+  alternate;
+
+}
+
+
+
+/* =========================================================
+   GRAPHITE OVERLAY
    ========================================================= */
 
 #graphite{
+
   position:fixed;
 
   inset:0;
@@ -107,30 +335,51 @@ body{
 
   background:
 
-    radial-gradient(
-      ellipse at 50% 48%,
-      rgba(75,75,75,.045) 0%,
-      rgba(28,28,28,.10) 43%,
-      rgba(5,5,5,.24) 74%,
-      rgba(0,0,0,.52) 100%
-    );
+  radial-gradient(
 
-  opacity:.46;
+    ellipse
+    at
+    50%
+    48%,
+
+    rgba(72,72,72,.03)
+    0%,
+
+    rgba(32,32,32,.065)
+    40%,
+
+    rgba(8,8,8,.18)
+    72%,
+
+    rgba(0,0,0,.52)
+    100%
+
+  );
+
+  opacity:.42;
 
   transition:
-    opacity 3s ease;
+  opacity
+  3.2s
+  ease;
+
 }
 
+
 body.questionMode #graphite{
-  opacity:.76;
+
+  opacity:.72;
+
 }
+
 
 
 /* =========================================================
-   READING SHADOW
+   READING FIELD
    ========================================================= */
 
 #readingShadow{
+
   position:fixed;
 
   inset:0;
@@ -143,21 +392,41 @@ body.questionMode #graphite{
 
   background:
 
-    radial-gradient(
-      ellipse at 50% 49%,
-      rgba(0,0,0,.03) 0%,
-      rgba(0,0,0,.14) 45%,
-      rgba(0,0,0,.44) 79%,
-      rgba(0,0,0,.67) 100%
-    );
+  radial-gradient(
+
+    ellipse
+    at
+    50%
+    48%,
+
+    rgba(0,0,0,.02)
+    0%,
+
+    rgba(0,0,0,.10)
+    40%,
+
+    rgba(0,0,0,.40)
+    78%,
+
+    rgba(0,0,0,.64)
+    100%
+
+  );
 
   transition:
-    opacity 2.6s ease;
+  opacity
+  2.8s
+  ease;
+
 }
 
+
 body.questionMode #readingShadow{
-  opacity:.57;
+
+  opacity:.59;
+
 }
+
 
 
 /* =========================================================
@@ -165,6 +434,7 @@ body.questionMode #readingShadow{
    ========================================================= */
 
 #veil{
+
   position:fixed;
 
   inset:-18%;
@@ -173,65 +443,50 @@ body.questionMode #readingShadow{
 
   pointer-events:none;
 
-  opacity:.44;
+  opacity:.40;
 
-  mix-blend-mode:screen;
+  mix-blend-mode:
+  screen;
 
   background:
 
-    radial-gradient(
-      circle at 28% 42%,
-      rgba(255,255,255,.025),
-      transparent 28%
-    ),
+  radial-gradient(
 
-    radial-gradient(
-      circle at 73% 59%,
-      rgba(255,255,255,.018),
-      transparent 30%
-    );
+    circle at 25% 43%,
 
-  animation:
-    veilBreath
-    76s
-    ease-in-out
-    infinite
-    alternate;
-}
+    rgba(255,255,255,.022),
 
+    transparent 27%
 
-/* =========================================================
-   GRAIN
-   ========================================================= */
+  ),
 
-#grain{
-  position:fixed;
+  radial-gradient(
 
-  inset:-50%;
+    circle at 74% 57%,
 
-  z-index:7;
+    rgba(255,255,255,.017),
 
-  pointer-events:none;
+    transparent 30%
 
-  opacity:.020;
-
-  background-image:url(
-    "data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.83' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"
   );
 
   animation:
-    grainMove
-    .36s
-    steps(2)
-    infinite;
+  veilBreath
+  89s
+  ease-in-out
+  infinite
+  alternate;
+
 }
 
 
+
 /* =========================================================
-   GHOSTS
+   GHOST WORDS
    ========================================================= */
 
 #ghostLayer{
+
   position:fixed;
 
   inset:0;
@@ -241,41 +496,85 @@ body.questionMode #readingShadow{
   pointer-events:none;
 
   overflow:hidden;
+
 }
 
+
 .ghost{
+
   position:absolute;
 
   max-width:90vw;
 
+  white-space:nowrap;
+
   font-size:
-    clamp(
-      25px,
-      8vw,
-      112px
-    );
+  clamp(
+    25px,
+    8vw,
+    112px
+  );
 
   line-height:.9;
 
   letter-spacing:-.05em;
 
-  white-space:nowrap;
+  color:
+  rgba(255,255,255,.023);
 
-  color:rgba(255,255,255,.025);
-
-  filter:blur(15px);
+  filter:
+  blur(15px);
 
   animation:
-    ghostMove
-    linear
-    forwards;
+  ghostMove
+  linear
+  forwards;
+
 }
+
 
 .answerGhost{
-  color:rgba(255,255,255,.045);
 
-  filter:blur(17px);
+  color:
+  rgba(255,255,255,.042);
+
+  filter:
+  blur(17px);
+
 }
+
+
+
+/* =========================================================
+   GRAIN
+   ========================================================= */
+
+#grain{
+
+  position:fixed;
+
+  inset:-50%;
+
+  z-index:7;
+
+  pointer-events:none;
+
+  opacity:.019;
+
+  background-image:
+
+  url(
+  "data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.83' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"
+  );
+
+  animation:
+  grainMove
+  .36s
+  steps(2)
+  infinite;
+
+}
+
 
 
 /* =========================================================
@@ -283,49 +582,87 @@ body.questionMode #readingShadow{
    ========================================================= */
 
 #ui{
+
   position:fixed;
 
   inset:0;
 
   z-index:20;
 
-  height:calc(var(--vh) * 100);
+  height:
+  calc(
+    var(--vh)
+    *
+    100
+  );
 
   display:flex;
 
-  flex-direction:column;
+  flex-direction:
+  column;
 
-  justify-content:space-between;
+  justify-content:
+  space-between;
 
   padding:
-    max(24px,env(safe-area-inset-top))
-    max(24px,env(safe-area-inset-right))
-    max(24px,env(safe-area-inset-bottom))
-    max(24px,env(safe-area-inset-left));
+
+  max(
+    24px,
+    env(safe-area-inset-top)
+  )
+
+  max(
+    24px,
+    env(safe-area-inset-right)
+  )
+
+  max(
+    24px,
+    env(safe-area-inset-bottom)
+  )
+
+  max(
+    24px,
+    env(safe-area-inset-left)
+  );
 
   transition:
-    opacity 1.5s ease,
-    filter 1.5s ease;
+
+  opacity
+  1.5s
+  ease,
+
+  filter
+  1.5s
+  ease;
+
 }
+
 
 #ui.hide{
+
   opacity:0;
 
-  filter:blur(14px);
+  filter:
+  blur(14px);
 
   pointer-events:none;
+
 }
+
 
 
 /* =========================================================
-   TOP / BOTTOM
+   MICRO UI
    ========================================================= */
 
 .top,
 .bottom{
+
   display:flex;
 
-  justify-content:space-between;
+  justify-content:
+  space-between;
 
   align-items:center;
 
@@ -335,12 +672,17 @@ body.questionMode #readingShadow{
 
   letter-spacing:.22em;
 
-  text-transform:uppercase;
+  text-transform:
+  uppercase;
 
-  color:var(--muted);
+  color:
+  var(--muted);
 
-  text-shadow:var(--shadow);
+  text-shadow:
+  var(--shadow);
+
 }
+
 
 
 /* =========================================================
@@ -348,56 +690,92 @@ body.questionMode #readingShadow{
    ========================================================= */
 
 #screenWrap{
-  width:min(960px,100%);
+
+  width:
+  min(
+    960px,
+    100%
+  );
 
   margin:auto;
 
   position:relative;
+
 }
 
+
 #screenWrap::before{
+
   content:"";
 
   position:absolute;
 
   z-index:-1;
 
-  inset:-80px -90px;
+  inset:
+  -80px
+  -90px;
 
   pointer-events:none;
 
-  opacity:.50;
+  opacity:.48;
 
-  filter:blur(30px);
+  filter:
+  blur(30px);
 
   background:
 
-    radial-gradient(
-      ellipse,
-      rgba(0,0,0,.52),
-      rgba(0,0,0,.22) 62%,
-      rgba(0,0,0,0) 82%
-    );
+  radial-gradient(
+
+    ellipse,
+
+    rgba(0,0,0,.52),
+
+    rgba(0,0,0,.20)
+    62%,
+
+    rgba(0,0,0,0)
+    83%
+
+  );
+
 }
 
+
 #screen{
+
   position:relative;
 
   transition:
-    opacity 1.25s ease,
-    transform 1.45s ease,
-    filter 1.25s ease;
+
+  opacity
+  1.25s
+  ease,
+
+  transform
+  1.45s
+  ease,
+
+  filter
+  1.25s
+  ease;
+
 }
 
+
 #screen.fade{
+
   opacity:0;
 
   transform:
-    translateY(10px)
-    scale(1.008);
+  translateY(10px)
+  scale(1.008);
 
-  filter:blur(13px);
+  filter:
+  blur(13px);
+
 }
+
 
 
 /* =========================================================
@@ -405,142 +783,210 @@ body.questionMode #readingShadow{
    ========================================================= */
 
 .eyebrow{
-  margin-bottom:24px;
 
-  font-size:10px;
+  margin-bottom:
+  24px;
 
-  letter-spacing:.24em;
+  font-size:
+  10px;
 
-  text-transform:uppercase;
+  letter-spacing:
+  .24em;
 
-  color:rgba(255,255,255,.54);
+  text-transform:
+  uppercase;
 
-  text-shadow:var(--shadow);
+  color:
+  rgba(255,255,255,.54);
+
+  text-shadow:
+  var(--shadow);
+
 }
 
+
 h1{
+
   font-size:
-    clamp(
-      56px,
-      13vw,
-      116px
-    );
+  clamp(
+    56px,
+    13vw,
+    116px
+  );
 
   line-height:.84;
 
-  letter-spacing:-.055em;
+  letter-spacing:
+  -.055em;
 
-  font-weight:400;
+  font-weight:
+  400;
 
-  text-shadow:var(--shadow);
+  text-shadow:
+  var(--shadow);
+
 }
+
 
 h2{
-  max-width:930px;
+
+  max-width:
+  930px;
 
   font-size:
-    clamp(
-      30px,
-      7vw,
-      64px
-    );
+  clamp(
+    30px,
+    7vw,
+    64px
+  );
 
-  line-height:1.02;
+  line-height:
+  1.02;
 
-  letter-spacing:-.038em;
+  letter-spacing:
+  -.038em;
 
-  font-weight:400;
+  font-weight:
+  400;
 
-  text-shadow:var(--shadow);
+  text-shadow:
+  var(--shadow);
+
 }
+
 
 .introText{
-  max-width:740px;
 
-  margin-top:28px;
+  max-width:
+  740px;
+
+  margin-top:
+  28px;
 
   font-size:
-    clamp(
-      18px,
-      2.8vw,
-      29px
-    );
+  clamp(
+    18px,
+    2.8vw,
+    29px
+  );
 
-  line-height:1.35;
+  line-height:
+  1.35;
 
-  letter-spacing:-.015em;
+  letter-spacing:
+  -.015em;
 
-  text-shadow:var(--shadow);
+  text-shadow:
+  var(--shadow);
+
 }
+
 
 .introMeta{
-  max-width:680px;
 
-  margin-top:27px;
+  max-width:
+  680px;
 
-  font-size:12px;
+  margin-top:
+  27px;
 
-  line-height:1.65;
+  font-size:
+  12px;
 
-  color:rgba(255,255,255,.54);
+  line-height:
+  1.65;
 
-  text-shadow:var(--shadow);
+  color:
+  rgba(255,255,255,.54);
+
+  text-shadow:
+  var(--shadow);
+
 }
+
 
 .sub{
-  max-width:650px;
 
-  margin-top:22px;
+  max-width:
+  650px;
 
-  font-size:14px;
+  margin-top:
+  22px;
 
-  line-height:1.55;
+  font-size:
+  14px;
 
-  color:rgba(255,255,255,.56);
+  line-height:
+  1.55;
 
-  text-shadow:var(--shadow);
+  color:
+  rgba(255,255,255,.56);
+
+  text-shadow:
+  var(--shadow);
+
 }
+
 
 .contextTrace{
-  max-width:640px;
 
-  margin-top:22px;
+  max-width:
+  640px;
 
-  font-size:11px;
+  margin-top:
+  22px;
 
-  line-height:1.55;
+  font-size:
+  11px;
 
-  letter-spacing:.06em;
+  line-height:
+  1.55;
 
-  color:rgba(255,255,255,.30);
+  letter-spacing:
+  .06em;
 
-  text-shadow:var(--shadow);
+  color:
+  rgba(255,255,255,.28);
+
+  text-shadow:
+  var(--shadow);
+
 }
+
 
 
 /* =========================================================
-   LANG
+   LANGUAGE
    ========================================================= */
 
 .langs{
+
   display:grid;
 
   grid-template-columns:
-    1fr 1fr 1fr;
+  1fr
+  1fr
+  1fr;
 
   gap:1px;
 
-  margin-top:52px;
+  margin-top:
+  52px;
 
-  background:rgba(255,255,255,.16);
+  background:
+  rgba(255,255,255,.16);
+
 }
 
+
 button{
+
   appearance:none;
 
   border:0;
 
-  background:rgba(0,0,0,.80);
+  background:
+  rgba(0,0,0,.80);
 
   color:#fff;
 
@@ -548,24 +994,36 @@ button{
 
   cursor:pointer;
 
-  text-shadow:var(--shadow);
+  text-shadow:
+  var(--shadow);
+
 }
+
 
 .langs button{
-  height:82px;
 
-  font-size:13px;
+  height:
+  82px;
 
-  letter-spacing:.18em;
+  font-size:
+  13px;
+
+  letter-spacing:
+  .18em;
+
 }
 
+
 button:hover{
+
   background:#fff;
 
   color:#000;
 
   text-shadow:none;
+
 }
+
 
 
 /* =========================================================
@@ -574,17 +1032,19 @@ button:hover{
 
 textarea,
 input{
+
   width:100%;
 
   border:0;
 
   border-bottom:
-    1px solid
-    rgba(255,255,255,.19);
+  1px solid
+  rgba(255,255,255,.19);
 
   outline:0;
 
-  background:rgba(0,0,0,.07);
+  background:
+  rgba(0,0,0,.07);
 
   color:#fff;
 
@@ -594,53 +1054,71 @@ input{
 
   border-radius:0;
 
-  text-shadow:var(--shadow);
+  text-shadow:
+  var(--shadow);
+
 }
 
-textarea{
-  min-height:210px;
 
-  margin-top:30px;
+textarea{
+
+  min-height:
+  210px;
+
+  margin-top:
+  30px;
 
   padding:
-    16px
-    0
-    20px;
+  16px
+  0
+  20px;
 
   resize:none;
 
   font-size:
-    clamp(
-      20px,
-      4.2vw,
-      33px
-    );
+  clamp(
+    20px,
+    4.2vw,
+    33px
+  );
 
-  line-height:1.38;
+  line-height:
+  1.38;
+
 }
+
 
 input{
-  margin-top:34px;
+
+  margin-top:
+  34px;
 
   padding:
-    18px
-    0
-    20px;
+  18px
+  0
+  20px;
 
   font-size:
-    clamp(
-      25px,
-      5vw,
-      44px
-    );
+  clamp(
+    25px,
+    5vw,
+    44px
+  );
 
-  letter-spacing:-.02em;
+  letter-spacing:
+  -.02em;
+
 }
+
 
 textarea::placeholder,
 input::placeholder{
-  color:rgba(255,255,255,.17);
+
+  color:
+  rgba(255,255,255,.17);
+
 }
+
 
 
 /* =========================================================
@@ -648,82 +1126,125 @@ input::placeholder{
    ========================================================= */
 
 .actions{
-  margin-top:34px;
+
+  margin-top:
+  34px;
 
   display:flex;
 
-  justify-content:space-between;
+  justify-content:
+  space-between;
 
   align-items:center;
 
-  gap:18px;
+  gap:
+  18px;
+
 }
+
 
 .back,
 .next{
-  font-size:10px;
 
-  letter-spacing:.18em;
+  font-size:
+  10px;
 
-  text-transform:uppercase;
+  letter-spacing:
+  .18em;
+
+  text-transform:
+  uppercase;
+
 }
+
 
 .back{
-  background:transparent;
 
-  color:var(--muted);
+  background:
+  transparent;
 
-  padding:16px 0;
-}
-
-.next{
-  min-width:150px;
+  color:
+  var(--muted);
 
   padding:
-    17px
-    20px;
+  16px
+  0;
+
+}
+
+
+.next{
+
+  min-width:
+  150px;
+
+  padding:
+  17px
+  20px;
 
   border:
-    1px solid
-    rgba(255,255,255,.26);
+  1px solid
+  rgba(255,255,255,.26);
 
-  transition:.42s;
+  transition:
+  .42s;
+
 }
+
 
 .received{
-  margin-top:34px;
 
-  font-size:11px;
+  margin-top:
+  34px;
 
-  letter-spacing:.21em;
+  font-size:
+  11px;
 
-  text-transform:uppercase;
+  letter-spacing:
+  .21em;
 
-  color:rgba(255,255,255,.56);
+  text-transform:
+  uppercase;
 
-  text-shadow:var(--shadow);
+  color:
+  rgba(255,255,255,.56);
+
+  text-shadow:
+  var(--shadow);
+
 }
+
 
 
 /* =========================================================
-   COLOR
+   COLOR QUESTION
    ========================================================= */
 
 .colorHint{
-  margin-top:15px;
 
-  font-size:10px;
+  margin-top:
+  15px;
 
-  line-height:1.5;
+  font-size:
+  10px;
 
-  letter-spacing:.15em;
+  line-height:
+  1.5;
 
-  text-transform:uppercase;
+  letter-spacing:
+  .15em;
 
-  color:rgba(255,255,255,.36);
+  text-transform:
+  uppercase;
 
-  text-shadow:var(--shadow);
+  color:
+  rgba(255,255,255,.36);
+
+  text-shadow:
+  var(--shadow);
+
 }
+
 
 
 /* =========================================================
@@ -731,6 +1252,7 @@ input::placeholder{
    ========================================================= */
 
 #dreamShift{
+
   position:fixed;
 
   inset:0;
@@ -748,61 +1270,90 @@ input::placeholder{
   opacity:0;
 
   background:#000;
+
 }
+
 
 #dreamShift.active{
+
   animation:
-    dreamShift
-    10s
-    ease
-    forwards;
+  dreamShift
+  10s
+  ease
+  forwards;
+
 }
+
 
 .dreamShiftWrap{
-  width:min(760px,88vw);
+
+  width:
+  min(
+    760px,
+    88vw
+  );
 
   text-align:center;
+
 }
 
+
 #dreamShiftMain{
+
   font-size:
-    clamp(
-      38px,
-      9vw,
-      92px
-    );
+  clamp(
+    38px,
+    9vw,
+    92px
+  );
 
   line-height:.9;
 
-  letter-spacing:-.055em;
+  letter-spacing:
+  -.055em;
 
-  font-weight:400;
+  font-weight:
+  400;
 
-  text-shadow:var(--shadow);
+  text-shadow:
+  var(--shadow);
+
 }
+
 
 #dreamShiftSub{
-  margin-top:28px;
 
-  font-size:10px;
+  margin-top:
+  28px;
 
-  line-height:1.6;
+  font-size:
+  10px;
 
-  letter-spacing:.22em;
+  line-height:
+  1.6;
 
-  text-transform:uppercase;
+  letter-spacing:
+  .22em;
 
-  color:rgba(255,255,255,.48);
+  text-transform:
+  uppercase;
 
-  text-shadow:var(--shadow);
+  color:
+  rgba(255,255,255,.48);
+
+  text-shadow:
+  var(--shadow);
+
 }
+
 
 
 /* =========================================================
-   FINAL TRANSITION
+   FINAL FLASH
    ========================================================= */
 
 #whiteBloom{
+
   position:fixed;
 
   inset:-30%;
@@ -813,31 +1364,51 @@ input::placeholder{
 
   opacity:0;
 
-  transform:scale(.2);
+  transform:
+  scale(.2);
 
-  filter:blur(60px);
+  filter:
+  blur(60px);
 
   background:
 
-    radial-gradient(
-      circle at 50% 50%,
-      rgba(255,255,255,1) 0%,
-      rgba(255,255,255,.96) 16%,
-      rgba(255,255,255,.63) 35%,
-      rgba(255,255,255,.14) 55%,
-      rgba(255,255,255,0) 74%
-    );
+  radial-gradient(
+
+    circle at 50% 50%,
+
+    rgba(255,255,255,1)
+    0%,
+
+    rgba(255,255,255,.96)
+    16%,
+
+    rgba(255,255,255,.63)
+    35%,
+
+    rgba(255,255,255,.14)
+    55%,
+
+    rgba(255,255,255,0)
+    74%
+
+  );
+
 }
+
 
 #whiteBloom.active{
+
   animation:
-    bloom
-    5.9s
-    cubic-bezier(.22,.62,.22,1)
-    forwards;
+  bloom
+  5.9s
+  cubic-bezier(.22,.62,.22,1)
+  forwards;
+
 }
 
+
 #whiteout{
+
   position:fixed;
 
   inset:0;
@@ -849,15 +1420,20 @@ input::placeholder{
   opacity:0;
 
   background:#fff;
+
 }
 
+
 #whiteout.active{
+
   animation:
-    whiteout
-    6s
-    cubic-bezier(.22,.62,.22,1)
-    forwards;
+  whiteout
+  6s
+  cubic-bezier(.22,.62,.22,1)
+  forwards;
+
 }
+
 
 
 /* =========================================================
@@ -865,6 +1441,7 @@ input::placeholder{
    ========================================================= */
 
 #finalInvite{
+
   position:fixed;
 
   inset:0;
@@ -884,241 +1461,784 @@ input::placeholder{
   pointer-events:none;
 
   padding:
-    max(30px,env(safe-area-inset-top))
-    max(28px,env(safe-area-inset-right))
-    max(30px,env(safe-area-inset-bottom))
-    max(28px,env(safe-area-inset-left));
+
+  max(
+    30px,
+    env(safe-area-inset-top)
+  )
+
+  max(
+    28px,
+    env(safe-area-inset-right)
+  )
+
+  max(
+    30px,
+    env(safe-area-inset-bottom)
+  )
+
+  max(
+    28px,
+    env(safe-area-inset-left)
+  );
+
 }
+
 
 #finalInvite.active{
+
   animation:
-    finalIn
-    2.9s
-    ease
-    forwards;
+  finalIn
+  2.9s
+  ease
+  forwards;
+
 }
 
+
 .finalGrid{
-  width:min(1100px,100%);
+
+  width:
+  min(
+    1100px,
+    100%
+  );
 
   display:grid;
 
   grid-template-columns:
-    minmax(180px,280px)
-    1fr;
+  minmax(
+    180px,
+    280px
+  )
+  1fr;
 
   gap:
-    clamp(
-      50px,
-      8vw,
-      120px
-    );
+  clamp(
+    50px,
+    8vw,
+    120px
+  );
 
   align-items:end;
+
 }
+
 
 .logoBlock img{
+
   display:block;
 
-  width:min(100%,260px);
+  width:
+  min(
+    100%,
+    260px
+  );
 
   height:auto;
+
 }
+
 
 .finalCopy{
-  max-width:760px;
+
+  max-width:
+  760px;
+
 }
+
 
 .finalLabel{
-  margin-bottom:32px;
 
-  font-size:10px;
+  margin-bottom:
+  32px;
 
-  letter-spacing:.24em;
+  font-size:
+  10px;
 
-  text-transform:uppercase;
+  letter-spacing:
+  .24em;
 
-  color:rgba(255,255,255,.42);
+  text-transform:
+  uppercase;
+
+  color:
+  rgba(255,255,255,.42);
+
 }
+
 
 #finalTitle{
+
   font-size:
-    clamp(
-      32px,
-      5.8vw,
-      70px
-    );
+  clamp(
+    32px,
+    5.8vw,
+    70px
+  );
 
-  line-height:1.02;
+  line-height:
+  1.02;
 
-  letter-spacing:-.04em;
+  letter-spacing:
+  -.04em;
 
-  font-weight:400;
+  font-weight:
+  400;
+
 }
 
+
 .finalRule{
+
   width:100%;
 
   height:1px;
 
   margin:
-    42px
-    0
-    24px;
+  42px
+  0
+  24px;
 
-  background:rgba(255,255,255,.21);
+  background:
+  rgba(255,255,255,.21);
+
 }
 
+
 .finalDetails{
+
   display:flex;
 
-  justify-content:space-between;
+  justify-content:
+  space-between;
 
-  gap:30px;
+  gap:
+  30px;
 
-  font-size:11px;
+  font-size:
+  11px;
 
-  letter-spacing:.18em;
+  letter-spacing:
+  .18em;
 
-  text-transform:uppercase;
+  text-transform:
+  uppercase;
 
-  color:rgba(255,255,255,.63);
+  color:
+  rgba(255,255,255,.63);
+
+}
+
+
+
+/* =========================================================
+   =========================================================
+   SLOW DREAM ANIMATIONS
+   =========================================================
+   ========================================================= */
+
+@keyframes dreamWorldBreath{
+
+  0%{
+
+    transform:
+    scale(1);
+
+  }
+
+  50%{
+
+    transform:
+    scale(1.015);
+
+  }
+
+  100%{
+
+    transform:
+    scale(1.03);
+
+  }
+
 }
 
 
 /* =========================================================
-   KEYFRAMES
+   BACK
+   ========================================================= */
+
+@keyframes backMorph{
+
+  0%{
+
+    transform:
+    scaleX(.95)
+    scaleY(1.04);
+
+    opacity:.78;
+
+  }
+
+
+  22%{
+
+    transform:
+    scaleX(1.02)
+    scaleY(.98);
+
+    opacity:.90;
+
+  }
+
+
+  49%{
+
+    transform:
+    scaleX(.98)
+    scaleY(1.06);
+
+    opacity:.80;
+
+  }
+
+
+  74%{
+
+    transform:
+    scaleX(1.055)
+    scaleY(.95);
+
+    opacity:.93;
+
+  }
+
+
+  100%{
+
+    transform:
+    scaleX(.965)
+    scaleY(1.025);
+
+    opacity:.80;
+
+  }
+
+}
+
+
+/* =========================================================
+   MID
+   ========================================================= */
+
+@keyframes midMorph{
+
+  0%{
+
+    transform:
+    scaleX(1.03)
+    scaleY(.95);
+
+    opacity:.76;
+
+  }
+
+
+  32%{
+
+    transform:
+    scaleX(.95)
+    scaleY(1.045);
+
+    opacity:.94;
+
+  }
+
+
+  64%{
+
+    transform:
+    scaleX(1.05)
+    scaleY(.98);
+
+    opacity:.81;
+
+  }
+
+
+  100%{
+
+    transform:
+    scaleX(.98)
+    scaleY(1.055);
+
+    opacity:.90;
+
+  }
+
+}
+
+
+/* =========================================================
+   FRONT
+   ========================================================= */
+
+@keyframes frontMorph{
+
+  0%{
+
+    transform:
+    scaleX(1.02)
+    scaleY(.97);
+
+    opacity:.91;
+
+  }
+
+
+  30%{
+
+    transform:
+    scaleX(.95)
+    scaleY(1.05);
+
+    opacity:.74;
+
+  }
+
+
+  63%{
+
+    transform:
+    scaleX(1.045)
+    scaleY(.96);
+
+    opacity:.96;
+
+  }
+
+
+  100%{
+
+    transform:
+    scaleX(.98)
+    scaleY(1.035);
+
+    opacity:.82;
+
+  }
+
+}
+
+
+/* =========================================================
+   WATER
+   ========================================================= */
+
+@keyframes waterMorph{
+
+  0%{
+
+    transform:
+    scaleX(.91)
+    scaleY(1.08);
+
+    opacity:.21;
+
+  }
+
+
+  39%{
+
+    transform:
+    scaleX(1.09)
+    scaleY(.92);
+
+    opacity:.38;
+
+  }
+
+
+  73%{
+
+    transform:
+    scaleX(.96)
+    scaleY(1.04);
+
+    opacity:.25;
+
+  }
+
+
+  100%{
+
+    transform:
+    scaleX(1.05)
+    scaleY(.95);
+
+    opacity:.33;
+
+  }
+
+}
+
+
+/* =========================================================
+   FOCUS / BLUR
+
+   This deliberately has uneven sections:
+   blurred -> clear -> blurred -> very clear -> dream again.
+   ========================================================= */
+
+@keyframes dreamFocus{
+
+  0%{
+
+    filter:
+    blur(14px)
+    contrast(111%);
+
+  }
+
+
+  15%{
+
+    filter:
+    blur(11px)
+    contrast(118%);
+
+  }
+
+
+  32%{
+
+    filter:
+    blur(5px)
+    contrast(135%);
+
+  }
+
+
+  43%{
+
+    filter:
+    blur(2.5px)
+    contrast(149%);
+
+  }
+
+
+  52%{
+
+    filter:
+    blur(4px)
+    contrast(141%);
+
+  }
+
+
+  68%{
+
+    filter:
+    blur(10px)
+    contrast(120%);
+
+  }
+
+
+  82%{
+
+    filter:
+    blur(17px)
+    contrast(108%);
+
+  }
+
+
+  92%{
+
+    filter:
+    blur(7px)
+    contrast(131%);
+
+  }
+
+
+  100%{
+
+    filter:
+    blur(14px)
+    contrast(111%);
+
+  }
+
+}
+
+
+/* =========================================================
+   VEIL
    ========================================================= */
 
 @keyframes veilBreath{
 
   from{
+
     transform:
-      translate3d(-.7%,.4%,0)
-      scale(1);
+    translate3d(
+      -.7%,
+      .4%,
+      0
+    )
+    scale(1);
+
   }
 
+
   to{
+
     transform:
-      translate3d(1%,-.7%,0)
-      scale(1.018);
+    translate3d(
+      1%,
+      -.7%,
+      0
+    )
+    scale(1.018);
+
   }
 
 }
+
+
+/* =========================================================
+   GRAIN
+   ========================================================= */
 
 @keyframes grainMove{
 
-  0%{transform:translate(0,0)}
-  25%{transform:translate(3%,-3%)}
-  50%{transform:translate(-4%,2%)}
-  75%{transform:translate(2%,4%)}
-  100%{transform:translate(-2%,-4%)}
+  0%{
+    transform:translate(0,0);
+  }
+
+  25%{
+    transform:translate(3%,-3%);
+  }
+
+  50%{
+    transform:translate(-4%,2%);
+  }
+
+  75%{
+    transform:translate(2%,4%);
+  }
+
+  100%{
+    transform:translate(-2%,-4%);
+  }
 
 }
+
+
+/* =========================================================
+   GHOST
+   ========================================================= */
 
 @keyframes ghostMove{
 
   0%{
+
     opacity:0;
 
     transform:
-      translate3d(-1vw,1vh,0)
-      scale(.99);
+    translate3d(
+      -1vw,
+      1vh,
+      0
+    )
+    scale(.99);
 
-    filter:blur(17px);
+    filter:
+    blur(17px);
+
   }
+
 
   20%{
+
     opacity:1;
+
   }
+
 
   74%{
+
     opacity:.60;
+
   }
 
+
   100%{
+
     opacity:0;
 
     transform:
-      translate3d(2vw,-1.5vh,0)
-      scale(1.025);
+    translate3d(
+      2vw,
+      -1.5vh,
+      0
+    )
+    scale(1.025);
 
-    filter:blur(31px);
+    filter:
+    blur(31px);
+
   }
 
 }
+
+
+/* =========================================================
+   DREAM SHIFT
+   ========================================================= */
 
 @keyframes dreamShift{
 
   0%{
+
     opacity:0;
-    filter:blur(22px);
+
+    filter:
+    blur(22px);
+
   }
+
 
   18%{
+
     opacity:1;
-    filter:blur(0);
+
+    filter:
+    blur(0);
+
   }
+
 
   78%{
+
     opacity:1;
-    filter:blur(0);
+
+    filter:
+    blur(0);
+
   }
 
+
   100%{
+
     opacity:0;
-    filter:blur(20px);
+
+    filter:
+    blur(20px);
+
   }
 
 }
+
+
+/* =========================================================
+   END
+   ========================================================= */
 
 @keyframes bloom{
 
   0%{
+
     opacity:0;
-    transform:scale(.2);
+
+    transform:
+    scale(.2);
+
   }
+
 
   42%{
+
     opacity:.14;
+
   }
 
+
   74%{
+
     opacity:.62;
-    transform:scale(1);
+
+    transform:
+    scale(1);
+
+  }
+
+
+  100%{
+
+    opacity:1;
+
+    transform:
+    scale(1.9);
+
+  }
+
+}
+
+
+@keyframes whiteout{
+
+  0%{
+    opacity:0;
+  }
+
+  58%{
+    opacity:.05;
+  }
+
+  82%{
+    opacity:.34;
   }
 
   100%{
     opacity:1;
-    transform:scale(1.9);
   }
 
 }
 
-@keyframes whiteout{
-
-  0%{opacity:0}
-  58%{opacity:.05}
-  82%{opacity:.34}
-  100%{opacity:1}
-
-}
 
 @keyframes finalIn{
 
   0%{
+
     opacity:0;
-    filter:blur(12px);
-    transform:scale(1.01);
+
+    filter:
+    blur(12px);
+
+    transform:
+    scale(1.01);
+
   }
 
+
   100%{
+
     opacity:1;
-    filter:blur(0);
-    transform:scale(1);
+
+    filter:
+    blur(0);
+
+    transform:
+    scale(1);
+
   }
 
 }
+
 
 
 /* =========================================================
@@ -1128,113 +2248,934 @@ input::placeholder{
 @media(max-width:700px){
 
   #ui{
+
     padding:
-      max(18px,env(safe-area-inset-top))
-      max(18px,env(safe-area-inset-right))
-      max(18px,env(safe-area-inset-bottom))
-      max(18px,env(safe-area-inset-left));
+
+    max(
+      18px,
+      env(safe-area-inset-top)
+    )
+
+    max(
+      18px,
+      env(safe-area-inset-right)
+    )
+
+    max(
+      18px,
+      env(safe-area-inset-bottom)
+    )
+
+    max(
+      18px,
+      env(safe-area-inset-left)
+    );
+
   }
+
 
   h1{
+
     font-size:
-      clamp(
-        54px,
-        19vw,
-        84px
-      );
+    clamp(
+      54px,
+      19vw,
+      84px
+    );
+
   }
+
 
   h2{
+
     font-size:
-      clamp(
-        27px,
-        8.4vw,
-        43px
-      );
+    clamp(
+      27px,
+      8.4vw,
+      43px
+    );
+
   }
+
 
   .introText{
+
     font-size:
-      clamp(
-        19px,
-        6vw,
-        29px
-      );
+    clamp(
+      19px,
+      6vw,
+      29px
+    );
+
   }
+
 
   textarea{
+
     min-height:
-      clamp(
-        165px,
-        29dvh,
-        260px
-      );
+    clamp(
+      165px,
+      29dvh,
+      260px
+    );
 
     font-size:
-      clamp(
-        18px,
-        5.6vw,
-        26px
-      );
+    clamp(
+      18px,
+      5.6vw,
+      26px
+    );
+
   }
+
 
   .langs{
-    margin-top:36px;
+
+    margin-top:
+    36px;
+
   }
+
 
   .langs button{
-    height:70px;
 
-    font-size:11px;
+    height:
+    70px;
+
+    font-size:
+    11px;
+
   }
+
 
   .actions{
-    margin-top:24px;
+
+    margin-top:
+    24px;
+
   }
+
 
   .next{
-    min-width:128px;
+
+    min-width:
+    128px;
+
   }
+
 
   .finalGrid{
+
     display:flex;
 
-    flex-direction:column;
+    flex-direction:
+    column;
 
-    align-items:flex-start;
+    align-items:
+    flex-start;
 
-    justify-content:center;
+    justify-content:
+    center;
 
-    gap:44px;
+    gap:
+    44px;
+
   }
+
 
   .logoBlock img{
-    width:min(52vw,190px);
+
+    width:
+    min(
+      52vw,
+      190px
+    );
+
   }
+
 
   #finalTitle{
+
     font-size:
-      clamp(
-        31px,
-        9vw,
-        46px
-      );
+    clamp(
+      31px,
+      9vw,
+      46px
+    );
+
   }
 
+
   .finalDetails{
-    flex-direction:column;
-    gap:8px;
+
+    flex-direction:
+    column;
+
+    gap:
+    8px;
+
   }
 
 }
 
 </style>
+
 </head>
+
 
 
 <body>
 
-<canvas id="dreamCanvas"></canvas>
+
+<!-- ======================================================
+     ======================================================
+     INDEPENDENT DREAM WORLD
+     ======================================================
+     ====================================================== -->
+
+<div id="dreamWorld">
+
+
+<svg
+id="dreamSvg"
+viewBox="0 0 1600 1000"
+preserveAspectRatio="xMidYMid slice"
+xmlns="http://www.w3.org/2000/svg"
+>
+
+
+<defs>
+
+
+<!-- ======================================================
+     DISTORTION A
+     ====================================================== -->
+
+<filter
+id="dreamFilterA"
+x="-50%"
+y="-50%"
+width="200%"
+height="200%"
+>
+
+
+<feTurbulence
+type="fractalNoise"
+baseFrequency="0.0035 0.008"
+numOctaves="3"
+seed="12"
+result="noiseA"
+>
+
+
+<animate
+attributeName="baseFrequency"
+dur="197s"
+values="
+0.0035 0.008;
+0.0060 0.0045;
+0.0028 0.0100;
+0.0050 0.0060;
+0.0035 0.008
+"
+repeatCount="indefinite"
+/>
+
+
+</feTurbulence>
+
+
+<feDisplacementMap
+in="SourceGraphic"
+in2="noiseA"
+scale="120"
+xChannelSelector="R"
+yChannelSelector="G"
+>
+
+
+<animate
+attributeName="scale"
+dur="181s"
+values="
+82;
+142;
+96;
+165;
+74;
+120
+"
+repeatCount="indefinite"
+/>
+
+
+</feDisplacementMap>
+
+
+<feGaussianBlur
+stdDeviation="6"
+>
+
+
+<animate
+attributeName="stdDeviation"
+dur="173s"
+values="
+12;
+6;
+2.5;
+8;
+15;
+5;
+12
+"
+repeatCount="indefinite"
+/>
+
+
+</feGaussianBlur>
+
+
+</filter>
+
+
+
+<!-- ======================================================
+     DISTORTION B
+     ====================================================== -->
+
+<filter
+id="dreamFilterB"
+x="-50%"
+y="-50%"
+width="200%"
+height="200%"
+>
+
+
+<feTurbulence
+type="turbulence"
+baseFrequency="0.002 0.006"
+numOctaves="4"
+seed="31"
+result="noiseB"
+>
+
+
+<animate
+attributeName="baseFrequency"
+dur="263s"
+values="
+0.002 0.006;
+0.0045 0.003;
+0.0028 0.009;
+0.005 0.004;
+0.002 0.006
+"
+repeatCount="indefinite"
+/>
+
+
+</feTurbulence>
+
+
+<feDisplacementMap
+in="SourceGraphic"
+in2="noiseB"
+scale="95"
+xChannelSelector="B"
+yChannelSelector="R"
+>
+
+
+<animate
+attributeName="scale"
+dur="227s"
+values="
+60;
+112;
+78;
+148;
+88;
+60
+"
+repeatCount="indefinite"
+/>
+
+
+</feDisplacementMap>
+
+
+<feGaussianBlur
+stdDeviation="8"
+>
+
+
+<animate
+attributeName="stdDeviation"
+dur="211s"
+values="
+15;
+9;
+4;
+2;
+7;
+13;
+15
+"
+repeatCount="indefinite"
+/>
+
+
+</feGaussianBlur>
+
+
+</filter>
+
+
+
+<!-- ======================================================
+     WATERCOLOUR
+     ====================================================== -->
+
+<filter
+id="watercolour"
+x="-40%"
+y="-40%"
+width="180%"
+height="180%"
+>
+
+
+<feTurbulence
+type="fractalNoise"
+baseFrequency=".012"
+numOctaves="3"
+seed="7"
+result="paper"
+/>
+
+
+<feDisplacementMap
+in="SourceGraphic"
+in2="paper"
+scale="20"
+>
+
+
+<animate
+attributeName="scale"
+dur="239s"
+values="
+12;
+26;
+16;
+31;
+12
+"
+repeatCount="indefinite"
+/>
+
+
+</feDisplacementMap>
+
+
+<feGaussianBlur
+stdDeviation="2.5"
+/>
+
+
+</filter>
+
+
+
+<!-- ======================================================
+     VIGNETTE
+     ====================================================== -->
+
+<radialGradient
+id="blackFade"
+cx="50%"
+cy="50%"
+r="68%"
+>
+
+
+<stop
+offset="0%"
+stop-color="#000"
+stop-opacity="0"
+/>
+
+
+<stop
+offset="61%"
+stop-color="#000"
+stop-opacity=".10"
+/>
+
+
+<stop
+offset="82%"
+stop-color="#000"
+stop-opacity=".35"
+/>
+
+
+<stop
+offset="100%"
+stop-color="#000"
+stop-opacity=".82"
+/>
+
+
+</radialGradient>
+
+
+</defs>
+
+
+
+<!-- ======================================================
+     BLACK
+     ====================================================== -->
+
+<rect
+x="0"
+y="0"
+width="1600"
+height="1000"
+fill="#000"
+/>
+
+
+
+<!-- ======================================================
+     BACK RORSCHACH
+     ====================================================== -->
+
+<g
+id="rorschachBack"
+filter="url(#dreamFilterB)"
+>
+
+
+<!-- LEFT -->
+
+<g>
+
+
+<ellipse
+cx="390"
+cy="505"
+rx="480"
+ry="220"
+class="dreamInk inkGhost"
+/>
+
+
+<ellipse
+cx="480"
+cy="350"
+rx="360"
+ry="235"
+class="dreamInk inkSoft"
+/>
+
+
+<ellipse
+cx="450"
+cy="655"
+rx="420"
+ry="260"
+class="dreamInk inkMedium"
+/>
+
+
+<ellipse
+cx="640"
+cy="500"
+rx="180"
+ry="465"
+class="dreamInk inkDark"
+/>
+
+
+<ellipse
+cx="535"
+cy="500"
+rx="265"
+ry="370"
+class="dreamInk inkSoft"
+/>
+
+
+</g>
+
+
+
+<!-- RIGHT -->
+
+<g
+transform="translate(1600 0) scale(-1 1)"
+>
+
+
+<ellipse
+cx="390"
+cy="505"
+rx="480"
+ry="220"
+class="dreamInk inkGhost"
+/>
+
+
+<ellipse
+cx="480"
+cy="350"
+rx="360"
+ry="235"
+class="dreamInk inkSoft"
+/>
+
+
+<ellipse
+cx="450"
+cy="655"
+rx="420"
+ry="260"
+class="dreamInk inkMedium"
+/>
+
+
+<ellipse
+cx="640"
+cy="500"
+rx="180"
+ry="465"
+class="dreamInk inkDark"
+/>
+
+
+<ellipse
+cx="535"
+cy="500"
+rx="265"
+ry="370"
+class="dreamInk inkSoft"
+/>
+
+
+</g>
+
+
+</g>
+
+
+
+<!-- ======================================================
+     MID RORSCHACH
+     ====================================================== -->
+
+<g
+id="rorschachMid"
+filter="url(#dreamFilterA)"
+>
+
+
+<g>
+
+
+<ellipse
+cx="575"
+cy="500"
+rx="300"
+ry="410"
+class="dreamInk inkMedium"
+/>
+
+
+<ellipse
+cx="490"
+cy="310"
+rx="250"
+ry="155"
+class="dreamInk inkLight"
+/>
+
+
+<ellipse
+cx="485"
+cy="690"
+rx="285"
+ry="175"
+class="dreamInk inkMain"
+/>
+
+
+<ellipse
+cx="680"
+cy="265"
+rx="120"
+ry="245"
+class="dreamInk inkDark"
+/>
+
+
+<ellipse
+cx="650"
+cy="735"
+rx="130"
+ry="220"
+class="dreamInk inkCore"
+/>
+
+
+</g>
+
+
+
+<g
+transform="translate(1600 0) scale(-1 1)"
+>
+
+
+<ellipse
+cx="575"
+cy="500"
+rx="300"
+ry="410"
+class="dreamInk inkMedium"
+/>
+
+
+<ellipse
+cx="490"
+cy="310"
+rx="250"
+ry="155"
+class="dreamInk inkLight"
+/>
+
+
+<ellipse
+cx="485"
+cy="690"
+rx="285"
+ry="175"
+class="dreamInk inkMain"
+/>
+
+
+<ellipse
+cx="680"
+cy="265"
+rx="120"
+ry="245"
+class="dreamInk inkDark"
+/>
+
+
+<ellipse
+cx="650"
+cy="735"
+rx="130"
+ry="220"
+class="dreamInk inkCore"
+/>
+
+
+</g>
+
+
+</g>
+
+
+
+<!-- ======================================================
+     FRONT RORSCHACH
+     ====================================================== -->
+
+<g
+id="rorschachFront"
+filter="url(#dreamFilterA)"
+>
+
+
+<g>
+
+
+<ellipse
+cx="675"
+cy="500"
+rx="230"
+ry="385"
+class="dreamInk inkMain"
+/>
+
+
+<ellipse
+cx="590"
+cy="390"
+rx="190"
+ry="140"
+class="dreamInk inkLight"
+/>
+
+
+<ellipse
+cx="590"
+cy="620"
+rx="225"
+ry="175"
+class="dreamInk inkMain"
+/>
+
+
+<ellipse
+cx="720"
+cy="205"
+rx="90"
+ry="185"
+class="dreamInk inkDark"
+/>
+
+
+<ellipse
+cx="725"
+cy="800"
+rx="95"
+ry="170"
+class="dreamInk inkCore"
+/>
+
+
+</g>
+
+
+
+<g
+transform="translate(1600 0) scale(-1 1)"
+>
+
+
+<ellipse
+cx="675"
+cy="500"
+rx="230"
+ry="385"
+class="dreamInk inkMain"
+/>
+
+
+<ellipse
+cx="590"
+cy="390"
+rx="190"
+ry="140"
+class="dreamInk inkLight"
+/>
+
+
+<ellipse
+cx="590"
+cy="620"
+rx="225"
+ry="175"
+class="dreamInk inkMain"
+/>
+
+
+<ellipse
+cx="720"
+cy="205"
+rx="90"
+ry="185"
+class="dreamInk inkDark"
+/>
+
+
+<ellipse
+cx="725"
+cy="800"
+rx="95"
+ry="170"
+class="dreamInk inkCore"
+/>
+
+
+</g>
+
+
+</g>
+
+
+
+<!-- ======================================================
+     WATERCOLOUR BLOOM
+     ====================================================== -->
+
+<g
+id="waterLayer"
+filter="url(#watercolour)"
+>
+
+
+<ellipse
+cx="800"
+cy="500"
+rx="610"
+ry="175"
+class="dreamInk inkWater"
+/>
+
+
+<ellipse
+cx="800"
+cy="500"
+rx="245"
+ry="475"
+class="dreamInk inkWater"
+/>
+
+
+<ellipse
+cx="800"
+cy="500"
+rx="430"
+ry="290"
+class="dreamInk inkGhost"
+/>
+
+
+</g>
+
+
+
+<!-- ======================================================
+     VIGNETTE
+     ====================================================== -->
+
+<rect
+x="0"
+y="0"
+width="1600"
+height="1000"
+fill="url(#blackFade)"
+/>
+
+
+</svg>
+
+
+</div>
+
+
+
+<!-- ======================================================
+     GRAPHITE / FOG
+     ====================================================== -->
 
 <div id="graphite"></div>
 
@@ -1247,94 +3188,166 @@ input::placeholder{
 <div id="grain"></div>
 
 
+
+<!-- ======================================================
+     DREAM SHIFT
+     ====================================================== -->
+
 <div id="dreamShift">
 
-  <div class="dreamShiftWrap">
 
-    <div id="dreamShiftMain"></div>
+<div class="dreamShiftWrap">
 
-    <div id="dreamShiftSub"></div>
 
-  </div>
+<div id="dreamShiftMain">
+</div>
+
+
+<div id="dreamShiftSub">
+</div>
+
 
 </div>
 
+
+</div>
+
+
+
+<!-- ======================================================
+     FINAL TRANSITION
+     ====================================================== -->
 
 <div id="whiteBloom"></div>
 
 <div id="whiteout"></div>
 
 
+
+<!-- ======================================================
+     FINAL
+     ====================================================== -->
+
 <div id="finalInvite">
 
-  <div class="finalGrid">
 
-    <div class="logoBlock">
-
-      <img
-        src="patchlab_2026_header_1.png"
-        alt="Patchlab Festival 2026"
-      >
-
-    </div>
+<div class="finalGrid">
 
 
-    <div class="finalCopy">
+<div class="logoBlock">
 
-      <div class="finalLabel">
-        TRAUM SIM / PATCHLAB 2026
-      </div>
 
-      <div id="finalTitle"></div>
+<img
+src="patchlab_2026_header_1.png"
+alt="Patchlab Festival 2026"
+>
 
-      <div class="finalRule"></div>
-
-      <div class="finalDetails">
-
-        <div>15.10.2026</div>
-
-        <div>HEVRE</div>
-
-        <div>KRAKÓW</div>
-
-      </div>
-
-    </div>
-
-  </div>
 
 </div>
 
+
+
+<div class="finalCopy">
+
+
+<div class="finalLabel">
+
+TRAUM SIM / PATCHLAB 2026
+
+</div>
+
+
+<div id="finalTitle">
+</div>
+
+
+<div class="finalRule">
+</div>
+
+
+<div class="finalDetails">
+
+
+<div>
+15.10.2026
+</div>
+
+
+<div>
+HEVRE
+</div>
+
+
+<div>
+KRAKÓW
+</div>
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+
+<!-- ======================================================
+     UI
+     ====================================================== -->
 
 <div id="ui">
 
-  <div class="top">
 
-    <span>TRAUM SIM</span>
-
-    <span id="progress"></span>
-
-  </div>
+<div class="top">
 
 
-  <div id="screenWrap">
-
-    <main id="screen"></main>
-
-  </div>
+<span>
+TRAUM SIM
+</span>
 
 
-  <div class="bottom">
+<span id="progress">
+</span>
 
-    <span>PATCHLAB 2026</span>
-
-    <span id="depthLabel">
-      TRAUM
-    </span>
-
-  </div>
 
 </div>
+
+
+
+<div id="screenWrap">
+
+
+<main id="screen">
+</main>
+
+
+</div>
+
+
+
+<div class="bottom">
+
+
+<span>
+PATCHLAB 2026
+</span>
+
+
+<span id="depthLabel">
+TRAUM
+</span>
+
+
+</div>
+
+
+</div>
+
 
 
 <script>
@@ -1344,7 +3357,9 @@ input::placeholder{
    ========================================================= */
 
 const API_URL =
+
 "https://script.google.com/macros/s/AKfycbzU_GDYcK7nC4aGNVxmQd4fojRBacX1UR076Ox-lCI8KrGV1YVN7G_mwGT-6UFzOhJY3g/exec";
+
 
 
 /* =========================================================
@@ -1354,38 +3369,67 @@ const API_URL =
 function setVH(){
 
   const h =
-    window.visualViewport
-    ?
-    window.visualViewport.height
-    :
-    window.innerHeight;
+
+  window.visualViewport
+
+  ?
+
+  window.visualViewport.height
+
+  :
+
+  window.innerHeight;
 
 
   document
-    .documentElement
-    .style
-    .setProperty(
-      "--vh",
-      (h*.01)+"px"
-    );
+  .documentElement
+  .style
+  .setProperty(
 
-}
+    "--vh",
 
-setVH();
+    (
+      h
+      *
+      .01
+    )
+    +
+    "px"
 
-window.addEventListener(
-  "resize",
-  setVH
-);
-
-if(window.visualViewport){
-
-  window.visualViewport.addEventListener(
-    "resize",
-    setVH
   );
 
 }
+
+
+setVH();
+
+
+window
+.addEventListener(
+
+  "resize",
+
+  setVH
+
+);
+
+
+if(
+  window.visualViewport
+){
+
+  window
+  .visualViewport
+  .addEventListener(
+
+    "resize",
+
+    setVH
+
+  );
+
+}
+
 
 
 /* =========================================================
@@ -1394,266 +3438,468 @@ if(window.visualViewport){
 
 const INTRO = {
 
+
 PL:[
 
-{
-type:"text",
-label:"TRAUM / 01",
-title:"Sen nie jest filmem.",
-text:"Sen nie musi mieć początku ani końca. Pamięć miesza miejsca, ludzi, czas i emocje w rzeczywistość, która przez chwilę wydaje się całkowicie naturalna.",
-meta:"Nie próbuj jeszcze niczego wyjaśniać. Pozwól temu po prostu wrócić."
-},
 
 {
+
 type:"text",
-label:"TRAUM / 02",
-title:"Pamięć rekonstruuje.",
-text:"To, co pamiętasz po przebudzeniu, nie musi być dokładnym zapisem snu. Sam akt przypominania może go zmieniać.",
-meta:"Za chwilę TRAUM SIM zacznie podążać za tym, co opisujesz."
+
+label:
+"TRAUM / 01",
+
+title:
+"Sen nie jest filmem.",
+
+text:
+"Sen nie musi mieć początku ani końca. Pamięć miesza miejsca, ludzi, czas i emocje w rzeczywistość, która przez chwilę wydaje się całkowicie naturalna.",
+
+meta:
+"Nie próbuj jeszcze niczego wyjaśniać. Pozwól temu po prostu wrócić."
+
 },
 
+
 {
+
+type:"text",
+
+label:
+"TRAUM / 02",
+
+title:
+"Pamięć rekonstruuje.",
+
+text:
+"To, co pamiętasz po przebudzeniu, nie musi być dokładnym zapisem snu. Sam akt przypominania może go zmieniać.",
+
+meta:
+"Za chwilę TRAUM SIM zacznie podążać za tym, co opisujesz."
+
+},
+
+
+{
+
 type:"color",
-label:"TRAUM / 03",
-title:"Jaki kolor mają Twoje najlepsze sny?",
-text:"Nie zastanawiaj się długo. Wpisz pierwszy kolor, który pojawił się w Twojej głowie.",
-meta:"Od tej chwili TRAUM SIM spróbuje śnić właśnie tym kolorem."
+
+label:
+"TRAUM / 03",
+
+title:
+"Jaki kolor mają Twoje najlepsze sny?",
+
+text:
+"Nie zastanawiaj się długo. Wpisz pierwszy kolor, który pojawił się w Twojej głowie.",
+
+meta:
+"Od tej chwili TRAUM SIM spróbuje śnić właśnie tym kolorem."
+
 },
 
+
 {
+
 type:"text",
-label:"TRAUM / 04",
-title:"Opowiedz, nie interpretuj.",
-text:"Nie musisz znać znaczenia snu. Opisz to, co pamiętasz: przestrzeń, osobę, sytuację, uczucie albo jeden obraz.",
-meta:"Każda odpowiedź zmieni następne pytanie."
+
+label:
+"TRAUM / 04",
+
+title:
+"Opowiedz. Nie interpretuj.",
+
+text:
+"Nie musisz znać znaczenia snu. Opisz to, co pamiętasz: przestrzeń, osobę, sytuację, uczucie albo jeden obraz.",
+
+meta:
+"Każda odpowiedź zmieni następne pytanie."
+
 }
 
+
 ],
+
 
 
 ENG:[
 
-{
-type:"text",
-label:"TRAUM / 01",
-title:"A dream is not a film.",
-text:"A dream does not need a beginning or an end. Memory mixes places, people, time and emotion into a reality that briefly feels completely natural.",
-meta:"Do not explain anything yet. Simply allow it to return."
-},
 
 {
+
 type:"text",
-label:"TRAUM / 02",
-title:"Memory reconstructs.",
-text:"What you remember after waking may not be an exact recording of the dream. The act of remembering can change it.",
-meta:"In a moment TRAUM SIM will begin to follow what you describe."
+
+label:
+"TRAUM / 01",
+
+title:
+"A dream is not a film.",
+
+text:
+"A dream does not need a beginning or an end. Memory mixes places, people, time and emotion into a reality that briefly feels completely natural.",
+
+meta:
+"Do not explain anything yet. Simply allow it to return."
+
 },
 
+
 {
+
+type:"text",
+
+label:
+"TRAUM / 02",
+
+title:
+"Memory reconstructs.",
+
+text:
+"What you remember after waking may not be an exact recording of the dream. The act of remembering can change it.",
+
+meta:
+"In a moment TRAUM SIM will begin to follow what you describe."
+
+},
+
+
+{
+
 type:"color",
-label:"TRAUM / 03",
-title:"What colour do your best dreams have?",
-text:"Do not think too long. Type the first colour that appeared in your mind.",
-meta:"From now on TRAUM SIM will try to dream in that colour."
+
+label:
+"TRAUM / 03",
+
+title:
+"What colour do your best dreams have?",
+
+text:
+"Do not think too long. Type the first colour that appeared in your mind.",
+
+meta:
+"From now on TRAUM SIM will try to dream in that colour."
+
 },
 
+
 {
+
 type:"text",
-label:"TRAUM / 04",
-title:"Describe. Do not interpret.",
-text:"You do not need to understand the dream. Describe what remains: a space, a person, an event, a feeling or a single image.",
-meta:"Every answer will change the next question."
+
+label:
+"TRAUM / 04",
+
+title:
+"Describe. Do not interpret.",
+
+text:
+"You do not need to understand the dream. Describe what remains: a space, a person, an event, a feeling or a single image.",
+
+meta:
+"Every answer will change the next question."
+
 }
+
 
 ],
 
 
+
 UKR:[
 
-{
-type:"text",
-label:"TRAUM / 01",
-title:"Сон — це не фільм.",
-text:"Сон не обов’язково має початок чи кінець. Пам’ять змішує місця, людей, час та емоції у реальність, яка на мить здається абсолютно природною.",
-meta:"Поки що не намагайся нічого пояснювати. Просто дозволь цьому повернутися."
-},
 
 {
+
 type:"text",
-label:"TRAUM / 02",
-title:"Пам’ять реконструює.",
-text:"Те, що залишається в пам’яті після пробудження, не обов’язково є точним записом сну. Сам процес пригадування може його змінювати.",
-meta:"За мить TRAUM SIM почне слідувати за тим, що з’являється у твоєму описі."
+
+label:
+"TRAUM / 01",
+
+title:
+"Сон — це не фільм.",
+
+text:
+"Сон не обов’язково має початок чи кінець. Пам’ять змішує місця, людей, час та емоції у реальність, яка на мить здається абсолютно природною.",
+
+meta:
+"Поки що не намагайся нічого пояснювати. Просто дозволь цьому повернутися."
+
 },
 
+
 {
+
+type:"text",
+
+label:
+"TRAUM / 02",
+
+title:
+"Пам’ять реконструює.",
+
+text:
+"Те, що залишається в пам’яті після пробудження, не обов’язково є точним записом сну. Сам процес пригадування може його змінювати.",
+
+meta:
+"За мить TRAUM SIM почне слідувати за тим, що з’являється в описі."
+
+},
+
+
+{
+
 type:"color",
-label:"TRAUM / 03",
-title:"Якого кольору твої найкращі сни?",
-text:"Не думай довго. Напиши перший колір, який з’являється в уяві.",
-meta:"Відтепер TRAUM SIM спробує бачити сни саме цим кольором."
+
+label:
+"TRAUM / 03",
+
+title:
+"Якого кольору найкращі сни?",
+
+text:
+"Не думай довго. Напиши перший колір, який з’являється в уяві.",
+
+meta:
+"Відтепер TRAUM SIM спробує бачити сни саме цим кольором."
+
 },
 
+
 {
+
 type:"text",
-label:"TRAUM / 04",
-title:"Описуй. Не пояснюй.",
-text:"Не потрібно шукати значення сну. Опиши те, що залишилося: простір, людину, ситуацію, відчуття або один образ.",
-meta:"Кожна відповідь змінюватиме наступне запитання."
+
+label:
+"TRAUM / 04",
+
+title:
+"Описуй. Не пояснюй.",
+
+text:
+"Не потрібно шукати значення сну. Опиши те, що залишилося: простір, людину, ситуацію, відчуття або один образ.",
+
+meta:
+"Кожна відповідь змінюватиме наступне запитання."
+
 }
 
+
 ]
+
 
 };
 
 
+
 /* =========================================================
-   UI COPY
+   UI
    ========================================================= */
 
 const UI = {
 
+
 PL:{
 
-back:"WSTECZ",
 
-next:"DALEJ",
+back:
+"WSTECZ",
 
-begin:"WEJDŹ W SEN",
+
+next:
+"DALEJ",
+
+
+begin:
+"WEJDŹ W SEN",
+
 
 placeholder:
 "opisz to własnymi słowami...",
 
+
 colorPlaceholder:
 "np. granatowy, fioletowy, czerwony...",
+
 
 nicknameTitle:
 "Jak mamy zapamiętać osobę, która śniła?",
 
+
 nicknameMeta:
 "Możesz użyć pseudonimu. Nie musisz podawać prawdziwego imienia.",
 
+
 nicknamePlaceholder:
 "NICKNAME",
+
 
 nicknameSubmit:
 "ZAPISZ SEN",
 
+
 saving:
 "ZAPISUJĘ SEN",
+
 
 done:
 "SEN ZAPISANY",
 
+
 sub:
 "Twój sen wszedł do wspólnego archiwum.",
+
 
 error:
 "Sen nie został zapisany.",
 
+
 retry:
 "SPRÓBUJ PONOWNIE",
+
 
 invite:
 "Zapraszamy na nasz performance ze swoim snem."
 
+
 },
+
 
 
 ENG:{
 
-back:"BACK",
 
-next:"NEXT",
+back:
+"BACK",
 
-begin:"ENTER DREAM",
+
+next:
+"NEXT",
+
+
+begin:
+"ENTER DREAM",
+
 
 placeholder:
 "describe it in your own words...",
 
+
 colorPlaceholder:
 "e.g. blue, violet, red...",
+
 
 nicknameTitle:
 "How should the dreamer be remembered?",
 
+
 nicknameMeta:
 "You may use a nickname. You do not need to provide your real name.",
 
+
 nicknamePlaceholder:
 "NICKNAME",
+
 
 nicknameSubmit:
 "SAVE DREAM",
 
+
 saving:
 "SAVING DREAM",
+
 
 done:
 "DREAM RECEIVED",
 
+
 sub:
 "Your dream has entered the collective archive.",
+
 
 error:
 "The dream could not be saved.",
 
+
 retry:
 "TRY AGAIN",
+
 
 invite:
 "Join our performance with your dream."
 
+
 },
+
 
 
 UKR:{
 
-back:"НАЗАД",
 
-next:"ДАЛІ",
+back:
+"НАЗАД",
 
-begin:"УВІЙТИ У СОН",
+
+next:
+"ДАЛІ",
+
+
+begin:
+"УВІЙТИ У СОН",
+
 
 placeholder:
 "опиши це своїми словами...",
 
+
 colorPlaceholder:
 "наприклад: синій, фіолетовий, червоний...",
+
 
 nicknameTitle:
 "Як нам запам’ятати людину, якій наснився цей сон?",
 
+
 nicknameMeta:
 "Можна використати псевдонім. Справжнє ім’я вказувати не обов’язково.",
+
 
 nicknamePlaceholder:
 "NICKNAME",
 
+
 nicknameSubmit:
 "ЗБЕРЕГТИ СОН",
+
 
 saving:
 "ЗБЕРІГАЮ СОН",
 
+
 done:
 "СОН ЗБЕРЕЖЕНО",
+
 
 sub:
 "Цей сон увійшов до спільного архіву.",
 
+
 error:
 "Сон не вдалося зберегти.",
+
 
 retry:
 "СПРОБУВАТИ ЩЕ РАЗ",
 
+
 invite:
 "Приходь на наш performance зі своїм сном."
 
+
 }
 
+
 };
+
 
 
 /* =========================================================
@@ -1662,31 +3908,55 @@ invite:
 
 const state = {
 
+
 lang:null,
 
-mode:"start",
 
-introStep:0,
+mode:
+"start",
 
-questionIndex:0,
 
-totalQuestions:9,
+introStep:
+0,
 
-answers:[],
 
-generatedQuestions:[],
+questionIndex:
+0,
 
-nickname:"",
 
-dreamColorName:"",
+totalQuestions:
+9,
+
+
+answers:
+[],
+
+
+generatedQuestions:
+[],
+
+
+nickname:
+"",
+
+
+dreamColorName:
+"",
+
 
 dreamColor:{
-  r:185,
-  g:185,
-  b:185
+
+r:185,
+
+g:185,
+
+b:185
+
 }
 
+
 };
+
 
 
 /* =========================================================
@@ -1694,24 +3964,36 @@ dreamColor:{
    ========================================================= */
 
 const screen =
-document.getElementById(
-  "screen"
+
+document
+.getElementById(
+"screen"
 );
+
 
 const progress =
-document.getElementById(
-  "progress"
+
+document
+.getElementById(
+"progress"
 );
+
 
 const depthLabel =
-document.getElementById(
-  "depthLabel"
+
+document
+.getElementById(
+"depthLabel"
 );
 
+
 const ghostLayer =
-document.getElementById(
-  "ghostLayer"
+
+document
+.getElementById(
+"ghostLayer"
 );
+
 
 
 /* =========================================================
@@ -1720,79 +4002,137 @@ document.getElementById(
 
 function escapeHtml(value){
 
-  return String(
-    value || ""
-  )
-  .replace(
-    /[&<>"']/g,
-    c=>({
 
-      "&":"&amp;",
-      "<":"&lt;",
-      ">":"&gt;",
-      "\"":"&quot;",
-      "'":"&#039;"
+return String(
+value || ""
+)
+.replace(
 
-    }[c])
-  );
+/[&<>"']/g,
+
+c=>({
+
+"&":"&amp;",
+
+"<":"&lt;",
+
+">":"&gt;",
+
+"\"":"&quot;",
+
+"'":"&#039;"
+
+}[c])
+
+);
 
 }
+
 
 
 function randomItem(array){
 
-  return array[
-    Math.floor(
-      Math.random() *
-      array.length
-    )
-  ];
+
+return array[
+Math.floor(
+Math.random()
+*
+array.length
+)
+];
 
 }
+
 
 
 function normalizeText(text){
 
-  return String(
-    text || ""
-  )
-  .replace(
-    /\s+/g,
-    " "
-  )
-  .trim();
+
+return String(
+text || ""
+)
+.replace(
+/\s+/g,
+" "
+)
+.trim();
 
 }
 
 
+
 /* =========================================================
-   MODE
+   DREAM COLOR
+   ========================================================= */
+
+function applyDreamColor(){
+
+
+const c =
+
+state.dreamColor
+
+||
+
+{
+
+r:185,
+
+g:185,
+
+b:185
+
+};
+
+
+document
+.documentElement
+.style
+.setProperty(
+
+"--dreamRGB",
+
+`${c.r},${c.g},${c.b}`
+
+);
+
+}
+
+
+
+/* =========================================================
+   VISUAL MODE
    ========================================================= */
 
 function setVisualMode(mode){
 
-  state.mode =
-    mode;
+
+state.mode =
+mode;
 
 
-  document
-    .body
-    .classList
-    .toggle(
-      "questionMode",
-      [
-        "questions",
-        "nickname",
-        "saving",
-        "saved",
-        "error"
-      ]
-      .includes(
-        mode
-      )
-    );
+document
+.body
+.classList
+.toggle(
+
+"questionMode",
+
+[
+"questions",
+"nickname",
+"saving",
+"saved",
+"error"
+]
+.includes(
+mode
+)
+
+);
 
 }
+
 
 
 /* =========================================================
@@ -1801,36 +4141,47 @@ function setVisualMode(mode){
 
 function transition(fn){
 
-  screen
-    .classList
-    .add(
-      "fade"
-    );
+
+screen
+.classList
+.add(
+"fade"
+);
 
 
-  setTimeout(
-    ()=>{
+setTimeout(
 
-      fn();
+()=>{
 
 
-      requestAnimationFrame(
-        ()=>{
+fn();
 
-          screen
-            .classList
-            .remove(
-              "fade"
-            );
 
-        }
-      );
+requestAnimationFrame(
 
-    },
-    720
-  );
+()=>{
+
+
+screen
+.classList
+.remove(
+"fade"
+);
+
 
 }
+
+);
+
+
+},
+
+720
+
+);
+
+}
+
 
 
 /* =========================================================
@@ -1839,54 +4190,83 @@ function transition(fn){
 
 function renderStart(){
 
-  setVisualMode(
-    "start"
-  );
+
+setVisualMode(
+"start"
+);
 
 
-  progress.textContent =
-    "";
+progress.textContent =
+"";
 
 
-  depthLabel.textContent =
-    "TRAUM";
+depthLabel.textContent =
+"TRAUM";
 
 
-  screen.innerHTML = `
+screen.innerHTML = `
+
 
 <div class="eyebrow">
+
 TRAUM / DREAM ARCHIVE
+
 </div>
 
+
 <h1>
+
 TRAUM
 <br>
 SIM
+
 </h1>
 
+
 <p class="sub">
+
 choose language / wybierz język / оберіть мову
+
 </p>
+
 
 <div class="langs">
 
-<button onclick="chooseLanguage('PL')">
+
+<button
+onclick="chooseLanguage('PL')"
+>
+
 PL
+
 </button>
 
-<button onclick="chooseLanguage('ENG')">
+
+<button
+onclick="chooseLanguage('ENG')"
+>
+
 ENG
+
 </button>
 
-<button onclick="chooseLanguage('UKR')">
+
+<button
+onclick="chooseLanguage('UKR')"
+>
+
 УКР
+
 </button>
+
 
 </div>
+
 
 `;
 
 }
+
 
 
 /* =========================================================
@@ -1895,46 +4275,56 @@ ENG
 
 function chooseLanguage(lang){
 
-  state.lang =
-    lang;
+
+state.lang =
+lang;
 
 
-  state.introStep =
-    0;
+state.introStep =
+0;
 
 
-  state.questionIndex =
-    0;
+state.questionIndex =
+0;
 
 
-  state.answers =
-    [];
+state.answers =
+[];
 
 
-  state.generatedQuestions =
-    [];
+state.generatedQuestions =
+[];
 
 
-  state.nickname =
-    "";
+state.nickname =
+"";
 
 
-  state.dreamColorName =
-    "";
+state.dreamColorName =
+"";
 
 
-  state.dreamColor = {
-    r:185,
-    g:185,
-    b:185
-  };
+state.dreamColor =
+{
+
+r:185,
+
+g:185,
+
+b:185
+
+};
 
 
-  transition(
-    renderIntro
-  );
+applyDreamColor();
+
+
+transition(
+renderIntro
+);
 
 }
+
 
 
 /* =========================================================
@@ -1943,72 +4333,94 @@ function chooseLanguage(lang){
 
 function renderIntro(){
 
-  setVisualMode(
-    "intro"
-  );
+
+setVisualMode(
+"intro"
+);
 
 
-  const slides =
-    INTRO[
-      state.lang
-    ];
+const slides =
+
+INTRO[
+state.lang
+];
 
 
-  const slide =
-    slides[
-      state.introStep
-    ];
+const slide =
+
+slides[
+state.introStep
+];
 
 
-  const copy =
-    UI[
-      state.lang
-    ];
+const copy =
+
+UI[
+state.lang
+];
 
 
-  const last =
-    state.introStep ===
-    slides.length-1;
+const last =
+
+state.introStep
+===
+slides.length-1;
 
 
-  progress.textContent =
-    `${String(
-      state.introStep+1
-    ).padStart(
-      2,
-      "0"
-    )}
-    /
-    ${String(
-      slides.length
-    ).padStart(
-      2,
-      "0"
-    )}`;
+
+progress.textContent =
+
+`${String(
+state.introStep+1
+)
+.padStart(
+2,
+"0"
+)}
+/
+${String(
+slides.length
+)
+.padStart(
+2,
+"0"
+)}`;
 
 
-  depthLabel.textContent =
-    "TRAUM";
+
+depthLabel.textContent =
+"TRAUM";
 
 
-  if(
-    slide.type ===
-    "color"
-  ){
 
-    screen.innerHTML = `
+if(
+slide.type==="color"
+){
+
+
+screen.innerHTML = `
+
 
 <div class="eyebrow">
+
 ${slide.label}
+
 </div>
+
 
 <h2>
+
 ${slide.title}
+
 </h2>
 
+
 <div class="introText">
+
 ${slide.text}
+
 </div>
+
 
 <input
 id="dreamColorInput"
@@ -2017,456 +4429,712 @@ autocomplete="off"
 spellcheck="false"
 placeholder="${copy.colorPlaceholder}"
 value="${escapeHtml(
-  state.dreamColorName
+state.dreamColorName
 )}"
 >
 
+
 <div class="colorHint">
+
 ${slide.meta}
+
 </div>
 
+
 <div class="actions">
+
 
 <button
 class="back"
 onclick="introBack()"
 >
+
 ${copy.back}
+
 </button>
+
 
 <button
 class="next"
 onclick="introNext()"
 >
+
 ${copy.next}
+
 </button>
 
+
 </div>
+
 
 `;
 
 
-    setTimeout(
-      ()=>{
+setTimeout(
 
-        const field =
-          document.getElementById(
-            "dreamColorInput"
-          );
+()=>{
 
 
-        if(field){
+const field =
 
-          field.focus();
-
-
-          field.addEventListener(
-            "input",
-            ()=>{
-
-              state.dreamColorName =
-                field.value.trim();
+document
+.getElementById(
+"dreamColorInput"
+);
 
 
-              state.dreamColor =
-                parseDreamColor(
-                  state.dreamColorName
-                );
-
-            }
-          );
-
-        }
-
-      },
-      350
-    );
-
-  }
-  else{
-
-    screen.innerHTML = `
-
-<div class="eyebrow">
-${slide.label}
-</div>
-
-<h2>
-${slide.title}
-</h2>
-
-<div class="introText">
-${slide.text}
-</div>
-
-<div class="introMeta">
-${slide.meta}
-</div>
-
-<div class="actions">
-
-<button
-class="back"
-onclick="introBack()"
->
-${copy.back}
-</button>
-
-<button
-class="next"
-onclick="introNext()"
->
-${last ? copy.begin : copy.next}
-</button>
-
-</div>
-
-`;
-
-  }
+if(field){
 
 
-  ghost(
-    slide.title
-  );
+field.focus();
+
+
+field
+.addEventListener(
+
+"input",
+
+()=>{
+
+
+state.dreamColorName =
+
+field
+.value
+.trim();
+
+
+state.dreamColor =
+
+parseDreamColor(
+state.dreamColorName
+);
+
+
+applyDreamColor();
+
+
+}
+
+);
+
 
 }
 
 
+},
+
+350
+
+);
+
+
+}
+
+else{
+
+
+screen.innerHTML = `
+
+
+<div class="eyebrow">
+
+${slide.label}
+
+</div>
+
+
+<h2>
+
+${slide.title}
+
+</h2>
+
+
+<div class="introText">
+
+${slide.text}
+
+</div>
+
+
+<div class="introMeta">
+
+${slide.meta}
+
+</div>
+
+
+<div class="actions">
+
+
+<button
+class="back"
+onclick="introBack()"
+>
+
+${copy.back}
+
+</button>
+
+
+<button
+class="next"
+onclick="introNext()"
+>
+
+${last
+?
+copy.begin
+:
+copy.next}
+
+</button>
+
+
+</div>
+
+
+`;
+
+
+}
+
+
+ghost(
+slide.title
+);
+
+}
+
+
+
 /* =========================================================
-   INTRO NAV
+   INTRO BACK
    ========================================================= */
 
 function introBack(){
 
-  if(
-    state.introStep ===
-    0
-  ){
 
-    transition(
-      renderStart
-    );
-
-    return;
-
-  }
+if(
+state.introStep===0
+){
 
 
-  saveColorField();
+transition(
+renderStart
+);
 
 
-  state.introStep--;
+return;
 
-
-  transition(
-    renderIntro
-  );
 
 }
 
 
-function introNext(){
-
-  saveColorField();
+saveColorField();
 
 
-  const slides =
-    INTRO[
-      state.lang
-    ];
+state.introStep--;
 
 
-  if(
-    state.introStep <
-    slides.length-1
-  ){
-
-    state.introStep++;
-
-
-    transition(
-      renderIntro
-    );
-
-  }
-  else{
-
-    state.questionIndex =
-      0;
-
-
-    if(
-      !state.generatedQuestions[0]
-    ){
-
-      state.generatedQuestions[0] =
-        generateOpeningQuestion();
-
-    }
-
-
-    transition(
-      renderQuestion
-    );
-
-  }
+transition(
+renderIntro
+);
 
 }
+
 
 
 /* =========================================================
-   COLOR
+   INTRO NEXT
+   ========================================================= */
+
+function introNext(){
+
+
+saveColorField();
+
+
+const slides =
+
+INTRO[
+state.lang
+];
+
+
+if(
+state.introStep
+<
+slides.length-1
+){
+
+
+state.introStep++;
+
+
+transition(
+renderIntro
+);
+
+
+}
+
+else{
+
+
+state.questionIndex =
+0;
+
+
+if(
+!state.generatedQuestions[0]
+){
+
+
+state.generatedQuestions[0] =
+
+generateOpeningQuestion();
+
+
+}
+
+
+transition(
+renderQuestion
+);
+
+
+}
+
+}
+
+
+
+/* =========================================================
+   SAVE COLOR
    ========================================================= */
 
 function saveColorField(){
 
-  const field =
-    document.getElementById(
-      "dreamColorInput"
-    );
+
+const field =
+
+document
+.getElementById(
+"dreamColorInput"
+);
 
 
-  if(!field){
-    return;
-  }
+if(!field){
 
-
-  state.dreamColorName =
-    field.value.trim();
-
-
-  state.dreamColor =
-    parseDreamColor(
-      state.dreamColorName
-    );
+return;
 
 }
 
 
-function parseDreamColor(name){
+state.dreamColorName =
 
-  const s =
-    String(
-      name || ""
-    )
-    .toLowerCase()
-    .trim();
+field
+.value
+.trim();
 
 
-  const map = {
+state.dreamColor =
 
-    /* PL */
+parseDreamColor(
+state.dreamColorName
+);
 
-    "niebieski":[65,115,195],
-    "błękitny":[85,160,215],
-    "błękit":[85,160,215],
 
-    "granatowy":[43,68,135],
-    "granat":[43,68,135],
-
-    "turkusowy":[50,160,160],
-
-    "zielony":[70,145,100],
-
-    "czerwony":[190,65,72],
-
-    "bordowy":[135,45,62],
-
-    "różowy":[205,100,150],
-
-    "fioletowy":[135,80,185],
-    "fiolet":[135,80,185],
-
-    "purpurowy":[155,70,150],
-
-    "pomarańczowy":[205,120,55],
-
-    "żółty":[215,180,75],
-
-    "złoty":[195,150,75],
-
-    "srebrny":[175,180,190],
-
-    "szary":[160,160,160],
-
-    "grafitowy":[105,108,114],
-
-    "biały":[220,220,215],
-
-    "czarny":[95,95,95],
-
-    "brązowy":[135,90,70],
-
-
-    /* ENG */
-
-    "blue":[65,115,195],
-
-    "navy":[43,68,135],
-
-    "cyan":[75,160,200],
-
-    "turquoise":[50,160,160],
-
-    "green":[70,145,100],
-
-    "red":[190,65,72],
-
-    "burgundy":[135,45,62],
-
-    "pink":[205,100,150],
-
-    "purple":[135,80,185],
-
-    "violet":[135,80,185],
-
-    "orange":[205,120,55],
-
-    "yellow":[215,180,75],
-
-    "gold":[195,150,75],
-
-    "silver":[175,180,190],
-
-    "grey":[160,160,160],
-
-    "gray":[160,160,160],
-
-    "white":[220,220,215],
-
-    "black":[95,95,95],
-
-    "brown":[135,90,70],
-
-
-    /* UKR */
-
-    "синій":[65,115,195],
-
-    "блакитний":[85,160,215],
-
-    "темно-синій":[43,68,135],
-
-    "бірюзовий":[50,160,160],
-
-    "зелений":[70,145,100],
-
-    "червоний":[190,65,72],
-
-    "бордовий":[135,45,62],
-
-    "рожевий":[205,100,150],
-
-    "фіолетовий":[135,80,185],
-
-    "пурпуровий":[155,70,150],
-
-    "помаранчевий":[205,120,55],
-
-    "жовтий":[215,180,75],
-
-    "золотий":[195,150,75],
-
-    "срібний":[175,180,190],
-
-    "сірий":[160,160,160],
-
-    "графітовий":[105,108,114],
-
-    "білий":[220,220,215],
-
-    "чорний":[95,95,95],
-
-    "коричневий":[135,90,70]
-
-  };
-
-
-  for(
-    const key
-    in map
-  ){
-
-    if(
-      s.includes(
-        key
-      )
-    ){
-
-      return {
-        r:map[key][0],
-        g:map[key][1],
-        b:map[key][2]
-      };
-
-    }
-
-  }
-
-
-  return {
-    r:175,
-    g:175,
-    b:175
-  };
+applyDreamColor();
 
 }
+
 
 
 /* =========================================================
-   FIRST QUESTION
+   COLOR PARSER
+   ========================================================= */
+
+function parseDreamColor(name){
+
+
+const s =
+
+String(
+name || ""
+)
+.toLowerCase()
+.trim();
+
+
+
+const map =
+{
+
+
+/* =====================================================
+   POLSKI
+   ===================================================== */
+
+"niebieski":
+[65,115,195],
+
+"niebieska":
+[65,115,195],
+
+"błękitny":
+[85,160,215],
+
+"błękit":
+[85,160,215],
+
+"granatowy":
+[43,68,135],
+
+"granat":
+[43,68,135],
+
+"turkusowy":
+[50,160,160],
+
+"turkus":
+[50,160,160],
+
+"zielony":
+[70,145,100],
+
+"zieleń":
+[70,145,100],
+
+"czerwony":
+[190,65,72],
+
+"czerwień":
+[190,65,72],
+
+"bordowy":
+[135,45,62],
+
+"bordo":
+[135,45,62],
+
+"różowy":
+[205,100,150],
+
+"róż":
+[205,100,150],
+
+"fioletowy":
+[135,80,185],
+
+"fiolet":
+[135,80,185],
+
+"purpurowy":
+[155,70,150],
+
+"purpura":
+[155,70,150],
+
+"pomarańczowy":
+[205,120,55],
+
+"pomarańcz":
+[205,120,55],
+
+"żółty":
+[215,180,75],
+
+"żółć":
+[215,180,75],
+
+"złoty":
+[195,150,75],
+
+"złoto":
+[195,150,75],
+
+"srebrny":
+[175,180,190],
+
+"srebro":
+[175,180,190],
+
+"szary":
+[160,160,160],
+
+"szarość":
+[160,160,160],
+
+"grafitowy":
+[105,108,114],
+
+"grafit":
+[105,108,114],
+
+"biały":
+[220,220,215],
+
+"biel":
+[220,220,215],
+
+"czarny":
+[95,95,95],
+
+"czerń":
+[95,95,95],
+
+"brązowy":
+[135,90,70],
+
+"brąz":
+[135,90,70],
+
+
+
+/* =====================================================
+   ENGLISH
+   ===================================================== */
+
+"blue":
+[65,115,195],
+
+"navy":
+[43,68,135],
+
+"cyan":
+[75,160,200],
+
+"turquoise":
+[50,160,160],
+
+"green":
+[70,145,100],
+
+"red":
+[190,65,72],
+
+"burgundy":
+[135,45,62],
+
+"pink":
+[205,100,150],
+
+"purple":
+[135,80,185],
+
+"violet":
+[135,80,185],
+
+"orange":
+[205,120,55],
+
+"yellow":
+[215,180,75],
+
+"gold":
+[195,150,75],
+
+"silver":
+[175,180,190],
+
+"grey":
+[160,160,160],
+
+"gray":
+[160,160,160],
+
+"white":
+[220,220,215],
+
+"black":
+[95,95,95],
+
+"brown":
+[135,90,70],
+
+
+
+/* =====================================================
+   UKRAINIAN
+   ===================================================== */
+
+"синій":
+[65,115,195],
+
+"блакитний":
+[85,160,215],
+
+"темно-синій":
+[43,68,135],
+
+"бірюзовий":
+[50,160,160],
+
+"зелений":
+[70,145,100],
+
+"червоний":
+[190,65,72],
+
+"бордовий":
+[135,45,62],
+
+"рожевий":
+[205,100,150],
+
+"фіолетовий":
+[135,80,185],
+
+"пурпуровий":
+[155,70,150],
+
+"помаранчевий":
+[205,120,55],
+
+"жовтий":
+[215,180,75],
+
+"золотий":
+[195,150,75],
+
+"срібний":
+[175,180,190],
+
+"сірий":
+[160,160,160],
+
+"графітовий":
+[105,108,114],
+
+"білий":
+[220,220,215],
+
+"чорний":
+[95,95,95],
+
+"коричневий":
+[135,90,70]
+
+
+};
+
+
+
+for(
+const key
+in map
+){
+
+
+if(
+s.includes(
+key
+)
+){
+
+
+return {
+
+r:
+map[key][0],
+
+g:
+map[key][1],
+
+b:
+map[key][2]
+
+};
+
+
+}
+
+
+}
+
+
+
+/*
+Unknown or poetic colour:
+neutral watercolour.
+*/
+
+return {
+
+r:175,
+
+g:175,
+
+b:175
+
+};
+
+}
+
+
+
+/* =========================================================
+   OPENING QUESTION
    ========================================================= */
 
 function generateOpeningQuestion(){
 
-  if(
-    state.lang ===
-    "PL"
-  ){
 
-    return {
-
-      category:
-        "POCZĄTEK",
-
-      question:
-        "Przywołaj jeden sen, który został z Tobą dłużej niż inne. Opowiedz o pierwszej scenie, obrazie albo sytuacji, która właśnie teraz wraca do pamięci."
-
-    };
-
-  }
+if(
+state.lang==="PL"
+){
 
 
-  if(
-    state.lang ===
-    "UKR"
-  ){
+return {
 
-    return {
+category:
+"POCZĄTEK",
 
-      category:
-        "ПОЧАТОК",
+question:
+"Przywołaj jeden sen, który został z Tobą dłużej niż inne. Opowiedz o pierwszej scenie, obrazie albo sytuacji, która właśnie teraz wraca do pamięci."
 
-      question:
-        "Згадай один сон, який залишився в пам’яті довше за інші. Опиши першу сцену, образ або ситуацію, що повертається просто зараз."
+};
 
-    };
-
-  }
-
-
-  return {
-
-    category:
-      "BEGINNING",
-
-    question:
-      "Remember one dream that stayed with you longer than the others. Describe the first scene, image or situation that returns to you now."
-
-  };
 
 }
+
+
+
+if(
+state.lang==="UKR"
+){
+
+
+return {
+
+category:
+"ПОЧАТОК",
+
+question:
+"Згадай один сон, який залишився в пам’яті довше за інші. Опиши першу сцену, образ або ситуацію, що повертається просто зараз."
+
+};
+
+
+}
+
+
+
+return {
+
+category:
+"BEGINNING",
+
+question:
+"Remember one dream that stayed with you longer than the others. Describe the first scene, image or situation that returns to you now."
+
+};
+
+}
+
 
 
 /* =========================================================
@@ -2475,102 +5143,116 @@ function generateOpeningQuestion(){
 
 function extractFragment(text){
 
-  const cleaned =
-    normalizeText(
-      text
-    );
+
+const cleaned =
+
+normalizeText(
+text
+);
 
 
-  if(
-    !cleaned
-  ){
+if(
+!cleaned
+){
 
-    return "";
-
-  }
-
-
-  const words =
-    cleaned
-    .split(/\s+/)
-    .filter(Boolean);
-
-
-  if(
-    words.length <=
-    8
-  ){
-
-    return cleaned;
-
-  }
-
-
-  const startOptions = [
-
-    0,
-
-    Math.floor(
-      words.length*.20
-    ),
-
-    Math.floor(
-      words.length*.40
-    ),
-
-    Math.max(
-      0,
-      words.length-8
-    )
-
-  ];
-
-
-  const start =
-    randomItem(
-      startOptions
-    );
-
-
-  return words
-    .slice(
-      start,
-      start+8
-    )
-    .join(" ");
+return "";
 
 }
 
 
+const words =
+
+cleaned
+.split(/\s+/)
+.filter(
+Boolean
+);
+
+
+if(
+words.length<=8
+){
+
+
+return cleaned;
+
+
+}
+
+
+const startOptions =
+[
+
+0,
+
+Math.floor(
+words.length*.20
+),
+
+Math.floor(
+words.length*.40
+),
+
+Math.max(
+0,
+words.length-8
+)
+
+];
+
+
+const start =
+
+randomItem(
+startOptions
+);
+
+
+return words
+.slice(
+start,
+start+8
+)
+.join(" ");
+
+}
+
+
+
 /* =========================================================
-   THEMES
+   THEME DETECTION
    ========================================================= */
 
 function detectThemes(text){
 
-  const t =
-    String(
-      text || ""
-    )
-    .toLowerCase();
+
+const t =
+
+String(
+text || ""
+)
+.toLowerCase();
 
 
-  const result =
-    [];
+const result =
+[];
 
 
-  const dictionaries = {
+const dictionaries =
+{
 
 
 PL:{
 
+
 person:[
 "mama","matka","ojciec","tata",
-"babcia","dziadek",
-"mężczyzna","kobieta","człowiek",
-"osoba","dziecko","przyjaciel",
+"babcia","dziadek","mężczyzna",
+"kobieta","człowiek","osoba",
+"dziecko","przyjaciel","przyjaciółka",
 "ktoś","ludzie"
 ],
+
 
 place:[
 "dom","pokój","mieszkanie","ulica",
@@ -2579,15 +5261,18 @@ place:[
 "morze","plaża","góra","ogród"
 ],
 
+
 water:[
 "woda","morze","ocean","rzeka",
 "jezioro","deszcz","basen","fala"
 ],
 
+
 fear:[
-"strach","bałem","bałam","lęk",
-"przeraż","niepokój","groza"
+"strach","bałem","bałam",
+"lęk","przeraż","niepokój","groza"
 ],
+
 
 body:[
 "ciało","ręka","ręce","noga","nogi",
@@ -2595,20 +5280,25 @@ body:[
 "skóra","krew"
 ],
 
+
 animal:[
 "pies","kot","ptak","koń","wąż",
 "zwierzę","owad","ryba","wilk"
 ],
+
 
 door:[
 "drzwi","okno","schody","korytarz",
 "tunel","przejście","brama"
 ]
 
+
 },
 
 
+
 ENG:{
+
 
 person:[
 "mother","mom","father","dad",
@@ -2617,6 +5307,7 @@ person:[
 "friend","someone","people"
 ],
 
+
 place:[
 "house","room","apartment","street",
 "city","forest","school","hotel",
@@ -2624,15 +5315,18 @@ place:[
 "sea","beach","mountain","garden"
 ],
 
+
 water:[
 "water","sea","ocean","river",
 "lake","rain","pool","wave"
 ],
 
+
 fear:[
 "fear","afraid","terrified",
 "anxiety","horror"
 ],
+
 
 body:[
 "body","hand","hands","leg","legs",
@@ -2640,20 +5334,25 @@ body:[
 "skin","blood"
 ],
 
+
 animal:[
 "dog","cat","bird","horse","snake",
 "animal","insect","fish","wolf"
 ],
+
 
 door:[
 "door","window","stairs","corridor",
 "tunnel","passage","gate"
 ]
 
+
 },
 
 
+
 UKR:{
+
 
 person:[
 "мама","мати","батько","тато",
@@ -2662,6 +5361,7 @@ person:[
 "друг","подруга","хтось","люди"
 ],
 
+
 place:[
 "дім","будинок","кімната","квартира",
 "вулиця","місто","ліс","школа",
@@ -2669,15 +5369,18 @@ place:[
 "море","пляж","гора","сад"
 ],
 
+
 water:[
 "вода","море","океан","річка",
 "озеро","дощ","басейн","хвиля"
 ],
 
+
 fear:[
-"страх","жах","тривога","тривожно",
-"темрява"
+"страх","жах","тривога",
+"тривожно","темрява"
 ],
+
 
 body:[
 "тіло","рука","руки","нога","ноги",
@@ -2685,124 +5388,169 @@ body:[
 "шкіра","кров"
 ],
 
+
 animal:[
-"собака","кіт","птах","кінь","змія",
-"тварина","комаха","риба","вовк"
+"собака","кіт","птах","кінь",
+"змія","тварина","комаха",
+"риба","вовк"
 ],
 
+
 door:[
-"двері","вікно","сходи","коридор",
-"тунель","прохід","брама"
+"двері","вікно","сходи",
+"коридор","тунель",
+"прохід","брама"
 ]
 
+
 }
+
 
 };
 
 
-  const dict =
-    dictionaries[
-      state.lang
-    ]
-    ||
-    dictionaries.ENG;
+
+const dict =
+
+dictionaries[
+state.lang
+]
+
+||
+
+dictionaries.ENG;
 
 
-  for(
-    const type
-    in dict
-  ){
 
-    if(
-      dict[type]
-      .some(
-        word =>
-          t.includes(
-            word
-          )
-      )
-    ){
-
-      result.push(
-        type
-      );
-
-    }
-
-  }
+for(
+const type
+in dict
+){
 
 
-  return result;
+if(
+dict[type]
+.some(
+
+word=>
+t.includes(
+word
+)
+
+)
+){
+
+
+result.push(
+type
+);
+
 
 }
 
 
+}
+
+
+
+return result;
+
+}
+
+
+
 /* =========================================================
-   GENERATE ADAPTIVE QUESTION
+   ADAPTIVE QUESTION
    ========================================================= */
 
 function generateAdaptiveQuestion(){
 
-  const i =
-    state.questionIndex;
+
+const i =
+state.questionIndex;
 
 
-  const previous =
-    state.answers[
-      i-1
-    ];
+const previous =
+
+state.answers[
+i-1
+];
 
 
-  const previousAnswer =
-    previous
-    ?
-    previous.answer
-    :
-    "";
+const previousAnswer =
+
+previous
+
+?
+
+previous.answer
+
+:
+
+"";
 
 
-  const fragment =
-    extractFragment(
-      previousAnswer
-    );
+const fragment =
+
+extractFragment(
+previousAnswer
+);
 
 
-  const themes =
-    detectThemes(
-      previousAnswer
-    );
+const themes =
+
+detectThemes(
+previousAnswer
+);
 
 
-  if(
-    i <= 2
-  ){
 
-    return generateLayerOneQuestion(
-      fragment,
-      themes
-    );
-
-  }
+if(
+i<=2
+){
 
 
-  if(
-    i <= 5
-  ){
+return generateLayerOneQuestion(
 
-    return generateLayerTwoQuestion(
-      fragment,
-      themes
-    );
+fragment,
 
-  }
+themes
 
+);
 
-  return generateLayerThreeQuestion(
-    fragment,
-    themes
-  );
 
 }
+
+
+
+if(
+i<=5
+){
+
+
+return generateLayerTwoQuestion(
+
+fragment,
+
+themes
+
+);
+
+
+}
+
+
+
+return generateLayerThreeQuestion(
+
+fragment,
+
+themes
+
+);
+
+}
+
 
 
 /* =========================================================
@@ -2810,226 +5558,361 @@ function generateAdaptiveQuestion(){
    ========================================================= */
 
 function generateLayerOneQuestion(
-  fragment,
-  themes
+fragment,
+themes
 ){
 
-  const f =
-    fragment ||
-    (
-      state.lang==="PL"
-      ?
-      "ten fragment snu"
-      :
-      state.lang==="UKR"
-      ?
-      "цей фрагмент сну"
-      :
-      "this part of the dream"
-    );
+
+const f =
+
+fragment
+
+||
+
+(
+state.lang==="PL"
+
+?
+
+"ten fragment snu"
+
+:
+
+state.lang==="UKR"
+
+?
+
+"цей фрагмент сну"
+
+:
+
+"this part of the dream"
+);
 
 
-  if(
-    state.lang ===
-    "PL"
-  ){
 
-    const pool = [
+/* =====================================================
+   PL
+   ===================================================== */
 
-      {
-        category:"PRZESTRZEŃ",
-        question:
-          `Zatrzymaj się przy „${f}”. Jak wyglądało otoczenie? Opisz światło, skalę, materiał, temperaturę albo jeden detal, który szczególnie pamiętasz.`
-      },
-
-      {
-        category:"PAMIĘĆ",
-        question:
-          `Kiedy wracasz teraz do „${f}”, co pojawia się obok tego obrazu, choć wcześniej o tym nie było mowy?`
-      },
-
-      {
-        category:"ODCZUCIE",
-        question:
-          `Nie opowiadaj jeszcze, co wydarzyło się dalej. Jak reagowało Twoje ciało w chwili „${f}”?`
-      },
-
-      {
-        category:"KADR",
-        question:
-          `Gdyby można było zatrzymać „${f}” w jednym nieruchomym kadrze, co znajdowałoby się na jego obrzeżach?`
-      }
-
-    ];
+if(
+state.lang==="PL"
+){
 
 
-    if(
-      themes.includes(
-        "person"
-      )
-    ){
-
-      pool.push(
-        {
-          category:"OBECNOŚĆ",
-          question:
-            "W opisie pojawia się ktoś jeszcze. Zamiast mówić tylko, kim była ta osoba, opisz atmosferę, którą wnosiła do snu."
-        }
-      );
-
-    }
+const pool =
+[
 
 
-    if(
-      themes.includes(
-        "place"
-      )
-    ){
+{
 
-      pool.push(
-        {
-          category:"MIEJSCE",
-          question:
-            "Spróbuj ponownie wejść do tego miejsca. Co było w nim znajome, a co nie mogłoby istnieć w rzeczywistości?"
-        }
-      );
+category:
+"PRZESTRZEŃ",
 
-    }
+question:
+`Zatrzymaj się przy „${f}”. Jak wyglądało otoczenie? Opisz światło, skalę, materiał, temperaturę albo jeden detal, który szczególnie pamiętasz.`
+
+},
 
 
-    return randomItem(
-      pool
-    );
+{
 
-  }
+category:
+"PAMIĘĆ",
 
+question:
+`Kiedy wracasz teraz do „${f}”, co pojawia się obok tego obrazu, choć wcześniej o tym nie było mowy?`
 
-  if(
-    state.lang ===
-    "UKR"
-  ){
-
-    const pool = [
-
-      {
-        category:"ПРОСТІР",
-        question:
-          `Затримайся біля «${f}». Яким було оточення? Опиши світло, масштаб, матеріал, температуру або одну деталь, що запам’яталася найбільше.`
-      },
-
-      {
-        category:"ПАМ’ЯТЬ",
-        question:
-          `Коли зараз повертаєшся до «${f}», що з’являється поруч із цим образом, хоча раніше про це не було згадки?`
-      },
-
-      {
-        category:"ВІДЧУТТЯ",
-        question:
-          `Поки що не переходь до наступних подій. Яким було відчуття тіла в момент «${f}»?`
-      },
-
-      {
-        category:"КАДР",
-        question:
-          `Якби «${f}» можна було зупинити в одному нерухомому кадрі, що знаходилося б біля країв цього зображення?`
-      }
-
-    ];
+},
 
 
-    if(
-      themes.includes(
-        "person"
-      )
-    ){
+{
 
-      pool.push(
-        {
-          category:"ПРИСУТНІСТЬ",
-          question:
-            "В описі з’являється ще хтось. Замість того щоб лише назвати цю людину, опиши атмосферу, яку її присутність створювала у сні."
-        }
-      );
+category:
+"ODCZUCIE",
 
-    }
+question:
+`Nie opowiadaj jeszcze, co wydarzyło się dalej. Jak reagowało Twoje ciało w chwili „${f}”?`
+
+},
 
 
-    if(
-      themes.includes(
-        "place"
-      )
-    ){
+{
 
-      pool.push(
-        {
-          category:"МІСЦЕ",
-          question:
-            "Спробуй знову увійти в це місце. Що в ньому було знайомим, а що не могло б існувати в реальності?"
-        }
-      );
+category:
+"KADR",
 
-    }
-
-
-    return randomItem(
-      pool
-    );
-
-  }
-
-
-  const pool = [
-
-    {
-      category:"SPACE",
-      question:
-        `Stay with “${f}”. What surrounded it? Describe the light, scale, material, temperature or one detail that remains unusually clear.`
-    },
-
-    {
-      category:"MEMORY",
-      question:
-        `When you return to “${f}” now, what appears beside the image that you did not mention before?`
-    },
-
-    {
-      category:"SENSATION",
-      question:
-        `Do not tell me what happened next yet. What did your body feel during “${f}”?`
-    },
-
-    {
-      category:"FRAME",
-      question:
-        `If “${f}” could become one still frame, what would exist near the edges of the image?`
-    }
-
-  ];
-
-
-  if(
-    themes.includes(
-      "person"
-    )
-  ){
-
-    pool.push(
-      {
-        category:"PRESENCE",
-        question:
-          "Someone else appears in the description. Rather than simply identifying them, describe the atmosphere their presence created in the dream."
-      }
-    );
-
-  }
-
-
-  return randomItem(
-    pool
-  );
+question:
+`Gdyby można było zatrzymać „${f}” w jednym nieruchomym kadrze, co znajdowałoby się na jego obrzeżach?`
 
 }
+
+
+];
+
+
+
+if(
+themes.includes(
+"person"
+)
+){
+
+
+pool.push(
+{
+
+category:
+"OBECNOŚĆ",
+
+question:
+"W opisie pojawia się ktoś jeszcze. Zamiast mówić tylko, kim była ta osoba, opisz atmosferę, którą wnosiła do snu."
+
+}
+);
+
+
+}
+
+
+
+if(
+themes.includes(
+"place"
+)
+){
+
+
+pool.push(
+{
+
+category:
+"MIEJSCE",
+
+question:
+"Spróbuj ponownie wejść do tego miejsca. Co było w nim znajome, a co nie mogłoby istnieć w rzeczywistości?"
+
+}
+);
+
+
+}
+
+
+
+return randomItem(
+pool
+);
+
+
+}
+
+
+
+/* =====================================================
+   UKR
+   ===================================================== */
+
+if(
+state.lang==="UKR"
+){
+
+
+const pool =
+[
+
+
+{
+
+category:
+"ПРОСТІР",
+
+question:
+`Затримайся біля «${f}». Яким було оточення? Опиши світло, масштаб, матеріал, температуру або одну деталь, що запам’яталася найбільше.`
+
+},
+
+
+{
+
+category:
+"ПАМ’ЯТЬ",
+
+question:
+`Коли зараз повертаєшся до «${f}», що з’являється поруч із цим образом, хоча раніше про це не було згадки?`
+
+},
+
+
+{
+
+category:
+"ВІДЧУТТЯ",
+
+question:
+`Поки що не переходь до наступних подій. Яким було відчуття тіла в момент «${f}»?`
+
+},
+
+
+{
+
+category:
+"КАДР",
+
+question:
+`Якби «${f}» можна було зупинити в одному нерухомому кадрі, що знаходилося б біля країв цього зображення?`
+
+}
+
+
+];
+
+
+
+if(
+themes.includes(
+"person"
+)
+){
+
+
+pool.push(
+{
+
+category:
+"ПРИСУТНІСТЬ",
+
+question:
+"В описі з’являється ще хтось. Замість того щоб лише назвати цю людину, опиши атмосферу, яку її присутність створювала у сні."
+
+}
+);
+
+
+}
+
+
+
+if(
+themes.includes(
+"place"
+)
+){
+
+
+pool.push(
+{
+
+category:
+"МІСЦЕ",
+
+question:
+"Спробуй знову увійти в це місце. Що в ньому було знайомим, а що не могло б існувати в реальності?"
+
+}
+);
+
+
+}
+
+
+
+return randomItem(
+pool
+);
+
+
+}
+
+
+
+/* =====================================================
+   ENG
+   ===================================================== */
+
+const pool =
+[
+
+
+{
+
+category:
+"SPACE",
+
+question:
+`Stay with “${f}”. What surrounded it? Describe the light, scale, material, temperature or one detail that remains unusually clear.`
+
+},
+
+
+{
+
+category:
+"MEMORY",
+
+question:
+`When you return to “${f}” now, what appears beside the image that you did not mention before?`
+
+},
+
+
+{
+
+category:
+"SENSATION",
+
+question:
+`Do not tell me what happened next yet. What did your body feel during “${f}”?`
+
+},
+
+
+{
+
+category:
+"FRAME",
+
+question:
+`If “${f}” could become one still frame, what would exist near the edges of the image?`
+
+}
+
+
+];
+
+
+
+if(
+themes.includes(
+"person"
+)
+){
+
+
+pool.push(
+{
+
+category:
+"PRESENCE",
+
+question:
+"Someone else appears in the description. Rather than simply identifying them, describe the atmosphere their presence created in the dream."
+
+}
+);
+
+
+}
+
+
+
+return randomItem(
+pool
+);
+
+}
+
 
 
 /* =========================================================
@@ -3037,278 +5920,442 @@ function generateLayerOneQuestion(
    ========================================================= */
 
 function generateLayerTwoQuestion(
-  fragment,
-  themes
+fragment,
+themes
 ){
 
-  const f =
-    fragment ||
-    (
-      state.lang==="PL"
-      ?
-      "to wspomnienie"
-      :
-      state.lang==="UKR"
-      ?
-      "цей спогад"
-      :
-      "this memory"
-    );
+
+const f =
+
+fragment
+
+||
+
+(
+state.lang==="PL"
+
+?
+
+"to wspomnienie"
+
+:
+
+state.lang==="UKR"
+
+?
+
+"цей спогад"
+
+:
+
+"this memory"
+);
 
 
-  if(
-    state.lang ===
-    "PL"
-  ){
 
-    const pool = [
+/* =====================================================
+   PL
+   ===================================================== */
 
-      {
-        category:"PRZEMIANA",
-        question:
-          `Wyobraź sobie, że „${f}” nie jest stałe. Co zaczęłoby zmieniać formę, gdyby sen trwał jeszcze kilka minut?`
-      },
-
-      {
-        category:"POZA KADREM",
-        question:
-          "Co mogło istnieć tuż poza tym, co pamiętasz — coś niewidocznego, ale wyraźnie obecnego?"
-      },
-
-      {
-        category:"LOGIKA SNU",
-        question:
-          "Która część tego snu wydawała się zupełnie normalna podczas śnienia, a dopiero po przebudzeniu staje się niemożliwa?"
-      },
-
-      {
-        category:"RELACJA",
-        question:
-          `Gdyby „${f}” mogło coś przekazać bez używania słów, co próbowałoby Ci pokazać?`
-      },
-
-      {
-        category:"CZAS",
-        question:
-          "Czy wydarzenia naprawdę następowały po sobie? Opisz, jak zachowywał się czas wewnątrz tego snu."
-      }
-
-    ];
+if(
+state.lang==="PL"
+){
 
 
-    if(
-      themes.includes(
-        "water"
-      )
-    ){
-
-      pool.push(
-        {
-          category:"WODA",
-          question:
-            "W Twoim śnie pojawia się woda. Czy zachowywała się jak przestrzeń, granica, siła, zagrożenie czy coś zupełnie innego?"
-        }
-      );
-
-    }
+const pool =
+[
 
 
-    if(
-      themes.includes(
-        "door"
-      )
-    ){
+{
 
-      pool.push(
-        {
-          category:"PRZEJŚCIE",
-          question:
-            "Pojawia się motyw przejścia. Co mogłoby znajdować się po drugiej stronie, nawet jeśli we śnie nigdy tam nie dotarłeś?"
-        }
-      );
+category:
+"PRZEMIANA",
 
-    }
+question:
+`Wyobraź sobie, że „${f}” nie jest stałe. Co zaczęłoby zmieniać formę, gdyby sen trwał jeszcze kilka minut?`
+
+},
 
 
-    if(
-      themes.includes(
-        "fear"
-      )
-    ){
+{
 
-      pool.push(
-        {
-          category:"NAPIĘCIE",
-          question:
-            "Nie opisuj samego strachu. Spróbuj opisać jego źródło — gdzie istniało napięcie, zanim stało się emocją?"
-        }
-      );
+category:
+"POZA KADREM",
 
-    }
+question:
+"Co mogło istnieć tuż poza tym, co pamiętasz — coś niewidocznego, ale wyraźnie obecnego?"
+
+},
 
 
-    return randomItem(
-      pool
-    );
+{
 
-  }
+category:
+"LOGIKA SNU",
 
+question:
+"Która część tego snu wydawała się zupełnie normalna podczas śnienia, a dopiero po przebudzeniu staje się niemożliwa?"
 
-  if(
-    state.lang ===
-    "UKR"
-  ){
-
-    const pool = [
-
-      {
-        category:"ЗМІНА",
-        question:
-          `Уяви, що «${f}» не є сталим. Що почало б змінювати форму, якби сон тривав ще кілька хвилин?`
-      },
-
-      {
-        category:"ПОЗА КАДРОМ",
-        question:
-          "Що могло існувати просто за межами того, що залишилося в пам’яті — щось невидиме, але відчутно присутнє?"
-      },
-
-      {
-        category:"ЛОГІКА СНУ",
-        question:
-          "Яка частина цього сну здавалася цілком нормальною під час сновидіння, але після пробудження стала неможливою?"
-      },
-
-      {
-        category:"ЗВ’ЯЗОК",
-        question:
-          `Якби «${f}» могло щось передати без слів, що воно намагалося б показати?`
-      },
-
-      {
-        category:"ЧАС",
-        question:
-          "Чи справді події відбувалися одна за одною? Опиши, як поводився час усередині цього сну."
-      }
-
-    ];
+},
 
 
-    if(
-      themes.includes(
-        "water"
-      )
-    ){
+{
 
-      pool.push(
-        {
-          category:"ВОДА",
-          question:
-            "У цьому сні з’являється вода. Вона була простором, межею, силою, загрозою чи чимось зовсім іншим?"
-        }
-      );
+category:
+"RELACJA",
 
-    }
+question:
+`Gdyby „${f}” mogło coś przekazać bez używania słów, co próbowałoby Ci pokazać?`
+
+},
 
 
-    if(
-      themes.includes(
-        "door"
-      )
-    ){
+{
 
-      pool.push(
-        {
-          category:"ПЕРЕХІД",
-          question:
-            "У сні з’являється мотив переходу. Що могло бути по той бік, навіть якщо дістатися туди не вдалося?"
-        }
-      );
+category:
+"CZAS",
 
-    }
-
-
-    if(
-      themes.includes(
-        "fear"
-      )
-    ){
-
-      pool.push(
-        {
-          category:"НАПРУЖЕННЯ",
-          question:
-            "Не описуй сам страх. Спробуй описати його джерело — де знаходилося напруження ще до того, як стало емоцією?"
-        }
-      );
-
-    }
-
-
-    return randomItem(
-      pool
-    );
-
-  }
-
-
-  const pool = [
-
-    {
-      category:"TRANSFORMATION",
-      question:
-        `Imagine that “${f}” is not fixed. What might begin changing shape if the dream continued for several more minutes?`
-    },
-
-    {
-      category:"OUTSIDE THE FRAME",
-      question:
-        "What might have existed just beyond what you remember — something unseen but unmistakably present?"
-    },
-
-    {
-      category:"DREAM LOGIC",
-      question:
-        "Which part of the dream felt completely normal while dreaming, but became impossible only after waking?"
-    },
-
-    {
-      category:"RELATION",
-      question:
-        `If “${f}” could communicate without using words, what might it be trying to show you?`
-    },
-
-    {
-      category:"TIME",
-      question:
-        "Did the events really happen one after another? Describe how time behaved inside this dream."
-    }
-
-  ];
-
-
-  if(
-    themes.includes(
-      "fear"
-    )
-  ){
-
-    pool.push(
-      {
-        category:"TENSION",
-        question:
-          "Do not describe the fear itself. Describe its source — where did the tension exist before it became an emotion?"
-      }
-    );
-
-  }
-
-
-  return randomItem(
-    pool
-  );
+question:
+"Czy wydarzenia naprawdę następowały po sobie? Opisz, jak zachowywał się czas wewnątrz tego snu."
 
 }
+
+
+];
+
+
+
+if(
+themes.includes(
+"water"
+)
+){
+
+
+pool.push(
+{
+
+category:
+"WODA",
+
+question:
+"W Twoim śnie pojawia się woda. Czy zachowywała się jak przestrzeń, granica, siła, zagrożenie czy coś zupełnie innego?"
+
+}
+);
+
+
+}
+
+
+
+if(
+themes.includes(
+"door"
+)
+){
+
+
+pool.push(
+{
+
+category:
+"PRZEJŚCIE",
+
+question:
+"Pojawia się motyw przejścia. Co mogłoby znajdować się po drugiej stronie, nawet jeśli we śnie nigdy tam nie dotarłeś?"
+
+}
+);
+
+
+}
+
+
+
+if(
+themes.includes(
+"fear"
+)
+){
+
+
+pool.push(
+{
+
+category:
+"NAPIĘCIE",
+
+question:
+"Nie opisuj samego strachu. Spróbuj opisać jego źródło — gdzie istniało napięcie, zanim stało się emocją?"
+
+}
+);
+
+
+}
+
+
+
+return randomItem(
+pool
+);
+
+
+}
+
+
+
+/* =====================================================
+   UKR
+   ===================================================== */
+
+if(
+state.lang==="UKR"
+){
+
+
+const pool =
+[
+
+
+{
+
+category:
+"ЗМІНА",
+
+question:
+`Уяви, що «${f}» не є сталим. Що почало б змінювати форму, якби сон тривав ще кілька хвилин?`
+
+},
+
+
+{
+
+category:
+"ПОЗА КАДРОМ",
+
+question:
+"Що могло існувати просто за межами того, що залишилося в пам’яті — щось невидиме, але відчутно присутнє?"
+
+},
+
+
+{
+
+category:
+"ЛОГІКА СНУ",
+
+question:
+"Яка частина цього сну здавалася цілком нормальною під час сновидіння, але після пробудження стала неможливою?"
+
+},
+
+
+{
+
+category:
+"ЗВ’ЯЗОК",
+
+question:
+`Якби «${f}» могло щось передати без слів, що воно намагалося б показати?`
+
+},
+
+
+{
+
+category:
+"ЧАС",
+
+question:
+"Чи справді події відбувалися одна за одною? Опиши, як поводився час усередині цього сну."
+
+}
+
+
+];
+
+
+
+if(
+themes.includes(
+"water"
+)
+){
+
+
+pool.push(
+{
+
+category:
+"ВОДА",
+
+question:
+"У цьому сні з’являється вода. Вона була простором, межею, силою, загрозою чи чимось зовсім іншим?"
+
+}
+);
+
+
+}
+
+
+
+if(
+themes.includes(
+"door"
+)
+){
+
+
+pool.push(
+{
+
+category:
+"ПЕРЕХІД",
+
+question:
+"У сні з’являється мотив переходу. Що могло бути по той бік, навіть якщо дістатися туди не вдалося?"
+
+}
+);
+
+
+}
+
+
+
+if(
+themes.includes(
+"fear"
+)
+){
+
+
+pool.push(
+{
+
+category:
+"НАПРУЖЕННЯ",
+
+question:
+"Не описуй сам страх. Спробуй описати його джерело — де знаходилося напруження ще до того, як стало емоцією?"
+
+}
+);
+
+
+}
+
+
+
+return randomItem(
+pool
+);
+
+
+}
+
+
+
+/* =====================================================
+   ENG
+   ===================================================== */
+
+const pool =
+[
+
+
+{
+
+category:
+"TRANSFORMATION",
+
+question:
+`Imagine that “${f}” is not fixed. What might begin changing shape if the dream continued for several more minutes?`
+
+},
+
+
+{
+
+category:
+"OUTSIDE THE FRAME",
+
+question:
+"What might have existed just beyond what you remember — something unseen but unmistakably present?"
+
+},
+
+
+{
+
+category:
+"DREAM LOGIC",
+
+question:
+"Which part of the dream felt completely normal while dreaming, but became impossible only after waking?"
+
+},
+
+
+{
+
+category:
+"RELATION",
+
+question:
+`If “${f}” could communicate without using words, what might it be trying to show you?`
+
+},
+
+
+{
+
+category:
+"TIME",
+
+question:
+"Did the events really happen one after another? Describe how time behaved inside this dream."
+
+}
+
+
+];
+
+
+
+if(
+themes.includes(
+"fear"
+)
+){
+
+
+pool.push(
+{
+
+category:
+"TENSION",
+
+question:
+"Do not describe the fear itself. Describe its source — where did the tension exist before it became an emotion?"
+
+}
+);
+
+
+}
+
+
+
+return randomItem(
+pool
+);
+
+}
+
 
 
 /* =========================================================
@@ -3316,168 +6363,292 @@ function generateLayerTwoQuestion(
    ========================================================= */
 
 function generateLayerThreeQuestion(
-  fragment,
-  themes
+fragment,
+themes
 ){
 
-  const f =
-    fragment ||
-    (
-      state.lang==="PL"
-      ?
-      "ten fragment"
-      :
-      state.lang==="UKR"
-      ?
-      "цей фрагмент"
-      :
-      "this fragment"
-    );
+
+const f =
+
+fragment
+
+||
+
+(
+state.lang==="PL"
+
+?
+
+"ten fragment"
+
+:
+
+state.lang==="UKR"
+
+?
+
+"цей фрагмент"
+
+:
+
+"this fragment"
+);
 
 
-  if(
-    state.lang ===
-    "PL"
-  ){
 
-    return randomItem(
-      [
+/* =====================================================
+   PL
+   ===================================================== */
 
-        {
-          category:"PAMIĘĆ",
-          question:
-            `Kiedy czytasz teraz własne słowa „${f}”, czy nadal masz pewność, że sen wyglądał właśnie tak? Co zdążyło zmienić się w pamięci podczas tej rozmowy?`
-        },
-
-        {
-          category:"DRUGI SEN",
-          question:
-            "Wyobraź sobie, że wszystko, co dotąd zostało opisane, było tylko snem wewnątrz innego snu. Co pojawiłoby się po przebudzeniu z tej pierwszej warstwy?"
-        },
-
-        {
-          category:"TOŻSAMOŚĆ",
-          question:
-            "Usuń na chwilę siebie z tego snu. Co nadal by się wydarzało, gdyby nie było Cię w tej historii?"
-        },
-
-        {
-          category:"ŚLAD",
-          question:
-            "Gdyby z całego snu można było zachować tylko jeden obraz, gest, przedmiot albo zdanie — co powinno pozostać?"
-        },
-
-        {
-          category:"ODWRÓCENIE",
-          question:
-            "A jeśli to nie Ty obserwowałeś ten sen? Co w tej historii mogło obserwować Ciebie?"
-        },
-
-        {
-          category:"PRZESUNIĘCIE",
-          question:
-            `Zmień jedną rzecz we fragmencie „${f}”. Co musiałoby się zmienić, aby cały sen nagle zaczął znaczyć coś zupełnie innego?`
-        }
-
-      ]
-    );
-
-  }
+if(
+state.lang==="PL"
+){
 
 
-  if(
-    state.lang ===
-    "UKR"
-  ){
-
-    return randomItem(
-      [
-
-        {
-          category:"ПАМ’ЯТЬ",
-          question:
-            `Коли зараз читаєш власні слова «${f}», чи залишається впевненість, що сон виглядав саме так? Що вже встигло змінитися в пам’яті протягом цієї розмови?`
-        },
-
-        {
-          category:"ІНШИЙ СОН",
-          question:
-            "Уяви, що все описане досі було лише сном усередині іншого сну. Що могло б з’явитися після пробудження з цього першого шару?"
-        },
-
-        {
-          category:"ІДЕНТИЧНІСТЬ",
-          question:
-            "Уяви цей сон без своєї присутності. Що продовжувало б відбуватися, якби в цій історії не було спостерігача?"
-        },
-
-        {
-          category:"СЛІД",
-          question:
-            "Якби з усього сну можна було залишити лише один образ, жест, предмет або речення — що мало б залишитися?"
-        },
-
-        {
-          category:"ПОГЛЯД",
-          question:
-            "А якщо цей сон не просто спостерігали? Що в цій історії могло дивитися у відповідь?"
-        },
-
-        {
-          category:"ЗСУВ",
-          question:
-            `Зміни одну деталь у фрагменті «${f}». Що мало б змінитися, щоб увесь сон раптом почав означати щось зовсім інше?`
-        }
-
-      ]
-    );
-
-  }
+return randomItem(
+[
 
 
-  return randomItem(
-    [
+{
 
-      {
-        category:"MEMORY",
-        question:
-          `When you read your own words “${f}” now, are you still certain the dream looked exactly like that? What has already changed in your memory during this conversation?`
-      },
+category:
+"PAMIĘĆ",
 
-      {
-        category:"SECOND DREAM",
-        question:
-          "Imagine everything described so far was only a dream contained inside another dream. What might appear after waking from the first layer?"
-      },
+question:
+`Kiedy czytasz teraz własne słowa „${f}”, czy nadal masz pewność, że sen wyglądał właśnie tak? Co zdążyło zmienić się w pamięci podczas tej rozmowy?`
 
-      {
-        category:"IDENTITY",
-        question:
-          "Remove yourself from the dream for a moment. What would continue happening if you were no longer inside the story?"
-      },
+},
 
-      {
-        category:"TRACE",
-        question:
-          "If you could preserve only one image, gesture, object or sentence from the entire dream, what should remain?"
-      },
 
-      {
-        category:"REVERSAL",
-        question:
-          "What if you were not the one observing this dream? What in the story might have been observing you?"
-      },
+{
 
-      {
-        category:"SHIFT",
-        question:
-          `Change one thing inside “${f}”. What would need to change for the entire dream to suddenly mean something completely different?`
-      }
+category:
+"DRUGI SEN",
 
-    ]
-  );
+question:
+"Wyobraź sobie, że wszystko, co dotąd zostało opisane, było tylko snem wewnątrz innego snu. Co pojawiłoby się po przebudzeniu z tej pierwszej warstwy?"
+
+},
+
+
+{
+
+category:
+"TOŻSAMOŚĆ",
+
+question:
+"Usuń na chwilę siebie z tego snu. Co nadal by się wydarzało, gdyby nie było Cię w tej historii?"
+
+},
+
+
+{
+
+category:
+"ŚLAD",
+
+question:
+"Gdyby z całego snu można było zachować tylko jeden obraz, gest, przedmiot albo zdanie — co powinno pozostać?"
+
+},
+
+
+{
+
+category:
+"ODWRÓCENIE",
+
+question:
+"A jeśli to nie Ty obserwowałeś ten sen? Co w tej historii mogło obserwować Ciebie?"
+
+},
+
+
+{
+
+category:
+"PRZESUNIĘCIE",
+
+question:
+`Zmień jedną rzecz we fragmencie „${f}”. Co musiałoby się zmienić, aby cały sen nagle zaczął znaczyć coś zupełnie innego?`
 
 }
+
+
+]
+);
+
+
+}
+
+
+
+/* =====================================================
+   UKR
+   ===================================================== */
+
+if(
+state.lang==="UKR"
+){
+
+
+return randomItem(
+[
+
+
+{
+
+category:
+"ПАМ’ЯТЬ",
+
+question:
+`Коли зараз читаєш власні слова «${f}», чи залишається впевненість, що сон виглядав саме так? Що вже встигло змінитися в пам’яті протягом цієї розмови?`
+
+},
+
+
+{
+
+category:
+"ІНШИЙ СОН",
+
+question:
+"Уяви, що все описане досі було лише сном усередині іншого сну. Що могло б з’явитися після пробудження з цього першого шару?"
+
+},
+
+
+{
+
+category:
+"ПРИСУТНІСТЬ",
+
+question:
+"Уяви цей сон без своєї присутності. Що продовжувало б відбуватися, якби в цій історії не було спостерігача?"
+
+},
+
+
+{
+
+category:
+"СЛІД",
+
+question:
+"Якби з усього сну можна було залишити лише один образ, жест, предмет або речення — що мало б залишитися?"
+
+},
+
+
+{
+
+category:
+"ПОГЛЯД",
+
+question:
+"Уяви, що сон також може дивитися у відповідь. Що в цій історії могло бути тим поглядом?"
+
+},
+
+
+{
+
+category:
+"ЗСУВ",
+
+question:
+`Зміни одну деталь у фрагменті «${f}». Що мало б змінитися, щоб увесь сон раптом почав означати щось зовсім інше?`
+
+}
+
+
+]
+);
+
+
+}
+
+
+
+/* =====================================================
+   ENG
+   ===================================================== */
+
+return randomItem(
+[
+
+
+{
+
+category:
+"MEMORY",
+
+question:
+`When you read your own words “${f}” now, are you still certain the dream looked exactly like that? What has already changed in your memory during this conversation?`
+
+},
+
+
+{
+
+category:
+"SECOND DREAM",
+
+question:
+"Imagine everything described so far was only a dream contained inside another dream. What might appear after waking from the first layer?"
+
+},
+
+
+{
+
+category:
+"IDENTITY",
+
+question:
+"Remove yourself from the dream for a moment. What would continue happening if you were no longer inside the story?"
+
+},
+
+
+{
+
+category:
+"TRACE",
+
+question:
+"If you could preserve only one image, gesture, object or sentence from the entire dream, what should remain?"
+
+},
+
+
+{
+
+category:
+"REVERSAL",
+
+question:
+"What if you were not the one observing this dream? What in the story might have been observing you?"
+
+},
+
+
+{
+
+category:
+"SHIFT",
+
+question:
+`Change one thing inside “${f}”. What would need to change for the entire dream to suddenly mean something completely different?`
+
+}
+
+
+]
+);
+
+}
+
 
 
 /* =========================================================
@@ -3486,11 +6657,14 @@ function generateLayerThreeQuestion(
 
 function getCurrentQuestion(){
 
-  return state.generatedQuestions[
-    state.questionIndex
-  ];
+
+return state
+.generatedQuestions[
+state.questionIndex
+];
 
 }
+
 
 
 /* =========================================================
@@ -3499,23 +6673,29 @@ function getCurrentQuestion(){
 
 function getDreamLevel(){
 
-  if(
-    state.questionIndex <= 2
-  ){
-    return 0;
-  }
 
+if(
+state.questionIndex<=2
+){
 
-  if(
-    state.questionIndex <= 5
-  ){
-    return 1;
-  }
-
-
-  return 2;
+return 0;
 
 }
+
+
+if(
+state.questionIndex<=5
+){
+
+return 1;
+
+}
+
+
+return 2;
+
+}
+
 
 
 /* =========================================================
@@ -3524,167 +6704,214 @@ function getDreamLevel(){
 
 function renderQuestion(){
 
-  setVisualMode(
-    "questions"
-  );
+
+setVisualMode(
+"questions"
+);
 
 
-  const copy =
-    UI[
-      state.lang
-    ];
+const copy =
+
+UI[
+state.lang
+];
 
 
-  const q =
-    getCurrentQuestion();
+const q =
+
+getCurrentQuestion();
 
 
-  if(!q){
-    return;
-  }
+if(!q){
+
+return;
+
+}
 
 
-  const saved =
-    state.answers[
-      state.questionIndex
-    ];
+const saved =
+
+state.answers[
+state.questionIndex
+];
 
 
-  const level =
-    getDreamLevel();
+const level =
+
+getDreamLevel();
 
 
-  dreamEngine.depthTarget =
-    level;
+
+progress.textContent =
+
+`${String(
+state.questionIndex+1
+)
+.padStart(
+2,
+"0"
+)}
+/
+${String(
+state.totalQuestions
+)
+.padStart(
+2,
+"0"
+)}`;
 
 
-  progress.textContent =
-    `${String(
-      state.questionIndex+1
-    ).padStart(
-      2,
-      "0"
-    )}
-    /
-    ${String(
-      state.totalQuestions
-    ).padStart(
-      2,
-      "0"
-    )}`;
+
+depthLabel.textContent =
+
+`TRAUM ${level}`;
 
 
-  depthLabel.textContent =
-    `TRAUM ${level}`;
+
+let trace =
+"";
 
 
-  let trace =
-    "";
+if(
+state.questionIndex>0
+){
 
 
-  if(
-    state.questionIndex > 0
-  ){
+const previous =
 
-    const previous =
-      state.answers[
-        state.questionIndex-1
-      ];
+state.answers[
+state.questionIndex-1
+];
 
 
-    if(
-      previous &&
-      previous.answer
-    ){
-
-      const fragment =
-        extractFragment(
-          previous.answer
-        );
+if(
+previous
+&&
+previous.answer
+){
 
 
-      if(fragment){
+const fragment =
 
-        trace = `
+extractFragment(
+previous.answer
+);
+
+
+if(fragment){
+
+
+trace = `
 
 <div class="contextTrace">
-${escapeHtml(fragment)}
+
+${escapeHtml(
+fragment
+)}
+
 </div>
 
 `;
 
-      }
 
-    }
-
-  }
+}
 
 
-  screen.innerHTML = `
+}
+
+
+}
+
+
+
+screen.innerHTML = `
+
 
 <div class="eyebrow">
+
 ${escapeHtml(
-  q.category
+q.category
 )}
+
 </div>
 
+
 <h2>
+
 ${escapeHtml(
-  q.question
+q.question
 )}
+
 </h2>
 
+
 ${trace}
+
 
 <textarea
 id="answer"
 placeholder="${copy.placeholder}"
 >${escapeHtml(
-  saved
-  ?
-  saved.answer
-  :
-  ""
+saved
+?
+saved.answer
+:
+""
 )}</textarea>
 
+
 <div class="actions">
+
 
 <button
 class="back"
 onclick="questionBack()"
 >
+
 ${copy.back}
+
 </button>
+
 
 <button
 class="next"
 onclick="questionNext()"
 >
+
 ${copy.next}
+
 </button>
 
+
 </div>
+
 
 `;
 
 
-  spawnPreviousAnswerGhost();
+spawnPreviousAnswerGhost();
 
 
-  setTimeout(
-    ()=>{
+setTimeout(
 
-      document
-      .getElementById(
-        "answer"
-      )
-      ?.focus();
+()=>{
 
-    },
-    450
-  );
+
+document
+.getElementById(
+"answer"
+)
+?.focus();
+
+
+},
+
+450
+
+);
 
 }
+
 
 
 /* =========================================================
@@ -3693,247 +6920,303 @@ ${copy.next}
 
 function saveCurrentAnswer(){
 
-  const field =
-    document.getElementById(
-      "answer"
-    );
+
+const field =
+
+document
+.getElementById(
+"answer"
+);
 
 
-  if(!field){
-    return;
-  }
+if(!field){
 
-
-  const q =
-    getCurrentQuestion();
-
-
-  state.answers[
-    state.questionIndex
-  ]
-  =
-  {
-
-    level:
-      getDreamLevel(),
-
-    category:
-      q.category,
-
-    question:
-      q.question,
-
-    answer:
-      normalizeText(
-        field.value
-      )
-
-  };
+return;
 
 }
 
 
+const q =
+
+getCurrentQuestion();
+
+
+state.answers[
+state.questionIndex
+]
+=
+{
+
+
+level:
+getDreamLevel(),
+
+
+category:
+q.category,
+
+
+question:
+q.question,
+
+
+answer:
+normalizeText(
+field.value
+)
+
+
+};
+
+}
+
+
+
 /* =========================================================
-   NEXT
+   QUESTION NEXT
    ========================================================= */
 
 function questionNext(){
 
-  saveCurrentAnswer();
+
+saveCurrentAnswer();
 
 
-  const current =
-    state.answers[
-      state.questionIndex
-    ];
+const current =
+
+state.answers[
+state.questionIndex
+];
 
 
-  if(
-    !current ||
-    !current.answer
-  ){
-
-    const field =
-      document.getElementById(
-        "answer"
-      );
+if(
+!current
+||
+!current.answer
+){
 
 
-    if(field){
+const field =
 
-      field.focus();
-
-
-      field.style.borderBottomColor =
-        "rgba(255,255,255,.68)";
-
-
-      setTimeout(
-        ()=>{
-
-          field.style.borderBottomColor =
-            "rgba(255,255,255,.19)";
-
-        },
-        900
-      );
-
-    }
+document
+.getElementById(
+"answer"
+);
 
 
-    return;
-
-  }
+if(field){
 
 
-  if(
-    state.questionIndex ===
-    state.totalQuestions-1
-  ){
-
-    transition(
-      renderNickname
-    );
-
-    return;
-
-  }
+field.focus();
 
 
-  if(
-    state.questionIndex ===
-    2
-  ){
+field.style.borderBottomColor =
 
-    state.questionIndex++;
+"rgba(255,255,255,.68)";
 
 
-    if(
-      !state.generatedQuestions[
-        state.questionIndex
-      ]
-    ){
+setTimeout(
 
-      state.generatedQuestions[
-        state.questionIndex
-      ]
-      =
-      generateAdaptiveQuestion();
-
-    }
+()=>{
 
 
-    runDreamShift(
-      1
-    );
+field.style.borderBottomColor =
+
+"rgba(255,255,255,.19)";
 
 
-    return;
+},
 
-  }
+900
 
+);
 
-  if(
-    state.questionIndex ===
-    5
-  ){
-
-    state.questionIndex++;
-
-
-    if(
-      !state.generatedQuestions[
-        state.questionIndex
-      ]
-    ){
-
-      state.generatedQuestions[
-        state.questionIndex
-      ]
-      =
-      generateAdaptiveQuestion();
-
-    }
-
-
-    runDreamShift(
-      2
-    );
-
-
-    return;
-
-  }
-
-
-  state.questionIndex++;
-
-
-  if(
-    !state.generatedQuestions[
-      state.questionIndex
-    ]
-  ){
-
-    state.generatedQuestions[
-      state.questionIndex
-    ]
-    =
-    generateAdaptiveQuestion();
-
-  }
-
-
-  transition(
-    renderQuestion
-  );
 
 }
 
 
+return;
+
+}
+
+
+
+/* =====================================================
+   END
+   ===================================================== */
+
+if(
+state.questionIndex
+===
+state.totalQuestions-1
+){
+
+
+transition(
+renderNickname
+);
+
+
+return;
+
+}
+
+
+
+/* =====================================================
+   AFTER 03
+   ===================================================== */
+
+if(
+state.questionIndex===2
+){
+
+
+state.questionIndex++;
+
+
+if(
+!state.generatedQuestions[
+state.questionIndex
+]
+){
+
+
+state.generatedQuestions[
+state.questionIndex
+]
+=
+generateAdaptiveQuestion();
+
+
+}
+
+
+runDreamShift(
+1
+);
+
+
+return;
+
+}
+
+
+
+/* =====================================================
+   AFTER 06
+   ===================================================== */
+
+if(
+state.questionIndex===5
+){
+
+
+state.questionIndex++;
+
+
+if(
+!state.generatedQuestions[
+state.questionIndex
+]
+){
+
+
+state.generatedQuestions[
+state.questionIndex
+]
+=
+generateAdaptiveQuestion();
+
+
+}
+
+
+runDreamShift(
+2
+);
+
+
+return;
+
+}
+
+
+
+/* =====================================================
+   NORMAL NEXT
+   ===================================================== */
+
+state.questionIndex++;
+
+
+if(
+!state.generatedQuestions[
+state.questionIndex
+]
+){
+
+
+state.generatedQuestions[
+state.questionIndex
+]
+=
+generateAdaptiveQuestion();
+
+
+}
+
+
+transition(
+renderQuestion
+);
+
+}
+
+
+
 /* =========================================================
-   BACK
+   QUESTION BACK
    ========================================================= */
 
 function questionBack(){
 
-  saveCurrentAnswer();
+
+saveCurrentAnswer();
 
 
-  if(
-    state.questionIndex ===
-    0
-  ){
-
-    state.introStep =
-      INTRO[
-        state.lang
-      ]
-      .length-1;
+if(
+state.questionIndex===0
+){
 
 
-    transition(
-      renderIntro
-    );
+state.introStep =
+
+INTRO[
+state.lang
+]
+.length-1;
 
 
-    return;
-
-  }
-
-
-  state.questionIndex--;
+transition(
+renderIntro
+);
 
 
-  dreamEngine.depthTarget =
-    getDreamLevel();
-
-
-  transition(
-    renderQuestion
-  );
+return;
 
 }
+
+
+state.questionIndex--;
+
+
+transition(
+renderQuestion
+);
+
+}
+
 
 
 /* =========================================================
@@ -3942,227 +7225,320 @@ function questionBack(){
 
 function runDreamShift(level){
 
-  const overlay =
-    document.getElementById(
-      "dreamShift"
-    );
 
+const overlay =
 
-  const main =
-    document.getElementById(
-      "dreamShiftMain"
-    );
+document
+.getElementById(
+"dreamShift"
+);
 
 
-  const sub =
-    document.getElementById(
-      "dreamShiftSub"
-    );
+const main =
 
+document
+.getElementById(
+"dreamShiftMain"
+);
 
-  const ui =
-    document.getElementById(
-      "ui"
-    );
 
+const sub =
 
-  ui.classList.add(
-    "hide"
-  );
+document
+.getElementById(
+"dreamShiftSub"
+);
 
 
-  if(
-    level === 1
-  ){
+const ui =
 
-    if(
-      state.lang ===
-      "PL"
-    ){
+document
+.getElementById(
+"ui"
+);
 
-      main.textContent =
-        "ZAMKNIJ OCZY JESZCZE RAZ";
 
-      sub.textContent =
-        "to samo wspomnienie może prowadzić głębiej";
 
-    }
-    else if(
-      state.lang ===
-      "UKR"
-    ){
+ui
+.classList
+.add(
+"hide"
+);
 
-      main.textContent =
-        "ЗАПЛЮЩ ОЧІ ЩЕ РАЗ";
 
-      sub.textContent =
-        "той самий спогад може вести глибше";
 
-    }
-    else{
+/* =====================================================
+   LEVEL 1
+   ===================================================== */
 
-      main.textContent =
-        "CLOSE YOUR EYES AGAIN";
+if(
+level===1
+){
 
-      sub.textContent =
-        "the same memory can lead deeper";
 
-    }
+if(
+state.lang==="PL"
+){
 
-  }
-  else{
 
-    if(
-      state.lang ===
-      "PL"
-    ){
+main.textContent =
+"ZAMKNIJ OCZY JESZCZE RAZ";
 
-      main.textContent =
-        "SEN PAMIĘTA";
 
-      sub.textContent =
-        "niektóre obrazy wracają inaczej";
+sub.textContent =
+"to samo wspomnienie może prowadzić głębiej";
 
-    }
-    else if(
-      state.lang ===
-      "UKR"
-    ){
-
-      main.textContent =
-        "СОН ПАМ’ЯТАЄ";
-
-      sub.textContent =
-        "деякі образи повертаються інакше";
-
-    }
-    else{
-
-      main.textContent =
-        "THE DREAM REMEMBERS";
-
-      sub.textContent =
-        "some images return differently";
-
-    }
-
-  }
-
-
-  overlay.classList.add(
-    "active"
-  );
-
-
-  setTimeout(
-    ()=>{
-
-      if(
-        level === 1
-      ){
-
-        if(
-          state.lang ===
-          "PL"
-        ){
-
-          main.textContent =
-            "NIE SZUKAJ POCZĄTKU";
-
-          sub.textContent =
-            "po prostu wejdź w następną scenę";
-
-        }
-        else if(
-          state.lang ===
-          "UKR"
-        ){
-
-          main.textContent =
-            "НЕ ШУКАЙ ПОЧАТКУ";
-
-          sub.textContent =
-            "просто увійди в наступну сцену";
-
-        }
-        else{
-
-          main.textContent =
-            "DO NOT LOOK FOR THE BEGINNING";
-
-          sub.textContent =
-            "simply enter the next scene";
-
-        }
-
-      }
-      else{
-
-        if(
-          state.lang ===
-          "PL"
-        ){
-
-          main.textContent =
-            "TERAZ SEN PATRZY NA CIEBIE";
-
-          sub.textContent =
-            "zostań jeszcze chwilę";
-
-        }
-        else if(
-          state.lang ===
-          "UKR"
-        ){
-
-          main.textContent =
-            "ТЕПЕР СОН ДИВИТЬСЯ У ВІДПОВІДЬ";
-
-          sub.textContent =
-            "залишся ще трохи";
-
-        }
-        else{
-
-          main.textContent =
-            "NOW THE DREAM LOOKS BACK";
-
-          sub.textContent =
-            "stay a little longer";
-
-        }
-
-      }
-
-    },
-    4300
-  );
-
-
-  setTimeout(
-    ()=>{
-
-      overlay.classList.remove(
-        "active"
-      );
-
-
-      dreamEngine.depthTarget =
-        level;
-
-
-      renderQuestion();
-
-
-      ui.classList.remove(
-        "hide"
-      );
-
-    },
-    10000
-  );
 
 }
+
+else if(
+state.lang==="UKR"
+){
+
+
+main.textContent =
+"ЗАПЛЮЩ ОЧІ ЩЕ РАЗ";
+
+
+sub.textContent =
+"той самий спогад може вести глибше";
+
+
+}
+
+else{
+
+
+main.textContent =
+"CLOSE YOUR EYES AGAIN";
+
+
+sub.textContent =
+"the same memory can lead deeper";
+
+
+}
+
+
+}
+
+
+
+/* =====================================================
+   LEVEL 2
+   ===================================================== */
+
+else{
+
+
+if(
+state.lang==="PL"
+){
+
+
+main.textContent =
+"SEN PAMIĘTA";
+
+
+sub.textContent =
+"niektóre obrazy wracają inaczej";
+
+
+}
+
+else if(
+state.lang==="UKR"
+){
+
+
+main.textContent =
+"СОН ПАМ’ЯТАЄ";
+
+
+sub.textContent =
+"деякі образи повертаються інакше";
+
+
+}
+
+else{
+
+
+main.textContent =
+"THE DREAM REMEMBERS";
+
+
+sub.textContent =
+"some images return differently";
+
+
+}
+
+
+}
+
+
+
+overlay
+.classList
+.add(
+"active"
+);
+
+
+
+/* =====================================================
+   SECOND PHRASE
+   ===================================================== */
+
+setTimeout(
+
+()=>{
+
+
+if(
+level===1
+){
+
+
+if(
+state.lang==="PL"
+){
+
+
+main.textContent =
+"NIE SZUKAJ POCZĄTKU";
+
+
+sub.textContent =
+"po prostu wejdź w następną scenę";
+
+
+}
+
+else if(
+state.lang==="UKR"
+){
+
+
+main.textContent =
+"НЕ ШУКАЙ ПОЧАТКУ";
+
+
+sub.textContent =
+"просто увійди в наступну сцену";
+
+
+}
+
+else{
+
+
+main.textContent =
+"DO NOT LOOK FOR THE BEGINNING";
+
+
+sub.textContent =
+"simply enter the next scene";
+
+
+}
+
+
+}
+
+else{
+
+
+if(
+state.lang==="PL"
+){
+
+
+main.textContent =
+"TERAZ SEN PATRZY NA CIEBIE";
+
+
+sub.textContent =
+"zostań jeszcze chwilę";
+
+
+}
+
+else if(
+state.lang==="UKR"
+){
+
+
+main.textContent =
+"ТЕПЕР СОН ДИВИТЬСЯ У ВІДПОВІДЬ";
+
+
+sub.textContent =
+"залишся ще трохи";
+
+
+}
+
+else{
+
+
+main.textContent =
+"NOW THE DREAM LOOKS BACK";
+
+
+sub.textContent =
+"stay a little longer";
+
+
+}
+
+
+}
+
+
+},
+
+4300
+
+);
+
+
+
+/* =====================================================
+   RETURN
+   ===================================================== */
+
+setTimeout(
+
+()=>{
+
+
+overlay
+.classList
+.remove(
+"active"
+);
+
+
+renderQuestion();
+
+
+ui
+.classList
+.remove(
+"hide"
+);
+
+
+},
+
+10000
+
+);
+
+}
+
 
 
 /* =========================================================
@@ -4171,60 +7547,73 @@ function runDreamShift(level){
 
 function spawnPreviousAnswerGhost(){
 
-  if(
-    state.questionIndex ===
-    0
-  ){
 
-    return;
+if(
+state.questionIndex===0
+){
 
-  }
-
-
-  const previous =
-    state.answers
-    .filter(
-      a =>
-        a &&
-        a.answer &&
-        a.answer.length > 2
-    );
-
-
-  if(
-    !previous.length
-  ){
-
-    return;
-
-  }
-
-
-  if(
-    Math.random() >
-    .52
-  ){
-
-    const a =
-      randomItem(
-        previous
-      );
-
-
-    const fragment =
-      extractFragment(
-        a.answer
-      );
-
-
-    ghost(
-      fragment,
-      true
-    );
-
-  }
+return;
 
 }
+
+
+const previous =
+
+state.answers
+.filter(
+
+a=>
+
+a
+&&
+a.answer
+&&
+a.answer.length>2
+
+);
+
+
+if(
+!previous.length
+){
+
+return;
+
+}
+
+
+if(
+Math.random()>.52
+){
+
+
+const a =
+
+randomItem(
+previous
+);
+
+
+const fragment =
+
+extractFragment(
+a.answer
+);
+
+
+ghost(
+
+fragment,
+
+true
+
+);
+
+
+}
+
+}
+
 
 
 /* =========================================================
@@ -4233,62 +7622,79 @@ function spawnPreviousAnswerGhost(){
 
 function renderNickname(){
 
-  setVisualMode(
-    "nickname"
-  );
+
+setVisualMode(
+"nickname"
+);
 
 
-  progress.textContent =
-    "";
+progress.textContent =
+"";
 
 
-  depthLabel.textContent =
-    "WAKE ?";
+depthLabel.textContent =
+"WAKE ?";
 
 
-  const copy =
-    UI[
-      state.lang
-    ];
+const copy =
+
+UI[
+state.lang
+];
 
 
-  let eyebrow =
-    "WHO DREAMED THIS?";
+
+let eyebrow =
+"WHO DREAMED THIS?";
 
 
-  if(
-    state.lang ===
-    "PL"
-  ){
-
-    eyebrow =
-      "KTO ŚNIŁ?";
-
-  }
-  else if(
-    state.lang ===
-    "UKR"
-  ){
-
-    eyebrow =
-      "КОМУ НАСНИВСЯ ЦЕЙ СОН?";
-
-  }
+if(
+state.lang==="PL"
+){
 
 
-  screen.innerHTML = `
+eyebrow =
+"KTO ŚNIŁ?";
+
+
+}
+
+else if(
+state.lang==="UKR"
+){
+
+
+eyebrow =
+"КОМУ НАСНИВСЯ ЦЕЙ СОН?";
+
+
+}
+
+
+
+screen.innerHTML = `
+
 
 <div class="eyebrow">
+
 ${eyebrow}
+
 </div>
 
+
 <h2>
+
 ${copy.nicknameTitle}
+
 </h2>
 
+
 <p class="sub">
+
 ${copy.nicknameMeta}
+
 </p>
+
 
 <input
 id="nickname"
@@ -4298,45 +7704,60 @@ autocomplete="off"
 spellcheck="false"
 placeholder="${copy.nicknamePlaceholder}"
 value="${escapeHtml(
-  state.nickname
+state.nickname
 )}"
 >
 
+
 <div class="actions">
+
 
 <button
 class="back"
 onclick="nicknameBack()"
 >
+
 ${copy.back}
+
 </button>
+
 
 <button
 class="next"
 onclick="saveDream()"
 >
+
 ${copy.nicknameSubmit}
+
 </button>
 
+
 </div>
+
 
 `;
 
 
-  setTimeout(
-    ()=>{
+setTimeout(
 
-      document
-      .getElementById(
-        "nickname"
-      )
-      ?.focus();
+()=>{
 
-    },
-    400
-  );
+
+document
+.getElementById(
+"nickname"
+)
+?.focus();
+
+
+},
+
+400
+
+);
 
 }
+
 
 
 /* =========================================================
@@ -4345,206 +7766,308 @@ ${copy.nicknameSubmit}
 
 function nicknameBack(){
 
-  const field =
-    document.getElementById(
-      "nickname"
-    );
+
+const field =
+
+document
+.getElementById(
+"nickname"
+);
 
 
-  if(field){
-
-    state.nickname =
-      field.value.trim();
-
-  }
+if(field){
 
 
-  state.questionIndex =
-    state.totalQuestions-1;
+state.nickname =
 
+field
+.value
+.trim();
 
-  dreamEngine.depthTarget =
-    2;
-
-
-  transition(
-    renderQuestion
-  );
 
 }
 
 
+state.questionIndex =
+
+state.totalQuestions-1;
+
+
+transition(
+renderQuestion
+);
+
+}
+
+
+
 /* =========================================================
-   SAVE
+   SAVE DREAM
    ========================================================= */
 
 async function saveDream(){
 
-  const field =
-    document.getElementById(
-      "nickname"
-    );
+
+const field =
+
+document
+.getElementById(
+"nickname"
+);
 
 
-  state.nickname =
-    field
-    ?
-    field.value.trim()
-    :
-    "";
+
+/*
+Important:
+retry does not destroy the nickname.
+*/
+
+if(field){
 
 
-  if(
-    !state.nickname
-  ){
+const value =
 
-    state.nickname =
-      "ANONYMOUS";
-
-  }
+field
+.value
+.trim();
 
 
-  const copy =
-    UI[
-      state.lang
-    ];
+if(value){
 
 
-  const payload = {
-
-    nickname:
-      state.nickname,
-
-    language:
-      state.lang,
-
-    dreamColor:
-      state.dreamColorName,
-
-    answers:
-      state.answers,
-
-    dream:
-      state.answers
-      .map(
-        a =>
-          a
-          ?
-          a.answer
-          :
-          ""
-      )
-      .join(
-        "\n\n"
-      )
-
-  };
+state.nickname =
+value;
 
 
-  transition(
-    ()=>{
-
-      setVisualMode(
-        "saving"
-      );
+}
 
 
-      progress.textContent =
-        "";
+}
 
 
-      depthLabel.textContent =
-        "ARCHIVE";
+
+if(
+!state.nickname
+){
 
 
-      screen.innerHTML = `
+state.nickname =
+"ANONYMOUS";
+
+
+}
+
+
+
+const copy =
+
+UI[
+state.lang
+];
+
+
+
+const payload =
+{
+
+
+nickname:
+state.nickname,
+
+
+language:
+state.lang,
+
+
+dreamColor:
+state.dreamColorName,
+
+
+answers:
+state.answers,
+
+
+dream:
+
+state.answers
+.map(
+
+a=>
+
+a
+?
+a.answer
+:
+""
+
+)
+.join(
+"\n\n"
+)
+
+
+};
+
+
+
+transition(
+
+()=>{
+
+
+setVisualMode(
+"saving"
+);
+
+
+progress.textContent =
+"";
+
+
+depthLabel.textContent =
+"ARCHIVE";
+
+
+screen.innerHTML = `
+
 
 <div class="eyebrow">
+
 TRAUM SIM
+
 </div>
 
+
 <h2>
+
 ${copy.saving}
+
 </h2>
 
+
 <p class="sub">
+
 ...
+
 </p>
+
 
 `;
 
-    }
-  );
-
-
-  try{
-
-    const response =
-      await fetch(
-        API_URL,
-        {
-
-          method:"POST",
-
-          headers:{
-            "Content-Type":
-              "text/plain;charset=utf-8"
-          },
-
-          body:
-            JSON.stringify(
-              payload
-            )
-
-        }
-      );
-
-
-    if(
-      !response.ok
-    ){
-
-      throw new Error(
-        "HTTP " +
-        response.status
-      );
-
-    }
-
-
-    const data =
-      await response.json();
-
-
-    if(
-      !data.ok
-    ){
-
-      throw new Error(
-        data.error ||
-        "Backend error"
-      );
-
-    }
-
-
-    renderSaved(
-      data.dreamId
-    );
-
-  }
-  catch(error){
-
-    console.error(
-      error
-    );
-
-
-    renderError();
-
-  }
 
 }
+
+);
+
+
+
+try{
+
+
+const response =
+
+await fetch(
+
+API_URL,
+
+{
+
+
+method:
+"POST",
+
+
+headers:{
+
+"Content-Type":
+"text/plain;charset=utf-8"
+
+},
+
+
+body:
+
+JSON.stringify(
+payload
+)
+
+
+}
+
+);
+
+
+
+if(
+!response.ok
+){
+
+
+throw new Error(
+
+"HTTP "
++
+response.status
+
+);
+
+
+}
+
+
+
+const data =
+
+await response.json();
+
+
+
+if(
+!data.ok
+){
+
+
+throw new Error(
+
+data.error
+
+||
+
+"Backend error"
+
+);
+
+
+}
+
+
+
+renderSaved(
+data.dreamId
+);
+
+
+}
+
+catch(error){
+
+
+console.error(
+
+"TRAUM SAVE ERROR",
+
+error
+
+);
+
+
+renderError();
+
+
+}
+
+}
+
 
 
 /* =========================================================
@@ -4553,60 +8076,81 @@ ${copy.saving}
 
 function renderSaved(id){
 
-  const copy =
-    UI[
-      state.lang
-    ];
+
+const copy =
+
+UI[
+state.lang
+];
 
 
-  transition(
-    ()=>{
+transition(
 
-      setVisualMode(
-        "saved"
-      );
+()=>{
 
 
-      screen.innerHTML = `
+setVisualMode(
+"saved"
+);
+
+
+screen.innerHTML = `
+
 
 <div class="eyebrow">
+
 TRAUM SIM
+
 </div>
 
+
 <h2>
+
 ${copy.done}
+
 </h2>
 
+
 <p class="sub">
+
 ${copy.sub}
+
 </p>
+
 
 <div class="received">
 
 ${escapeHtml(
-  id || ""
+id || ""
 )}
 
 &nbsp;&nbsp;/&nbsp;&nbsp;
 
 ${escapeHtml(
-  state.nickname
+state.nickname
 )}
 
 </div>
 
+
 `;
 
-    }
-  );
-
-
-  setTimeout(
-    startFinalSequence,
-    4600
-  );
 
 }
+
+);
+
+
+setTimeout(
+
+startFinalSequence,
+
+4600
+
+);
+
+}
+
 
 
 /* =========================================================
@@ -4615,82 +8159,113 @@ ${escapeHtml(
 
 function renderError(){
 
-  const copy =
-    UI[
-      state.lang
-    ];
+
+const copy =
+
+UI[
+state.lang
+];
 
 
-  let message;
+let message;
 
 
-  if(
-    state.lang ===
-    "PL"
-  ){
-
-    message =
-      "Połączenie z archiwum zostało przerwane.";
-
-  }
-  else if(
-    state.lang ===
-    "UKR"
-  ){
-
-    message =
-      "З’єднання з архівом перервано.";
-
-  }
-  else{
-
-    message =
-      "The connection to the archive was interrupted.";
-
-  }
+if(
+state.lang==="PL"
+){
 
 
-  transition(
-    ()=>{
-
-      setVisualMode(
-        "error"
-      );
+message =
+"Połączenie z archiwum zostało przerwane.";
 
 
-      screen.innerHTML = `
+}
+
+else if(
+state.lang==="UKR"
+){
+
+
+message =
+"З’єднання з архівом перервано.";
+
+
+}
+
+else{
+
+
+message =
+"The connection to the archive was interrupted.";
+
+
+}
+
+
+
+transition(
+
+()=>{
+
+
+setVisualMode(
+"error"
+);
+
+
+screen.innerHTML = `
+
 
 <div class="eyebrow">
+
 TRAUM SIM
+
 </div>
 
+
 <h2>
+
 ${copy.error}
+
 </h2>
 
+
 <p class="sub">
+
 ${message}
+
 </p>
+
 
 <div class="actions">
 
-<span></span>
+
+<span>
+</span>
+
 
 <button
 class="next"
 onclick="saveDream()"
 >
+
 ${copy.retry}
+
 </button>
+
 
 </div>
 
+
 `;
 
-    }
-  );
 
 }
+
+);
+
+}
+
 
 
 /* =========================================================
@@ -4699,90 +8274,128 @@ ${copy.retry}
 
 function startFinalSequence(){
 
-  const ui =
-    document.getElementById(
-      "ui"
-    );
+
+const ui =
+
+document
+.getElementById(
+"ui"
+);
 
 
-  const bloom =
-    document.getElementById(
-      "whiteBloom"
-    );
+const bloom =
+
+document
+.getElementById(
+"whiteBloom"
+);
 
 
-  const whiteout =
-    document.getElementById(
-      "whiteout"
-    );
+const whiteout =
+
+document
+.getElementById(
+"whiteout"
+);
 
 
-  const final =
-    document.getElementById(
-      "finalInvite"
-    );
+const final =
+
+document
+.getElementById(
+"finalInvite"
+);
 
 
-  ui.classList.add(
-    "hide"
-  );
+
+ui
+.classList
+.add(
+"hide"
+);
 
 
-  setTimeout(
-    ()=>{
 
-      bloom.classList.add(
-        "active"
-      );
+setTimeout(
+
+()=>{
 
 
-      whiteout.classList.add(
-        "active"
-      );
-
-    },
-    1300
-  );
+bloom
+.classList
+.add(
+"active"
+);
 
 
-  setTimeout(
-    ()=>{
-
-      document
-      .getElementById(
-        "finalTitle"
-      )
-      .textContent =
-        UI[
-          state.lang
-        ]
-        .invite;
+whiteout
+.classList
+.add(
+"active"
+);
 
 
-      final.classList.add(
-        "active"
-      );
+},
 
-    },
-    7500
-  );
+1300
+
+);
 
 
-  setTimeout(
-    ()=>{
 
-      bloom.style.display =
-        "none";
+setTimeout(
+
+()=>{
 
 
-      whiteout.style.display =
-        "none";
+document
+.getElementById(
+"finalTitle"
+)
+.textContent =
 
-    },
-    8150
-  );
+UI[
+state.lang
+]
+.invite;
+
+
+final
+.classList
+.add(
+"active"
+);
+
+
+},
+
+7500
+
+);
+
+
+
+setTimeout(
+
+()=>{
+
+
+bloom.style.display =
+"none";
+
+
+whiteout.style.display =
+"none";
+
+
+},
+
+8150
+
+);
 
 }
+
 
 
 /* =========================================================
@@ -4790,1281 +8403,125 @@ function startFinalSequence(){
    ========================================================= */
 
 function ghost(
-  text,
-  answer=false
+text,
+answer=false
 ){
 
-  if(!text){
-    return;
-  }
 
+if(!text){
 
-  const e =
-    document.createElement(
-      "div"
-    );
-
-
-  e.className =
-    answer
-    ?
-    "ghost answerGhost"
-    :
-    "ghost";
-
-
-  e.textContent =
-    text;
-
-
-  e.style.left =
-    (
-      Math.random()*55
-      -
-      5
-    )
-    +
-    "vw";
-
-
-  e.style.top =
-    (
-      Math.random()*75
-      +
-      8
-    )
-    +
-    "vh";
-
-
-  e.style.animationDuration =
-    (
-      25
-      +
-      Math.random()*22
-    )
-    +
-    "s";
-
-
-  ghostLayer.appendChild(
-    e
-  );
-
-
-  setTimeout(
-    ()=>{
-
-      e.remove();
-
-    },
-    49000
-  );
+return;
 
 }
 
 
-/* =========================================================
-   =========================================================
-   RORSCHACH ENGINE — FIXED + VERIFIED LOGIC
-   =========================================================
-   ========================================================= */
+const e =
 
-
-/*
-IMPORTANT:
-
-- no rotation
-- no random values inside animation frame
-- fixed central symmetry
-- black background
-- giant full-screen forms
-- motion measured in SECONDS
-- movement cycles 100–400 seconds
-- blur cycles 100–300 seconds
-*/
-
-
-const canvas =
-document.getElementById(
-  "dreamCanvas"
+document
+.createElement(
+"div"
 );
 
 
-const ctx =
-canvas.getContext(
-  "2d",
-  {
-    alpha:false
-  }
+e.className =
+
+answer
+
+?
+
+"ghost answerGhost"
+
+:
+
+"ghost";
+
+
+e.textContent =
+text;
+
+
+e.style.left =
+
+(
+Math.random()
+*
+55
+-
+5
+)
++
+"vw";
+
+
+e.style.top =
+
+(
+Math.random()
+*
+75
++
+8
+)
++
+"vh";
+
+
+e.style.animationDuration =
+
+(
+26
++
+Math.random()
+*
+24
+)
++
+"s";
+
+
+ghostLayer
+.appendChild(
+e
 );
 
 
-let W =
-0;
+setTimeout(
+
+()=>{
 
 
-let H =
-0;
+e.remove();
 
 
-let DPR =
-1;
+},
 
+52000
 
-const dreamEngine = {
-
-  depth:
-    0,
-
-  depthTarget:
-    0,
-
-  focus:
-    0
-
-};
-
-
-const organisms =
-[];
-
-
-/* =========================================================
-   RANDOM
-   ========================================================= */
-
-function rand(
-  min,
-  max
-){
-
-  return min +
-  Math.random() *
-  (
-    max-min
-  );
+);
 
 }
 
-
-/* =========================================================
-   ORGANISM
-   ========================================================= */
-
-function makeOrganism(index){
-
-  const base =
-    Math.min(
-      W,
-      H
-    );
-
-
-  return {
-
-    index:index,
-
-    y:
-      H *
-      rand(
-        .22,
-        .78
-      ),
-
-    radius:
-      base *
-      rand(
-        .24,
-        .46
-      ),
-
-    stretchX:
-      rand(
-        1.20,
-        2.55
-      ),
-
-    stretchY:
-      rand(
-        .56,
-        1.22
-      ),
-
-    lobeA:
-      rand(
-        1.25,
-        3.20
-      ),
-
-    lobeB:
-      rand(
-        3.50,
-        7.00
-      ),
-
-    lobeC:
-      rand(
-        7.00,
-        12.50
-      ),
-
-    amplitudeA:
-      rand(
-        .07,
-        .16
-      ),
-
-    amplitudeB:
-      rand(
-        .025,
-        .075
-      ),
-
-    amplitudeC:
-      rand(
-        .012,
-        .040
-      ),
-
-    phaseA:
-      rand(
-        0,
-        Math.PI*2
-      ),
-
-    phaseB:
-      rand(
-        0,
-        Math.PI*2
-      ),
-
-    phaseC:
-      rand(
-        0,
-        Math.PI*2
-      ),
-
-    phaseY:
-      rand(
-        0,
-        Math.PI*2
-      ),
-
-    /*
-    rad / sec
-    insanely slow
-    */
-
-    speedA:
-      rand(
-        .006,
-        .015
-      ),
-
-    speedB:
-      rand(
-        .003,
-        .009
-      ),
-
-    speedC:
-      rand(
-        .0015,
-        .005
-      ),
-
-    speedY:
-      rand(
-        .002,
-        .006
-      ),
-
-    driftY:
-      rand(
-        3,
-        14
-      )
-
-  };
-
-}
-
-
-/* =========================================================
-   RESIZE
-   ========================================================= */
-
-function resizeDream(){
-
-  W =
-    Math.max(
-      1,
-      window.innerWidth
-    );
-
-
-  H =
-    Math.max(
-      1,
-      window.innerHeight
-    );
-
-
-  DPR =
-    Math.min(
-      window.devicePixelRatio ||
-      1,
-      1.5
-    );
-
-
-  canvas.width =
-    Math.round(
-      W *
-      DPR
-    );
-
-
-  canvas.height =
-    Math.round(
-      H *
-      DPR
-    );
-
-
-  canvas.style.width =
-    W +
-    "px";
-
-
-  canvas.style.height =
-    H +
-    "px";
-
-
-  ctx.setTransform(
-    DPR,
-    0,
-    0,
-    DPR,
-    0,
-    0
-  );
-
-
-  organisms.length =
-    0;
-
-
-  /*
-  6 giant ink masses.
-  */
-
-  for(
-    let i=0;
-    i<6;
-    i++
-  ){
-
-    organisms.push(
-      makeOrganism(
-        i
-      )
-    );
-
-  }
-
-
-  ctx.fillStyle =
-    "#000";
-
-
-  ctx.fillRect(
-    0,
-    0,
-    W,
-    H
-  );
-
-}
-
-
-/* =========================================================
-   WATERCOLOUR COLOR
-   ========================================================= */
-
-function watercolorColor(
-  brightness,
-  alpha
-){
-
-  const source =
-    state.dreamColor;
-
-
-  const average =
-    (
-      source.r +
-      source.g +
-      source.b
-    )
-    /
-    3;
-
-
-  /*
-  Keep it like pigment,
-  not RGB neon.
-  */
-
-  const saturation =
-    .42;
-
-
-  let r =
-    average +
-    (
-      source.r -
-      average
-    )
-    *
-    saturation;
-
-
-  let g =
-    average +
-    (
-      source.g -
-      average
-    )
-    *
-    saturation;
-
-
-  let b =
-    average +
-    (
-      source.b -
-      average
-    )
-    *
-    saturation;
-
-
-  r =
-    Math.max(
-      0,
-      Math.min(
-        255,
-        r *
-        brightness
-      )
-    );
-
-
-  g =
-    Math.max(
-      0,
-      Math.min(
-        255,
-        g *
-        brightness
-      )
-    );
-
-
-  b =
-    Math.max(
-      0,
-      Math.min(
-        255,
-        b *
-        brightness
-      )
-    );
-
-
-  return `rgba(
-    ${Math.round(r)},
-    ${Math.round(g)},
-    ${Math.round(b)},
-    ${alpha}
-  )`;
-
-}
-
-
-/* =========================================================
-   RADIUS
-   ========================================================= */
-
-function radiusAt(
-  o,
-  angle,
-  seconds,
-  scale
-){
-
-  const waveA =
-    Math.sin(
-      angle *
-      o.lobeA
-      +
-      seconds *
-      o.speedA
-      +
-      o.phaseA
-    )
-    *
-    o.amplitudeA;
-
-
-  const waveB =
-    Math.cos(
-      angle *
-      o.lobeB
-      -
-      seconds *
-      o.speedB
-      +
-      o.phaseB
-    )
-    *
-    o.amplitudeB;
-
-
-  const waveC =
-    Math.sin(
-      angle *
-      o.lobeC
-      +
-      seconds *
-      o.speedC
-      +
-      o.phaseC
-    )
-    *
-    o.amplitudeC;
-
-
-  /*
-  ~200 sec breathing.
-  */
-
-  const breath =
-    Math.sin(
-      seconds *
-      .030
-      +
-      o.phaseA
-    )
-    *
-    .022;
-
-
-  /*
-  IMPORTANT:
-  expression stays attached to return.
-  */
-
-  return (
-    o.radius *
-    scale *
-    (
-      1 +
-      waveA +
-      waveB +
-      waveC +
-      breath
-    )
-  );
-
-}
-
-
-/* =========================================================
-   BUILD PATH
-   ========================================================= */
-
-function buildBlotPath(
-  o,
-  seconds,
-  scale,
-  edgeAmount
-){
-
-  const cx =
-    W *
-    .5;
-
-
-  const cy =
-    o.y
-    +
-    Math.sin(
-      seconds *
-      o.speedY
-      +
-      o.phaseY
-    )
-    *
-    o.driftY;
-
-
-  const points =
-    190;
-
-
-  const left =
-    [];
-
-
-  for(
-    let i=0;
-    i<=points;
-    i++
-  ){
-
-    const p =
-      i /
-      points;
-
-
-    const angle =
-      -Math.PI*.5
-      +
-      p *
-      Math.PI;
-
-
-    const baseRadius =
-      radiusAt(
-        o,
-        angle,
-        seconds,
-        scale
-      );
-
-
-    /*
-    Static-ish ink edge.
-    Full cycle > 1000 sec.
-    */
-
-    const edge =
-      Math.sin(
-        angle *
-        (
-          18 +
-          o.index*2
-        )
-        +
-        o.phaseC
-        +
-        seconds *
-        .002
-      )
-      *
-      edgeAmount;
-
-
-    const radius =
-      baseRadius *
-      (
-        1 +
-        edge
-      );
-
-
-    const x =
-      Math.cos(
-        angle
-      )
-      *
-      radius
-      *
-      o.stretchX;
-
-
-    const y =
-      Math.sin(
-        angle
-      )
-      *
-      radius
-      *
-      o.stretchY;
-
-
-    left.push(
-      {
-        x:
-          cx-x,
-
-        y:
-          cy+y
-      }
-    );
-
-  }
-
-
-  if(
-    left.length <
-    2
-  ){
-
-    return false;
-
-  }
-
-
-  ctx.beginPath();
-
-
-  ctx.moveTo(
-    left[0].x,
-    left[0].y
-  );
-
-
-  for(
-    let i=1;
-    i<left.length;
-    i++
-  ){
-
-    ctx.lineTo(
-      left[i].x,
-      left[i].y
-    );
-
-  }
-
-
-  /*
-  Mirror exactly.
-  */
-
-  for(
-    let i=left.length-1;
-    i>=0;
-    i--
-  ){
-
-    const p =
-      left[i];
-
-
-    ctx.lineTo(
-      cx +
-      (
-        cx -
-        p.x
-      ),
-      p.y
-    );
-
-  }
-
-
-  ctx.closePath();
-
-
-  return true;
-
-}
-
-
-/* =========================================================
-   PAINT LAYER
-   ========================================================= */
-
-function paintLayer(
-  o,
-  seconds,
-  scale,
-  brightness,
-  alpha,
-  edge
-){
-
-  const valid =
-    buildBlotPath(
-      o,
-      seconds,
-      scale,
-      edge
-    );
-
-
-  if(
-    !valid
-  ){
-
-    return;
-
-  }
-
-
-  ctx.fillStyle =
-    watercolorColor(
-      brightness,
-      alpha
-    );
-
-
-  ctx.fill();
-
-}
-
-
-/* =========================================================
-   PAINT ORGANISM
-   ========================================================= */
-
-function paintOrganism(
-  o,
-  seconds
-){
-
-  /*
-  Big wet exterior.
-  */
-
-  paintLayer(
-    o,
-    seconds,
-    1.23,
-    1.30,
-    .095,
-    .018
-  );
-
-
-  /*
-  Main pigment.
-  */
-
-  paintLayer(
-    o,
-    seconds+37,
-    1.00,
-    1.00,
-    .150,
-    .014
-  );
-
-
-  /*
-  Medium pigment.
-  */
-
-  paintLayer(
-    o,
-    seconds+89,
-    .80,
-    .76,
-    .130,
-    .011
-  );
-
-
-  /*
-  Dense centre.
-  */
-
-  paintLayer(
-    o,
-    seconds+151,
-    .59,
-    .54,
-    .115,
-    .008
-  );
-
-
-  /*
-  Almost black pigment.
-  */
-
-  paintLayer(
-    o,
-    seconds+223,
-    .40,
-    .37,
-    .095,
-    .006
-  );
-
-
-  /*
-  Inner dream appears deeper.
-  */
-
-  if(
-    dreamEngine.depth >
-    .65
-  ){
-
-    const depth =
-      Math.min(
-        1,
-        (
-          dreamEngine.depth -
-          .55
-        )
-        /
-        1.2
-      );
-
-
-    paintLayer(
-      o,
-      seconds+301,
-      .27,
-      1.12,
-      .055 *
-      depth,
-      .006
-    );
-
-  }
-
-}
-
-
-/* =========================================================
-   DEPTH
-   ========================================================= */
-
-function updateDepth(){
-
-  dreamEngine.depth +=
-    (
-      dreamEngine.depthTarget -
-      dreamEngine.depth
-    )
-    *
-    .002;
-
-}
-
-
-/* =========================================================
-   BLUR / FOCUS
-   ========================================================= */
-
-function updateFocus(seconds){
-
-  /*
-  Long irregular waves.
-
-  A = 118 sec
-  B = 277 sec
-
-  Result:
-  several seconds almost sharp,
-  then slowly dissolves again.
-  */
-
-  const a =
-    (
-      Math.sin(
-        seconds *
-        Math.PI *
-        2 /
-        118
-      )
-      +
-      1
-    )
-    /
-    2;
-
-
-  const b =
-    (
-      Math.sin(
-        seconds *
-        Math.PI *
-        2 /
-        277
-        +
-        1.73
-      )
-      +
-      1
-    )
-    /
-    2;
-
-
-  let focus =
-    a*.58 +
-    b*.42;
-
-
-  focus =
-    focus *
-    focus *
-    (
-      3 -
-      2*focus
-    );
-
-
-  dreamEngine.focus =
-    focus;
-
-
-  /*
-  Reference-like:
-  can become clearly readable,
-  but never digital-sharp.
-  */
-
-  let blur =
-    17.5 -
-    focus *
-    14.2;
-
-
-  if(
-    state.mode ===
-    "questions"
-  ){
-
-    blur +=
-      1.4;
-
-  }
-
-
-  const contrast =
-    112 +
-    focus *
-    43;
-
-
-  const opacity =
-    .78 +
-    focus *
-    .17;
-
-
-  canvas.style.filter =
-    `blur(${blur.toFixed(2)}px) contrast(${contrast.toFixed(1)}%)`;
-
-
-  canvas.style.opacity =
-    opacity.toFixed(
-      3
-    );
-
-}
-
-
-/* =========================================================
-   BACKGROUND
-   ========================================================= */
-
-function drawBlackField(){
-
-  /*
-  REAL BLACK.
-  */
-
-  ctx.fillStyle =
-    "#000";
-
-
-  ctx.fillRect(
-    0,
-    0,
-    W,
-    H
-  );
-
-
-  /*
-  Tiny graphite halo only near centre.
-  */
-
-  const gradient =
-    ctx.createRadialGradient(
-      W*.5,
-      H*.5,
-      0,
-      W*.5,
-      H*.5,
-      Math.max(
-        W,
-        H
-      )
-      *
-      .75
-    );
-
-
-  gradient.addColorStop(
-    0,
-    "rgba(25,25,25,.20)"
-  );
-
-
-  gradient.addColorStop(
-    .48,
-    "rgba(8,8,8,.16)"
-  );
-
-
-  gradient.addColorStop(
-    1,
-    "rgba(0,0,0,0)"
-  );
-
-
-  ctx.fillStyle =
-    gradient;
-
-
-  ctx.fillRect(
-    0,
-    0,
-    W,
-    H
-  );
-
-}
-
-
-/* =========================================================
-   DRAW
-   ========================================================= */
-
-function drawDream(timestamp){
-
-  /*
-  requestAnimationFrame timestamp is ms.
-  Convert exactly once.
-  */
-
-  const seconds =
-    timestamp /
-    1000;
-
-
-  updateDepth();
-
-
-  drawBlackField();
-
-
-  /*
-  NORMAL compositing.
-  This makes the pigment definitely visible.
-
-  Earlier versions relied heavily on SCREEN +
-  very low alpha.
-  This version intentionally does not.
-  */
-
-  ctx.globalCompositeOperation =
-    "source-over";
-
-
-  for(
-    const organism
-    of
-    organisms
-  ){
-
-    paintOrganism(
-      organism,
-      seconds
-    );
-
-  }
-
-
-  /*
-  Very subtle central fold.
-  */
-
-  const fold =
-    ctx.createLinearGradient(
-      W*.465,
-      0,
-      W*.535,
-      0
-    );
-
-
-  fold.addColorStop(
-    0,
-    "rgba(0,0,0,0)"
-  );
-
-
-  fold.addColorStop(
-    .5,
-    "rgba(255,255,255,.012)"
-  );
-
-
-  fold.addColorStop(
-    1,
-    "rgba(0,0,0,0)"
-  );
-
-
-  ctx.fillStyle =
-    fold;
-
-
-  ctx.fillRect(
-    W*.44,
-    0,
-    W*.12,
-    H
-  );
-
-
-  updateFocus(
-    seconds
-  );
-
-
-  requestAnimationFrame(
-    drawDream
-  );
-
-}
 
 
 /* =========================================================
    INIT
    ========================================================= */
 
-window.addEventListener(
-  "resize",
-  resizeDream
-);
+/*
+SVG animation starts independently
+the moment the document is rendered.
+JS is NOT responsible for the background.
+*/
 
-
-resizeDream();
+applyDreamColor();
 
 
 renderStart();
 
 
-requestAnimationFrame(
-  drawDream
-);
-
 </script>
 
+
 </body>
+
 </html>
