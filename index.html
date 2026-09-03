@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
+
 <meta charset="UTF-8">
 
 <meta
@@ -10,15 +11,15 @@
 
 <meta name="theme-color" content="#000000">
 
-<title>DREAM SIM — PATCHLAB 2026</title>
+<title>TRAUM SIM — PATCHLAB 2026</title>
 
 <style>
 
 :root{
   --vh:1vh;
-  --fg:#f2f2ef;
-  --muted:rgba(255,255,255,.44);
-  --quiet:rgba(255,255,255,.20);
+  --fg:#f4f4f0;
+  --muted:rgba(255,255,255,.42);
+  --quiet:rgba(255,255,255,.18);
   --line:rgba(255,255,255,.18);
 }
 
@@ -33,9 +34,15 @@ body{
   width:100%;
   height:100%;
   overflow:hidden;
+
   background:#000;
   color:var(--fg);
-  font-family:Helvetica,Arial,sans-serif;
+
+  font-family:
+    Helvetica,
+    Arial,
+    sans-serif;
+
   -webkit-font-smoothing:antialiased;
   -webkit-text-size-adjust:none;
 }
@@ -44,153 +51,78 @@ body{
   min-height:calc(var(--vh) * 100);
 }
 
+
 /* =========================================================
-   DREAM BACKGROUND
+   RORSCHACH FIELD
    ========================================================= */
 
-#dreamCanvas{
+#rorschach{
   position:fixed;
-  inset:-10%;
-  width:120%;
-  height:120%;
-  z-index:0;
 
-  filter:
-    blur(19px)
-    contrast(145%);
+  inset:-8%;
+
+  width:116%;
+  height:116%;
+
+  z-index:0;
 
   opacity:.86;
 
-  transform:scale(1.06);
-}
-
-/* =========================================================
-   FOREST
-   ========================================================= */
-
-#forestCanvas{
-  position:fixed;
-  inset:0;
-  width:100%;
-  height:100%;
-  z-index:2;
-
-  opacity:0;
-
-  filter:
-    grayscale(1)
-    blur(2px)
-    contrast(150%);
-
-  mix-blend-mode:screen;
-
-  pointer-events:none;
-
-  transition:
-    opacity 4.5s ease,
-    filter 5s ease,
-    transform 11s ease;
-}
-
-#forestCanvas.visible{
-  opacity:.31;
-
-  filter:
-    grayscale(1)
-    blur(3.5px)
-    contrast(145%);
-
-  transform:scale(1.055);
-}
-
-/* =========================================================
-   CURTAIN
-   ========================================================= */
-
-#curtain{
-  position:fixed;
-  inset:-12%;
-  z-index:2;
-
-  pointer-events:none;
-
-  opacity:0;
-
-  background:
-    repeating-linear-gradient(
-      90deg,
-      rgba(255,255,255,0) 0%,
-      rgba(255,255,255,.018) 2.4%,
-      rgba(255,255,255,.12) 4.8%,
-      rgba(255,255,255,.018) 7.7%,
-      rgba(0,0,0,.08) 10.8%
-    );
-
   filter:
     blur(10px)
-    contrast(165%);
+    contrast(180%);
 
-  transform:
-    perspective(800px)
-    rotateY(-7deg)
-    scaleX(1.1);
+  transform:scale(1.04);
 
-  mix-blend-mode:screen;
-
-  transition:opacity 4.5s ease;
+  transition:
+    filter 7s ease,
+    opacity 6s ease;
 }
 
-#curtain.visible{
-  opacity:.42;
-
-  animation:
-    curtainWave
-    12s
-    ease-in-out
-    infinite
-    alternate;
-}
 
 /* =========================================================
-   FOG
+   DREAM VEIL
    ========================================================= */
 
-#fog{
+#veil{
   position:fixed;
-  inset:-20%;
-  z-index:3;
+
+  inset:-18%;
+
+  z-index:2;
 
   pointer-events:none;
 
   background:
 
     radial-gradient(
-      circle at 28% 40%,
-      rgba(255,255,255,.065),
-      transparent 20%
+      circle at 50% 42%,
+      rgba(255,255,255,.035),
+      transparent 26%
     ),
 
     radial-gradient(
-      circle at 72% 55%,
-      rgba(255,255,255,.045),
-      transparent 25%
-    ),
-
-    radial-gradient(
-      circle at 50% 82%,
+      circle at 25% 68%,
       rgba(255,255,255,.025),
+      transparent 26%
+    ),
+
+    radial-gradient(
+      circle at 78% 61%,
+      rgba(255,255,255,.018),
       transparent 28%
     );
 
   mix-blend-mode:screen;
 
   animation:
-    fogMove
-    22s
+    veilMove
+    19s
     ease-in-out
     infinite
     alternate;
 }
+
 
 /* =========================================================
    GRAIN
@@ -198,7 +130,9 @@ body{
 
 #grain{
   position:fixed;
+
   inset:-50%;
+
   z-index:7;
 
   pointer-events:none;
@@ -206,23 +140,26 @@ body{
   opacity:.045;
 
   background-image:url(
-    "data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.88' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"
+  "data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.88' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"
   );
 
   animation:
-    grain
+    grainMove
     .22s
     steps(2)
     infinite;
 }
 
+
 /* =========================================================
-   GHOST TEXT
+   GHOSTS / ANSWER ECHOES
    ========================================================= */
 
 #ghostLayer{
   position:fixed;
+
   inset:0;
+
   z-index:6;
 
   pointer-events:none;
@@ -233,23 +170,39 @@ body{
 .ghost{
   position:absolute;
 
-  font-size:clamp(24px,8vw,112px);
+  max-width:90vw;
 
-  line-height:.9;
+  font-size:
+    clamp(
+      24px,
+      8vw,
+      116px
+    );
+
+  line-height:.92;
 
   letter-spacing:-.05em;
 
-  color:rgba(255,255,255,.038);
+  color:
+    rgba(255,255,255,.038);
 
-  filter:blur(8px);
+  filter:blur(9px);
 
   white-space:nowrap;
 
   animation:
-    ghostDrift
+    ghostMove
     linear
     forwards;
 }
+
+.answerGhost{
+  color:
+    rgba(255,255,255,.055);
+
+  filter:blur(11px);
+}
+
 
 /* =========================================================
    UI
@@ -257,42 +210,68 @@ body{
 
 #ui{
   position:fixed;
+
   inset:0;
 
   z-index:20;
 
-  height:calc(var(--vh) * 100);
+  height:
+    calc(
+      var(--vh)
+      *
+      100
+    );
 
   display:flex;
+
   flex-direction:column;
+
   justify-content:space-between;
 
   padding:
-    max(24px,env(safe-area-inset-top))
-    max(24px,env(safe-area-inset-right))
-    max(24px,env(safe-area-inset-bottom))
-    max(24px,env(safe-area-inset-left));
+
+    max(
+      24px,
+      env(safe-area-inset-top)
+    )
+
+    max(
+      24px,
+      env(safe-area-inset-right)
+    )
+
+    max(
+      24px,
+      env(safe-area-inset-bottom)
+    )
+
+    max(
+      24px,
+      env(safe-area-inset-left)
+    );
 
   transition:
-    opacity
-    1.4s
-    ease;
+    opacity 1.5s ease,
+    filter 1.5s ease;
 }
 
 #ui.hide{
   opacity:0;
+  filter:blur(12px);
   pointer-events:none;
 }
 
 .top,
 .bottom{
   display:flex;
+
   justify-content:space-between;
+
   align-items:center;
 
   font-size:10px;
 
-  letter-spacing:.2em;
+  letter-spacing:.21em;
 
   text-transform:uppercase;
 
@@ -300,7 +279,7 @@ body{
 }
 
 #screen{
-  width:min(900px,100%);
+  width:min(920px,100%);
 
   margin:auto;
 
@@ -314,32 +293,38 @@ body{
   opacity:0;
 
   transform:
-    translateY(12px)
+    translateY(11px)
     scale(1.012);
 
   filter:blur(13px);
 }
+
 
 /* =========================================================
    TYPOGRAPHY
    ========================================================= */
 
 .eyebrow{
-  margin-bottom:25px;
+  margin-bottom:24px;
 
   font-size:10px;
 
   letter-spacing:.24em;
 
-  color:var(--muted);
-
   text-transform:uppercase;
+
+  color:var(--muted);
 }
 
 h1{
   font-weight:400;
 
-  font-size:clamp(52px,12vw,108px);
+  font-size:
+    clamp(
+      54px,
+      13vw,
+      116px
+    );
 
   line-height:.84;
 
@@ -351,17 +336,51 @@ h2{
 
   font-weight:400;
 
-  font-size:clamp(31px,7vw,64px);
+  font-size:
+    clamp(
+      30px,
+      7vw,
+      64px
+    );
 
   line-height:1.02;
 
   letter-spacing:-.035em;
 }
 
-.sub{
-  margin-top:22px;
+.introText{
+  max-width:720px;
 
+  margin-top:28px;
+
+  font-size:
+    clamp(
+      18px,
+      2.8vw,
+      29px
+    );
+
+  line-height:1.34;
+
+  letter-spacing:-.015em;
+}
+
+.introMeta{
+  max-width:680px;
+
+  margin-top:28px;
+
+  font-size:12px;
+
+  line-height:1.65;
+
+  color:rgba(255,255,255,.47);
+}
+
+.sub{
   max-width:620px;
+
+  margin-top:22px;
 
   color:rgba(255,255,255,.50);
 
@@ -370,6 +389,7 @@ h2{
   line-height:1.55;
 }
 
+
 /* =========================================================
    LANGUAGE
    ========================================================= */
@@ -377,11 +397,13 @@ h2{
 .langs{
   display:grid;
 
-  grid-template-columns:1fr 1fr;
+  grid-template-columns:
+    1fr
+    1fr;
 
   gap:1px;
 
-  margin-top:50px;
+  margin-top:52px;
 
   background:var(--line);
 }
@@ -391,7 +413,8 @@ button{
 
   border:0;
 
-  background:rgba(0,0,0,.84);
+  background:
+    rgba(0,0,0,.82);
 
   color:#fff;
 
@@ -414,6 +437,7 @@ button{
   color:#000;
 }
 
+
 /* =========================================================
    DREAM WORDS
    ========================================================= */
@@ -429,28 +453,26 @@ button{
 
 .dreamword.blur{
   filter:blur(7px);
-  opacity:.66;
+  opacity:.67;
 }
 
 .dreamword.deepblur{
   filter:blur(14px);
-  opacity:.30;
+  opacity:.28;
 }
 
 .dreamword.float{
-  transform:translateY(-.09em);
+  transform:translateY(-.08em);
 }
 
+
 /* =========================================================
-   TEXTAREA
+   INPUT
    ========================================================= */
 
-textarea{
+textarea,
+input{
   width:100%;
-
-  min-height:190px;
-
-  margin-top:30px;
 
   border:0;
 
@@ -460,32 +482,67 @@ textarea{
 
   outline:0;
 
-  background:rgba(0,0,0,.06);
+  background:
+    rgba(0,0,0,.04);
 
   color:#fff;
 
-  resize:none;
+  font:inherit;
+
+  caret-color:#fff;
+
+  border-radius:0;
+}
+
+textarea{
+  min-height:190px;
+
+  margin-top:30px;
 
   padding:
     16px
     0
     20px;
 
-  font:inherit;
+  resize:none;
 
-  font-size:clamp(20px,4.5vw,34px);
+  font-size:
+    clamp(
+      20px,
+      4.5vw,
+      34px
+    );
 
   line-height:1.35;
-
-  caret-color:#fff;
 }
 
-textarea::placeholder{
-  color:rgba(255,255,255,.15);
+input{
+  margin-top:34px;
+
+  padding:
+    18px
+    0
+    20px;
+
+  font-size:
+    clamp(
+      25px,
+      5vw,
+      44px
+    );
+
+  letter-spacing:-.02em;
 }
+
+textarea::placeholder,
+input::placeholder{
+  color:
+    rgba(255,255,255,.15);
+}
+
 
 /* =========================================================
-   CONTROLS
+   BUTTONS
    ========================================================= */
 
 .actions{
@@ -497,14 +554,14 @@ textarea::placeholder{
 
   justify-content:space-between;
 
-  gap:16px;
+  gap:18px;
 }
 
 .back,
 .next{
   text-transform:uppercase;
 
-  letter-spacing:.17em;
+  letter-spacing:.18em;
 
   font-size:10px;
 }
@@ -518,13 +575,15 @@ textarea::placeholder{
 }
 
 .next{
+  min-width:150px;
+
+  padding:
+    17px
+    20px;
+
   border:
     1px solid
     rgba(255,255,255,.25);
-
-  padding:17px 20px;
-
-  min-width:150px;
 
   transition:.45s;
 }
@@ -540,6 +599,75 @@ textarea::placeholder{
 
   text-transform:uppercase;
 }
+
+
+/* =========================================================
+   FALSE AWAKENING
+   ========================================================= */
+
+#falseWake{
+  position:fixed;
+
+  inset:0;
+
+  z-index:150;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  background:#000;
+
+  color:#fff;
+
+  opacity:0;
+
+  pointer-events:none;
+}
+
+#falseWake.active{
+  animation:
+    falseWakeSequence
+    6.2s
+    ease
+    forwards;
+}
+
+.falseWakeContent{
+  width:min(700px,88vw);
+
+  text-align:center;
+}
+
+.falseWakeMain{
+  font-size:
+    clamp(
+      36px,
+      9vw,
+      90px
+    );
+
+  line-height:.9;
+
+  letter-spacing:-.055em;
+
+  font-weight:400;
+}
+
+.falseWakeSub{
+  margin-top:28px;
+
+  font-size:10px;
+
+  letter-spacing:.22em;
+
+  text-transform:uppercase;
+
+  color:rgba(255,255,255,.45);
+}
+
 
 /* =========================================================
    WHITE BLOOM
@@ -561,6 +689,7 @@ textarea::placeholder{
   filter:blur(60px);
 
   background:
+
     radial-gradient(
       circle at 50% 50%,
       rgba(255,255,255,1) 0%,
@@ -586,9 +715,9 @@ textarea::placeholder{
 
   z-index:201;
 
-  pointer-events:none;
-
   background:#fff;
+
+  pointer-events:none;
 
   opacity:0;
 }
@@ -601,8 +730,9 @@ textarea::placeholder{
     forwards;
 }
 
+
 /* =========================================================
-   FINAL BOARD
+   FINAL SCREEN
    ========================================================= */
 
 #finalInvite{
@@ -614,9 +744,9 @@ textarea::placeholder{
 
   background:#000;
 
-  color:#fff;
-
   opacity:0;
+
+  color:#fff;
 
   pointer-events:none;
 
@@ -627,16 +757,32 @@ textarea::placeholder{
   justify-content:center;
 
   padding:
-    max(30px,env(safe-area-inset-top))
-    max(28px,env(safe-area-inset-right))
-    max(30px,env(safe-area-inset-bottom))
-    max(28px,env(safe-area-inset-left));
+
+    max(
+      30px,
+      env(safe-area-inset-top)
+    )
+
+    max(
+      28px,
+      env(safe-area-inset-right)
+    )
+
+    max(
+      30px,
+      env(safe-area-inset-bottom)
+    )
+
+    max(
+      28px,
+      env(safe-area-inset-left)
+    );
 }
 
 #finalInvite.active{
   animation:
     finalIn
-    2.7s
+    2.8s
     ease
     forwards;
 }
@@ -650,7 +796,12 @@ textarea::placeholder{
     minmax(180px,280px)
     1fr;
 
-  gap:clamp(48px,8vw,120px);
+  gap:
+    clamp(
+      50px,
+      8vw,
+      120px
+    );
 
   align-items:end;
 }
@@ -665,8 +816,6 @@ textarea::placeholder{
   width:min(100%,260px);
 
   height:auto;
-
-  object-fit:contain;
 }
 
 .finalCopy{
@@ -678,17 +827,20 @@ textarea::placeholder{
 
   font-size:10px;
 
-  line-height:1.4;
-
   letter-spacing:.24em;
 
-  color:rgba(255,255,255,.42);
-
   text-transform:uppercase;
+
+  color:rgba(255,255,255,.42);
 }
 
 #finalTitle{
-  font-size:clamp(32px,5.8vw,70px);
+  font-size:
+    clamp(
+      32px,
+      5.8vw,
+      70px
+    );
 
   line-height:1.02;
 
@@ -702,9 +854,13 @@ textarea::placeholder{
 
   height:1px;
 
-  background:rgba(255,255,255,.21);
+  background:
+    rgba(255,255,255,.21);
 
-  margin:42px 0 24px;
+  margin:
+    42px
+    0
+    24px;
 }
 
 .finalDetails{
@@ -712,94 +868,58 @@ textarea::placeholder{
 
   justify-content:space-between;
 
-  align-items:flex-start;
-
   gap:30px;
 
-  font-size:clamp(10px,1.4vw,12px);
+  font-size:11px;
 
-  line-height:1.55;
-
-  letter-spacing:.17em;
-
-  color:rgba(255,255,255,.65);
+  letter-spacing:.18em;
 
   text-transform:uppercase;
+
+  color:rgba(255,255,255,.63);
 }
 
+
 /* =========================================================
-   ANIMATIONS
+   ANIMATION
    ========================================================= */
 
-@keyframes fogMove{
+@keyframes veilMove{
+
   from{
     transform:
-      translate3d(-2%,0,0)
+      translate(-2%,0)
       scale(1);
   }
 
   to{
     transform:
-      translate3d(3%,-2%,0)
-      scale(1.12);
+      translate(3%,-2%)
+      scale(1.1);
 
-    filter:blur(10px);
+    filter:blur(12px);
   }
+
 }
 
-@keyframes curtainWave{
-  0%{
-    transform:
-      perspective(800px)
-      rotateY(-8deg)
-      scaleX(1.08)
-      translateX(-2%);
+@keyframes grainMove{
 
-    filter:
-      blur(10px)
-      contrast(160%);
-  }
-
-  50%{
-    transform:
-      perspective(800px)
-      rotateY(4deg)
-      scaleX(.98)
-      translateX(2%);
-
-    filter:
-      blur(16px)
-      contrast(190%);
-  }
-
-  100%{
-    transform:
-      perspective(800px)
-      rotateY(-3deg)
-      scaleX(1.12)
-      translateX(-1%);
-
-    filter:
-      blur(8px)
-      contrast(150%);
-  }
-}
-
-@keyframes grain{
   0%{transform:translate(0,0)}
   25%{transform:translate(3%,-3%)}
   50%{transform:translate(-4%,2%)}
   75%{transform:translate(2%,4%)}
   100%{transform:translate(-2%,-4%)}
+
 }
 
-@keyframes ghostDrift{
+@keyframes ghostMove{
+
   0%{
     opacity:0;
 
     transform:
-      translate3d(-4vw,3vh,0)
-      scale(.97);
+      translate(-3vw,3vh)
+      scale(.96);
 
     filter:blur(12px);
   }
@@ -808,22 +928,48 @@ textarea::placeholder{
     opacity:1;
   }
 
-  68%{
-    opacity:.70;
+  70%{
+    opacity:.7;
   }
 
   100%{
     opacity:0;
 
     transform:
-      translate3d(6vw,-4vh,0)
-      scale(1.06);
+      translate(6vw,-4vh)
+      scale(1.07);
 
-    filter:blur(23px);
+    filter:blur(24px);
   }
+
+}
+
+@keyframes falseWakeSequence{
+
+  0%{
+    opacity:0;
+    filter:blur(18px);
+  }
+
+  18%{
+    opacity:1;
+    filter:blur(0);
+  }
+
+  70%{
+    opacity:1;
+    filter:blur(0);
+  }
+
+  100%{
+    opacity:0;
+    filter:blur(16px);
+  }
+
 }
 
 @keyframes bloom{
+
   0%{
     opacity:0;
     transform:scale(.20);
@@ -842,32 +988,34 @@ textarea::placeholder{
     opacity:1;
     transform:scale(1.9);
   }
+
 }
 
 @keyframes whiteout{
+
   0%{opacity:0}
   56%{opacity:.04}
   80%{opacity:.34}
   100%{opacity:1}
+
 }
 
 @keyframes finalIn{
+
   0%{
     opacity:0;
-
     filter:blur(12px);
-
     transform:scale(1.012);
   }
 
   100%{
     opacity:1;
-
     filter:blur(0);
-
     transform:scale(1);
   }
+
 }
+
 
 /* =========================================================
    MOBILE
@@ -877,24 +1025,69 @@ textarea::placeholder{
 
   #ui{
     padding:
-      max(18px,env(safe-area-inset-top))
-      max(18px,env(safe-area-inset-right))
-      max(18px,env(safe-area-inset-bottom))
-      max(18px,env(safe-area-inset-left));
+
+      max(
+        18px,
+        env(safe-area-inset-top)
+      )
+
+      max(
+        18px,
+        env(safe-area-inset-right)
+      )
+
+      max(
+        18px,
+        env(safe-area-inset-bottom)
+      )
+
+      max(
+        18px,
+        env(safe-area-inset-left)
+      );
   }
 
   h1{
-    font-size:clamp(52px,18vw,82px);
+    font-size:
+      clamp(
+        54px,
+        19vw,
+        84px
+      );
   }
 
   h2{
-    font-size:clamp(28px,8.7vw,44px);
+    font-size:
+      clamp(
+        28px,
+        8.8vw,
+        44px
+      );
+  }
+
+  .introText{
+    font-size:
+      clamp(
+        19px,
+        6vw,
+        29px
+      );
   }
 
   textarea{
-    min-height:clamp(150px,27dvh,230px);
+    min-height:
+      clamp(
+        145px,
+        25dvh,
+        225px
+      );
 
-    font-size:clamp(19px,6vw,27px);
+    font-size:
+      clamp(
+        19px,
+        6vw,
+        27px
+      );
   }
 
   .langs{
@@ -922,7 +1115,7 @@ textarea::placeholder{
 
     justify-content:center;
 
-    gap:46px;
+    gap:45px;
   }
 
   .logoBlock img{
@@ -930,63 +1123,26 @@ textarea::placeholder{
   }
 
   #finalTitle{
-    font-size:clamp(31px,9vw,46px);
+    font-size:
+      clamp(
+        31px,
+        9vw,
+        46px
+      );
   }
 
   .finalRule{
-    margin:32px 0 20px;
+    margin:
+      32px
+      0
+      20px;
   }
 
   .finalDetails{
     flex-direction:column;
-
     gap:8px;
   }
-}
 
-/* =========================================================
-   LANDSCAPE MOBILE
-   ========================================================= */
-
-@media(orientation:landscape) and (max-height:520px){
-
-  textarea{
-    min-height:90px;
-  }
-
-  .eyebrow{
-    margin-bottom:11px;
-  }
-
-  .actions{
-    margin-top:13px;
-  }
-
-  .finalGrid{
-    display:grid;
-
-    grid-template-columns:
-      150px
-      1fr;
-
-    gap:45px;
-  }
-
-  .logoBlock img{
-    width:140px;
-  }
-
-  #finalTitle{
-    font-size:clamp(25px,7vh,38px);
-  }
-
-  .finalLabel{
-    margin-bottom:16px;
-  }
-
-  .finalRule{
-    margin:20px 0 14px;
-  }
 }
 
 </style>
@@ -995,21 +1151,49 @@ textarea::placeholder{
 
 <body>
 
-<canvas id="dreamCanvas"></canvas>
 
-<canvas id="forestCanvas"></canvas>
+<!-- DREAM FIELD -->
 
-<div id="curtain"></div>
+<canvas id="rorschach"></canvas>
 
-<div id="fog"></div>
+<div id="veil"></div>
 
 <div id="grain"></div>
 
 <div id="ghostLayer"></div>
 
+
+<!-- FALSE AWAKENING -->
+
+<div id="falseWake">
+
+  <div class="falseWakeContent">
+
+    <div
+      class="falseWakeMain"
+      id="falseWakeMain"
+    >
+    </div>
+
+    <div
+      class="falseWakeSub"
+      id="falseWakeSub"
+    >
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- FINAL TRANSITION -->
+
 <div id="whiteBloom"></div>
 
 <div id="whiteout"></div>
+
+
+<!-- FINAL INVITATION -->
 
 <div id="finalInvite">
 
@@ -1027,7 +1211,7 @@ textarea::placeholder{
     <div class="finalCopy">
 
       <div class="finalLabel">
-        DREAM SIM / PATCHLAB 2026
+        TRAUM SIM / PATCHLAB 2026
       </div>
 
       <div id="finalTitle"></div>
@@ -1036,11 +1220,17 @@ textarea::placeholder{
 
       <div class="finalDetails">
 
-        <div>15.10.2026</div>
+        <div>
+          15.10.2026
+        </div>
 
-        <div>HEVRE</div>
+        <div>
+          HEVRE
+        </div>
 
-        <div>KRAKÓW</div>
+        <div>
+          KRAKÓW
+        </div>
 
       </div>
 
@@ -1050,12 +1240,15 @@ textarea::placeholder{
 
 </div>
 
+
+<!-- UI -->
+
 <div id="ui">
 
   <div class="top">
 
     <span>
-      DREAM SIM
+      TRAUM SIM
     </span>
 
     <span id="progress"></span>
@@ -1070,15 +1263,17 @@ textarea::placeholder{
       PATCHLAB 2026
     </span>
 
-    <span>
-      DREAM ARCHIVE
+    <span id="depthLabel">
+      TRAUM 0
     </span>
 
   </div>
 
 </div>
 
+
 <script>
+
 
 /* =========================================================
    GOOGLE BACKEND
@@ -1096,13 +1291,18 @@ function setVH(){
 
   const h =
     window.visualViewport
-      ? window.visualViewport.height
-      : window.innerHeight;
+    ?
+    window.visualViewport.height
+    :
+    window.innerHeight;
 
-  document.documentElement.style.setProperty(
-    "--vh",
-    (h * .01) + "px"
-  );
+  document
+    .documentElement
+    .style
+    .setProperty(
+      "--vh",
+      (h*.01)+"px"
+    );
 
 }
 
@@ -1115,830 +1315,466 @@ window.addEventListener(
 
 if(window.visualViewport){
 
-  window.visualViewport.addEventListener(
-    "resize",
-    setVH
-  );
+  window
+    .visualViewport
+    .addEventListener(
+      "resize",
+      setVH
+    );
 
 }
 
 
 /* =========================================================
-   DREAM QUESTION BANK
-
-   Lenses:
-   - Jung / archetypes / shadow / persona / Self
-   - contemporary psychology of dreaming
-   - symbolic / esoteric poetic layer
-
-   These are prompts, not diagnoses.
+   INTRO
    ========================================================= */
 
+const INTRO = {
 
-const QUESTIONS_PL = [
+PL:[
 
-
-/* =========================
-   JUNG — CIEŃ
-   ========================= */
-
-{
-  group:"CIEŃ",
-  question:"Kto zrobił we śnie coś, czego ty nigdy nie zrobiłbyś na jawie?"
-},
-
-{
-  group:"CIEŃ",
-  question:"Która postać była najbardziej obca, a jednak zachowywała się trochę jak ty?"
-},
-
-{
-  group:"CIEŃ",
-  question:"Czego we śnie nie chciałeś zobaczyć, chociaż sen ciągle prowadził cię właśnie tam?"
-},
-
-{
-  group:"CIEŃ",
-  question:"Co cię ścigało — i co by się stało, gdybyś przestał przed tym uciekać?"
-},
-
-{
-  group:"CIEŃ",
-  question:"Która część snu wydawała się zła tylko dlatego, że była ci nieznana?"
-},
-
-{
-  group:"CIEŃ",
-  question:"Gdyby twój lęk miał twarz, czy była to twarz kogoś obcego?"
-},
-
-
-/* =========================
-   JUNG — PERSONA
-   ========================= */
-
-{
-  group:"MASKA",
-  question:"Czy we śnie byłeś sobą, czy kimś, kogo inni mieli za ciebie?"
-},
-
-{
-  group:"MASKA",
-  question:"Jak wyglądałeś w oczach postaci, które cię obserwowały?"
-},
-
-{
-  group:"MASKA",
-  question:"Czy ktoś znał cię pod innym imieniem?"
-},
-
-{
-  group:"MASKA",
-  question:"Którą wersję siebie próbowałeś odegrać?"
-},
-
-{
-  group:"MASKA",
-  question:"Co zostałoby z ciebie, gdyby w tym śnie zniknęła twoja twarz?"
-},
-
-
-/* =========================
-   JUNG — SELF
-   ========================= */
-
-{
-  group:"CENTRUM",
-  question:"Czy w śnie było miejsce, do którego wszystko zdawało się prowadzić?"
-},
-
-{
-  group:"CENTRUM",
-  question:"Co znajdowało się w samym środku przestrzeni, nawet jeśli fizycznie nie było w centrum?"
-},
-
-{
-  group:"CENTRUM",
-  question:"Czy pojawił się znak, obiekt albo miejsce, które wydawało się ważniejsze niż cała reszta?"
-},
-
-{
-  group:"CENTRUM",
-  question:"Gdyby cały sen był wiadomością od ciebie do ciebie, czego nie wolno byłoby z niej usunąć?"
-},
-
-{
-  group:"CENTRUM",
-  question:"Co w tym śnie pozostawało nieruchome, kiedy wszystko inne się zmieniało?"
-},
-
-
-/* =========================
-   JUNG — ANIMA / ANIMUS
-   ========================= */
-
-{
-  group:"INNY",
-  question:"Czy ktoś prowadził cię przez sen, mimo że nie wiedziałeś dokąd?"
-},
-
-{
-  group:"INNY",
-  question:"Kto wydawał się znać ten świat lepiej niż ty?"
-},
-
-{
-  group:"INNY",
-  question:"Czy była tam postać, której ufałeś bez żadnego powodu?"
-},
-
-{
-  group:"INNY",
-  question:"Czy ktoś powiedział coś, czego znaczenie zrozumiałeś dopiero po przebudzeniu?"
-},
-
-{
-  group:"INNY",
-  question:"Czy spotkałeś kogoś, kogo nigdy wcześniej nie widziałeś, ale rozpoznałeś?"
-},
-
-
-/* =========================
-   ARCHETYP / MOTYW
-   ========================= */
-
-{
-  group:"ARCHETYP",
-  question:"Czy pojawiły się drzwi, schody, las, woda, dom albo droga?"
-},
-
-{
-  group:"ARCHETYP",
-  question:"Który element wyglądał zwyczajnie, ale zachowywał się jak symbol?"
-},
-
-{
-  group:"ARCHETYP",
-  question:"Czy w śnie coś prowadziło w dół albo bardzo wysoko?"
-},
-
-{
-  group:"ARCHETYP",
-  question:"Co było granicą między jednym światem a drugim?"
-},
-
-{
-  group:"ARCHETYP",
-  question:"Czy jakaś rzecz wracała tak, jakby sen próbował ją podkreślić?"
-},
-
-
-/* =========================
-   MODERN — EMOTION
-   ========================= */
-
-{
-  group:"EMOCJA",
-  question:"Jakie uczucie pamiętasz wyraźniej niż samą historię?"
-},
-
-{
-  group:"EMOCJA",
-  question:"Czy emocja zmieniła się nagle bez żadnego powodu?"
-},
-
-{
-  group:"EMOCJA",
-  question:"Co we śnie było spokojne, choć na jawie powinno wywołać strach?"
-},
-
-{
-  group:"EMOCJA",
-  question:"Co było przerażające, mimo że obiektywnie nic się nie działo?"
-},
-
-{
-  group:"EMOCJA",
-  question:"Które uczucie zostało w ciele już po przebudzeniu?"
-},
-
-
-/* =========================
-   MODERN — MEMORY
-   ========================= */
-
-{
-  group:"PAMIĘĆ",
-  question:"Który szczegół pamiętasz bez żadnego wysiłku?"
-},
-
-{
-  group:"PAMIĘĆ",
-  question:"Co wiesz, że wydarzyło się we śnie, choć nie potrafisz tego zobaczyć?"
-},
-
-{
-  group:"PAMIĘĆ",
-  question:"Który fragment zaczął znikać natychmiast po przebudzeniu?"
-},
-
-{
-  group:"PAMIĘĆ",
-  question:"Czy miejsce przypominało kilka prawdziwych miejsc połączonych w jedno?"
-},
-
-{
-  group:"PAMIĘĆ",
-  question:"Czy ktoś ze snu wyglądał jak jedna osoba, ale był kimś zupełnie innym?"
-},
-
-{
-  group:"PAMIĘĆ",
-  question:"Które wspomnienie z rzeczywistości zostało przez sen przerobione?"
-},
-
-
-/* =========================
-   MODERN — CONTINUITY
-   ========================= */
-
-{
-  group:"ŚLAD DNIA",
-  question:"Co z ostatnich dni mogło przedostać się do tego snu?"
-},
-
-{
-  group:"ŚLAD DNIA",
-  question:"Czy pojawiło się coś, o czym myślałeś tylko przez sekundę dzień wcześniej?"
-},
-
-{
-  group:"ŚLAD DNIA",
-  question:"Czy sen wykorzystał prawdziwy problem, ale zmienił jego formę?"
-},
-
-{
-  group:"ŚLAD DNIA",
-  question:"Co było znajome, ale przeniesione do całkowicie niewłaściwego miejsca?"
-},
-
-{
-  group:"ŚLAD DNIA",
-  question:"Czy sen mieszał stare wspomnienie z czymś, co wydarzyło się niedawno?"
-},
-
-
-/* =========================
-   MODERN — THREAT
-   ========================= */
-
-{
-  group:"ZAGROŻENIE",
-  question:"Przed czym próbowałeś się ochronić?"
-},
-
-{
-  group:"ZAGROŻENIE",
-  question:"Czy wiedziałeś, że coś się wydarzy, zanim to się wydarzyło?"
-},
-
-{
-  group:"ZAGROŻENIE",
-  question:"Co zmusiło cię do ucieczki, ukrycia się albo zatrzymania?"
-},
-
-{
-  group:"ZAGROŻENIE",
-  question:"Czy zagrożenie było widoczne, czy tylko obecne?"
-},
-
-{
-  group:"ZAGROŻENIE",
-  question:"Czy sen przygotowywał cię do czegoś, czego nigdy naprawdę nie przeżyłeś?"
-},
-
-
-/* =========================
-   MODERN — BODY
-   ========================= */
-
-{
-  group:"CIAŁO",
-  question:"Czy twoje ciało działało tak samo jak na jawie?"
-},
-
-{
-  group:"CIAŁO",
-  question:"Czy mogłeś biec, mówić albo krzyczeć?"
-},
-
-{
-  group:"CIAŁO",
-  question:"Czy czułeś ciężar własnego ciała?"
-},
-
-{
-  group:"CIAŁO",
-  question:"Czy patrzyłeś własnymi oczami, czy widziałeś siebie z zewnątrz?"
-},
-
-{
-  group:"CIAŁO",
-  question:"Czy byłeś człowiekiem przez cały czas?"
-},
-
-
-/* =========================
-   MODERN — TIME
-   ========================= */
-
-{
-  group:"CZAS",
-  question:"Czy wydarzenia miały kolejność?"
-},
-
-{
-  group:"CZAS",
-  question:"Czy wiedziałeś, co wydarzyło się wcześniej, mimo że tego nie widziałeś?"
-},
-
-{
-  group:"CZAS",
-  question:"Czy jedna chwila wydawała się trwać bardzo długo?"
-},
-
-{
-  group:"CZAS",
-  question:"Czy coś powtórzyło się dokładnie, czy tylko prawie dokładnie?"
-},
-
-{
-  group:"CZAS",
-  question:"Czy obudziłeś się w śnie, zanim obudziłeś się naprawdę?"
-},
-
-
-/* =========================
-   MODERN — METACOGNITION
-   ========================= */
-
-{
-  group:"ŚWIADOMOŚĆ",
-  question:"Czy choć przez chwilę wiedziałeś, że śnisz?"
-},
-
-{
-  group:"ŚWIADOMOŚĆ",
-  question:"Czy próbowałeś zmienić wydarzenia?"
-},
-
-{
-  group:"ŚWIADOMOŚĆ",
-  question:"Czy zadałeś komuś we śnie pytanie tylko po to, żeby sprawdzić, co odpowie?"
-},
-
-{
-  group:"ŚWIADOMOŚĆ",
-  question:"Czy zauważyłeś coś niemożliwego i uznałeś to za całkowicie normalne?"
-},
-
-{
-  group:"ŚWIADOMOŚĆ",
-  question:"W którym momencie logika przestała mieć znaczenie?"
-},
-
-
-/* =========================
-   ESOTERIC / SYMBOLIC
-   ========================= */
-
-{
-  group:"PRÓG",
-  question:"Jeśli sen był przejściem, z czego wychodziłeś i do czego wchodziłeś?"
-},
-
-{
-  group:"PRÓG",
-  question:"Czy pojawiły się drzwi, których nie powinno tam być?"
-},
-
-{
-  group:"PRÓG",
-  question:"Czy przekroczyłeś miejsce, po którym świat już nie był taki sam?"
-},
-
-{
-  group:"PRÓG",
-  question:"Co znajdowało się po drugiej stronie?"
-},
-
-
-{
-  group:"ZNAK",
-  question:"Czy jakaś liczba, kolor, zwierzę albo przedmiot powtarzały się?"
-},
-
-{
-  group:"ZNAK",
-  question:"Gdyby jeden obraz ze snu był omenem — który byś wybrał?"
-},
-
-{
-  group:"ZNAK",
-  question:"Który przedmiot wyglądał jakby czekał właśnie na ciebie?"
-},
-
-{
-  group:"ZNAK",
-  question:"Czy coś zdawało się wiedzieć, że patrzysz?"
-},
-
-
-{
-  group:"ODBICIE",
-  question:"Czy widziałeś lustro, wodę, szybę albo własne odbicie?"
-},
-
-{
-  group:"ODBICIE",
-  question:"Czy odbicie robiło dokładnie to samo co ty?"
-},
-
-{
-  group:"ODBICIE",
-  question:"Co zobaczyłbyś, gdybyś spojrzał jeszcze raz?"
-},
-
-
-{
-  group:"MIEJSCE",
-  question:"Czy las był miejscem, czy czymś, co cię obserwowało?"
-},
-
-{
-  group:"MIEJSCE",
-  question:"Czy dom miał więcej pomieszczeń, niż powinien?"
-},
-
-{
-  group:"MIEJSCE",
-  question:"Czy droga prowadziła gdzieś, czy tylko dalej?"
-},
-
-{
-  group:"MIEJSCE",
-  question:"Czy przestrzeń pamiętała cię wcześniej niż ty ją?"
-},
-
-
 {
-  group:"NIEMOŻLIWE",
-  question:"Co wydarzyło się poprawnie, choć nie mogło się wydarzyć?"
+label:"TRAUM / 01",
+title:"Sen nie jest filmem.",
+text:
+"Podczas snu mózg nadal pracuje. Fragmenty pamięci, emocji, miejsc, osób i doświadczeń zostają ponownie połączone w rzeczywistość, która w chwili śnienia może wydawać się całkowicie prawdziwa.",
+meta:
+"Nie istnieje jeden naukowy słownik symboli snu. Znaczenie obrazu zależy od osoby, pamięci, emocji i kontekstu."
 },
 
 {
-  group:"NIEMOŻLIWE",
-  question:"Czy grawitacja pamiętała, w którą stronę ma działać?"
+label:"TRAUM / 02",
+title:"Pamięć nie odtwarza. Pamięć rekonstruuje.",
+text:
+"Sen może połączyć dom z dzieciństwa z pokojem widzianym wczoraj, nadać znajomej osobie inną twarz albo pozwolić ci wiedzieć coś, czego nikt wcześniej nie powiedział.",
+meta:
+"To, co podczas czuwania byłoby sprzecznością, we śnie często zostaje zaakceptowane bez pytania."
 },
 
 {
-  group:"NIEMOŻLIWE",
-  question:"Co było żywe, choć nie powinno mieć życia?"
+label:"TRAUM / 03",
+title:"Niektóre sny zmieniły rzeczywistość.",
+text:
+"Mary Shelley opisywała obraz pomiędzy snem a jawą, który stał się zalążkiem Frankensteina. Otto Loewi przypisywał snowi projekt eksperymentu dotyczącego chemicznego przekazywania sygnałów nerwowych. Paul McCartney opowiadał, że melodia Yesterday pojawiła się podczas snu.",
+meta:
+"Sen potrafi działać jak generator: bierze istniejące fragmenty i układa je w konfigurację, której wcześniej nie było."
 },
 
 {
-  group:"NIEMOŻLIWE",
-  question:"Co wiedziałeś bez żadnego sposobu, żeby to wiedzieć?"
+label:"TRAUM / 04",
+title:"Nie próbuj interpretować.",
+text:
+"Przypomnij sobie tylko to, co zostało. Obraz. Uczucie. Osobę. Miejsce. Przejście. Coś niemożliwego.",
+meta:
+"Nie szukamy poprawnego znaczenia. Szukamy śladu."
 }
 
-];
+],
+
+ENG:[
+
+{
+label:"TRAUM / 01",
+title:"A dream is not a film.",
+text:
+"During sleep the brain continues working. Fragments of memory, emotion, places, people and experience are recombined into a reality that can feel completely real while it is happening.",
+meta:
+"There is no single scientific dictionary of dream symbols. Meaning depends on the dreamer, memory, emotion and context."
+},
+
+{
+label:"TRAUM / 02",
+title:"Memory does not replay. Memory reconstructs.",
+text:
+"A dream can merge a childhood home with a room seen yesterday, give a familiar person another face, or allow you to know something nobody ever told you.",
+meta:
+"What would be a contradiction while awake often requires no explanation inside a dream."
+},
+
+{
+label:"TRAUM / 03",
+title:"Some dreams changed reality.",
+text:
+"Mary Shelley described a waking vision that became the seed of Frankenstein. Otto Loewi credited a dream with the design of an experiment concerning chemical neurotransmission. Paul McCartney has said that the melody of Yesterday came to him in a dream.",
+meta:
+"Dreaming can behave like a generator: recombining existing fragments into a configuration that did not exist before."
+},
+
+{
+label:"TRAUM / 04",
+title:"Do not interpret.",
+text:
+"Simply remember what remained. An image. A feeling. A person. A place. A passage. Something impossible.",
+meta:
+"We are not looking for the correct meaning. We are looking for a trace."
+}
+
+]
+
+};
 
 
 /* =========================================================
-   ENGLISH QUESTION BANK
+   QUESTION BANK PL
+   3 LEVELS
    ========================================================= */
 
-const QUESTIONS_EN = [
+const QUESTIONS_PL = {
+
+
+0:[
 
 {
-  group:"SHADOW",
-  question:"Who did something in the dream that you would never do while awake?"
+group:"PAMIĘĆ",
+question:
+"Który szczegół snu pamiętasz bez żadnego wysiłku?"
 },
 
 {
-  group:"SHADOW",
-  question:"Which stranger behaved a little too much like you?"
+group:"MIEJSCE",
+question:
+"Czy miejsce było prawdziwym miejscem, czy kilkoma miejscami połączonymi w jedno?"
 },
 
 {
-  group:"SHADOW",
-  question:"What did you refuse to look at while the dream kept leading you toward it?"
+group:"EMOCJA",
+question:
+"Jakie uczucie pamiętasz wyraźniej niż same wydarzenia?"
 },
 
 {
-  group:"SHADOW",
-  question:"What was chasing you — and what might happen if you stopped running?"
+group:"OBECNOŚĆ",
+question:
+"Kto był tam z tobą?"
 },
 
 {
-  group:"SHADOW",
-  question:"What seemed evil only because it was unknown?"
+group:"CIAŁO",
+question:
+"Czy patrzyłeś własnymi oczami, czy obserwowałeś siebie z zewnątrz?"
 },
 
 {
-  group:"MASK",
-  question:"Were you yourself, or someone others believed was you?"
-},
-
-{
-  group:"MASK",
-  question:"Did anyone know you by another name?"
-},
-
-{
-  group:"MASK",
-  question:"Which version of yourself were you performing?"
-},
-
-{
-  group:"CENTER",
-  question:"Was there a place everything seemed to lead toward?"
-},
-
-{
-  group:"CENTER",
-  question:"What remained still while everything else changed?"
-},
-
-{
-  group:"CENTER",
-  question:"Which object or place felt more important than the rest of the dream?"
-},
-
-{
-  group:"OTHER",
-  question:"Who seemed to know the dream world better than you?"
-},
-
-{
-  group:"OTHER",
-  question:"Did someone guide you without telling you where you were going?"
-},
-
-{
-  group:"OTHER",
-  question:"Did you recognize someone you had never seen before?"
-},
-
-{
-  group:"ARCHETYPE",
-  question:"Did you encounter a door, staircase, forest, water, house or road?"
-},
-
-{
-  group:"ARCHETYPE",
-  question:"Which ordinary object behaved like a symbol?"
-},
-
-{
-  group:"ARCHETYPE",
-  question:"What separated one world from another?"
-},
-
-{
-  group:"EMOTION",
-  question:"Which feeling do you remember more clearly than the story?"
-},
-
-{
-  group:"EMOTION",
-  question:"What was frightening even though nothing was happening?"
-},
-
-{
-  group:"EMOTION",
-  question:"What felt strangely calm despite being impossible?"
-},
-
-{
-  group:"MEMORY",
-  question:"Which detail do you remember without trying?"
-},
-
-{
-  group:"MEMORY",
-  question:"What do you know happened even though you cannot see it anymore?"
-},
-
-{
-  group:"MEMORY",
-  question:"Which fragment disappeared first after waking?"
-},
-
-{
-  group:"MEMORY",
-  question:"Did one place seem to be several real places merged together?"
-},
-
-{
-  group:"MEMORY",
-  question:"Did someone look like one person while somehow being another?"
-},
-
-{
-  group:"DAY TRACE",
-  question:"What from the last few days may have entered the dream?"
-},
-
-{
-  group:"DAY TRACE",
-  question:"Did something you barely noticed yesterday become important?"
-},
-
-{
-  group:"DAY TRACE",
-  question:"Did the dream transform a real problem into something else?"
-},
-
-{
-  group:"THREAT",
-  question:"What were you trying to protect yourself from?"
-},
-
-{
-  group:"THREAT",
-  question:"Did you know something was about to happen before it happened?"
-},
-
-{
-  group:"THREAT",
-  question:"Was the threat visible, or only present?"
-},
-
-{
-  group:"BODY",
-  question:"Did your body work the same way it does while awake?"
-},
-
-{
-  group:"BODY",
-  question:"Could you run, speak or scream?"
-},
-
-{
-  group:"BODY",
-  question:"Were you seeing through your own eyes or watching yourself from outside?"
-},
-
-{
-  group:"BODY",
-  question:"Were you human the entire time?"
-},
-
-{
-  group:"TIME",
-  question:"Did events have an order?"
-},
-
-{
-  group:"TIME",
-  question:"Did one moment seem to last much longer than it should?"
-},
-
-{
-  group:"TIME",
-  question:"Did something repeat exactly, or only almost exactly?"
-},
-
-{
-  group:"TIME",
-  question:"Did you wake inside the dream before waking for real?"
-},
-
-{
-  group:"AWARENESS",
-  question:"Did you know, even for a moment, that you were dreaming?"
-},
-
-{
-  group:"AWARENESS",
-  question:"Did you try to change what was happening?"
-},
-
-{
-  group:"AWARENESS",
-  question:"When did logic stop mattering?"
-},
-
-{
-  group:"THRESHOLD",
-  question:"If the dream was a passage, what were you leaving and what were you entering?"
-},
-
-{
-  group:"THRESHOLD",
-  question:"Did a door appear where no door should have been?"
-},
-
-{
-  group:"THRESHOLD",
-  question:"What was on the other side?"
-},
-
-{
-  group:"SIGN",
-  question:"Did a number, animal, color or object keep returning?"
-},
-
-{
-  group:"SIGN",
-  question:"If one image were an omen, which one would it be?"
-},
-
-{
-  group:"SIGN",
-  question:"Which object seemed to be waiting specifically for you?"
-},
-
-{
-  group:"REFLECTION",
-  question:"Did you encounter a mirror, water, glass or your own reflection?"
-},
-
-{
-  group:"REFLECTION",
-  question:"Did the reflection do exactly what you did?"
-},
-
-{
-  group:"PLACE",
-  question:"Was the forest a place, or something watching you?"
-},
-
-{
-  group:"PLACE",
-  question:"Did the house contain more rooms than it should?"
-},
-
-{
-  group:"PLACE",
-  question:"Did the road lead somewhere, or only farther?"
-},
-
-{
-  group:"IMPOSSIBLE",
-  question:"What happened correctly even though it could not happen?"
-},
-
-{
-  group:"IMPOSSIBLE",
-  question:"Did gravity remember which direction it was supposed to work?"
-},
-
-{
-  group:"IMPOSSIBLE",
-  question:"What was alive that should not have been alive?"
-},
-
-{
-  group:"IMPOSSIBLE",
-  question:"What did you know without having any possible way to know it?"
+group:"ŚLAD DNIA",
+question:
+"Co z ostatnich dni mogło przedostać się do tego snu?"
 }
 
-];
+],
+
+
+1:[
+
+{
+group:"CIEŃ",
+question:
+"Co cię ścigało — i co mogłoby się wydarzyć, gdybyś przestał uciekać?"
+},
+
+{
+group:"CIEŃ",
+question:
+"Która postać była całkowicie obca, a jednak zachowywała się trochę jak ty?"
+},
+
+{
+group:"MASKA",
+question:
+"Czy byłeś sobą, czy osobą, którą inni mieli za ciebie?"
+},
+
+{
+group:"ARCHETYP",
+question:
+"Czy pojawiły się drzwi, schody, woda, dom, las albo droga?"
+},
+
+{
+group:"CENTRUM",
+question:
+"Czy istniało miejsce albo rzecz, do której wszystko zdawało się prowadzić?"
+},
+
+{
+group:"PRÓG",
+question:
+"Co znajdowało się po drugiej stronie?"
+}
+
+],
+
+
+2:[
+
+{
+group:"TOŻSAMOŚĆ",
+question:
+"Kto śnił — ty, czy ktoś, kto tylko wyglądał jak ty?"
+},
+
+{
+group:"ŚWIADOMOŚĆ",
+question:
+"Czy teraz pamiętasz ten sen tak samo jak na początku?"
+},
+
+{
+group:"CZAS",
+question:
+"Czy ta historia wydarzyła się wcześniej, czy właśnie teraz?"
+},
+
+{
+group:"ODBICIE",
+question:
+"Jeżeli jedna z twoich wcześniejszych odpowiedzi nie była prawdziwa — która?"
+},
+
+{
+group:"SYSTEM",
+question:
+"Czy jesteś pewien, że opisujesz swój sen?"
+},
+
+{
+group:"SYSTEM",
+question:
+"Kto teraz pamięta ten sen — ty czy TRAUM SIM?"
+}
+
+]
+
+};
+
+
+/* =========================================================
+   QUESTION BANK EN
+   ========================================================= */
+
+const QUESTIONS_EN = {
+
+
+0:[
+
+{
+group:"MEMORY",
+question:
+"Which detail of the dream do you remember without trying?"
+},
+
+{
+group:"PLACE",
+question:
+"Was the place real, or several places merged into one?"
+},
+
+{
+group:"EMOTION",
+question:
+"Which feeling do you remember more clearly than the events?"
+},
+
+{
+group:"PRESENCE",
+question:
+"Who was there with you?"
+},
+
+{
+group:"BODY",
+question:
+"Were you looking through your own eyes or watching yourself from outside?"
+},
+
+{
+group:"DAY TRACE",
+question:
+"What from the last few days might have entered the dream?"
+}
+
+],
+
+
+1:[
+
+{
+group:"SHADOW",
+question:
+"What was chasing you — and what might happen if you stopped running?"
+},
+
+{
+group:"SHADOW",
+question:
+"Which stranger behaved a little too much like you?"
+},
+
+{
+group:"MASK",
+question:
+"Were you yourself, or the person others believed you were?"
+},
+
+{
+group:"ARCHETYPE",
+question:
+"Did you encounter a door, staircase, water, house, forest or road?"
+},
+
+{
+group:"CENTER",
+question:
+"Was there somewhere or something everything seemed to lead toward?"
+},
+
+{
+group:"THRESHOLD",
+question:
+"What was on the other side?"
+}
+
+],
+
+
+2:[
+
+{
+group:"IDENTITY",
+question:
+"Who was dreaming — you, or someone who only looked like you?"
+},
+
+{
+group:"AWARENESS",
+question:
+"Do you remember the dream the same way you did at the beginning?"
+},
+
+{
+group:"TIME",
+question:
+"Did this story happen before, or is it happening now?"
+},
+
+{
+group:"REFLECTION",
+question:
+"If one of your earlier answers was not true, which one?"
+},
+
+{
+group:"SYSTEM",
+question:
+"Are you sure you are describing your dream?"
+},
+
+{
+group:"SYSTEM",
+question:
+"Who remembers the dream now — you or TRAUM SIM?"
+}
+
+]
+
+};
 
 
 /* =========================================================
    UI COPY
    ========================================================= */
 
-const uiText = {
+const UI = {
 
-  PL:{
-    back:"WSTECZ",
-    next:"DALEJ",
-    submit:"ODDAJ SEN",
-    placeholder:"napisz to, co zostało...",
-    saving:"ZAPISUJĘ SEN",
-    done:"SEN ZAPISANY",
-    sub:"Twoje wspomnienie weszło do symulacji.",
-    error:"Sen nie został zapisany.",
-    retry:"SPRÓBUJ PONOWNIE",
-    invite:"Zapraszamy na nasz performance ze swoim snem."
-  },
+PL:{
 
-  ENG:{
-    back:"BACK",
-    next:"NEXT",
-    submit:"SUBMIT DREAM",
-    placeholder:"write what remained...",
-    saving:"SAVING DREAM",
-    done:"DREAM RECEIVED",
-    sub:"Your memory has entered the simulation.",
-    error:"The dream could not be saved.",
-    retry:"TRY AGAIN",
-    invite:"Join our performance with your dream."
-  }
+back:"WSTECZ",
+
+next:"DALEJ",
+
+begin:"WEJDŹ W SEN",
+
+submit:"DALEJ",
+
+placeholder:
+"napisz to, co zostało...",
+
+saving:
+"ZAPISUJĘ SEN",
+
+done:
+"SEN ZAPISANY",
+
+sub:
+"Twoje wspomnienie weszło do symulacji.",
+
+nicknameTitle:
+"Jak mamy zapamiętać śniącego?",
+
+nicknameMeta:
+"Możesz użyć pseudonimu. Nie musisz podawać prawdziwego imienia.",
+
+nicknamePlaceholder:
+"NICKNAME",
+
+nicknameSubmit:
+"ZAPISZ SEN",
+
+error:
+"Sen nie został zapisany.",
+
+retry:
+"SPRÓBUJ PONOWNIE",
+
+invite:
+"Zapraszamy na nasz performance ze swoim snem."
+
+},
+
+
+ENG:{
+
+back:"BACK",
+
+next:"NEXT",
+
+begin:"ENTER DREAM",
+
+submit:"CONTINUE",
+
+placeholder:
+"write what remained...",
+
+saving:
+"SAVING DREAM",
+
+done:
+"DREAM RECEIVED",
+
+sub:
+"Your memory has entered the simulation.",
+
+nicknameTitle:
+"How should the dreamer be remembered?",
+
+nicknameMeta:
+"You may use a nickname. You do not need to provide your real name.",
+
+nicknamePlaceholder:
+"NICKNAME",
+
+nicknameSubmit:
+"SAVE DREAM",
+
+error:
+"The dream could not be saved.",
+
+retry:
+"TRY AGAIN",
+
+invite:
+"Join our performance with your dream."
+
+}
 
 };
 
@@ -1949,127 +1785,133 @@ const uiText = {
 
 const state = {
 
-  lang:null,
+lang:null,
 
-  step:0,
+mode:"start",
 
-  total:9,
+introStep:0,
 
-  answers:[],
+level:0,
 
-  questions:[]
+levelQuestion:0,
+
+questionsByLevel:{
+  0:[],
+  1:[],
+  2:[]
+},
+
+answers:[],
+
+nickname:"",
+
+falseWakeDone1:false,
+
+falseWakeDone2:false
 
 };
 
 
 const screen =
-  document.getElementById("screen");
+document.getElementById(
+"screen"
+);
 
 const progress =
-  document.getElementById("progress");
+document.getElementById(
+"progress"
+);
+
+const depthLabel =
+document.getElementById(
+"depthLabel"
+);
 
 const ghostLayer =
-  document.getElementById("ghostLayer");
+document.getElementById(
+"ghostLayer"
+);
 
 
 /* =========================================================
-   SHUFFLE
+   RANDOM
    ========================================================= */
 
 function shuffle(array){
 
-  const a = [...array];
+const a =
+[...array];
 
-  for(let i=a.length-1;i>0;i--){
+for(
+let i=a.length-1;
+i>0;
+i--
+){
 
-    const j =
-      Math.floor(
-        Math.random() *
-        (i+1)
-      );
+const j =
+Math.floor(
+Math.random()
+*
+(i+1)
+);
 
-    [a[i],a[j]] =
-      [a[j],a[i]];
+[
+a[i],
+a[j]
+]
+=
+[
+a[j],
+a[i]
+];
 
-  }
+}
 
-  return a;
+return a;
 
 }
 
 
 /* =========================================================
-   PICK QUESTIONS
+   PREPARE QUESTIONS
+   3 PER LEVEL
    ========================================================= */
 
-function pickQuestions(lang){
+function prepareQuestions(){
 
-  const bank =
-    lang === "PL"
-      ? QUESTIONS_PL
-      : QUESTIONS_EN;
+const bank =
+state.lang==="PL"
+?
+QUESTIONS_PL
+:
+QUESTIONS_EN;
 
-  const shuffled =
-    shuffle(bank);
+state.questionsByLevel[0] =
+shuffle(
+bank[0]
+)
+.slice(
+0,
+3
+);
 
-  const picked = [];
+state.questionsByLevel[1] =
+shuffle(
+bank[1]
+)
+.slice(
+0,
+3
+);
 
-  const usedGroups =
-    new Set();
-
-  /*
-  First pass:
-  maximize thematic variation.
-  */
-
-  for(const item of shuffled){
-
-    if(!item || !item.question){
-      continue;
-    }
-
-    if(!usedGroups.has(item.group)){
-
-      picked.push(item);
-
-      usedGroups.add(item.group);
-
-    }
-
-    if(picked.length >= state.total){
-      break;
-    }
-
-  }
-
-  /*
-  If there are still not enough,
-  fill with any valid remaining questions.
-  */
-
-  if(picked.length < state.total){
-
-    for(const item of shuffled){
-
-      if(
-        item &&
-        item.question &&
-        !picked.includes(item)
-      ){
-
-        picked.push(item);
-
-      }
-
-      if(picked.length >= state.total){
-        break;
-      }
-
-    }
-
-  }
-
-  return picked;
+state.questionsByLevel[2] =
+shuffle(
+bank[2]
+)
+.slice(
+0,
+3
+);
 
 }
 
@@ -2080,19 +1922,32 @@ function pickQuestions(lang){
 
 function transition(fn){
 
-  screen.classList.add("fade");
+screen
+.classList
+.add(
+"fade"
+);
 
-  setTimeout(()=>{
+setTimeout(
+()=>{
 
-    fn();
+fn();
 
-    requestAnimationFrame(()=>{
+requestAnimationFrame(
+()=>{
 
-      screen.classList.remove("fade");
+screen
+.classList
+.remove(
+"fade"
+);
 
-    });
+}
+);
 
-  },720);
+},
+720
+);
 
 }
 
@@ -2103,35 +1958,48 @@ function transition(fn){
 
 function renderStart(){
 
-  progress.textContent = "";
+state.mode =
+"start";
 
-  screen.innerHTML = `
+progress.textContent =
+"";
 
-    <div class="eyebrow">
-      DREAM ARCHIVE / ARCHIWUM SNÓW
-    </div>
+depthLabel.textContent =
+"TRAUM 0";
 
-    <h1>
-      DREAM<br>SIM
-    </h1>
+screen.innerHTML = `
 
-    <p class="sub">
-      choose language / wybierz język
-    </p>
+<div class="eyebrow">
+TRAUM / DREAM ARCHIVE
+</div>
 
-    <div class="langs">
+<h1>
+TRAUM
+<br>
+SIM
+</h1>
 
-      <button onclick="chooseLang('PL')">
-        PL
-      </button>
+<p class="sub">
+choose language / wybierz język
+</p>
 
-      <button onclick="chooseLang('ENG')">
-        ENG
-      </button>
+<div class="langs">
 
-    </div>
+<button
+onclick="chooseLanguage('PL')"
+>
+PL
+</button>
 
-  `;
+<button
+onclick="chooseLanguage('ENG')"
+>
+ENG
+</button>
+
+</div>
+
+`;
 
 }
 
@@ -2140,77 +2008,396 @@ function renderStart(){
    LANGUAGE
    ========================================================= */
 
-function chooseLang(lang){
+function chooseLanguage(lang){
 
-  state.lang =
-    lang;
+state.lang =
+lang;
 
-  state.step =
-    0;
+state.mode =
+"intro";
 
-  state.answers =
-    [];
+state.introStep =
+0;
 
-  state.questions =
-    pickQuestions(lang);
+state.level =
+0;
 
-  transition(
-    renderQuestion
-  );
+state.levelQuestion =
+0;
+
+state.answers =
+[];
+
+state.nickname =
+"";
+
+prepareQuestions();
+
+transition(
+renderIntro
+);
 
 }
 
 
 /* =========================================================
-   SURREAL TYPOGRAPHY
-   IMPORTANT:
-   NO LINE BREAK AFTER RETURN
+   INTRO
+   ========================================================= */
+
+function renderIntro(){
+
+const slides =
+INTRO[
+state.lang
+];
+
+const slide =
+slides[
+state.introStep
+];
+
+const copy =
+UI[
+state.lang
+];
+
+const last =
+state.introStep===
+slides.length-1;
+
+progress.textContent =
+`${String(
+state.introStep+1
+).padStart(
+2,
+"0"
+)}
+/
+${String(
+slides.length
+).padStart(
+2,
+"0"
+)}`;
+
+depthLabel.textContent =
+"TRAUM 0";
+
+screen.innerHTML = `
+
+<div class="eyebrow">
+${slide.label}
+</div>
+
+<h2>
+${slide.title}
+</h2>
+
+<div class="introText">
+${slide.text}
+</div>
+
+<div class="introMeta">
+${slide.meta}
+</div>
+
+<div class="actions">
+
+<button
+class="back"
+onclick="introBack()"
+>
+${copy.back}
+</button>
+
+<button
+class="next"
+onclick="introNext()"
+>
+${last
+?
+copy.begin
+:
+copy.next}
+</button>
+
+</div>
+
+`;
+
+ghost(
+slide.title
+);
+
+}
+
+
+/* =========================================================
+   INTRO NAV
+   ========================================================= */
+
+function introBack(){
+
+if(
+state.introStep===0
+){
+
+transition(
+renderStart
+);
+
+return;
+
+}
+
+state.introStep--;
+
+transition(
+renderIntro
+);
+
+}
+
+
+function introNext(){
+
+const slides =
+INTRO[
+state.lang
+];
+
+if(
+state.introStep
+<
+slides.length-1
+){
+
+state.introStep++;
+
+transition(
+renderIntro
+);
+
+}
+else{
+
+state.mode =
+"questions";
+
+state.level =
+0;
+
+state.levelQuestion =
+0;
+
+transition(
+renderQuestion
+);
+
+}
+
+}
+
+
+/* =========================================================
+   CURRENT QUESTION
+   ========================================================= */
+
+function currentQuestion(){
+
+return state
+.questionsByLevel[
+state.level
+][
+state.levelQuestion
+];
+
+}
+
+
+/* =========================================================
+   GLOBAL QUESTION INDEX
+   ========================================================= */
+
+function globalQuestionIndex(){
+
+return (
+state.level
+*
+3
+)
++
+state.levelQuestion;
+
+}
+
+
+/* =========================================================
+   SURREALIZE
    ========================================================= */
 
 function surrealize(text){
 
-  if(!text){
-    return "";
-  }
+if(!text){
+return "";
+}
 
-  const words =
-    text.split(" ");
+return text
+.split(" ")
+.map(
+word=>{
 
-  return words.map((word)=>{
+let cls =
+"dreamword";
 
-    let className =
-      "dreamword";
+const random =
+Math.random();
 
-    const random =
-      Math.random();
+if(
+random<.08
+){
 
-    if(random < .09){
+cls +=
+" deepblur";
 
-      className +=
-        " deepblur";
+}
+else
+if(
+random<.22
+){
 
-    }
-    else if(random < .24){
+cls +=
+" blur";
 
-      className +=
-        " blur";
+}
 
-    }
+if(
+Math.random()<.08
+){
 
-    if(Math.random() < .10){
+cls +=
+" float";
 
-      className +=
-        " float";
+}
 
-    }
+return `<span class="${cls}">${escapeHtml(word)}</span>`;
 
-    return `
-      <span class="${className}">
-        ${escapeHtml(word)}
-      </span>
-    `;
+}
+)
+.join(" ");
 
-  }).join(" ");
+}
+
+
+/* =========================================================
+   BUILD ECHO QUESTION
+   TRAUM 1 / 2 CAN USE PREVIOUS ANSWERS
+   ========================================================= */
+
+function questionWithEcho(
+item
+){
+
+if(
+state.level===0
+){
+
+return item.question;
+
+}
+
+const previous =
+state.answers
+.filter(
+a=>
+a.answer &&
+a.answer.trim().length>2
+);
+
+if(
+!previous.length
+){
+
+return item.question;
+
+}
+
+
+/*
+sometimes use a fragment of
+the dreamer's own earlier answer
+*/
+
+if(
+Math.random()>.58
+){
+
+const source =
+previous[
+Math.floor(
+Math.random()
+*
+previous.length
+)
+];
+
+const fragment =
+source.answer
+.split(/\s+/)
+.slice(
+0,
+7
+)
+.join(" ");
+
+if(
+state.lang==="PL"
+){
+
+const variations = [
+
+`Powiedziałeś wcześniej: „${fragment}”. Czy nadal tak to pamiętasz?`,
+
+`„${fragment}” — czy to należało do pierwszego snu?`,
+
+`Jeżeli „${fragment}” było prawdą, co wydarzyło się chwilę wcześniej?`
+
+];
+
+return variations[
+Math.floor(
+Math.random()
+*
+variations.length
+)
+];
+
+}
+else{
+
+const variations = [
+
+`Earlier you said: “${fragment}”. Do you still remember it that way?`,
+
+`“${fragment}” — did that belong to the first dream?`,
+
+`If “${fragment}” was true, what happened immediately before it?`
+
+];
+
+return variations[
+Math.floor(
+Math.random()
+*
+variations.length
+)
+];
+
+}
+
+}
+
+return item.question;
 
 }
 
@@ -2219,365 +2406,891 @@ function surrealize(text){
    QUESTION
    ========================================================= */
 
-let blurTimer = null;
+let blurTimer =
+null;
 
 
 function renderQuestion(){
 
-  const copy =
-    uiText[state.lang];
+state.mode =
+"questions";
 
-  const item =
-    state.questions[state.step];
+const item =
+currentQuestion();
 
-  /*
-  safety guard
-  */
+const copy =
+UI[
+state.lang
+];
 
-  if(!item || !item.question){
+if(!item){
 
-    console.error(
-      "Missing question",
-      state.step,
-      state.questions
-    );
+console.error(
+"QUESTION MISSING",
+state
+);
 
-    state.questions =
-      pickQuestions(state.lang);
+return;
 
-    state.step =
-      0;
+}
 
-    renderQuestion();
+const globalIndex =
+globalQuestionIndex();
 
-    return;
+const displayQuestion =
+questionWithEcho(
+item
+);
 
-  }
+progress.textContent =
+`${String(
+globalIndex+1
+).padStart(
+2,
+"0"
+)}
+/
+09`;
 
+depthLabel.textContent =
+`TRAUM ${state.level}`;
 
-  progress.textContent =
-    `${String(state.step+1).padStart(2,"0")} / ${String(state.total).padStart(2,"0")}`;
+const saved =
+state.answers[
+globalIndex
+];
 
+screen.innerHTML = `
 
-  screen.innerHTML = `
+<div class="eyebrow">
+${escapeHtml(
+item.group
+)}
+</div>
 
-    <div class="question">
+<h2>
+${surrealize(
+displayQuestion
+)}
+</h2>
 
-      <div class="eyebrow">
-        ${escapeHtml(item.group)}
-      </div>
+<textarea
+id="answer"
+placeholder="${copy.placeholder}"
+>${escapeHtml(
+saved
+?
+saved.answer
+:
+""
+)}</textarea>
 
-      <h2>
-        ${surrealize(item.question)}
-      </h2>
+<div class="actions">
 
-      <textarea
-        id="answer"
-        placeholder="${copy.placeholder}"
-      >${escapeHtml(state.answers[state.step] || "")}</textarea>
+<button
+class="back"
+onclick="questionBack()"
+>
+${copy.back}
+</button>
 
-      <div class="actions">
+<button
+class="next"
+onclick="questionNext()"
+>
+${globalIndex===8
+?
+copy.submit
+:
+copy.next}
+</button>
 
-        <button
-          class="back"
-          onclick="goBack()"
-        >
-          ${copy.back}
-        </button>
+</div>
 
-        <button
-          class="next"
-          onclick="goNext()"
-        >
-          ${
-            state.step ===
-            state.total - 1
-              ? copy.submit
-              : copy.next
-          }
-        </button>
+`;
 
-      </div>
+animateBlur();
 
-    </div>
+ghost(
+item.group
+);
 
-  `;
+spawnPreviousAnswerGhost();
 
+setTimeout(
+()=>{
 
-  animateBlurWords();
+document
+.getElementById(
+"answer"
+)
+?.focus();
 
-  ghost(
-    item.group
-  );
-
-  dreamScenePulse();
-
-
-  setTimeout(()=>{
-
-    document
-      .getElementById("answer")
-      ?.focus();
-
-  },500);
+},
+450
+);
 
 }
 
 
 /* =========================================================
-   MOVING BLUR
+   DYNAMIC BLUR
    ========================================================= */
 
-function animateBlurWords(){
+function animateBlur(){
 
-  if(blurTimer){
+if(
+blurTimer
+){
 
-    clearInterval(
-      blurTimer
-    );
+clearInterval(
+blurTimer
+);
 
-  }
+}
 
-  blurTimer =
-    setInterval(()=>{
+blurTimer =
+setInterval(
+()=>{
 
-      const words =
-        [
-          ...document.querySelectorAll(
-            ".dreamword"
-          )
-        ];
+const words =
+[
+...document
+.querySelectorAll(
+".dreamword"
+)
+];
 
-      if(!words.length){
-        return;
-      }
+if(
+!words.length
+){
+return;
+}
 
-      const word =
-        words[
-          Math.floor(
-            Math.random() *
-            words.length
-          )
-        ];
+const word =
+words[
+Math.floor(
+Math.random()
+*
+words.length
+)
+];
 
-      if(Math.random() > .5){
+if(
+Math.random()>.55
+){
 
-        word.classList.toggle(
-          "blur"
-        );
+word
+.classList
+.toggle(
+"blur"
+);
 
-      }
-      else{
+}
+else{
 
-        word.classList.toggle(
-          "deepblur"
-        );
+word
+.classList
+.toggle(
+"deepblur"
+);
 
-      }
+}
 
-    },1900 + Math.random()*1300);
+},
+2000
++
+Math.random()*1300
+);
 
 }
 
 
 /* =========================================================
-   ANSWERS
+   SAVE ANSWER
    ========================================================= */
 
-function saveAnswer(){
+function saveCurrentAnswer(){
 
-  const input =
-    document.getElementById(
-      "answer"
-    );
+const input =
+document.getElementById(
+"answer"
+);
 
-  if(input){
-
-    state.answers[
-      state.step
-    ] =
-      input.value.trim();
-
-  }
-
+if(!input){
+return;
 }
 
+const globalIndex =
+globalQuestionIndex();
 
-function goBack(){
+const item =
+currentQuestion();
 
-  saveAnswer();
+const existing =
+state.answers[
+globalIndex
+];
 
-  if(state.step === 0){
+state.answers[
+globalIndex
+]
+=
+{
 
-    state.lang =
-      null;
+level:
+state.level,
 
-    transition(
-      renderStart
-    );
+category:
+item.group,
 
-    return;
+question:
+existing
+?
+existing.question
+:
+item.question,
 
-  }
+answer:
+input.value.trim()
 
-  state.step--;
-
-  transition(
-    renderQuestion
-  );
-
-}
-
-
-function goNext(){
-
-  saveAnswer();
-
-  if(
-    state.step <
-    state.total - 1
-  ){
-
-    state.step++;
-
-    transition(
-      renderQuestion
-    );
-
-  }
-  else{
-
-    submitDream();
-
-  }
+};
 
 }
 
 
 /* =========================================================
-   SUBMIT
+   BACK
    ========================================================= */
 
-async function submitDream(){
+function questionBack(){
 
-  const copy =
-    uiText[state.lang];
+saveCurrentAnswer();
 
-  const payload = {
+if(
+state.level===0 &&
+state.levelQuestion===0
+){
 
-    language:
-      state.lang,
+state.introStep =
+INTRO[
+state.lang
+]
+.length-1;
 
-    answers:
-      state.questions.map(
-        (item,index)=>({
+transition(
+renderIntro
+);
 
-          category:
-            item.group,
+return;
 
-          question:
-            item.question,
+}
 
-          answer:
-            state.answers[index] || ""
+if(
+state.levelQuestion>0
+){
 
-        })
-      ),
+state.levelQuestion--;
 
-    dream:
-      state.answers.join(
-        "\n\n"
-      )
+}
+else{
 
-  };
+state.level--;
 
+state.levelQuestion =
+2;
 
-  transition(()=>{
+updateDepthVisuals();
 
-    progress.textContent =
-      "";
+}
 
-    screen.innerHTML = `
+transition(
+renderQuestion
+);
 
-      <div class="eyebrow">
-        DREAM SIM
-      </div>
-
-      <h2>
-        ${copy.saving}
-      </h2>
-
-      <p class="sub">
-        ...
-      </p>
-
-    `;
-
-  });
+}
 
 
-  try{
+/* =========================================================
+   NEXT
+   ========================================================= */
 
-    const response =
-      await fetch(
-        API_URL,
-        {
+function questionNext(){
 
-          method:"POST",
+saveCurrentAnswer();
 
-          headers:{
-            "Content-Type":
-              "text/plain;charset=utf-8"
-          },
+const globalIndex =
+globalQuestionIndex();
 
-          body:
-            JSON.stringify(
-              payload
-            )
+if(globalIndex===8){
 
-        }
-      );
+transition(
+renderNickname
+);
 
+return;
 
-    if(!response.ok){
-
-      throw new Error(
-        "HTTP " +
-        response.status
-      );
-
-    }
+}
 
 
-    const data =
-      await response.json();
+/*
+end of TRAUM 0
+*/
+
+if(
+state.level===0 &&
+state.levelQuestion===2
+){
+
+runFalseAwakening(
+1
+);
+
+return;
+
+}
 
 
-    if(!data.ok){
+/*
+end of TRAUM 1
+*/
 
-      throw new Error(
-        data.error ||
-        "Backend error"
-      );
+if(
+state.level===1 &&
+state.levelQuestion===2
+){
 
-    }
+runFalseAwakening(
+2
+);
+
+return;
+
+}
 
 
-    renderSaved(
-      data.dreamId
-    );
+state.levelQuestion++;
 
-  }
-  catch(error){
+transition(
+renderQuestion
+);
 
-    console.error(
-      "DREAM SAVE ERROR",
-      error
-    );
+}
 
-    renderSaveError();
 
-  }
+/* =========================================================
+   FALSE AWAKENING
+   ========================================================= */
+
+function runFalseAwakening(
+targetLevel
+){
+
+const overlay =
+document.getElementById(
+"falseWake"
+);
+
+const main =
+document.getElementById(
+"falseWakeMain"
+);
+
+const sub =
+document.getElementById(
+"falseWakeSub"
+);
+
+const ui =
+document.getElementById(
+"ui"
+);
+
+
+ui.classList.add(
+"hide"
+);
+
+
+if(targetLevel===1){
+
+main.textContent =
+"TRAUM SIM";
+
+sub.textContent =
+state.lang==="PL"
+?
+"SESJA UTRACONA"
+:
+"SESSION LOST";
+
+}
+else{
+
+main.textContent =
+state.lang==="PL"
+?
+"OBUDZIŁEŚ SIĘ"
+:
+"YOU WOKE UP";
+
+sub.textContent =
+state.lang==="PL"
+?
+"ale coś nadal pamięta"
+:
+"but something still remembers";
+
+}
+
+
+overlay.classList.add(
+"active"
+);
+
+
+setTimeout(
+()=>{
+
+if(targetLevel===1){
+
+sub.textContent =
+state.lang==="PL"
+?
+"SESJA ODNALEZIONA · JUŻ TU BYŁEŚ"
+:
+"SESSION FOUND · YOU HAVE BEEN HERE";
+
+}
+else{
+
+sub.textContent =
+state.lang==="PL"
+?
+"TO NIE BYŁO PRZEBUDZENIE"
+:
+"THAT WAS NOT WAKING";
+
+}
+
+},
+2800
+);
+
+
+setTimeout(
+()=>{
+
+overlay.classList.remove(
+"active"
+);
+
+state.level =
+targetLevel;
+
+state.levelQuestion =
+0;
+
+updateDepthVisuals();
+
+renderQuestion();
+
+ui.classList.remove(
+"hide"
+);
+
+},
+6200
+);
+
+}
+
+
+/* =========================================================
+   DEPTH VISUALS
+   ========================================================= */
+
+function updateDepthVisuals(){
+
+const canvas =
+document.getElementById(
+"rorschach"
+);
+
+if(state.level===0){
+
+canvas.style.filter =
+"blur(10px) contrast(180%)";
+
+canvas.style.opacity =
+".86";
+
+}
+else
+if(state.level===1){
+
+canvas.style.filter =
+"blur(13px) contrast(195%)";
+
+canvas.style.opacity =
+".91";
+
+}
+else{
+
+canvas.style.filter =
+"blur(17px) contrast(220%)";
+
+canvas.style.opacity =
+".96";
+
+}
+
+}
+
+
+/* =========================================================
+   PREVIOUS ANSWER GHOST
+   ========================================================= */
+
+function spawnPreviousAnswerGhost(){
+
+if(
+state.level===0
+){
+
+return;
+
+}
+
+const previous =
+state.answers
+.filter(
+entry=>
+entry &&
+entry.answer &&
+entry.answer.length>2
+);
+
+if(
+!previous.length
+){
+
+return;
+
+}
+
+if(
+Math.random()>.44
+){
+
+const entry =
+previous[
+Math.floor(
+Math.random()
+*
+previous.length
+)
+];
+
+const fragment =
+entry.answer
+.split(/\s+/)
+.slice(
+0,
+8
+)
+.join(" ");
+
+ghost(
+fragment,
+true
+);
+
+}
+
+}
+
+
+/* =========================================================
+   NICKNAME
+   ========================================================= */
+
+function renderNickname(){
+
+state.mode =
+"nickname";
+
+progress.textContent =
+"";
+
+depthLabel.textContent =
+"WAKE ?";
+
+const copy =
+UI[
+state.lang
+];
+
+screen.innerHTML = `
+
+<div class="eyebrow">
+WHO DREAMED THIS?
+</div>
+
+<h2>
+${copy.nicknameTitle}
+</h2>
+
+<p class="sub">
+${copy.nicknameMeta}
+</p>
+
+<input
+id="nickname"
+type="text"
+maxlength="40"
+autocomplete="off"
+spellcheck="false"
+placeholder="${copy.nicknamePlaceholder}"
+value="${escapeHtml(
+state.nickname
+)}"
+>
+
+<div class="actions">
+
+<button
+class="back"
+onclick="nicknameBack()"
+>
+${copy.back}
+</button>
+
+<button
+class="next"
+onclick="saveDream()"
+>
+${copy.nicknameSubmit}
+</button>
+
+</div>
+
+`;
+
+ghost(
+"WHO DREAMED THIS?"
+);
+
+setTimeout(
+()=>{
+
+document
+.getElementById(
+"nickname"
+)
+?.focus();
+
+},
+450
+);
+
+}
+
+
+/* =========================================================
+   NICKNAME BACK
+   ========================================================= */
+
+function nicknameBack(){
+
+const nick =
+document.getElementById(
+"nickname"
+);
+
+if(nick){
+
+state.nickname =
+nick.value.trim();
+
+}
+
+state.level =
+2;
+
+state.levelQuestion =
+2;
+
+transition(
+renderQuestion
+);
+
+}
+
+
+/* =========================================================
+   SAVE DREAM
+   ========================================================= */
+
+async function saveDream(){
+
+const nicknameInput =
+document.getElementById(
+"nickname"
+);
+
+state.nickname =
+nicknameInput
+?
+nicknameInput.value.trim()
+:
+"";
+
+
+if(
+!state.nickname
+){
+
+state.nickname =
+"ANONYMOUS";
+
+}
+
+
+const copy =
+UI[
+state.lang
+];
+
+
+const payload = {
+
+nickname:
+state.nickname,
+
+language:
+state.lang,
+
+answers:
+state.answers,
+
+dream:
+state.answers
+.map(
+entry=>
+entry
+?
+entry.answer
+:
+""
+)
+.join(
+"\n\n"
+)
+
+};
+
+
+transition(
+()=>{
+
+progress.textContent =
+"";
+
+depthLabel.textContent =
+"ARCHIVE";
+
+screen.innerHTML = `
+
+<div class="eyebrow">
+TRAUM SIM
+</div>
+
+<h2>
+${copy.saving}
+</h2>
+
+<p class="sub">
+...
+</p>
+
+`;
+
+}
+);
+
+
+try{
+
+const response =
+await fetch(
+API_URL,
+{
+
+method:
+"POST",
+
+headers:{
+"Content-Type":
+"text/plain;charset=utf-8"
+},
+
+body:
+JSON.stringify(
+payload
+)
+
+}
+);
+
+
+if(
+!response.ok
+){
+
+throw new Error(
+"HTTP "
++
+response.status
+);
+
+}
+
+
+const data =
+await response.json();
+
+
+if(
+!data.ok
+){
+
+throw new Error(
+data.error
+||
+"Backend error"
+);
+
+}
+
+
+renderSaved(
+data.dreamId
+);
+
+
+}
+catch(error){
+
+console.error(
+"DREAM SAVE ERROR",
+error
+);
+
+renderError();
+
+}
 
 }
 
@@ -2586,41 +3299,50 @@ async function submitDream(){
    SAVED
    ========================================================= */
 
-function renderSaved(dreamId){
+function renderSaved(id){
 
-  const copy =
-    uiText[state.lang];
+const copy =
+UI[
+state.lang
+];
 
-  transition(()=>{
+transition(
+()=>{
 
-    screen.innerHTML = `
+screen.innerHTML = `
 
-      <div class="eyebrow">
-        DREAM SIM
-      </div>
+<div class="eyebrow">
+TRAUM SIM
+</div>
 
-      <h2>
-        ${copy.done}
-      </h2>
+<h2>
+${copy.done}
+</h2>
 
-      <p class="sub">
-        ${copy.sub}
-      </p>
+<p class="sub">
+${copy.sub}
+</p>
 
-      <div class="received">
-        ${escapeHtml(dreamId || "")}
-      </div>
+<div class="received">
+${escapeHtml(
+id || ""
+)}
+&nbsp;&nbsp;/&nbsp;&nbsp;
+${escapeHtml(
+state.nickname
+)}
+</div>
 
-    `;
+`;
 
-  });
+}
+);
 
 
-  setTimeout(()=>{
-
-    startFinalSequence();
-
-  },4300);
+setTimeout(
+startFinalSequence,
+4500
+);
 
 }
 
@@ -2629,49 +3351,54 @@ function renderSaved(dreamId){
    ERROR
    ========================================================= */
 
-function renderSaveError(){
+function renderError(){
 
-  const copy =
-    uiText[state.lang];
+const copy =
+UI[
+state.lang
+];
 
-  transition(()=>{
+transition(
+()=>{
 
-    screen.innerHTML = `
+screen.innerHTML = `
 
-      <div class="eyebrow">
-        DREAM SIM
-      </div>
+<div class="eyebrow">
+TRAUM SIM
+</div>
 
-      <h2>
-        ${copy.error}
-      </h2>
+<h2>
+${copy.error}
+</h2>
 
-      <p class="sub">
-        ${
-          state.lang === "PL"
-          ?
-          "Połączenie z archiwum zostało przerwane."
-          :
-          "The connection to the archive was interrupted."
-        }
-      </p>
+<p class="sub">
 
-      <div class="actions">
+${state.lang==="PL"
+?
+"Połączenie z archiwum zostało przerwane."
+:
+"The connection to the archive was interrupted."
+}
 
-        <span></span>
+</p>
 
-        <button
-          class="next"
-          onclick="submitDream()"
-        >
-          ${copy.retry}
-        </button>
+<div class="actions">
 
-      </div>
+<span></span>
 
-    `;
+<button
+class="next"
+onclick="saveDream()"
+>
+${copy.retry}
+</button>
 
-  });
+</div>
+
+`;
+
+}
+);
 
 }
 
@@ -2682,900 +3409,942 @@ function renderSaveError(){
 
 function startFinalSequence(){
 
-  const ui =
-    document.getElementById(
-      "ui"
-    );
-
-  const bloom =
-    document.getElementById(
-      "whiteBloom"
-    );
-
-  const whiteout =
-    document.getElementById(
-      "whiteout"
-    );
-
-  const final =
-    document.getElementById(
-      "finalInvite"
-    );
-
-
-  ui.classList.add(
-    "hide"
-  );
-
-
-  setTimeout(()=>{
-
-    bloom.classList.add(
-      "active"
-    );
-
-    whiteout.classList.add(
-      "active"
-    );
-
-  },1200);
-
-
-  setTimeout(()=>{
-
-    document
-      .getElementById(
-        "finalTitle"
-      )
-      .textContent =
-        uiText[state.lang].invite;
-
-    final.classList.add(
-      "active"
-    );
-
-  },7000);
-
-
-  setTimeout(()=>{
-
-    bloom.style.display =
-      "none";
-
-    whiteout.style.display =
-      "none";
-
-  },7600);
-
-}
-
-
-/* =========================================================
-   GHOST TEXT
-   ========================================================= */
-
-function ghost(text){
-
-  const ghostElement =
-    document.createElement(
-      "div"
-    );
-
-  ghostElement.className =
-    "ghost";
-
-  ghostElement.textContent =
-    text;
-
-  ghostElement.style.left =
-    (
-      Math.random()*55 - 5
-    )
-    +
-    "vw";
-
-  ghostElement.style.top =
-    (
-      Math.random()*75 + 8
-    )
-    +
-    "vh";
-
-  ghostElement.style.animationDuration =
-    (
-      9 +
-      Math.random()*9
-    )
-    +
-    "s";
-
-  ghostLayer.appendChild(
-    ghostElement
-  );
-
-  setTimeout(()=>{
-
-    ghostElement.remove();
-
-  },19000);
-
-}
-
-
-/* =========================================================
-   ESCAPE HTML
-   ========================================================= */
-
-function escapeHtml(value){
-
-  return String(
-    value || ""
-  )
-  .replace(
-    /[&<>"']/g,
-    char=>({
-
-      "&":"&amp;",
-
-      "<":"&lt;",
-
-      ">":"&gt;",
-
-      "\"":"&quot;",
-
-      "'":"&#039;"
-
-    }[char])
-  );
-
-}
-
-
-/* =========================================================
-   AUTONOMOUS TEXT
-   ========================================================= */
-
-const traces = [
-
-  "REMEMBER",
-
-  "NOT HERE",
-
-  "AGAIN",
-
-  "SOMEWHERE",
-
-  "BEHIND",
-
-  "WAKE",
-
-  "ALMOST",
-
-  "WHO WAS THERE",
-
-  "DON'T LOOK BACK",
-
-  "DREAM",
-
-  "YOU HAVE BEEN HERE",
-
-  "THE ROOM REMEMBERS",
-
-  "NOT YET",
-
-  "WHO IS DREAMING",
-
-  "THE OTHER SIDE",
-
-  "THIS HAPPENED BEFORE"
-
-];
-
-
-setInterval(()=>{
-
-  if(Math.random() > .48){
-
-    ghost(
-      traces[
-        Math.floor(
-          Math.random() *
-          traces.length
-        )
-      ]
-    );
-
-  }
-
-},4600);
-
-
-/* =========================================================
-   DREAM FIELD
-   ========================================================= */
-
-const canvas =
-  document.getElementById(
-    "dreamCanvas"
-  );
-
-const ctx =
-  canvas.getContext(
-    "2d",
-    {
-      alpha:false
-    }
-  );
-
-let W;
-let H;
-
-let DPR =
-  Math.min(
-    devicePixelRatio || 1,
-    1.5
-  );
-
-let blobs = [];
-
-
-function resizeCanvas(){
-
-  W =
-    window.innerWidth;
-
-  H =
-    window.innerHeight;
-
-  canvas.width =
-    W * DPR;
-
-  canvas.height =
-    H * DPR;
-
-  ctx.setTransform(
-    DPR,
-    0,
-    0,
-    DPR,
-    0,
-    0
-  );
-
-  blobs =
-    Array.from(
-      {
-        length:14
-      },
-      ()=>({
-
-        x:
-          Math.random()*W,
-
-        y:
-          Math.random()*H,
-
-        r:
-          Math.min(W,H) *
-          (
-            .08 +
-            Math.random()*.25
-          ),
-
-        vx:
-          (Math.random()-.5)*.13,
-
-        vy:
-          (Math.random()-.5)*.13,
-
-        ph:
-          Math.random()*Math.PI*2,
-
-        sp:
-          .001 +
-          Math.random()*.0022
-
-      })
-    );
-
-}
-
-
-function draw(time){
-
-  ctx.fillStyle =
-    "rgba(0,0,0,.045)";
-
-  ctx.fillRect(
-    0,
-    0,
-    W,
-    H
-  );
-
-
-  ctx.globalCompositeOperation =
-    "screen";
-
-
-  blobs.forEach(
-    (blob,index)=>{
-
-      blob.x +=
-        blob.vx +
-        Math.sin(
-          time*blob.sp +
-          blob.ph
-        )*.08;
-
-      blob.y +=
-        blob.vy +
-        Math.cos(
-          time*blob.sp*.8 +
-          blob.ph
-        )*.08;
-
-
-      if(blob.x < -blob.r){
-        blob.x = W + blob.r;
-      }
-
-      if(blob.x > W + blob.r){
-        blob.x = -blob.r;
-      }
-
-      if(blob.y < -blob.r){
-        blob.y = H + blob.r;
-      }
-
-      if(blob.y > H + blob.r){
-        blob.y = -blob.r;
-      }
-
-
-      const radius =
-        blob.r *
-        (
-          1 +
-          Math.sin(
-            time*blob.sp +
-            blob.ph
-          )*.15
-        );
-
-
-      const gradient =
-        ctx.createRadialGradient(
-
-          blob.x,
-          blob.y,
-          0,
-
-          blob.x,
-          blob.y,
-          radius
-
-        );
-
-
-      const alpha =
-        .045 +
-        (index%4)*.009;
-
-
-      gradient.addColorStop(
-        0,
-        `rgba(255,255,255,${alpha})`
-      );
-
-      gradient.addColorStop(
-        .4,
-        `rgba(255,255,255,${alpha*.55})`
-      );
-
-      gradient.addColorStop(
-        1,
-        "rgba(255,255,255,0)"
-      );
-
-
-      ctx.fillStyle =
-        gradient;
-
-      ctx.beginPath();
-
-      ctx.arc(
-        blob.x,
-        blob.y,
-        radius,
-        0,
-        Math.PI*2
-      );
-
-      ctx.fill();
-
-    }
-  );
-
-
-  /* VORTEX */
-
-  ctx.save();
-
-  ctx.translate(
-    W*.5,
-    H*.5
-  );
-
-  ctx.rotate(
-    time*.000035
-  );
-
-
-  for(
-    let i=0;
-    i<9;
-    i++
-  ){
-
-    ctx.beginPath();
-
-    const radius =
-      Math.min(W,H) *
-      (
-        .05 +
-        i*.035
-      );
-
-
-    ctx.strokeStyle =
-      `rgba(255,255,255,${.007+i*.002})`;
-
-    ctx.lineWidth =
-      1;
-
-
-    ctx.ellipse(
-      0,
-      0,
-      radius*1.6,
-      radius*.53,
-      Math.sin(
-        time*.00009+i
-      )*.42,
-      0,
-      Math.PI*2
-    );
-
-    ctx.stroke();
-
-  }
-
-
-  ctx.restore();
-
-
-  ctx.globalCompositeOperation =
-    "source-over";
-
-
-  requestAnimationFrame(
-    draw
-  );
-
-}
-
-
-/* =========================================================
-   FOREST
-   ========================================================= */
-
-const forestCanvas =
-  document.getElementById(
-    "forestCanvas"
-  );
-
-const forestCtx =
-  forestCanvas.getContext(
-    "2d"
-  );
-
-
-function drawForest(){
-
-  const width =
-    window.innerWidth;
-
-  const height =
-    window.innerHeight;
-
-
-  forestCanvas.width =
-    width * DPR;
-
-  forestCanvas.height =
-    height * DPR;
-
-
-  forestCtx.setTransform(
-    DPR,
-    0,
-    0,
-    DPR,
-    0,
-    0
-  );
-
-
-  forestCtx.clearRect(
-    0,
-    0,
-    width,
-    height
-  );
-
-
-  const haze =
-    forestCtx.createRadialGradient(
-
-      width*.5,
-      height*.50,
-      0,
-
-      width*.5,
-      height*.50,
-
-      Math.max(
-        width,
-        height
-      )*.65
-
-    );
-
-
-  haze.addColorStop(
-    0,
-    "rgba(255,255,255,.26)"
-  );
-
-  haze.addColorStop(
-    .38,
-    "rgba(255,255,255,.07)"
-  );
-
-  haze.addColorStop(
-    1,
-    "rgba(255,255,255,0)"
-  );
-
-
-  forestCtx.fillStyle =
-    haze;
-
-  forestCtx.fillRect(
-    0,
-    0,
-    width,
-    height
-  );
-
-
-  const treeCount =
-    Math.max(
-      45,
-      Math.floor(
-        width/18
-      )
-    );
-
-
-  for(
-    let i=0;
-    i<treeCount;
-    i++
-  ){
-
-    const x =
-      Math.random() *
-      width;
-
-    const depth =
-      Math.random();
-
-    const base =
-      height *
-      (
-        .82 +
-        Math.random()*.20
-      );
-
-    const treeHeight =
-      height *
-      (
-        .28 +
-        depth*.65
-      );
-
-    const trunkWidth =
-      1 +
-      depth*7;
-
-    const alpha =
-      .10 +
-      depth*.45;
-
-
-    forestCtx.strokeStyle =
-      `rgba(255,255,255,${alpha})`;
-
-    forestCtx.lineWidth =
-      trunkWidth;
-
-
-    forestCtx.beginPath();
-
-    forestCtx.moveTo(
-      x,
-      base
-    );
-
-    forestCtx.lineTo(
-      x +
-      (Math.random()-.5)*25,
-      base-treeHeight
-    );
-
-    forestCtx.stroke();
-
-
-    if(depth > .35){
-
-      for(
-        let branch=0;
-        branch<5;
-        branch++
-      ){
-
-        const y =
-          base -
-          treeHeight *
-          (
-            .30 +
-            Math.random()*.55
-          );
-
-
-        const direction =
-          Math.random()>.5
-            ? 1
-            : -1;
-
-
-        forestCtx.lineWidth =
-          Math.max(
-            1,
-            trunkWidth*.25
-          );
-
-
-        forestCtx.beginPath();
-
-        forestCtx.moveTo(
-          x,
-          y
-        );
-
-        forestCtx.lineTo(
-
-          x +
-          direction *
-          (
-            12 +
-            Math.random()*50
-          ),
-
-          y -
-          (
-            5 +
-            Math.random()*35
-          )
-
-        );
-
-        forestCtx.stroke();
-
-      }
-
-    }
-
-  }
-
-
-  /*
-  occasional distant figure
-  */
-
-  if(Math.random() > .38){
-
-    forestCtx.fillStyle =
-      "rgba(255,255,255,.16)";
-
-    const figureX =
-      width *
-      (
-        .38 +
-        Math.random()*.24
-      );
-
-    const figureY =
-      height*.61;
-
-
-    forestCtx.beginPath();
-
-    forestCtx.arc(
-      figureX,
-      figureY-30,
-      8,
-      0,
-      Math.PI*2
-    );
-
-    forestCtx.fill();
-
-
-    forestCtx.fillRect(
-      figureX-5,
-      figureY-24,
-      10,
-      50
-    );
-
-  }
-
-}
-
-
-/* =========================================================
-   DREAM SCENES
-   ========================================================= */
-
-const curtain =
-  document.getElementById(
-    "curtain"
-  );
-
-let dreamScene = 0;
-
-
-function cycleDreamScene(){
-
-  const forest =
-    document.getElementById(
-      "forestCanvas"
-    );
-
-
-  forest.classList.remove(
-    "visible"
-  );
-
-  curtain.classList.remove(
-    "visible"
-  );
-
-
-  dreamScene =
-    (
-      dreamScene + 1
-    )
-    %
-    4;
-
-
-  if(dreamScene === 1){
-
-    drawForest();
-
-    forest.classList.add(
-      "visible"
-    );
-
-  }
-
-
-  else if(dreamScene === 2){
-
-    curtain.classList.add(
-      "visible"
-    );
-
-  }
-
-
-  else if(dreamScene === 3){
-
-    drawForest();
-
-    forest.classList.add(
-      "visible"
-    );
-
-
-    setTimeout(()=>{
-
-      curtain.classList.add(
-        "visible"
-      );
-
-    },2400);
-
-  }
-
-}
-
-
-setInterval(
-  cycleDreamScene,
-  9500
+const ui =
+document.getElementById(
+"ui"
+);
+
+const bloom =
+document.getElementById(
+"whiteBloom"
+);
+
+const whiteout =
+document.getElementById(
+"whiteout"
+);
+
+const final =
+document.getElementById(
+"finalInvite"
 );
 
 
-function dreamScenePulse(){
-
-  if(Math.random() > .58){
-
-    cycleDreamScene();
-
-  }
-
-}
-
-
-/* =========================================================
-   INITIALIZATION
-   ========================================================= */
-
-window.addEventListener(
-  "resize",
-  ()=>{
-
-    resizeCanvas();
-
-    drawForest();
-
-  }
-);
-
-
-resizeCanvas();
-
-drawForest();
-
-
-ctx.fillStyle =
-  "#000";
-
-ctx.fillRect(
-  0,
-  0,
-  W,
-  H
-);
-
-
-requestAnimationFrame(
-  draw
+ui.classList.add(
+"hide"
 );
 
 
 setTimeout(
-  cycleDreamScene,
-  2800
+()=>{
+
+bloom.classList.add(
+"active"
+);
+
+whiteout.classList.add(
+"active"
+);
+
+},
+1300
+);
+
+
+setTimeout(
+()=>{
+
+document
+.getElementById(
+"finalTitle"
+)
+.textContent =
+UI[
+state.lang
+]
+.invite;
+
+final.classList.add(
+"active"
+);
+
+},
+7200
+);
+
+
+setTimeout(
+()=>{
+
+bloom.style.display =
+"none";
+
+whiteout.style.display =
+"none";
+
+},
+7800
+);
+
+}
+
+
+/* =========================================================
+   GHOST
+   ========================================================= */
+
+function ghost(
+text,
+answer=false
+){
+
+if(!text){
+return;
+}
+
+const element =
+document.createElement(
+"div"
+);
+
+element.className =
+answer
+?
+"ghost answerGhost"
+:
+"ghost";
+
+element.textContent =
+text;
+
+element.style.left =
+(
+Math.random()*55
+-
+5
+)
++
+"vw";
+
+element.style.top =
+(
+Math.random()*75
++
+8
+)
++
+"vh";
+
+element.style.animationDuration =
+(
+10
++
+Math.random()*10
+)
++
+"s";
+
+ghostLayer.appendChild(
+element
+);
+
+setTimeout(
+()=>{
+
+element.remove();
+
+},
+21000
+);
+
+}
+
+
+/* =========================================================
+   AUTONOMOUS GHOST WORDS
+   ========================================================= */
+
+const ghostWords = [
+
+"REMEMBER",
+
+"WHO IS DREAMING",
+
+"NOT HERE",
+
+"AGAIN",
+
+"THE OTHER SIDE",
+
+"YOU HAVE BEEN HERE",
+
+"NO BEGINNING",
+
+"NOT YET",
+
+"WAKE",
+
+"ALMOST",
+
+"TRAUM",
+
+"SESSION FOUND",
+
+"WHO REMEMBERS?"
+
+];
+
+
+setInterval(
+()=>{
+
+if(
+Math.random()>.52
+){
+
+ghost(
+ghostWords[
+Math.floor(
+Math.random()
+*
+ghostWords.length
+)
+]
+);
+
+}
+
+},
+5000
+);
+
+
+/* =========================================================
+   HTML ESCAPE
+   ========================================================= */
+
+function escapeHtml(value){
+
+return String(
+value || ""
+)
+.replace(
+/[&<>"']/g,
+char=>({
+
+"&":"&amp;",
+
+"<":"&lt;",
+
+">":"&gt;",
+
+"\"":"&quot;",
+
+"'":"&#039;"
+
+}[char])
+);
+
+}
+
+
+/* =========================================================
+   RORSCHACH ENGINE
+   ========================================================= */
+
+const rCanvas =
+document.getElementById(
+"rorschach"
+);
+
+const rCtx =
+rCanvas.getContext(
+"2d"
+);
+
+
+let RW;
+let RH;
+let RDPR;
+
+let forms=[];
+
+let morphSeed=0;
+
+
+/* =========================================================
+   RESIZE
+   ========================================================= */
+
+function resizeRorschach(){
+
+RW =
+window.innerWidth;
+
+RH =
+window.innerHeight;
+
+RDPR =
+Math.min(
+window.devicePixelRatio || 1,
+1.5
+);
+
+
+rCanvas.width =
+RW * RDPR;
+
+rCanvas.height =
+RH * RDPR;
+
+
+rCtx.setTransform(
+RDPR,
+0,
+0,
+RDPR,
+0,
+0
+);
+
+
+generateForms();
+
+}
+
+
+/* =========================================================
+   GENERATE FORMS
+   ========================================================= */
+
+function generateForms(){
+
+forms=[];
+
+const level =
+state.level || 0;
+
+
+const count =
+level===0
+?
+6
+:
+level===1
+?
+9
+:
+12;
+
+
+for(
+let i=0;
+i<count;
+i++
+){
+
+forms.push({
+
+cy:
+RH *
+(
+.15 +
+Math.random()*.70
+),
+
+radius:
+Math.min(
+RW,
+RH
+)
+*
+(
+.06 +
+Math.random()*.18
+),
+
+stretch:
+.55 +
+Math.random()*.85,
+
+lobes:
+3 +
+Math.floor(
+Math.random()*7
+),
+
+phase:
+Math.random() *
+Math.PI *
+2,
+
+speed:
+.00012 +
+Math.random()*.00030,
+
+alpha:
+.045 +
+Math.random()*.085,
+
+nested:
+Math.random()>.58
+
+});
+
+}
+
+}
+
+
+/* =========================================================
+   RADIUS
+   ========================================================= */
+
+function organicRadius(
+form,
+angle,
+time,
+layer=0
+){
+
+const level =
+state.level || 0;
+
+
+const waveA =
+Math.sin(
+angle *
+form.lobes
++
+time *
+form.speed *
+1000
++
+form.phase
++
+layer
+)
+*
+(
+.19 +
+level*.025
+);
+
+
+const waveB =
+Math.sin(
+angle *
+(
+form.lobes+3
+)
+-
+time *
+form.speed *
+630
+)
+*
+.10;
+
+
+const waveC =
+Math.cos(
+angle*2
++
+time*.00021
++
+form.phase*4
+)
+*
+.075;
+
+
+return form.radius *
+(
+1 +
+waveA +
+waveB +
+waveC
+);
+
+}
+
+
+/* =========================================================
+   DRAW MIRROR BLOT
+   ========================================================= */
+
+function drawMirrorBlot(
+form,
+time,
+scale=1,
+alphaScale=1
+){
+
+const cx =
+RW*.5;
+
+const cy =
+form.cy;
+
+const count =
+86;
+
+const left=[];
+
+
+for(
+let i=0;
+i<=count;
+i++
+){
+
+const p =
+i/count;
+
+
+const angle =
+-Math.PI*.5
++
+p*Math.PI;
+
+
+const radius =
+organicRadius(
+form,
+angle,
+time
+)
+*
+scale;
+
+
+const x =
+Math.cos(angle)
+*
+radius
+*
+form.stretch;
+
+
+const y =
+Math.sin(angle)
+*
+radius;
+
+
+left.push({
+
+x:
+cx-x,
+
+y:
+cy+y
+
+});
+
+}
+
+
+/*
+asymmetry only in TRAUM 2
+*/
+
+const asymmetry =
+state.level===2
+?
+Math.sin(
+time*.00041
++
+form.phase
+)
+*
+12
+:
+0;
+
+
+rCtx.beginPath();
+
+
+rCtx.moveTo(
+cx,
+cy-form.radius*.12
+);
+
+
+for(
+const point
+of
+left
+){
+
+rCtx.lineTo(
+point.x,
+point.y
+);
+
+}
+
+
+for(
+let i=left.length-1;
+i>=0;
+i--
+){
+
+const point =
+left[i];
+
+
+const mirroredX =
+cx
++
+(
+cx-point.x
+)
++
+asymmetry;
+
+
+rCtx.lineTo(
+mirroredX,
+point.y
+);
+
+}
+
+
+rCtx.closePath();
+
+
+rCtx.fillStyle =
+`rgba(
+255,
+255,
+255,
+${form.alpha*alphaScale}
+)`;
+
+
+rCtx.fill();
+
+
+/*
+dream inside dream
+*/
+
+if(
+form.nested &&
+state.level>=1
+){
+
+rCtx.save();
+
+
+rCtx.translate(
+cx,
+cy
+);
+
+
+rCtx.scale(
+.62,
+.62
+);
+
+
+rCtx.translate(
+-cx,
+-cy
+);
+
+
+rCtx.fillStyle =
+`rgba(
+255,
+255,
+255,
+${form.alpha*.38}
+)`;
+
+
+rCtx.fill();
+
+
+rCtx.restore();
+
+}
+
+}
+
+
+/* =========================================================
+   RORSCHACH LOOP
+   ========================================================= */
+
+function drawRorschach(time){
+
+rCtx.fillStyle =
+state.level===0
+?
+"rgba(0,0,0,.065)"
+:
+state.level===1
+?
+"rgba(0,0,0,.055)"
+:
+"rgba(0,0,0,.045)";
+
+
+rCtx.fillRect(
+0,
+0,
+RW,
+RH
+);
+
+
+/*
+breathing exposure
+*/
+
+const exposure =
+.008
++
+(
+Math.sin(
+time*.00027
+)
++
+1
+)
+*
+.006;
+
+
+rCtx.fillStyle =
+`rgba(
+255,
+255,
+255,
+${exposure}
+)`;
+
+
+rCtx.fillRect(
+0,
+0,
+RW,
+RH
+);
+
+
+rCtx.globalCompositeOperation =
+"screen";
+
+
+for(
+const form
+of
+forms
+){
+
+drawMirrorBlot(
+form,
+time
+);
+
+}
+
+
+/*
+nested center world
+*/
+
+if(
+state.level>=1
+){
+
+rCtx.save();
+
+
+rCtx.translate(
+RW*.5,
+RH*.5
+);
+
+
+const pulse =
+.72
++
+Math.sin(
+time*.00018
+)
+*
+.10;
+
+
+rCtx.scale(
+pulse,
+pulse
+);
+
+
+rCtx.translate(
+-RW*.5,
+-RH*.5
+);
+
+
+for(
+let i=0;
+i<Math.min(
+3,
+forms.length
+);
+i++
+){
+
+drawMirrorBlot(
+forms[i],
+time+5000,
+.52,
+.42
+);
+
+}
+
+
+rCtx.restore();
+
+}
+
+
+rCtx.globalCompositeOperation =
+"source-over";
+
+
+/*
+central fold
+*/
+
+const fold =
+rCtx.createLinearGradient(
+RW*.43,
+0,
+RW*.57,
+0
+);
+
+
+fold.addColorStop(
+0,
+"rgba(0,0,0,0)"
+);
+
+
+fold.addColorStop(
+.5,
+state.level===2
+?
+"rgba(255,255,255,.055)"
+:
+"rgba(255,255,255,.028)"
+);
+
+
+fold.addColorStop(
+1,
+"rgba(0,0,0,0)"
+);
+
+
+rCtx.fillStyle =
+fold;
+
+
+rCtx.fillRect(
+RW*.39,
+0,
+RW*.22,
+RH
+);
+
+
+requestAnimationFrame(
+drawRorschach
+);
+
+}
+
+
+/* =========================================================
+   MORPH REBIRTH
+   ========================================================= */
+
+setInterval(
+()=>{
+
+morphSeed++;
+
+generateForms();
+
+
+if(
+Math.random()>.62
+){
+
+ghost(
+state.level===0
+?
+"ANOTHER FORM"
+:
+state.level===1
+?
+"DREAM WITHIN DREAM"
+:
+"IT REMEMBERS"
+);
+
+}
+
+},
+17000
+);
+
+
+/* =========================================================
+   INIT
+   ========================================================= */
+
+window.addEventListener(
+"resize",
+resizeRorschach
+);
+
+
+resizeRorschach();
+
+
+rCtx.fillStyle =
+"#000";
+
+
+rCtx.fillRect(
+0,
+0,
+RW,
+RH
+);
+
+
+requestAnimationFrame(
+drawRorschach
 );
 
 
 renderStart();
+
 
 </script>
 
