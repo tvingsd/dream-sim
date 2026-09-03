@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#000000">
+<title>DREAM SIM — PATCHLAB 2026</title>
+
+<style>
+:root{
+  --vh:1vh;
+  --fg:#f4f4f4;
+  --muted:rgba(255,255,255,.42);
+  --line:rgba(255,255,255,.20);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  background:#000;
+  color:var(--fg);
+  font-family:Helvetica,Arial,sans-serif;
+  -webkit-font-smoothing:antialiased;
+  -webkit-text-size-adjust:none;
+}
+body{min-height:calc(var(--vh)*100)}
+
+#dreamCanvas{
+  position:fixed;
+  inset:-10%;
+  width:120%;
+  height:120%;
+  filter:blur(20px) contrast(145%);
+  opacity:.88;
+  transform:scale(1.06);
+}
+#fog{
+  position:fixed;
+  inset:-20%;
+  pointer-events:none;
+  background:
+    radial-gradient(circle at 30% 40%,rgba(255,255,255,.065),transparent 20%),
+    radial-gradient(circle at 75% 55%,rgba(255,255,255,.04),transparent 22%),
+    radial-gradient(circle at 50% 80%,rgba(255,255,255,.025),transparent 26%);
+  mix-blend-mode:screen;
+  animation:fogMove 22s ease-in-out infinite alternate;
+}
+#grain{
+  position:fixed;
+  inset:-50%;
+  pointer-events:none;
+  opacity:.05;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation:grain .22s steps(2) infinite;
+}
+#ghostLayer{
+  position:fixed;
+  inset:0;
+  z-index:3;
+  pointer-events:none;
+  overflow:hidden;
+}
+.ghost{
+  position:absolute;
+  font-size:clamp(26px,8vw,110px);
+  line-height:.9;
+  letter-spacing:-.05em;
+  color:rgba(255,255,255,.042);
+  filter:blur(7px);
+  white-space:nowrap;
+  animation:ghostDrift linear forwards;
+}
+#ui{
+  position:fixed;
+  inset:0;
+  z-index:20;
+  height:calc(var(--vh)*100);
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  padding:
+    max(24px,env(safe-area-inset-top))
+    max(22px,env(safe-area-inset-right))
+    max(24px,env(safe-area-inset-bottom))
+    max(22px,env(safe-area-inset-left));
+}
+.top,.bottom{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  font-size:10px;
+  letter-spacing:.19em;
+  text-transform:uppercase;
+  color:var(--muted);
+}
+#screen{
+  width:min(900px,100%);
+  margin:auto;
+  transition:opacity 1.25s ease,transform 1.45s ease,filter 1.25s ease;
+}
+#screen.fade{
+  opacity:0;
+  transform:translateY(11px) scale(1.012);
+  filter:blur(12px);
+}
+.eyebrow{
+  margin-bottom:24px;
+  font-size:10px;
+  letter-spacing:.24em;
+  color:var(--muted);
+  text-transform:uppercase;
+}
+h1{
+  font-weight:400;
+  font-size:clamp(52px,12vw,108px);
+  line-height:.84;
+  letter-spacing:-.055em;
+}
+h2{
+  font-weight:400;
+  font-size:clamp(31px,7vw,64px);
+  line-height:1.02;
+  letter-spacing:-.035em;
+  max-width:900px;
+}
+.sub{
+  margin-top:22px;
+  max-width:620px;
+  color:rgba(255,255,255,.52);
+  font-size:14px;
+  line-height:1.52;
+}
+.langs{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:1px;
+  margin-top:50px;
+  background:var(--line);
+}
+button{
+  appearance:none;
+  border:0;
+  background:rgba(0,0,0,.86);
+  color:#fff;
+  font:inherit;
+  cursor:pointer;
+}
+.langs button{
+  height:82px;
+  font-size:14px;
+  letter-spacing:.17em;
+}
+.langs button:hover,.next:hover{background:#fff;color:#000}
+.question{
+  position:relative;
+}
+.dreamword{
+  display:inline-block;
+  transition:filter 3s ease,opacity 3s ease;
+}
+.dreamword.blur{
+  filter:blur(7px);
+  opacity:.72;
+}
+.dreamword.deepblur{
+  filter:blur(14px);
+  opacity:.35;
+}
+.dreamword.float{
+  transform:translateY(-.08em);
+}
+textarea{
+  width:100%;
+  min-height:190px;
+  margin-top:30px;
+  border:0;
+  border-bottom:1px solid var(--line);
+  outline:0;
+  background:rgba(0,0,0,.05);
+  color:#fff;
+  resize:none;
+  padding:16px 0 20px;
+  font:inherit;
+  font-size:clamp(20px,4.5vw,34px);
+  line-height:1.35;
+  caret-color:#fff;
+}
+textarea::placeholder{color:rgba(255,255,255,.16)}
+.actions{
+  margin-top:34px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+}
+.back,.next{
+  text-transform:uppercase;
+  letter-spacing:.17em;
+  font-size:10px;
+}
+.back{
+  color:var(--muted);
+  background:transparent;
+  padding:16px 0;
+}
+.next{
+  border:1px solid rgba(255,255,255,.25);
+  padding:17px 20px;
+  min-width:150px;
+  transition:.45s;
+}
+.received{
+  margin-top:34px;
+  color:var(--muted);
+  font-size:11px;
+  letter-spacing:.21em;
+  text-transform:uppercase;
+}
+
+#whiteBloom{
+  position:fixed;
+  inset:-30%;
+  z-index:200;
+  pointer-events:none;
+  opacity:0;
+  transform:scale(.22);
+  filter:blur(55px);
+  background:radial-gradient(circle at 50% 50%,
+    rgba(255,255,255,1) 0%,
+    rgba(255,255,255,.96) 16%,
+    rgba(255,255,255,.64) 34%,
+    rgba(255,255,255,.14) 55%,
+    rgba(255,255,255,0) 72%);
+}
+#whiteBloom.active{animation:bloom 5s cubic-bezier(.22,.62,.22,1) forwards}
+#whiteout{
+  position:fixed;inset:0;z-index:201;pointer-events:none;
+  background:#fff;opacity:0;
+}
+#whiteout.active{animation:whiteout 5.25s cubic-bezier(.22,.62,.22,1) forwards}
+
+#finalInvite{
+  position:fixed;inset:0;z-index:220;
+  min-height:calc(var(--vh)*100);
+  display:flex;align-items:center;justify-content:center;
+  text-align:center;
+  background:#000;color:#fff;
+  opacity:0;pointer-events:none;
+  padding:
+    max(28px,env(safe-area-inset-top))
+    max(22px,env(safe-area-inset-right))
+    max(28px,env(safe-area-inset-bottom))
+    max(22px,env(safe-area-inset-left));
+}
+#finalInvite.active{animation:finalIn 2.7s ease forwards}
+.finalWrap{width:min(900px,92vw)}
+.patchlab{
+  font-size:clamp(19px,3.2vw,34px);
+  font-weight:700;
+  letter-spacing:.2em;
+  margin-bottom:34px;
+}
+.patchlab small{
+  display:block;
+  margin-top:9px;
+  font-size:9px;
+  font-weight:400;
+  letter-spacing:.34em;
+  color:rgba(255,255,255,.62);
+}
+#finalInvite h3{
+  font-size:clamp(30px,6vw,66px);
+  line-height:1.02;
+  letter-spacing:-.035em;
+  font-weight:400;
+}
+#finalInvite .details{
+  margin-top:28px;
+  font-size:clamp(10px,1.5vw,13px);
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:rgba(255,255,255,.62);
+}
+
+@keyframes fogMove{
+  from{transform:translate3d(-2%,0,0) scale(1)}
+  to{transform:translate3d(3%,-2%,0) scale(1.12);filter:blur(10px)}
+}
+@keyframes grain{
+  0%{transform:translate(0,0)}
+  25%{transform:translate(3%,-3%)}
+  50%{transform:translate(-4%,2%)}
+  75%{transform:translate(2%,4%)}
+  100%{transform:translate(-2%,-4%)}
+}
+@keyframes ghostDrift{
+  0%{opacity:0;transform:translate3d(-4vw,3vh,0) scale(.97);filter:blur(12px)}
+  18%{opacity:1}
+  68%{opacity:.7}
+  100%{opacity:0;transform:translate3d(6vw,-4vh,0) scale(1.06);filter:blur(22px)}
+}
+@keyframes bloom{
+  0%{opacity:0;transform:scale(.2)}
+  40%{opacity:.16}
+  72%{opacity:.62;transform:scale(1)}
+  100%{opacity:1;transform:scale(1.9)}
+}
+@keyframes whiteout{
+  0%{opacity:0}
+  55%{opacity:.05}
+  80%{opacity:.36}
+  100%{opacity:1}
+}
+@keyframes finalIn{
+  0%{opacity:0;filter:blur(14px);transform:scale(1.015)}
+  100%{opacity:1;filter:blur(0);transform:scale(1)}
+}
+
+@media(max-width:600px){
+  #ui{
+    padding:
+      max(18px,env(safe-area-inset-top))
+      max(18px,env(safe-area-inset-right))
+      max(18px,env(safe-area-inset-bottom))
+      max(18px,env(safe-area-inset-left));
+  }
+  h1{font-size:clamp(52px,18vw,82px)}
+  h2{font-size:clamp(29px,9vw,44px)}
+  textarea{min-height:clamp(160px,28dvh,235px);font-size:clamp(19px,6vw,27px)}
+  .langs{margin-top:36px}
+  .langs button{height:70px}
+  .actions{margin-top:24px}
+  .next{min-width:130px}
+  #finalInvite h3{font-size:clamp(28px,9vw,44px)}
+}
+@media(orientation:landscape) and (max-height:520px){
+  textarea{min-height:100px}
+  .eyebrow{margin-bottom:12px}
+  .actions{margin-top:14px}
+  .patchlab{margin-bottom:18px}
+  #finalInvite h3{font-size:clamp(24px,7vh,38px)}
+  #finalInvite .details{margin-top:15px}
+}
+</style>
+</head>
+<body>
+
+<canvas id="dreamCanvas"></canvas>
+<div id="fog"></div>
+<div id="grain"></div>
+<div id="ghostLayer"></div>
+
+<div id="whiteBloom"></div>
+<div id="whiteout"></div>
+
+<div id="finalInvite">
+  <div class="finalWrap">
+    <div class="patchlab">PATCHLAB<small>DIGITAL ART FESTIVAL</small></div>
+    <h3 id="finalTitle"></h3>
+    <div class="details">15.10.2026 · HEVRE · KRAKÓW</div>
+  </div>
+</div>
+
+<div id="ui">
+  <div class="top">
+    <span>DREAM SIM</span>
+    <span id="progress"></span>
+  </div>
+
+  <main id="screen"></main>
+
+  <div class="bottom">
+    <span>PATCHLAB 2026</span>
+    <span>DREAM ARCHIVE</span>
+  </div>
+</div>
+
+<script>
+const API_URL="PASTE_YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE";
+
+function setVH(){
+  const h=window.visualViewport?window.visualViewport.height:window.innerHeight;
+  document.documentElement.style.setProperty("--vh",(h*.01)+"px");
+}
+setVH();
+addEventListener("resize",setVH);
+if(window.visualViewport)window.visualViewport.addEventListener("resize",setVH);
+
+const QUESTIONS_PL=[
+["MIEJSCE","Gdzie byłeś, zanim miejsce przypomniało sobie ciebie?"],
+["MIEJSCE","Czy pokój był pokojem, czy tylko pamięcią o pokoju?"],
+["MIEJSCE","W którym miejscu sen udawał rzeczywistość?"],
+["MIEJSCE","Gdzie kończyła się przestrzeń, jeśli w ogóle się kończyła?"],
+["MIEJSCE","Czy byłeś wewnątrz miejsca, czy miejsce było wewnątrz ciebie?"],
+
+["OBECNOŚĆ","Kto patrzył, kiedy nikogo nie było?"],
+["OBECNOŚĆ","Czy ktoś stał obok, zanim go zobaczyłeś?"],
+["OBECNOŚĆ","Czy obecność miała twarz, czy tylko ciężar?"],
+["OBECNOŚĆ","Co szło za tobą, choć nie poruszało się?"],
+["OBECNOŚĆ","Czy ktoś mówił twoim głosem z innego miejsca?"],
+
+["UCZUCIE","Jakie uczucie zostało, kiedy sen już odszedł?"],
+["UCZUCIE","Co czułeś, zanim zrozumiałeś, że to niemożliwe?"],
+["UCZUCIE","Czy strach był twój, czy należał do miejsca?"],
+["UCZUCIE","Jak czuło się ciało, którego nie pamiętasz?"],
+["UCZUCIE","Co było spokojne w czymś, co nie powinno być spokojne?"],
+
+["NIEMOŻLIWE","Co wydarzyło się poprawnie, choć nie mogło się wydarzyć?"],
+["NIEMOŻLIWE","Która rzecz złamała zasady, których wcześniej nie znałeś?"],
+["NIEMOŻLIWE","Co było niemożliwe, ale we śnie całkowicie normalne?"],
+["NIEMOŻLIWE","Czy grawitacja pamiętała, w którą stronę ma działać?"],
+["NIEMOŻLIWE","Co było żywe, choć nie powinno mieć życia?"],
+
+["PAMIĘĆ","Który fragment snu wraca pierwszy, kiedy o nim nie myślisz?"],
+["PAMIĘĆ","Co pamiętasz nie jako obraz, lecz jako ślad?"],
+["PAMIĘĆ","Jaki szczegół nie pasuje do reszty, a jednak został?"],
+["PAMIĘĆ","Które wspomnienie ze snu brzmi jak cudze?"],
+["PAMIĘĆ","Co zniknęło dokładnie w chwili, kiedy próbowałeś to zapamiętać?"],
+
+["CZAS","Czy sen trwał chwilę, czy całe inne życie?"],
+["CZAS","Co wydarzyło się wcześniej, mimo że było później?"],
+["CZAS","Czy czas płynął, czy tylko zmieniał kształt?"],
+["CZAS","Która chwila powtarzała się bez początku?"],
+["CZAS","Czy obudziłeś się, zanim sen się wydarzył?"],
+
+["CIAŁO","Czy twoje ciało było twoje?"],
+["CIAŁO","Czy poruszałeś się, czy świat przesuwał się wokół ciebie?"],
+["CIAŁO","Której części ciała nie było, choć jej potrzebowałeś?"],
+["CIAŁO","Czy miałeś twarz?"],
+["CIAŁO","Co robiły twoje dłonie, kiedy nie patrzyłeś?"],
+
+["DŹWIĘK","Co słyszałeś z miejsca, którego nie było?"],
+["DŹWIĘK","Czy głos mówił słowami, czy tylko znaczeniem?"],
+["DŹWIĘK","Jaki dźwięk był większy niż przestrzeń?"],
+["DŹWIĘK","Czy cisza coś ci powiedziała?"],
+["DŹWIĘK","Co brzmiało znajomo, mimo że nigdy tego nie słyszałeś?"],
+
+["PRZEJŚCIE","Przez co przeszedłeś i dokąd to nie prowadziło?"],
+["PRZEJŚCIE","Czy drzwi otworzyły się zanim ich dotknąłeś?"],
+["PRZEJŚCIE","Co było po drugiej stronie, zanim pojawiła się pierwsza?"],
+["PRZEJŚCIE","Czy korytarz kończył się tam, gdzie się zaczynał?"],
+["PRZEJŚCIE","Które przejście wyglądało jak wyjście, ale nim nie było?"],
+
+["TOŻSAMOŚĆ","Kim byłeś, zanim przypomniałeś sobie siebie?"],
+["TOŻSAMOŚĆ","Czy wiedziałeś, że jesteś sobą?"],
+["TOŻSAMOŚĆ","Kto śnił: ty czy ktoś, kto wyglądał jak ty?"],
+["TOŻSAMOŚĆ","Czy twoje imię działało w tym śnie?"],
+["TOŻSAMOŚĆ","Czy ktoś pomylił cię z tobą samym?"]
+];
+
+const QUESTIONS_EN=[
+["PLACE","Where were you before the place remembered you?"],
+["PLACE","Was the room a room, or only the memory of one?"],
+["PLACE","Where did the dream pretend to be reality?"],
+["PLACE","Where did space end, if it ended at all?"],
+["PLACE","Were you inside the place, or was the place inside you?"],
+
+["PRESENCE","Who was watching when nobody was there?"],
+["PRESENCE","Was someone beside you before you saw them?"],
+["PRESENCE","Did the presence have a face, or only weight?"],
+["PRESENCE","What followed you without moving?"],
+["PRESENCE","Did someone speak with your voice from somewhere else?"],
+
+["FEELING","What feeling remained after the dream had already gone?"],
+["FEELING","What did you feel before you understood it was impossible?"],
+["FEELING","Was the fear yours, or did it belong to the place?"],
+["FEELING","How did the body feel that you cannot remember?"],
+["FEELING","What was calm inside something that should not have been calm?"],
+
+["IMPOSSIBLE","What happened correctly even though it could not happen?"],
+["IMPOSSIBLE","What broke rules you did not know existed?"],
+["IMPOSSIBLE","What was impossible but completely ordinary in the dream?"],
+["IMPOSSIBLE","Did gravity remember which way to work?"],
+["IMPOSSIBLE","What was alive that should not have had life?"],
+
+["MEMORY","Which fragment returns first when you are not thinking about it?"],
+["MEMORY","What do you remember not as an image, but as a trace?"],
+["MEMORY","Which detail does not belong, yet remained?"],
+["MEMORY","Which memory from the dream feels like someone else's?"],
+["MEMORY","What disappeared exactly when you tried to remember it?"],
+
+["TIME","Did the dream last a moment, or an entire other life?"],
+["TIME","What happened earlier even though it came later?"],
+["TIME","Did time pass, or only change shape?"],
+["TIME","Which moment repeated without ever beginning?"],
+["TIME","Did you wake up before the dream happened?"],
+
+["BODY","Was your body yours?"],
+["BODY","Were you moving, or was the world moving around you?"],
+["BODY","Which part of your body was missing when you needed it?"],
+["BODY","Did you have a face?"],
+["BODY","What were your hands doing when you were not looking?"],
+
+["SOUND","What did you hear from a place that did not exist?"],
+["SOUND","Did the voice speak in words, or only in meaning?"],
+["SOUND","Which sound was larger than the space around it?"],
+["SOUND","Did the silence tell you something?"],
+["SOUND","What sounded familiar although you had never heard it before?"],
+
+["PASSAGE","What did you pass through, and where did it fail to lead?"],
+["PASSAGE","Did the door open before you touched it?"],
+["PASSAGE","What was on the other side before there was a first side?"],
+["PASSAGE","Did the corridor end where it began?"],
+["PASSAGE","Which exit looked like an exit but was not?"],
+
+["IDENTITY","Who were you before you remembered yourself?"],
+["IDENTITY","Did you know that you were you?"],
+["IDENTITY","Who was dreaming: you, or someone who looked like you?"],
+["IDENTITY","Did your name still work inside the dream?"],
+["IDENTITY","Did someone mistake you for yourself?"]
+];
+
+const uiText={
+ PL:{
+  back:"WSTECZ",
+  next:"DALEJ",
+  submit:"ODDAJ SEN",
+  placeholder:"napisz to, co zostało...",
+  done:"SEN ZAPISANY",
+  sub:"Twoje wspomnienie weszło do symulacji.",
+  invite:"Zapraszamy na nasz performance<br>ze swoim snem."
+ },
+ ENG:{
+  back:"BACK",
+  next:"NEXT",
+  submit:"SUBMIT DREAM",
+  placeholder:"write what remained...",
+  done:"DREAM RECEIVED",
+  sub:"Your memory has entered the simulation.",
+  invite:"Join our performance<br>with your dream."
+ }
+};
+
+const state={
+  lang:null,
+  step:0,
+  total:7,
+  answers:[],
+  questions:[]
+};
+
+const screen=document.getElementById("screen");
+const progress=document.getElementById("progress");
+const ghostLayer=document.getElementById("ghostLayer");
+
+function shuffle(a){
+  return [...a].sort(()=>Math.random()-.5);
+}
+
+function pickQuestions(lang){
+  const bank=lang==="PL"?QUESTIONS_PL:QUESTIONS_EN;
+  const shuffled=shuffle(bank);
+  const picked=[];
+  const used=new Set();
+
+  for(const q of shuffled){
+    if(!used.has(q[0]) || picked.length>4){
+      picked.push(q);
+      used.add(q[0]);
+    }
+    if(picked.length===state.total)break;
+  }
+  return picked;
+}
+
+function transition(fn){
+  screen.classList.add("fade");
+  setTimeout(()=>{
+    fn();
+    requestAnimationFrame(()=>{
+      screen.classList.remove("fade");
+    });
+  },720);
+}
+
+function renderStart(){
+  progress.textContent="";
+  screen.innerHTML=`
+    <div class="eyebrow">DREAM ARCHIVE / ARCHIWUM SNÓW</div>
+    <h1>DREAM<br>SIM</h1>
+    <p class="sub">choose language / wybierz język</p>
+    <div class="langs">
+      <button onclick="chooseLang('PL')">PL</button>
+      <button onclick="chooseLang('ENG')">ENG</button>
+    </div>
+  `;
+}
+
+function chooseLang(lang){
+  state.lang=lang;
+  state.step=0;
+  state.answers=[];
+  state.questions=pickQuestions(lang);
+  transition(renderQuestion);
+}
+
+function surrealize(text){
+  const words=text.split(" ");
+
+  return words.map((w)=>{
+    let cls="dreamword";
+    const r=Math.random();
+
+    if(r<.12){
+      cls+=" deepblur";
+    }else if(r<.27){
+      cls+=" blur";
+    }
+
+    if(Math.random()<.12){
+      cls+=" float";
+    }
+
+    return `<span class="${cls}">${escapeHtml(w)} </span>`;
+  }).join("");
+}
+
+function renderQuestion(){
+  const t=uiText[state.lang];
+  const q=state.questions[state.step];
+
+  progress.textContent=
+    `${String(state.step+1).padStart(2,"0")} / ${String(state.total).padStart(2,"0")}`;
+
+  screen.innerHTML=`
+    <div class="question">
+      <div class="eyebrow">${q[0]}</div>
+
+      <h2>${surrealize(q[1])}</h2>
+
+      <textarea
+        id="answer"
+        placeholder="${t.placeholder}"
+      >${escapeHtml(state.answers[state.step]||"")}</textarea>
+
+      <div class="actions">
+        <button class="back" onclick="goBack()">${t.back}</button>
+
+        <button class="next" onclick="goNext()">
+          ${state.step===state.total-1?t.submit:t.next}
+        </button>
+      </div>
+    </div>
+  `;
+
+  animateBlurWords();
+  ghost(q[0]);
+
+  setTimeout(()=>{
+    document.getElementById("answer")?.focus();
+  },500);
+}
+
+function animateBlurWords(){
+  const words=[...document.querySelectorAll(".dreamword")];
+
+  setInterval(()=>{
+    if(!words.length)return;
+
+    const w=words[Math.floor(Math.random()*words.length)];
+    w.classList.toggle("blur");
+  },1800+Math.random()*1000);
+}
+
+function saveAnswer(){
+  const el=document.getElementById("answer");
+
+  if(el){
+    state.answers[state.step]=el.value.trim();
+  }
+}
+
+function goBack(){
+  saveAnswer();
+
+  if(state.step===0){
+    state.lang=null;
+    transition(renderStart);
+    return;
+  }
+
+  state.step--;
+  transition(renderQuestion);
+}
+
+function goNext(){
+  saveAnswer();
+
+  if(state.step<state.total-1){
+    state.step++;
+    transition(renderQuestion);
+  }else{
+    submitDream();
+  }
+}
+
+async function submitDream(){
+  const t=uiText[state.lang];
+
+  const payload={
+    language:state.lang,
+    answers:state.questions.map((q,i)=>({
+      category:q[0],
+      question:q[1],
+      answer:state.answers[i]||""
+    })),
+    dream:state.answers.join("\n\n")
+  };
+
+  transition(()=>{
+    progress.textContent="";
+
+    screen.innerHTML=`
+      <div class="eyebrow">DREAM SIM</div>
+      <h2>${t.done}</h2>
+      <p class="sub">${t.sub}</p>
+    `;
+  });
+
+  try{
+    if(!API_URL.includes("PASTE_YOUR")){
+      await fetch(API_URL,{
+        method:"POST",
+        headers:{
+          "Content-Type":"text/plain;charset=utf-8"
+        },
+        body:JSON.stringify(payload)
+      });
+    }
+  }catch(e){
+    console.log("Dream save error:",e);
+  }
+
+  setTimeout(startFinalSequence,2500);
+}
+
+function startFinalSequence(){
+  const bloom=document.getElementById("whiteBloom");
+  const whiteout=document.getElementById("whiteout");
+  const final=document.getElementById("finalInvite");
+
+  document.getElementById("finalTitle").innerHTML=
+    uiText[state.lang].invite;
+
+  bloom.classList.add("active");
+  whiteout.classList.add("active");
+
+  setTimeout(()=>{
+    final.classList.add("active");
+  },5100);
+
+  setTimeout(()=>{
+    bloom.style.display="none";
+    whiteout.style.display="none";
+  },5650);
+}
+
+function ghost(text){
+  const d=document.createElement("div");
+  d.className="ghost";
+  d.textContent=text;
+
+  d.style.left=(Math.random()*55-5)+"vw";
+  d.style.top=(Math.random()*75+8)+"vh";
+  d.style.animationDuration=(9+Math.random()*9)+"s";
+
+  ghostLayer.appendChild(d);
+
+  setTimeout(()=>{
+    d.remove();
+  },19000);
+}
+
+function escapeHtml(s){
+  return String(s||"").replace(
+    /[&<>"']/g,
+    m=>({
+      "&":"&amp;",
+      "<":"&lt;",
+      ">":"&gt;",
+      "\"":"&quot;",
+      "'":"&#039;"
+    }[m])
+  );
+}
+
+const traces=[
+  "REMEMBER",
+  "NOT HERE",
+  "AGAIN",
+  "SOMEWHERE",
+  "BEHIND",
+  "WAKE",
+  "ALMOST",
+  "WHO WAS THERE",
+  "DON'T LOOK BACK",
+  "DREAM"
+];
+
+setInterval(()=>{
+  if(Math.random()>.5){
+    ghost(
+      traces[Math.floor(Math.random()*traces.length)]
+    );
+  }
+},4200);
+
+const canvas=document.getElementById("dreamCanvas");
+const ctx=canvas.getContext("2d",{alpha:false});
+
+let W,H;
+let DPR=Math.min(devicePixelRatio||1,1.5);
+let blobs=[];
+
+function resizeCanvas(){
+  W=innerWidth;
+  H=innerHeight;
+
+  canvas.width=W*DPR;
+  canvas.height=H*DPR;
+
+  ctx.setTransform(
+    DPR,0,0,DPR,0,0
+  );
+
+  blobs=Array.from({length:14},()=>({
+    x:Math.random()*W,
+    y:Math.random()*H,
+    r:Math.min(W,H)*(.08+Math.random()*.25),
+    vx:(Math.random()-.5)*.13,
+    vy:(Math.random()-.5)*.13,
+    ph:Math.random()*Math.PI*2,
+    sp:.001+Math.random()*.0022
+  }));
+}
+
+function draw(t){
+  ctx.fillStyle="rgba(0,0,0,.045)";
+  ctx.fillRect(0,0,W,H);
+
+  ctx.globalCompositeOperation="screen";
+
+  blobs.forEach((b,i)=>{
+    b.x+=b.vx+Math.sin(t*b.sp+b.ph)*.08;
+    b.y+=b.vy+Math.cos(t*b.sp*.8+b.ph)*.08;
+
+    if(b.x<-b.r)b.x=W+b.r;
+    if(b.x>W+b.r)b.x=-b.r;
+
+    if(b.y<-b.r)b.y=H+b.r;
+    if(b.y>H+b.r)b.y=-b.r;
+
+    const rr=
+      b.r*(1+Math.sin(t*b.sp+b.ph)*.15);
+
+    const g=
+      ctx.createRadialGradient(
+        b.x,b.y,0,
+        b.x,b.y,rr
+      );
+
+    const a=.045+(i%4)*.009;
+
+    g.addColorStop(
+      0,
+      `rgba(255,255,255,${a})`
+    );
+
+    g.addColorStop(
+      .4,
+      `rgba(255,255,255,${a*.55})`
+    );
+
+    g.addColorStop(
+      1,
+      "rgba(255,255,255,0)"
+    );
+
+    ctx.fillStyle=g;
+
+    ctx.beginPath();
+    ctx.arc(
+      b.x,
+      b.y,
+      rr,
+      0,
+      Math.PI*2
+    );
+    ctx.fill();
+  });
+
+  ctx.save();
+
+  ctx.translate(
+    W*.5,
+    H*.5
+  );
+
+  ctx.rotate(
+    t*.000035
+  );
+
+  for(let i=0;i<8;i++){
+    ctx.beginPath();
+
+    const rad=
+      Math.min(W,H)*
+      (.05+i*.035);
+
+    ctx.strokeStyle=
+      `rgba(255,255,255,${.008+i*.002})`;
+
+    ctx.lineWidth=1;
+
+    ctx.ellipse(
+      0,
+      0,
+      rad*1.5,
+      rad*.55,
+      Math.sin(t*.00009+i)*.4,
+      0,
+      Math.PI*2
+    );
+
+    ctx.stroke();
+  }
+
+  ctx.restore();
+
+  ctx.globalCompositeOperation=
+    "source-over";
+
+  requestAnimationFrame(draw);
+}
+
+addEventListener(
+  "resize",
+  resizeCanvas
+);
+
+resizeCanvas();
+
+ctx.fillStyle="#000";
+ctx.fillRect(0,0,W,H);
+
+requestAnimationFrame(draw);
+
+renderStart();
+</script>
+
+</body>
+</html>
