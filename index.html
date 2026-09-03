@@ -1,4309 +1,1843 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-
-<meta charset="UTF-8">
-
-<meta
-  name="viewport"
-  content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover"
->
-
-<meta name="theme-color" content="#000000">
-
-<title>TRAUM SIM — PATCHLAB 2026</title>
-
-<style>
-
-:root{
-  --vh:1vh;
-  --fg:#f4f4f0;
-  --muted:rgba(255,255,255,.42);
-  --quiet:rgba(255,255,255,.18);
-  --line:rgba(255,255,255,.18);
-}
-
-*{
-  box-sizing:border-box;
-  margin:0;
-  padding:0;
-}
-
-html,
-body{
-  width:100%;
-  height:100%;
-  overflow:hidden;
-  background:#000;
-  color:var(--fg);
-
-  font-family:
-    Helvetica,
-    Arial,
-    sans-serif;
-
-  -webkit-font-smoothing:antialiased;
-  -webkit-text-size-adjust:none;
-}
-
-body{
-  min-height:calc(var(--vh) * 100);
-}
-
-
-/* =========================================================
-   RORSCHACH
-   ========================================================= */
-
-#rorschach{
-  position:fixed;
-
-  inset:-7%;
-
-  width:114%;
-  height:114%;
-
-  z-index:0;
-
-  opacity:.78;
-
-  filter:
-    blur(16px)
-    contrast(145%);
-
-  transform:
-    scale(1.045);
-
-  transition:
-    opacity 8s ease,
-    filter 8s ease,
-    transform 12s ease;
-}
-
-
-/* =========================================================
-   VEIL
-   ========================================================= */
-
-#veil{
-  position:fixed;
-
-  inset:-18%;
-
-  z-index:2;
-
-  pointer-events:none;
-
-  background:
-
-    radial-gradient(
-      circle at 50% 42%,
-      rgba(255,255,255,.035),
-      transparent 26%
-    ),
-
-    radial-gradient(
-      circle at 25% 68%,
-      rgba(255,255,255,.025),
-      transparent 26%
-    ),
-
-    radial-gradient(
-      circle at 78% 61%,
-      rgba(255,255,255,.018),
-      transparent 28%
-    );
-
-  mix-blend-mode:screen;
-
-  animation:
-    veilMove
-    28s
-    ease-in-out
-    infinite
-    alternate;
-}
-
-
-/* =========================================================
-   GRAIN
-   ========================================================= */
-
-#grain{
-  position:fixed;
-
-  inset:-50%;
-
-  z-index:7;
-
-  pointer-events:none;
-
-  opacity:.038;
-
-  background-image:url(
-  "data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.88' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"
-  );
-
-  animation:
-    grainMove
-    .25s
-    steps(2)
-    infinite;
-}
-
-
-/* =========================================================
-   GHOSTS
-   ========================================================= */
-
-#ghostLayer{
-  position:fixed;
-
-  inset:0;
-
-  z-index:6;
-
-  pointer-events:none;
-
-  overflow:hidden;
-}
-
-.ghost{
-  position:absolute;
-
-  max-width:90vw;
-
-  font-size:
-    clamp(
-      24px,
-      8vw,
-      116px
-    );
-
-  line-height:.92;
-
-  letter-spacing:-.05em;
-
-  color:
-    rgba(255,255,255,.033);
-
-  filter:blur(10px);
-
-  white-space:nowrap;
-
-  animation:
-    ghostMove
-    linear
-    forwards;
-}
-
-.answerGhost{
-  color:
-    rgba(255,255,255,.05);
-
-  filter:blur(12px);
-}
-
-
-/* =========================================================
-   UI
-   ========================================================= */
-
-#ui{
-  position:fixed;
-
-  inset:0;
-
-  z-index:20;
-
-  height:
-    calc(
-      var(--vh)
-      *
-      100
-    );
-
-  display:flex;
-
-  flex-direction:column;
-
-  justify-content:space-between;
-
-  padding:
-
-    max(
-      24px,
-      env(safe-area-inset-top)
-    )
-
-    max(
-      24px,
-      env(safe-area-inset-right)
-    )
-
-    max(
-      24px,
-      env(safe-area-inset-bottom)
-    )
-
-    max(
-      24px,
-      env(safe-area-inset-left)
-    );
-
-  transition:
-    opacity 1.5s ease,
-    filter 1.5s ease;
-}
-
-#ui.hide{
-  opacity:0;
-  filter:blur(12px);
-  pointer-events:none;
-}
-
-.top,
-.bottom{
-  display:flex;
-
-  justify-content:space-between;
-
-  align-items:center;
-
-  font-size:10px;
-
-  letter-spacing:.21em;
-
-  text-transform:uppercase;
-
-  color:var(--muted);
-
-  text-shadow:
-    0 1px 2px rgba(0,0,0,.8);
-}
-
-#screen{
-  width:min(920px,100%);
-
-  margin:auto;
-
-  transition:
-    opacity 1.25s ease,
-    transform 1.45s ease,
-    filter 1.25s ease;
-}
-
-#screen.fade{
-  opacity:0;
-
-  transform:
-    translateY(11px)
-    scale(1.012);
-
-  filter:blur(13px);
-}
-
-
-/* =========================================================
-   TYPOGRAPHY
-   ========================================================= */
-
-.eyebrow{
-  margin-bottom:24px;
-
-  font-size:10px;
-
-  letter-spacing:.24em;
-
-  text-transform:uppercase;
-
-  color:var(--muted);
-
-  text-shadow:
-    0 1px 2px rgba(0,0,0,.75);
-}
-
-h1,
-h2,
-.introText,
-.sub,
-.introMeta,
-.received{
-  text-shadow:
-    0 1px 2px rgba(0,0,0,.78),
-    0 0 10px rgba(0,0,0,.20);
-}
-
-h1{
-  font-weight:400;
-
-  font-size:
-    clamp(
-      54px,
-      13vw,
-      116px
-    );
-
-  line-height:.84;
-
-  letter-spacing:-.055em;
-}
-
-h2{
-  max-width:900px;
-
-  font-weight:400;
-
-  font-size:
-    clamp(
-      30px,
-      7vw,
-      64px
-    );
-
-  line-height:1.02;
-
-  letter-spacing:-.035em;
-}
-
-.introText{
-  max-width:720px;
-
-  margin-top:28px;
-
-  font-size:
-    clamp(
-      18px,
-      2.8vw,
-      29px
-    );
-
-  line-height:1.34;
-
-  letter-spacing:-.015em;
-}
-
-.introMeta{
-  max-width:680px;
-
-  margin-top:28px;
-
-  font-size:12px;
-
-  line-height:1.65;
-
-  color:rgba(255,255,255,.47);
-}
-
-.sub{
-  max-width:620px;
-
-  margin-top:22px;
-
-  color:rgba(255,255,255,.50);
-
-  font-size:14px;
-
-  line-height:1.55;
-}
-
-
-/* =========================================================
-   LANGUAGE
-   ========================================================= */
-
-.langs{
-  display:grid;
-
-  grid-template-columns:
-    1fr
-    1fr;
-
-  gap:1px;
-
-  margin-top:52px;
-
-  background:var(--line);
-}
-
-button{
-  appearance:none;
-
-  border:0;
-
-  background:
-    rgba(0,0,0,.82);
-
-  color:#fff;
-
-  font:inherit;
-
-  cursor:pointer;
-
-  text-shadow:
-    0 1px 2px rgba(0,0,0,.75);
-}
-
-.langs button{
-  height:82px;
-
-  font-size:13px;
-
-  letter-spacing:.18em;
-}
-
-.langs button:hover,
-.next:hover{
-  background:#fff;
-  color:#000;
-  text-shadow:none;
-}
-
-
-/* =========================================================
-   DREAM WORDS
-   ========================================================= */
-
-.dreamword{
-  display:inline-block;
-
-  transition:
-    filter 5s ease,
-    opacity 5s ease,
-    transform 5s ease;
-}
-
-.dreamword.blur{
-  filter:blur(6px);
-  opacity:.70;
-}
-
-.dreamword.deepblur{
-  filter:blur(12px);
-  opacity:.32;
-}
-
-.dreamword.float{
-  transform:translateY(-.06em);
-}
-
-
-/* =========================================================
-   INPUT
-   ========================================================= */
-
-textarea,
-input{
-  width:100%;
-
-  border:0;
-
-  border-bottom:
-    1px solid
-    var(--line);
-
-  outline:0;
-
-  background:
-    rgba(0,0,0,.05);
-
-  color:#fff;
-
-  font:inherit;
-
-  caret-color:#fff;
-
-  border-radius:0;
-
-  text-shadow:
-    0 1px 2px rgba(0,0,0,.8);
-}
-
-textarea{
-  min-height:190px;
-
-  margin-top:30px;
-
-  padding:
-    16px
-    0
-    20px;
-
-  resize:none;
-
-  font-size:
-    clamp(
-      20px,
-      4.5vw,
-      34px
-    );
-
-  line-height:1.35;
-}
-
-input{
-  margin-top:34px;
-
-  padding:
-    18px
-    0
-    20px;
-
-  font-size:
-    clamp(
-      25px,
-      5vw,
-      44px
-    );
-
-  letter-spacing:-.02em;
-}
-
-textarea::placeholder,
-input::placeholder{
-  color:
-    rgba(255,255,255,.15);
-}
-
-
-/* =========================================================
-   BUTTONS
-   ========================================================= */
-
-.actions{
-  margin-top:34px;
-
-  display:flex;
-
-  align-items:center;
-
-  justify-content:space-between;
-
-  gap:18px;
-}
-
-.back,
-.next{
-  text-transform:uppercase;
-
-  letter-spacing:.18em;
-
-  font-size:10px;
-}
-
-.back{
-  color:var(--muted);
-
-  background:transparent;
-
-  padding:16px 0;
-}
-
-.next{
-  min-width:150px;
-
-  padding:
-    17px
-    20px;
-
-  border:
-    1px solid
-    rgba(255,255,255,.25);
-
-  transition:.45s;
-}
-
-.received{
-  margin-top:34px;
-
-  color:var(--muted);
-
-  font-size:11px;
-
-  letter-spacing:.21em;
-
-  text-transform:uppercase;
-}
-
-
-/* =========================================================
-   FALSE AWAKENING
-   ========================================================= */
-
-#falseWake{
-  position:fixed;
-
-  inset:0;
-
-  z-index:150;
-
-  display:flex;
-
-  align-items:center;
-
-  justify-content:center;
-
-  background:#000;
-
-  color:#fff;
-
-  opacity:0;
-
-  pointer-events:none;
-}
-
-#falseWake.active{
-  animation:
-    falseWakeSequence
-    7.4s
-    ease
-    forwards;
-}
-
-.falseWakeContent{
-  width:min(700px,88vw);
-
-  text-align:center;
-}
-
-.falseWakeMain{
-  font-size:
-    clamp(
-      36px,
-      9vw,
-      90px
-    );
-
-  line-height:.9;
-
-  letter-spacing:-.055em;
-
-  font-weight:400;
-
-  text-shadow:
-    0 1px 2px rgba(0,0,0,.8);
-}
-
-.falseWakeSub{
-  margin-top:28px;
-
-  font-size:10px;
-
-  letter-spacing:.22em;
-
-  text-transform:uppercase;
-
-  color:rgba(255,255,255,.45);
-}
-
-
-/* =========================================================
-   WHITE BLOOM
-   ========================================================= */
-
-#whiteBloom{
-  position:fixed;
-
-  inset:-30%;
-
-  z-index:200;
-
-  pointer-events:none;
-
-  opacity:0;
-
-  transform:scale(.20);
-
-  filter:blur(60px);
-
-  background:
-
-    radial-gradient(
-      circle at 50% 50%,
-      rgba(255,255,255,1) 0%,
-      rgba(255,255,255,.96) 15%,
-      rgba(255,255,255,.62) 34%,
-      rgba(255,255,255,.13) 55%,
-      rgba(255,255,255,0) 74%
-    );
-}
-
-#whiteBloom.active{
-  animation:
-    bloom
-    5.5s
-    cubic-bezier(.22,.62,.22,1)
-    forwards;
-}
-
-#whiteout{
-  position:fixed;
-
-  inset:0;
-
-  z-index:201;
-
-  background:#fff;
-
-  pointer-events:none;
-
-  opacity:0;
-}
-
-#whiteout.active{
-  animation:
-    whiteout
-    5.6s
-    cubic-bezier(.22,.62,.22,1)
-    forwards;
-}
-
-
-/* =========================================================
-   FINAL
-   ========================================================= */
-
-#finalInvite{
-  position:fixed;
-
-  inset:0;
-
-  z-index:220;
-
-  background:#000;
-
-  opacity:0;
-
-  color:#fff;
-
-  pointer-events:none;
-
-  display:flex;
-
-  align-items:center;
-
-  justify-content:center;
-
-  padding:
-
-    max(
-      30px,
-      env(safe-area-inset-top)
-    )
-
-    max(
-      28px,
-      env(safe-area-inset-right)
-    )
-
-    max(
-      30px,
-      env(safe-area-inset-bottom)
-    )
-
-    max(
-      28px,
-      env(safe-area-inset-left)
-    );
-}
-
-#finalInvite.active{
-  animation:
-    finalIn
-    2.8s
-    ease
-    forwards;
-}
-
-.finalGrid{
-  width:min(1100px,100%);
-
-  display:grid;
-
-  grid-template-columns:
-    minmax(180px,280px)
-    1fr;
-
-  gap:
-    clamp(
-      50px,
-      8vw,
-      120px
-    );
-
-  align-items:end;
-}
-
-.logoBlock{
-  align-self:start;
-}
-
-.logoBlock img{
-  display:block;
-
-  width:min(100%,260px);
-
-  height:auto;
-}
-
-.finalCopy{
-  max-width:760px;
-}
-
-.finalLabel{
-  margin-bottom:32px;
-
-  font-size:10px;
-
-  letter-spacing:.24em;
-
-  text-transform:uppercase;
-
-  color:rgba(255,255,255,.42);
-}
-
-#finalTitle{
-  font-size:
-    clamp(
-      32px,
-      5.8vw,
-      70px
-    );
-
-  line-height:1.02;
-
-  letter-spacing:-.04em;
-
-  font-weight:400;
-}
-
-.finalRule{
-  width:100%;
-
-  height:1px;
-
-  background:
-    rgba(255,255,255,.21);
-
-  margin:
-    42px
-    0
-    24px;
-}
-
-.finalDetails{
-  display:flex;
-
-  justify-content:space-between;
-
-  gap:30px;
-
-  font-size:11px;
-
-  letter-spacing:.18em;
-
-  text-transform:uppercase;
-
-  color:rgba(255,255,255,.63);
-}
-
-
-/* =========================================================
-   ANIMATION
-   ========================================================= */
-
-@keyframes veilMove{
-
-  from{
-    transform:
-      translate(-1.5%,0)
-      scale(1);
-  }
-
-  to{
-    transform:
-      translate(2.2%,-1.5%)
-      scale(1.06);
-
-    filter:blur(10px);
-  }
-
-}
-
-@keyframes grainMove{
-
-  0%{transform:translate(0,0)}
-  25%{transform:translate(3%,-3%)}
-  50%{transform:translate(-4%,2%)}
-  75%{transform:translate(2%,4%)}
-  100%{transform:translate(-2%,-4%)}
-
-}
-
-@keyframes ghostMove{
-
-  0%{
-    opacity:0;
-
-    transform:
-      translate(-2vw,2vh)
-      scale(.97);
-
-    filter:blur(14px);
-  }
-
-  20%{
-    opacity:1;
-  }
-
-  72%{
-    opacity:.66;
-  }
-
-  100%{
-    opacity:0;
-
-    transform:
-      translate(4vw,-3vh)
-      scale(1.05);
-
-    filter:blur(26px);
-  }
-
-}
-
-@keyframes falseWakeSequence{
-
-  0%{
-    opacity:0;
-    filter:blur(20px);
-  }
-
-  20%{
-    opacity:1;
-    filter:blur(0);
-  }
-
-  72%{
-    opacity:1;
-    filter:blur(0);
-  }
-
-  100%{
-    opacity:0;
-    filter:blur(18px);
-  }
-
-}
-
-@keyframes bloom{
-
-  0%{
-    opacity:0;
-    transform:scale(.20);
-  }
-
-  42%{
-    opacity:.14;
-  }
-
-  74%{
-    opacity:.62;
-    transform:scale(1);
-  }
-
-  100%{
-    opacity:1;
-    transform:scale(1.9);
-  }
-
-}
-
-@keyframes whiteout{
-
-  0%{opacity:0}
-  56%{opacity:.04}
-  80%{opacity:.34}
-  100%{opacity:1}
-
-}
-
-@keyframes finalIn{
-
-  0%{
-    opacity:0;
-    filter:blur(12px);
-    transform:scale(1.012);
-  }
-
-  100%{
-    opacity:1;
-    filter:blur(0);
-    transform:scale(1);
-  }
-
-}
-
-
-/* =========================================================
-   MOBILE
-   ========================================================= */
-
-@media(max-width:700px){
-
-  #ui{
-    padding:
-
-      max(
-        18px,
-        env(safe-area-inset-top)
-      )
-
-      max(
-        18px,
-        env(safe-area-inset-right)
-      )
-
-      max(
-        18px,
-        env(safe-area-inset-bottom)
-      )
-
-      max(
-        18px,
-        env(safe-area-inset-left)
-      );
-  }
-
-  h1{
-    font-size:
-      clamp(
-        54px,
-        19vw,
-        84px
-      );
-  }
-
-  h2{
-    font-size:
-      clamp(
-        28px,
-        8.8vw,
-        44px
-      );
-  }
-
-  .introText{
-    font-size:
-      clamp(
-        19px,
-        6vw,
-        29px
-      );
-  }
-
-  textarea{
-    min-height:
-      clamp(
-        145px,
-        25dvh,
-        225px
-      );
-
-    font-size:
-      clamp(
-        19px,
-        6vw,
-        27px
-      );
-  }
-
-  .langs{
-    margin-top:36px;
-  }
-
-  .langs button{
-    height:70px;
-  }
-
-  .actions{
-    margin-top:24px;
-  }
-
-  .next{
-    min-width:128px;
-  }
-
-  .finalGrid{
-    display:flex;
-
-    flex-direction:column;
-
-    align-items:flex-start;
-
-    justify-content:center;
-
-    gap:45px;
-  }
-
-  .logoBlock img{
-    width:min(52vw,190px);
-  }
-
-  #finalTitle{
-    font-size:
-      clamp(
-        31px,
-        9vw,
-        46px
-      );
-  }
-
-  .finalRule{
-    margin:
-      32px
-      0
-      20px;
-  }
-
-  .finalDetails{
-    flex-direction:column;
-    gap:8px;
-  }
-
-}
-
-</style>
-
+  <meta charset="UTF-8" />
+  <meta
+    name="viewport"
+    content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover"
+  />
+  <meta name="theme-color" content="#000000" />
+  <title>TRAUM SIM — PATCHLAB 2026</title>
+
+  <style>
+    :root{
+      --vh:1vh;
+      --fg:#f5f5f2;
+      --muted:rgba(255,255,255,.48);
+      --line:rgba(255,255,255,.16);
+      --shadow:0 1px 2px rgba(0,0,0,.82), 0 0 18px rgba(0,0,0,.22);
+    }
+
+    *{
+      box-sizing:border-box;
+      margin:0;
+      padding:0;
+    }
+
+    html,body{
+      width:100%;
+      height:100%;
+      overflow:hidden;
+      background:#000;
+      color:var(--fg);
+      font-family:Helvetica, Arial, sans-serif;
+      -webkit-font-smoothing:antialiased;
+      -webkit-text-size-adjust:none;
+    }
+
+    body{
+      min-height:calc(var(--vh) * 100);
+    }
+
+    /* =========================================================
+       BACKGROUND WORLD
+       ========================================================= */
+
+    #dreamCanvas{
+      position:fixed;
+      inset:0;
+      width:100%;
+      height:100%;
+      z-index:0;
+      opacity:.82;
+      filter:blur(10px) contrast(112%) saturate(0%);
+      transform:scale(1.03);
+      transition:
+        opacity 2.5s ease,
+        filter 3.5s ease,
+        transform 7s ease;
+    }
+
+    #canvasDimmer{
+      position:fixed;
+      inset:0;
+      z-index:1;
+      pointer-events:none;
+      background:
+        radial-gradient(circle at 50% 50%, rgba(0,0,0,.10), rgba(0,0,0,.34) 58%, rgba(0,0,0,.54) 100%),
+        linear-gradient(180deg, rgba(0,0,0,.24), rgba(0,0,0,.40));
+      opacity:1;
+      transition:opacity 1.8s ease, background 2.4s ease;
+    }
+
+    #questionTint{
+      position:fixed;
+      inset:0;
+      z-index:2;
+      pointer-events:none;
+      opacity:0;
+      background:
+        radial-gradient(circle at 50% 50%, rgba(98,98,98,.10) 0%, rgba(46,46,46,.20) 32%, rgba(18,18,18,.46) 65%, rgba(0,0,0,.76) 100%),
+        linear-gradient(135deg, rgba(80,80,80,.14), rgba(0,0,0,0) 30%, rgba(52,52,52,.12) 55%, rgba(0,0,0,.24) 100%);
+      transition:opacity 1.8s ease;
+    }
+
+    #questionTint.active{
+      opacity:1;
+    }
+
+    #veil{
+      position:fixed;
+      inset:-14%;
+      z-index:3;
+      pointer-events:none;
+      mix-blend-mode:screen;
+      opacity:.70;
+      background:
+        radial-gradient(circle at 50% 40%, rgba(255,255,255,.038), transparent 26%),
+        radial-gradient(circle at 28% 68%, rgba(255,255,255,.02), transparent 24%),
+        radial-gradient(circle at 80% 55%, rgba(255,255,255,.015), transparent 26%);
+      animation:veilMove 34s ease-in-out infinite alternate;
+    }
+
+    #grain{
+      position:fixed;
+      inset:-50%;
+      z-index:4;
+      pointer-events:none;
+      opacity:.03;
+      background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      animation:grainMove .26s steps(2) infinite;
+    }
+
+    /* =========================================================
+       GHOST LAYER
+       ========================================================= */
+
+    #ghostLayer{
+      position:fixed;
+      inset:0;
+      z-index:5;
+      pointer-events:none;
+      overflow:hidden;
+    }
+
+    .ghost{
+      position:absolute;
+      max-width:90vw;
+      white-space:nowrap;
+      color:rgba(255,255,255,.038);
+      filter:blur(11px);
+      letter-spacing:-.05em;
+      line-height:.9;
+      font-size:clamp(26px, 8vw, 114px);
+      animation:ghostMove linear forwards;
+      text-shadow:none;
+    }
+
+    .ghost.answerGhost{
+      color:rgba(255,255,255,.056);
+      filter:blur(13px);
+    }
+
+    /* =========================================================
+       UI
+       ========================================================= */
+
+    #ui{
+      position:fixed;
+      inset:0;
+      z-index:20;
+      height:calc(var(--vh) * 100);
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      padding:
+        max(24px, env(safe-area-inset-top))
+        max(24px, env(safe-area-inset-right))
+        max(24px, env(safe-area-inset-bottom))
+        max(24px, env(safe-area-inset-left));
+      transition:opacity 1.3s ease, filter 1.4s ease;
+    }
+
+    #ui.hide{
+      opacity:0;
+      filter:blur(12px);
+      pointer-events:none;
+    }
+
+    .top,
+    .bottom{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:20px;
+      font-size:10px;
+      letter-spacing:.22em;
+      text-transform:uppercase;
+      color:var(--muted);
+      text-shadow:var(--shadow);
+    }
+
+    #screenWrap{
+      width:min(980px,100%);
+      margin:auto;
+      position:relative;
+    }
+
+    #screenWrap::before{
+      content:"";
+      position:absolute;
+      inset:-24px -28px -24px -28px;
+      z-index:0;
+      pointer-events:none;
+      background:
+        radial-gradient(circle at 50% 45%, rgba(0,0,0,.24), rgba(0,0,0,.38) 58%, rgba(0,0,0,.16) 100%);
+      opacity:.42;
+      filter:blur(18px);
+      transition:opacity 1.2s ease;
+    }
+
+    #screen{
+      position:relative;
+      z-index:1;
+      width:100%;
+      transition:
+        opacity 1.2s ease,
+        transform 1.4s ease,
+        filter 1.2s ease;
+    }
+
+    #screen.fade{
+      opacity:0;
+      transform:translateY(10px) scale(1.01);
+      filter:blur(12px);
+    }
+
+    .eyebrow{
+      margin-bottom:24px;
+      font-size:10px;
+      letter-spacing:.24em;
+      text-transform:uppercase;
+      color:var(--muted);
+      text-shadow:var(--shadow);
+    }
+
+    h1{
+      font-weight:400;
+      font-size:clamp(54px, 13vw, 116px);
+      line-height:.84;
+      letter-spacing:-.055em;
+      text-shadow:var(--shadow);
+    }
+
+    h2{
+      max-width:920px;
+      font-weight:400;
+      font-size:clamp(30px, 7vw, 64px);
+      line-height:1.02;
+      letter-spacing:-.038em;
+      text-shadow:var(--shadow);
+    }
+
+    .introText{
+      max-width:730px;
+      margin-top:28px;
+      font-size:clamp(18px, 2.8vw, 29px);
+      line-height:1.34;
+      letter-spacing:-.015em;
+      text-shadow:var(--shadow);
+    }
+
+    .introMeta{
+      max-width:680px;
+      margin-top:26px;
+      color:rgba(255,255,255,.52);
+      font-size:12px;
+      line-height:1.65;
+      text-shadow:var(--shadow);
+    }
+
+    .sub{
+      max-width:650px;
+      margin-top:22px;
+      color:rgba(255,255,255,.52);
+      font-size:14px;
+      line-height:1.55;
+      text-shadow:var(--shadow);
+    }
+
+    .received{
+      margin-top:34px;
+      color:rgba(255,255,255,.55);
+      font-size:11px;
+      letter-spacing:.2em;
+      text-transform:uppercase;
+      text-shadow:var(--shadow);
+    }
+
+    /* language */
+
+    .langs{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:1px;
+      margin-top:52px;
+      background:var(--line);
+    }
+
+    button{
+      appearance:none;
+      border:0;
+      background:rgba(0,0,0,.82);
+      color:#fff;
+      font:inherit;
+      cursor:pointer;
+      text-shadow:var(--shadow);
+    }
+
+    .langs button{
+      height:82px;
+      font-size:13px;
+      letter-spacing:.18em;
+    }
+
+    button:hover{
+      background:#fff;
+      color:#000;
+      text-shadow:none;
+    }
+
+    /* dreamy typography */
+
+    .dreamword{
+      display:inline-block;
+      transition:
+        opacity 5s ease,
+        filter 5s ease,
+        transform 5s ease;
+    }
+
+    .dreamword.blur{
+      opacity:.70;
+      filter:blur(7px);
+    }
+
+    .dreamword.deepblur{
+      opacity:.34;
+      filter:blur(13px);
+    }
+
+    .dreamword.float{
+      transform:translateY(-.06em);
+    }
+
+    /* inputs */
+
+    textarea,
+    input{
+      width:100%;
+      border:0;
+      border-bottom:1px solid rgba(255,255,255,.18);
+      outline:0;
+      background:rgba(0,0,0,.08);
+      color:#fff;
+      font:inherit;
+      caret-color:#fff;
+      border-radius:0;
+      text-shadow:var(--shadow);
+      box-shadow:inset 0 -1px 0 rgba(255,255,255,.05);
+    }
+
+    textarea{
+      min-height:190px;
+      margin-top:30px;
+      padding:16px 0 20px;
+      resize:none;
+      font-size:clamp(20px, 4.4vw, 34px);
+      line-height:1.35;
+    }
+
+    input{
+      margin-top:34px;
+      padding:18px 0 20px;
+      font-size:clamp(24px, 5vw, 44px);
+      letter-spacing:-.02em;
+    }
+
+    textarea::placeholder,
+    input::placeholder{
+      color:rgba(255,255,255,.16);
+    }
+
+    .actions{
+      margin-top:34px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:18px;
+    }
+
+    .back,
+    .next{
+      text-transform:uppercase;
+      letter-spacing:.18em;
+      font-size:10px;
+    }
+
+    .back{
+      background:transparent;
+      color:var(--muted);
+      padding:16px 0;
+    }
+
+    .next{
+      min-width:150px;
+      padding:17px 20px;
+      border:1px solid rgba(255,255,255,.25);
+      transition:.4s;
+    }
+
+    /* false awakening */
+
+    #falseWake{
+      position:fixed;
+      inset:0;
+      z-index:140;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:#000;
+      color:#fff;
+      opacity:0;
+      pointer-events:none;
+    }
+
+    #falseWake.active{
+      animation:falseWakeSequence 8.2s ease forwards;
+    }
+
+    .falseWakeContent{
+      width:min(760px,88vw);
+      text-align:center;
+    }
+
+    .falseWakeMain{
+      font-size:clamp(38px, 9vw, 92px);
+      line-height:.9;
+      letter-spacing:-.055em;
+      font-weight:400;
+      text-shadow:var(--shadow);
+    }
+
+    .falseWakeSub{
+      margin-top:28px;
+      font-size:10px;
+      letter-spacing:.22em;
+      text-transform:uppercase;
+      color:rgba(255,255,255,.45);
+      text-shadow:var(--shadow);
+    }
+
+    /* white bloom */
+
+    #whiteBloom{
+      position:fixed;
+      inset:-30%;
+      z-index:200;
+      pointer-events:none;
+      opacity:0;
+      transform:scale(.22);
+      filter:blur(60px);
+      background:
+        radial-gradient(circle at 50% 50%,
+          rgba(255,255,255,1) 0%,
+          rgba(255,255,255,.96) 16%,
+          rgba(255,255,255,.63) 35%,
+          rgba(255,255,255,.14) 55%,
+          rgba(255,255,255,0) 74%);
+    }
+
+    #whiteBloom.active{
+      animation:bloom 5.8s cubic-bezier(.22,.62,.22,1) forwards;
+    }
+
+    #whiteout{
+      position:fixed;
+      inset:0;
+      z-index:201;
+      background:#fff;
+      pointer-events:none;
+      opacity:0;
+    }
+
+    #whiteout.active{
+      animation:whiteout 5.9s cubic-bezier(.22,.62,.22,1) forwards;
+    }
+
+    /* final */
+
+    #finalInvite{
+      position:fixed;
+      inset:0;
+      z-index:220;
+      background:#000;
+      color:#fff;
+      opacity:0;
+      pointer-events:none;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:
+        max(30px, env(safe-area-inset-top))
+        max(28px, env(safe-area-inset-right))
+        max(30px, env(safe-area-inset-bottom))
+        max(28px, env(safe-area-inset-left));
+    }
+
+    #finalInvite.active{
+      animation:finalIn 2.8s ease forwards;
+    }
+
+    .finalGrid{
+      width:min(1100px,100%);
+      display:grid;
+      grid-template-columns:minmax(180px,280px) 1fr;
+      gap:clamp(50px, 8vw, 120px);
+      align-items:end;
+    }
+
+    .logoBlock img{
+      display:block;
+      width:min(100%,260px);
+      height:auto;
+    }
+
+    .finalCopy{
+      max-width:760px;
+    }
+
+    .finalLabel{
+      margin-bottom:32px;
+      font-size:10px;
+      letter-spacing:.24em;
+      text-transform:uppercase;
+      color:rgba(255,255,255,.42);
+      text-shadow:var(--shadow);
+    }
+
+    #finalTitle{
+      font-size:clamp(32px, 5.8vw, 70px);
+      line-height:1.02;
+      letter-spacing:-.04em;
+      font-weight:400;
+      text-shadow:var(--shadow);
+    }
+
+    .finalRule{
+      width:100%;
+      height:1px;
+      background:rgba(255,255,255,.21);
+      margin:42px 0 24px;
+    }
+
+    .finalDetails{
+      display:flex;
+      justify-content:space-between;
+      gap:30px;
+      font-size:11px;
+      letter-spacing:.18em;
+      text-transform:uppercase;
+      color:rgba(255,255,255,.63);
+      text-shadow:var(--shadow);
+    }
+
+    /* keyframes */
+
+    @keyframes veilMove{
+      from{
+        transform:translate(-1.6%,0) scale(1);
+      }
+      to{
+        transform:translate(2.4%,-1.7%) scale(1.05);
+        filter:blur(12px);
+      }
+    }
+
+    @keyframes grainMove{
+      0%{transform:translate(0,0)}
+      25%{transform:translate(3%,-3%)}
+      50%{transform:translate(-4%,2%)}
+      75%{transform:translate(2%,4%)}
+      100%{transform:translate(-2%,-4%)}
+    }
+
+    @keyframes ghostMove{
+      0%{
+        opacity:0;
+        transform:translate(-2vw,2vh) scale(.97);
+        filter:blur(14px);
+      }
+      18%{opacity:1}
+      72%{opacity:.68}
+      100%{
+        opacity:0;
+        transform:translate(4vw,-3vh) scale(1.05);
+        filter:blur(27px);
+      }
+    }
+
+    @keyframes falseWakeSequence{
+      0%{opacity:0; filter:blur(20px)}
+      18%{opacity:1; filter:blur(0)}
+      76%{opacity:1; filter:blur(0)}
+      100%{opacity:0; filter:blur(18px)}
+    }
+
+    @keyframes bloom{
+      0%{opacity:0; transform:scale(.20)}
+      42%{opacity:.14}
+      74%{opacity:.62; transform:scale(1)}
+      100%{opacity:1; transform:scale(1.9)}
+    }
+
+    @keyframes whiteout{
+      0%{opacity:0}
+      58%{opacity:.05}
+      82%{opacity:.34}
+      100%{opacity:1}
+    }
+
+    @keyframes finalIn{
+      0%{
+        opacity:0;
+        filter:blur(12px);
+        transform:scale(1.012);
+      }
+      100%{
+        opacity:1;
+        filter:blur(0);
+        transform:scale(1);
+      }
+    }
+
+    /* mobile */
+
+    @media(max-width:700px){
+      #ui{
+        padding:
+          max(18px, env(safe-area-inset-top))
+          max(18px, env(safe-area-inset-right))
+          max(18px, env(safe-area-inset-bottom))
+          max(18px, env(safe-area-inset-left));
+      }
+
+      h1{
+        font-size:clamp(54px, 19vw, 84px);
+      }
+
+      h2{
+        font-size:clamp(28px, 8.8vw, 44px);
+      }
+
+      .introText{
+        font-size:clamp(19px, 6vw, 29px);
+      }
+
+      textarea{
+        min-height:clamp(145px, 25dvh, 225px);
+        font-size:clamp(19px, 6vw, 27px);
+      }
+
+      .langs{
+        margin-top:36px;
+      }
+
+      .langs button{
+        height:70px;
+      }
+
+      .actions{
+        margin-top:24px;
+      }
+
+      .next{
+        min-width:128px;
+      }
+
+      .finalGrid{
+        display:flex;
+        flex-direction:column;
+        align-items:flex-start;
+        justify-content:center;
+        gap:45px;
+      }
+
+      .logoBlock img{
+        width:min(52vw,190px);
+      }
+
+      #finalTitle{
+        font-size:clamp(31px, 9vw, 46px);
+      }
+
+      .finalRule{
+        margin:32px 0 20px;
+      }
+
+      .finalDetails{
+        flex-direction:column;
+        gap:8px;
+      }
+    }
+  </style>
 </head>
-
 <body>
 
-<canvas id="rorschach"></canvas>
+  <canvas id="dreamCanvas"></canvas>
+  <div id="canvasDimmer"></div>
+  <div id="questionTint"></div>
+  <div id="veil"></div>
+  <div id="grain"></div>
+  <div id="ghostLayer"></div>
 
-<div id="veil"></div>
-
-<div id="grain"></div>
-
-<div id="ghostLayer"></div>
-
-
-<div id="falseWake">
-
-  <div class="falseWakeContent">
-
-    <div
-      class="falseWakeMain"
-      id="falseWakeMain"
-    ></div>
-
-    <div
-      class="falseWakeSub"
-      id="falseWakeSub"
-    ></div>
-
+  <div id="falseWake">
+    <div class="falseWakeContent">
+      <div class="falseWakeMain" id="falseWakeMain"></div>
+      <div class="falseWakeSub" id="falseWakeSub"></div>
+    </div>
   </div>
 
-</div>
+  <div id="whiteBloom"></div>
+  <div id="whiteout"></div>
 
+  <div id="finalInvite">
+    <div class="finalGrid">
+      <div class="logoBlock">
+        <img src="patchlab_2026_header_1.png" alt="Patchlab Festival 2026">
+      </div>
+      <div class="finalCopy">
+        <div class="finalLabel">TRAUM SIM / PATCHLAB 2026</div>
+        <div id="finalTitle"></div>
+        <div class="finalRule"></div>
+        <div class="finalDetails">
+          <div>15.10.2026</div>
+          <div>HEVRE</div>
+          <div>KRAKÓW</div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-<div id="whiteBloom"></div>
-
-<div id="whiteout"></div>
-
-
-<div id="finalInvite">
-
-  <div class="finalGrid">
-
-    <div class="logoBlock">
-
-      <img
-        src="patchlab_2026_header_1.png"
-        alt="Patchlab Festival 2026"
-      >
-
+  <div id="ui">
+    <div class="top">
+      <span>TRAUM SIM</span>
+      <span id="progress"></span>
     </div>
 
-    <div class="finalCopy">
-
-      <div class="finalLabel">
-        TRAUM SIM / PATCHLAB 2026
-      </div>
-
-      <div id="finalTitle"></div>
-
-      <div class="finalRule"></div>
-
-      <div class="finalDetails">
-
-        <div>15.10.2026</div>
-
-        <div>HEVRE</div>
-
-        <div>KRAKÓW</div>
-
-      </div>
-
+    <div id="screenWrap">
+      <main id="screen"></main>
     </div>
 
+    <div class="bottom">
+      <span>PATCHLAB 2026</span>
+      <span id="depthLabel">TRAUM 0</span>
+    </div>
   </div>
 
-</div>
-
-
-<div id="ui">
-
-  <div class="top">
-
-    <span>
-      TRAUM SIM
-    </span>
-
-    <span id="progress"></span>
-
-  </div>
-
-  <main id="screen"></main>
-
-  <div class="bottom">
-
-    <span>
-      PATCHLAB 2026
-    </span>
-
-    <span id="depthLabel">
-      TRAUM 0
-    </span>
-
-  </div>
-
-</div>
-
-
-<script>
-
-/* =========================================================
-   BACKEND
-   ========================================================= */
-
-const API_URL =
-"https://script.google.com/macros/s/AKfycbzU_GDYcK7nC4aGNVxmQd4fojRBacX1UR076Ox-lCI8KrGV1YVN7G_mwGT-6UFzOhJY3g/exec";
-
-
-/* =========================================================
-   VIEWPORT
-   ========================================================= */
-
-function setVH(){
-
-  const h =
-    window.visualViewport
-    ?
-    window.visualViewport.height
-    :
-    window.innerHeight;
-
-  document
-    .documentElement
-    .style
-    .setProperty(
-      "--vh",
-      (h*.01)+"px"
-    );
-
-}
-
-setVH();
-
-window.addEventListener(
-  "resize",
-  setVH
-);
-
-if(window.visualViewport){
-
-  window
-    .visualViewport
-    .addEventListener(
-      "resize",
-      setVH
-    );
-
-}
-
-
-/* =========================================================
-   INTRO
-   ========================================================= */
-
-const INTRO = {
-
-PL:[
-
-{
-label:"TRAUM / 01",
-title:"Sen nie jest filmem.",
-text:
-"Podczas snu mózg nadal pracuje. Fragmenty pamięci, emocji, miejsc, osób i doświadczeń zostają ponownie połączone w rzeczywistość, która w chwili śnienia może wydawać się całkowicie prawdziwa.",
-meta:
-"Nie istnieje jeden naukowy słownik symboli snu. Znaczenie obrazu zależy od osoby, pamięci, emocji i kontekstu."
-},
-
-{
-label:"TRAUM / 02",
-title:"Pamięć nie odtwarza. Pamięć rekonstruuje.",
-text:
-"Sen może połączyć dom z dzieciństwa z pokojem widzianym wczoraj, nadać znajomej osobie inną twarz albo pozwolić ci wiedzieć coś, czego nikt wcześniej nie powiedział.",
-meta:
-"To, co podczas czuwania byłoby sprzecznością, we śnie często zostaje zaakceptowane bez pytania."
-},
-
-{
-label:"TRAUM / 03",
-title:"Niektóre sny zmieniły rzeczywistość.",
-text:
-"Mary Shelley opisywała obraz pomiędzy snem a jawą, który stał się zalążkiem Frankensteina. Otto Loewi przypisywał snowi projekt eksperymentu dotyczącego chemicznego przekazywania sygnałów nerwowych. Paul McCartney opowiadał, że melodia Yesterday pojawiła się podczas snu.",
-meta:
-"Sen potrafi działać jak generator: bierze istniejące fragmenty i układa je w konfigurację, której wcześniej nie było."
-},
-
-{
-label:"TRAUM / 04",
-title:"Nie próbuj interpretować.",
-text:
-"Przypomnij sobie tylko to, co zostało. Obraz. Uczucie. Osobę. Miejsce. Przejście. Coś niemożliwego.",
-meta:
-"Nie szukamy poprawnego znaczenia. Szukamy śladu."
-}
-
-],
-
-ENG:[
-
-{
-label:"TRAUM / 01",
-title:"A dream is not a film.",
-text:
-"During sleep the brain continues working. Fragments of memory, emotion, places, people and experience are recombined into a reality that can feel completely real while it is happening.",
-meta:
-"There is no single scientific dictionary of dream symbols. Meaning depends on the dreamer, memory, emotion and context."
-},
-
-{
-label:"TRAUM / 02",
-title:"Memory does not replay. Memory reconstructs.",
-text:
-"A dream can merge a childhood home with a room seen yesterday, give a familiar person another face, or allow you to know something nobody ever told you.",
-meta:
-"What would be a contradiction while awake often requires no explanation inside a dream."
-},
-
-{
-label:"TRAUM / 03",
-title:"Some dreams changed reality.",
-text:
-"Mary Shelley described a waking vision that became the seed of Frankenstein. Otto Loewi credited a dream with the design of an experiment concerning chemical neurotransmission. Paul McCartney has said that the melody of Yesterday came to him in a dream.",
-meta:
-"Dreaming can behave like a generator: recombining existing fragments into a configuration that did not exist before."
-},
-
-{
-label:"TRAUM / 04",
-title:"Do not interpret.",
-text:
-"Simply remember what remained. An image. A feeling. A person. A place. A passage. Something impossible.",
-meta:
-"We are not looking for the correct meaning. We are looking for a trace."
-}
-
-]
-
-};
-
-
-/* =========================================================
-   QUESTIONS
-   ========================================================= */
-
-const QUESTIONS_PL = {
-
-0:[
-
-{
-group:"PAMIĘĆ",
-question:
-"Który szczegół snu pamiętasz bez żadnego wysiłku?"
-},
-
-{
-group:"MIEJSCE",
-question:
-"Czy miejsce było prawdziwym miejscem, czy kilkoma miejscami połączonymi w jedno?"
-},
-
-{
-group:"EMOCJA",
-question:
-"Jakie uczucie pamiętasz wyraźniej niż same wydarzenia?"
-},
-
-{
-group:"OBECNOŚĆ",
-question:
-"Kto był tam z tobą?"
-},
-
-{
-group:"CIAŁO",
-question:
-"Czy patrzyłeś własnymi oczami, czy obserwowałeś siebie z zewnątrz?"
-},
-
-{
-group:"ŚLAD DNIA",
-question:
-"Co z ostatnich dni mogło przedostać się do tego snu?"
-}
-
-],
-
-1:[
-
-{
-group:"CIEŃ",
-question:
-"Co cię ścigało — i co mogłoby się wydarzyć, gdybyś przestał uciekać?"
-},
-
-{
-group:"CIEŃ",
-question:
-"Która postać była całkowicie obca, a jednak zachowywała się trochę jak ty?"
-},
-
-{
-group:"MASKA",
-question:
-"Czy byłeś sobą, czy osobą, którą inni mieli za ciebie?"
-},
-
-{
-group:"ARCHETYP",
-question:
-"Czy pojawiły się drzwi, schody, woda, dom, las albo droga?"
-},
-
-{
-group:"CENTRUM",
-question:
-"Czy istniało miejsce albo rzecz, do której wszystko zdawało się prowadzić?"
-},
-
-{
-group:"PRÓG",
-question:
-"Co znajdowało się po drugiej stronie?"
-}
-
-],
-
-2:[
-
-{
-group:"TOŻSAMOŚĆ",
-question:
-"Kto śnił — ty, czy ktoś, kto tylko wyglądał jak ty?"
-},
-
-{
-group:"ŚWIADOMOŚĆ",
-question:
-"Czy teraz pamiętasz ten sen tak samo jak na początku?"
-},
-
-{
-group:"CZAS",
-question:
-"Czy ta historia wydarzyła się wcześniej, czy właśnie teraz?"
-},
-
-{
-group:"ODBICIE",
-question:
-"Jeżeli jedna z twoich wcześniejszych odpowiedzi nie była prawdziwa — która?"
-},
-
-{
-group:"SYSTEM",
-question:
-"Czy jesteś pewien, że opisujesz swój sen?"
-},
-
-{
-group:"SYSTEM",
-question:
-"Kto teraz pamięta ten sen — ty czy TRAUM SIM?"
-}
-
-]
-
-};
-
-
-const QUESTIONS_EN = {
-
-0:[
-
-{
-group:"MEMORY",
-question:
-"Which detail of the dream do you remember without trying?"
-},
-
-{
-group:"PLACE",
-question:
-"Was the place real, or several places merged into one?"
-},
-
-{
-group:"EMOTION",
-question:
-"Which feeling do you remember more clearly than the events?"
-},
-
-{
-group:"PRESENCE",
-question:
-"Who was there with you?"
-},
-
-{
-group:"BODY",
-question:
-"Were you looking through your own eyes or watching yourself from outside?"
-},
-
-{
-group:"DAY TRACE",
-question:
-"What from the last few days might have entered the dream?"
-}
-
-],
-
-1:[
-
-{
-group:"SHADOW",
-question:
-"What was chasing you — and what might happen if you stopped running?"
-},
-
-{
-group:"SHADOW",
-question:
-"Which stranger behaved a little too much like you?"
-},
-
-{
-group:"MASK",
-question:
-"Were you yourself, or the person others believed you were?"
-},
-
-{
-group:"ARCHETYPE",
-question:
-"Did you encounter a door, staircase, water, house, forest or road?"
-},
-
-{
-group:"CENTER",
-question:
-"Was there somewhere or something everything seemed to lead toward?"
-},
-
-{
-group:"THRESHOLD",
-question:
-"What was on the other side?"
-}
-
-],
-
-2:[
-
-{
-group:"IDENTITY",
-question:
-"Who was dreaming — you, or someone who only looked like you?"
-},
-
-{
-group:"AWARENESS",
-question:
-"Do you remember the dream the same way you did at the beginning?"
-},
-
-{
-group:"TIME",
-question:
-"Did this story happen before, or is it happening now?"
-},
-
-{
-group:"REFLECTION",
-question:
-"If one of your earlier answers was not true, which one?"
-},
-
-{
-group:"SYSTEM",
-question:
-"Are you sure you are describing your dream?"
-},
-
-{
-group:"SYSTEM",
-question:
-"Who remembers the dream now — you or TRAUM SIM?"
-}
-
-]
-
-};
-
-
-/* =========================================================
-   UI COPY
-   ========================================================= */
-
-const UI = {
-
-PL:{
-
-back:"WSTECZ",
-next:"DALEJ",
-begin:"WEJDŹ W SEN",
-submit:"DALEJ",
-placeholder:"napisz to, co zostało...",
-saving:"ZAPISUJĘ SEN",
-done:"SEN ZAPISANY",
-sub:"Twoje wspomnienie weszło do symulacji.",
-nicknameTitle:"Jak mamy zapamiętać śniącego?",
-nicknameMeta:"Możesz użyć pseudonimu. Nie musisz podawać prawdziwego imienia.",
-nicknamePlaceholder:"NICKNAME",
-nicknameSubmit:"ZAPISZ SEN",
-error:"Sen nie został zapisany.",
-retry:"SPRÓBUJ PONOWNIE",
-invite:"Zapraszamy na nasz performance ze swoim snem."
-
-},
-
-ENG:{
-
-back:"BACK",
-next:"NEXT",
-begin:"ENTER DREAM",
-submit:"CONTINUE",
-placeholder:"write what remained...",
-saving:"SAVING DREAM",
-done:"DREAM RECEIVED",
-sub:"Your memory has entered the simulation.",
-nicknameTitle:"How should the dreamer be remembered?",
-nicknameMeta:"You may use a nickname. You do not need to provide your real name.",
-nicknamePlaceholder:"NICKNAME",
-nicknameSubmit:"SAVE DREAM",
-error:"The dream could not be saved.",
-retry:"TRY AGAIN",
-invite:"Join our performance with your dream."
-
-}
-
-};
-
-
-/* =========================================================
-   STATE
-   ========================================================= */
-
-const state = {
-
-lang:null,
-
-mode:"start",
-
-introStep:0,
-
-level:0,
-
-levelQuestion:0,
-
-questionsByLevel:{
-  0:[],
-  1:[],
-  2:[]
-},
-
-answers:[],
-
-nickname:""
-
-};
-
-
-const screen =
-document.getElementById("screen");
-
-const progress =
-document.getElementById("progress");
-
-const depthLabel =
-document.getElementById("depthLabel");
-
-const ghostLayer =
-document.getElementById("ghostLayer");
-
-
-/* =========================================================
-   SHUFFLE
-   ========================================================= */
-
-function shuffle(array){
-
-  const a =
-  [...array];
-
-  for(
-    let i=a.length-1;
-    i>0;
-    i--
-  ){
-
-    const j =
-    Math.floor(
-      Math.random() *
-      (i+1)
-    );
-
-    [
-      a[i],
-      a[j]
-    ]
-    =
-    [
-      a[j],
-      a[i]
-    ];
-
-  }
-
-  return a;
-
-}
-
-
-/* =========================================================
-   PREPARE QUESTIONS
-   ========================================================= */
-
-function prepareQuestions(){
-
-  const bank =
-  state.lang==="PL"
-  ?
-  QUESTIONS_PL
-  :
-  QUESTIONS_EN;
-
-  state.questionsByLevel[0] =
-  shuffle(
-    bank[0]
-  )
-  .slice(
-    0,
-    3
-  );
-
-  state.questionsByLevel[1] =
-  shuffle(
-    bank[1]
-  )
-  .slice(
-    0,
-    3
-  );
-
-  state.questionsByLevel[2] =
-  shuffle(
-    bank[2]
-  )
-  .slice(
-    0,
-    3
-  );
-
-}
-
-
-/* =========================================================
-   TRANSITION
-   ========================================================= */
-
-function transition(fn){
-
-  screen
-  .classList
-  .add(
-    "fade"
-  );
-
-  setTimeout(
-    ()=>{
-
-      fn();
-
-      requestAnimationFrame(
-        ()=>{
-
-          screen
-          .classList
-          .remove(
-            "fade"
-          );
-
+  <script>
+    /* =========================================================
+       BACKEND
+       ========================================================= */
+    const API_URL =
+      "https://script.google.com/macros/s/AKfycbzU_GDYcK7nC4aGNVxmQd4fojRBacX1UR076Ox-lCI8KrGV1YVN7G_mwGT-6UFzOhJY3g/exec";
+
+    /* =========================================================
+       VIEWPORT
+       ========================================================= */
+    function setVH(){
+      const h = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+      document.documentElement.style.setProperty("--vh", (h * 0.01) + "px");
+    }
+
+    setVH();
+    window.addEventListener("resize", setVH);
+    if(window.visualViewport){
+      window.visualViewport.addEventListener("resize", setVH);
+    }
+
+    /* =========================================================
+       COPY
+       ========================================================= */
+    const INTRO = {
+      PL:[
+        {
+          label:"TRAUM / 01",
+          title:"Sen nie jest filmem.",
+          text:"Podczas snu mózg nadal pracuje. Fragmenty pamięci, emocji, miejsc, osób i doświadczeń zostają ponownie połączone w rzeczywistość, która w chwili śnienia może wydawać się całkowicie prawdziwa.",
+          meta:"Nie istnieje jeden naukowy słownik symboli snu. Znaczenie obrazu zależy od osoby, pamięci, emocji i kontekstu."
+        },
+        {
+          label:"TRAUM / 02",
+          title:"Pamięć nie odtwarza. Pamięć rekonstruuje.",
+          text:"Sen może połączyć dom z dzieciństwa z pokojem widzianym wczoraj, nadać znajomej osobie inną twarz albo pozwolić ci wiedzieć coś, czego nikt wcześniej nie powiedział.",
+          meta:"To, co podczas czuwania byłoby sprzecznością, we śnie często zostaje zaakceptowane bez pytania."
+        },
+        {
+          label:"TRAUM / 03",
+          title:"Niektóre sny zmieniły rzeczywistość.",
+          text:"Mary Shelley opisywała obraz pomiędzy snem a jawą, który stał się zalążkiem Frankensteina. Otto Loewi przypisywał snowi projekt eksperymentu dotyczącego chemicznego przekazywania sygnałów nerwowych. Paul McCartney opowiadał, że melodia Yesterday pojawiła się podczas snu.",
+          meta:"Sen potrafi działać jak generator: bierze istniejące fragmenty i układa je w konfigurację, której wcześniej nie było."
+        },
+        {
+          label:"TRAUM / 04",
+          title:"Nie próbuj interpretować.",
+          text:"Przypomnij sobie tylko to, co zostało. Obraz. Uczucie. Osobę. Miejsce. Przejście. Coś niemożliwego.",
+          meta:"Nie szukamy poprawnego znaczenia. Szukamy śladu."
         }
-      );
-
-    },
-    720
-  );
-
-}
-
-
-/* =========================================================
-   START
-   ========================================================= */
-
-function renderStart(){
-
-  state.mode =
-  "start";
-
-  progress.textContent =
-  "";
-
-  depthLabel.textContent =
-  "TRAUM 0";
-
-  screen.innerHTML = `
-
-  <div class="eyebrow">
-  TRAUM / DREAM ARCHIVE
-  </div>
-
-  <h1>
-  TRAUM
-  <br>
-  SIM
-  </h1>
-
-  <p class="sub">
-  choose language / wybierz język
-  </p>
-
-  <div class="langs">
-
-  <button onclick="chooseLanguage('PL')">
-  PL
-  </button>
-
-  <button onclick="chooseLanguage('ENG')">
-  ENG
-  </button>
-
-  </div>
-
-  `;
-
-}
-
-
-/* =========================================================
-   LANGUAGE
-   ========================================================= */
-
-function chooseLanguage(lang){
-
-  state.lang =
-  lang;
-
-  state.mode =
-  "intro";
-
-  state.introStep =
-  0;
-
-  state.level =
-  0;
-
-  state.levelQuestion =
-  0;
-
-  state.answers =
-  [];
-
-  state.nickname =
-  "";
-
-  prepareQuestions();
-
-  transition(
-    renderIntro
-  );
-
-}
-
-
-/* =========================================================
-   INTRO
-   ========================================================= */
-
-function renderIntro(){
-
-  const slides =
-  INTRO[
-    state.lang
-  ];
-
-  const slide =
-  slides[
-    state.introStep
-  ];
-
-  const copy =
-  UI[
-    state.lang
-  ];
-
-  const last =
-  state.introStep===
-  slides.length-1;
-
-  progress.textContent =
-  `${String(
-    state.introStep+1
-  ).padStart(
-    2,
-    "0"
-  )}
-  /
-  ${String(
-    slides.length
-  ).padStart(
-    2,
-    "0"
-  )}`;
-
-  depthLabel.textContent =
-  "TRAUM 0";
-
-  screen.innerHTML = `
-
-  <div class="eyebrow">
-  ${slide.label}
-  </div>
-
-  <h2>
-  ${slide.title}
-  </h2>
-
-  <div class="introText">
-  ${slide.text}
-  </div>
-
-  <div class="introMeta">
-  ${slide.meta}
-  </div>
-
-  <div class="actions">
-
-  <button
-  class="back"
-  onclick="introBack()"
-  >
-  ${copy.back}
-  </button>
-
-  <button
-  class="next"
-  onclick="introNext()"
-  >
-  ${
-    last
-    ?
-    copy.begin
-    :
-    copy.next
-  }
-  </button>
-
-  </div>
-
-  `;
-
-  ghost(
-    slide.title
-  );
-
-}
-
-
-/* =========================================================
-   INTRO NAV
-   ========================================================= */
-
-function introBack(){
-
-  if(
-    state.introStep===0
-  ){
-
-    transition(
-      renderStart
-    );
-
-    return;
-
-  }
-
-  state.introStep--;
-
-  transition(
-    renderIntro
-  );
-
-}
-
-
-function introNext(){
-
-  const slides =
-  INTRO[
-    state.lang
-  ];
-
-  if(
-    state.introStep
-    <
-    slides.length-1
-  ){
-
-    state.introStep++;
-
-    transition(
-      renderIntro
-    );
-
-  }
-  else{
-
-    state.mode =
-    "questions";
-
-    state.level =
-    0;
-
-    state.levelQuestion =
-    0;
-
-    transition(
-      renderQuestion
-    );
-
-  }
-
-}
-
-
-/* =========================================================
-   CURRENT QUESTION
-   ========================================================= */
-
-function currentQuestion(){
-
-  return state
-  .questionsByLevel[
-    state.level
-  ][
-    state.levelQuestion
-  ];
-
-}
-
-
-/* =========================================================
-   GLOBAL INDEX
-   ========================================================= */
-
-function globalQuestionIndex(){
-
-  return (
-    state.level
-    *
-    3
-  )
-  +
-  state.levelQuestion;
-
-}
-
-
-/* =========================================================
-   TYPOGRAPHY
-   ========================================================= */
-
-function surrealize(text){
-
-  if(!text){
-    return "";
-  }
-
-  return text
-  .split(" ")
-  .map(
-    word=>{
-
-      let cls =
-      "dreamword";
-
-      const random =
-      Math.random();
-
-      if(
-        random<.06
-      ){
-
-        cls +=
-        " deepblur";
-
+      ],
+      ENG:[
+        {
+          label:"TRAUM / 01",
+          title:"A dream is not a film.",
+          text:"During sleep the brain continues working. Fragments of memory, emotion, places, people and experience are recombined into a reality that can feel completely real while it is happening.",
+          meta:"There is no single scientific dictionary of dream symbols. Meaning depends on the dreamer, memory, emotion and context."
+        },
+        {
+          label:"TRAUM / 02",
+          title:"Memory does not replay. Memory reconstructs.",
+          text:"A dream can merge a childhood home with a room seen yesterday, give a familiar person another face, or allow you to know something nobody ever told you.",
+          meta:"What would be a contradiction while awake often requires no explanation inside a dream."
+        },
+        {
+          label:"TRAUM / 03",
+          title:"Some dreams changed reality.",
+          text:"Mary Shelley described a waking vision that became the seed of Frankenstein. Otto Loewi credited a dream with the design of an experiment concerning chemical neurotransmission. Paul McCartney has said that the melody of Yesterday came to him in a dream.",
+          meta:"Dreaming can behave like a generator: recombining existing fragments into a configuration that did not exist before."
+        },
+        {
+          label:"TRAUM / 04",
+          title:"Do not interpret.",
+          text:"Simply remember what remained. An image. A feeling. A person. A place. A passage. Something impossible.",
+          meta:"We are not looking for the correct meaning. We are looking for a trace."
+        }
+      ]
+    };
+
+    const QUESTIONS_PL = {
+      0:[
+        { group:"PAMIĘĆ", question:"Który szczegół snu pamiętasz bez żadnego wysiłku?" },
+        { group:"MIEJSCE", question:"Czy miejsce było prawdziwym miejscem, czy kilkoma miejscami połączonymi w jedno?" },
+        { group:"EMOCJA", question:"Jakie uczucie pamiętasz wyraźniej niż same wydarzenia?" },
+        { group:"OBECNOŚĆ", question:"Kto był tam z tobą?" },
+        { group:"CIAŁO", question:"Czy patrzyłeś własnymi oczami, czy obserwowałeś siebie z zewnątrz?" },
+        { group:"ŚLAD DNIA", question:"Co z ostatnich dni mogło przedostać się do tego snu?" }
+      ],
+      1:[
+        { group:"CIEŃ", question:"Co cię ścigało — i co mogłoby się wydarzyć, gdybyś przestał uciekać?" },
+        { group:"CIEŃ", question:"Która postać była całkowicie obca, a jednak zachowywała się trochę jak ty?" },
+        { group:"MASKA", question:"Czy byłeś sobą, czy osobą, którą inni mieli za ciebie?" },
+        { group:"ARCHETYP", question:"Czy pojawiły się drzwi, schody, woda, dom, las albo droga?" },
+        { group:"CENTRUM", question:"Czy istniało miejsce albo rzecz, do której wszystko zdawało się prowadzić?" },
+        { group:"PRÓG", question:"Co znajdowało się po drugiej stronie?" }
+      ],
+      2:[
+        { group:"TOŻSAMOŚĆ", question:"Kto śnił — ty, czy ktoś, kto tylko wyglądał jak ty?" },
+        { group:"ŚWIADOMOŚĆ", question:"Czy teraz pamiętasz ten sen tak samo jak na początku?" },
+        { group:"CZAS", question:"Czy ta historia wydarzyła się wcześniej, czy właśnie teraz?" },
+        { group:"ODBICIE", question:"Jeżeli jedna z twoich wcześniejszych odpowiedzi nie była prawdziwa — która?" },
+        { group:"SYSTEM", question:"Czy jesteś pewien, że opisujesz swój sen?" },
+        { group:"SYSTEM", question:"Kto teraz pamięta ten sen — ty czy TRAUM SIM?" }
+      ]
+    };
+
+    const QUESTIONS_EN = {
+      0:[
+        { group:"MEMORY", question:"Which detail of the dream do you remember without trying?" },
+        { group:"PLACE", question:"Was the place real, or several places merged into one?" },
+        { group:"EMOTION", question:"Which feeling do you remember more clearly than the events?" },
+        { group:"PRESENCE", question:"Who was there with you?" },
+        { group:"BODY", question:"Were you looking through your own eyes or watching yourself from outside?" },
+        { group:"DAY TRACE", question:"What from the last few days might have entered the dream?" }
+      ],
+      1:[
+        { group:"SHADOW", question:"What was chasing you — and what might happen if you stopped running?" },
+        { group:"SHADOW", question:"Which stranger behaved a little too much like you?" },
+        { group:"MASK", question:"Were you yourself, or the person others believed you were?" },
+        { group:"ARCHETYPE", question:"Did you encounter a door, staircase, water, house, forest or road?" },
+        { group:"CENTER", question:"Was there somewhere or something everything seemed to lead toward?" },
+        { group:"THRESHOLD", question:"What was on the other side?" }
+      ],
+      2:[
+        { group:"IDENTITY", question:"Who was dreaming — you, or someone who only looked like you?" },
+        { group:"AWARENESS", question:"Do you remember the dream the same way you did at the beginning?" },
+        { group:"TIME", question:"Did this story happen before, or is it happening now?" },
+        { group:"REFLECTION", question:"If one of your earlier answers was not true, which one?" },
+        { group:"SYSTEM", question:"Are you sure you are describing your dream?" },
+        { group:"SYSTEM", question:"Who remembers the dream now — you or TRAUM SIM?" }
+      ]
+    };
+
+    const UI = {
+      PL:{
+        back:"WSTECZ",
+        next:"DALEJ",
+        begin:"WEJDŹ W SEN",
+        submit:"DALEJ",
+        placeholder:"napisz to, co zostało...",
+        saving:"ZAPISUJĘ SEN",
+        done:"SEN ZAPISANY",
+        sub:"Twoje wspomnienie weszło do symulacji.",
+        nicknameTitle:"Jak mamy zapamiętać śniącego?",
+        nicknameMeta:"Możesz użyć pseudonimu. Nie musisz podawać prawdziwego imienia.",
+        nicknamePlaceholder:"NICKNAME",
+        nicknameSubmit:"ZAPISZ SEN",
+        error:"Sen nie został zapisany.",
+        retry:"SPRÓBUJ PONOWNIE",
+        invite:"Zapraszamy na nasz performance ze swoim snem."
+      },
+      ENG:{
+        back:"BACK",
+        next:"NEXT",
+        begin:"ENTER DREAM",
+        submit:"CONTINUE",
+        placeholder:"write what remained...",
+        saving:"SAVING DREAM",
+        done:"DREAM RECEIVED",
+        sub:"Your memory has entered the simulation.",
+        nicknameTitle:"How should the dreamer be remembered?",
+        nicknameMeta:"You may use a nickname. You do not need to provide your real name.",
+        nicknamePlaceholder:"NICKNAME",
+        nicknameSubmit:"SAVE DREAM",
+        error:"The dream could not be saved.",
+        retry:"TRY AGAIN",
+        invite:"Join our performance with your dream."
       }
-      else if(
-        random<.18
-      ){
+    };
 
-        cls +=
-        " blur";
+    /* =========================================================
+       STATE
+       ========================================================= */
+    const state = {
+      lang:null,
+      mode:"start",
+      introStep:0,
+      level:0,
+      levelQuestion:0,
+      questionsByLevel:{0:[],1:[],2:[]},
+      answers:[],
+      nickname:""
+    };
 
+    const screen = document.getElementById("screen");
+    const progress = document.getElementById("progress");
+    const depthLabel = document.getElementById("depthLabel");
+    const ghostLayer = document.getElementById("ghostLayer");
+    const questionTint = document.getElementById("questionTint");
+
+    /* =========================================================
+       HELPERS
+       ========================================================= */
+    function shuffle(arr){
+      const a = [...arr];
+      for(let i = a.length - 1; i > 0; i--){
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
       }
-
-      if(
-        Math.random()<.05
-      ){
-
-        cls +=
-        " float";
-
-      }
-
-      return `<span class="${cls}">${escapeHtml(word)}</span>`;
-
-    }
-  )
-  .join(" ");
-
-}
-
-
-/* =========================================================
-   ECHO QUESTION
-   ========================================================= */
-
-function questionWithEcho(
-  item
-){
-
-  if(
-    state.level===0
-  ){
-
-    return item.question;
-
-  }
-
-  const previous =
-  state.answers
-  .filter(
-    a=>
-    a &&
-    a.answer &&
-    a.answer.trim().length>2
-  );
-
-  if(
-    !previous.length
-  ){
-
-    return item.question;
-
-  }
-
-  if(
-    Math.random()>.62
-  ){
-
-    const source =
-    previous[
-      Math.floor(
-        Math.random()
-        *
-        previous.length
-      )
-    ];
-
-    const fragment =
-    source.answer
-    .split(/\s+/)
-    .slice(
-      0,
-      7
-    )
-    .join(" ");
-
-    if(
-      state.lang==="PL"
-    ){
-
-      const variations = [
-
-      `Powiedziałeś wcześniej: „${fragment}”. Czy nadal tak to pamiętasz?`,
-
-      `„${fragment}” — czy to należało do pierwszego snu?`,
-
-      `Jeżeli „${fragment}” było prawdą, co wydarzyło się chwilę wcześniej?`
-
-      ];
-
-      return variations[
-        Math.floor(
-          Math.random()
-          *
-          variations.length
-        )
-      ];
-
-    }
-    else{
-
-      const variations = [
-
-      `Earlier you said: “${fragment}”. Do you still remember it that way?`,
-
-      `“${fragment}” — did that belong to the first dream?`,
-
-      `If “${fragment}” was true, what happened immediately before it?`
-
-      ];
-
-      return variations[
-        Math.floor(
-          Math.random()
-          *
-          variations.length
-        )
-      ];
-
+      return a;
     }
 
-  }
+    function escapeHtml(value){
+      return String(value || "").replace(/[&<>"']/g, char => ({
+        "&":"&amp;",
+        "<":"&lt;",
+        ">":"&gt;",
+        "\"":"&quot;",
+        "'":"&#039;"
+      }[char]));
+    }
 
-  return item.question;
+    function prepareQuestions(){
+      const bank = state.lang === "PL" ? QUESTIONS_PL : QUESTIONS_EN;
+      state.questionsByLevel[0] = shuffle(bank[0]).slice(0, 3);
+      state.questionsByLevel[1] = shuffle(bank[1]).slice(0, 3);
+      state.questionsByLevel[2] = shuffle(bank[2]).slice(0, 3);
+    }
 
-}
+    function transition(fn){
+      screen.classList.add("fade");
+      setTimeout(() => {
+        fn();
+        requestAnimationFrame(() => {
+          screen.classList.remove("fade");
+        });
+      }, 720);
+    }
 
+    function setVisualMode(mode){
+      state.mode = mode;
 
-/* =========================================================
-   QUESTION
-   ========================================================= */
+      if(mode === "questions" || mode === "nickname" || mode === "saving" || mode === "saved" || mode === "error"){
+        questionTint.classList.add("active");
+      }else{
+        questionTint.classList.remove("active");
+      }
 
-let blurTimer =
-null;
+      if(mode === "questions"){
+        dreamFX.targetDim = .95;
+        dreamFX.targetContrast = 120;
+        dreamFX.targetBlur = 12;
+        dreamFX.targetOpacity = .84;
+      }else if(mode === "intro"){
+        dreamFX.targetDim = .86;
+        dreamFX.targetContrast = 114;
+        dreamFX.targetBlur = 11;
+        dreamFX.targetOpacity = .81;
+      }else if(mode === "start"){
+        dreamFX.targetDim = .82;
+        dreamFX.targetContrast = 110;
+        dreamFX.targetBlur = 10;
+        dreamFX.targetOpacity = .80;
+      }else if(mode === "nickname" || mode === "saving" || mode === "saved"){
+        dreamFX.targetDim = .96;
+        dreamFX.targetContrast = 124;
+        dreamFX.targetBlur = 13;
+        dreamFX.targetOpacity = .85;
+      }else{
+        dreamFX.targetDim = .88;
+        dreamFX.targetContrast = 114;
+        dreamFX.targetBlur = 11;
+        dreamFX.targetOpacity = .82;
+      }
+    }
 
+    function surrealize(text){
+      if(!text) return "";
+      return text.split(" ").map(word => {
+        let cls = "dreamword";
+        const r = Math.random();
+        if(r < .06) cls += " deepblur";
+        else if(r < .18) cls += " blur";
+        if(Math.random() < .05) cls += " float";
+        return `<span class="${cls}">${escapeHtml(word)}</span>`;
+      }).join(" ");
+    }
 
-function renderQuestion(){
+    function currentQuestion(){
+      return state.questionsByLevel[state.level][state.levelQuestion];
+    }
 
-  state.mode =
-  "questions";
+    function globalQuestionIndex(){
+      return (state.level * 3) + state.levelQuestion;
+    }
 
-  const item =
-  currentQuestion();
+    function questionWithEcho(item){
+      if(state.level === 0) return item.question;
 
-  const copy =
-  UI[
-    state.lang
-  ];
+      const previous = state.answers.filter(a => a && a.answer && a.answer.trim().length > 2);
+      if(!previous.length) return item.question;
 
-  if(!item){
+      if(Math.random() > .62){
+        const source = previous[Math.floor(Math.random() * previous.length)];
+        const fragment = source.answer.split(/\s+/).slice(0, 7).join(" ");
 
-    console.error(
-      "QUESTION MISSING",
-      state
-    );
+        if(state.lang === "PL"){
+          const variants = [
+            `Powiedziałeś wcześniej: „${fragment}”. Czy nadal tak to pamiętasz?`,
+            `„${fragment}” — czy to należało do pierwszego snu?`,
+            `Jeżeli „${fragment}” było prawdą, co wydarzyło się chwilę wcześniej?`
+          ];
+          return variants[Math.floor(Math.random() * variants.length)];
+        }else{
+          const variants = [
+            `Earlier you said: “${fragment}”. Do you still remember it that way?`,
+            `“${fragment}” — did that belong to the first dream?`,
+            `If “${fragment}” was true, what happened immediately before it?`
+          ];
+          return variants[Math.floor(Math.random() * variants.length)];
+        }
+      }
 
-    return;
+      return item.question;
+    }
 
-  }
+    /* =========================================================
+       RENDER
+       ========================================================= */
+    function renderStart(){
+      setVisualMode("start");
+      progress.textContent = "";
+      depthLabel.textContent = "TRAUM 0";
 
-  const globalIndex =
-  globalQuestionIndex();
+      screen.innerHTML = `
+        <div class="eyebrow">TRAUM / DREAM ARCHIVE</div>
+        <h1>TRAUM<br>SIM</h1>
+        <p class="sub">choose language / wybierz język</p>
+        <div class="langs">
+          <button onclick="chooseLanguage('PL')">PL</button>
+          <button onclick="chooseLanguage('ENG')">ENG</button>
+        </div>
+      `;
+    }
 
-  const displayQuestion =
-  questionWithEcho(
-    item
-  );
+    function chooseLanguage(lang){
+      state.lang = lang;
+      state.introStep = 0;
+      state.level = 0;
+      state.levelQuestion = 0;
+      state.answers = [];
+      state.nickname = "";
+      prepareQuestions();
+      transition(renderIntro);
+    }
 
-  progress.textContent =
-  `${String(
-    globalIndex+1
-  ).padStart(
-    2,
-    "0"
-  )}
-  /
-  09`;
+    function renderIntro(){
+      setVisualMode("intro");
 
-  depthLabel.textContent =
-  `TRAUM ${state.level}`;
+      const slides = INTRO[state.lang];
+      const slide = slides[state.introStep];
+      const copy = UI[state.lang];
+      const last = state.introStep === slides.length - 1;
 
-  const saved =
-  state.answers[
-    globalIndex
-  ];
+      progress.textContent =
+        `${String(state.introStep + 1).padStart(2,"0")} / ${String(slides.length).padStart(2,"0")}`;
+      depthLabel.textContent = "TRAUM 0";
 
-  screen.innerHTML = `
+      screen.innerHTML = `
+        <div class="eyebrow">${slide.label}</div>
+        <h2>${slide.title}</h2>
+        <div class="introText">${slide.text}</div>
+        <div class="introMeta">${slide.meta}</div>
+        <div class="actions">
+          <button class="back" onclick="introBack()">${copy.back}</button>
+          <button class="next" onclick="introNext()">${last ? copy.begin : copy.next}</button>
+        </div>
+      `;
 
-  <div class="eyebrow">
-  ${escapeHtml(
-    item.group
-  )}
-  </div>
+      ghost(slide.title);
+    }
 
-  <h2>
-  ${surrealize(
-    displayQuestion
-  )}
-  </h2>
+    function introBack(){
+      if(state.introStep === 0){
+        transition(renderStart);
+        return;
+      }
+      state.introStep--;
+      transition(renderIntro);
+    }
 
-  <textarea
-  id="answer"
-  placeholder="${copy.placeholder}"
-  >${escapeHtml(
-    saved
-    ?
-    saved.answer
-    :
-    ""
-  )}</textarea>
+    function introNext(){
+      const slides = INTRO[state.lang];
+      if(state.introStep < slides.length - 1){
+        state.introStep++;
+        transition(renderIntro);
+      }else{
+        state.level = 0;
+        state.levelQuestion = 0;
+        transition(renderQuestion);
+      }
+    }
 
-  <div class="actions">
+    let blurTimer = null;
 
-  <button
-  class="back"
-  onclick="questionBack()"
-  >
-  ${copy.back}
-  </button>
+    function renderQuestion(){
+      setVisualMode("questions");
 
-  <button
-  class="next"
-  onclick="questionNext()"
-  >
-  ${
-    globalIndex===8
-    ?
-    copy.submit
-    :
-    copy.next
-  }
-  </button>
+      const item = currentQuestion();
+      const copy = UI[state.lang];
+      if(!item) return;
 
-  </div>
+      const gIndex = globalQuestionIndex();
+      const displayQuestion = questionWithEcho(item);
+      const saved = state.answers[gIndex];
 
-  `;
+      progress.textContent = `${String(gIndex + 1).padStart(2,"0")} / 09`;
+      depthLabel.textContent = `TRAUM ${state.level}`;
 
-  animateBlur();
+      screen.innerHTML = `
+        <div class="eyebrow">${escapeHtml(item.group)}</div>
+        <h2>${surrealize(displayQuestion)}</h2>
 
-  ghost(
-    item.group
-  );
+        <textarea
+          id="answer"
+          placeholder="${copy.placeholder}"
+        >${escapeHtml(saved ? saved.answer : "")}</textarea>
 
-  spawnPreviousAnswerGhost();
+        <div class="actions">
+          <button class="back" onclick="questionBack()">${copy.back}</button>
+          <button class="next" onclick="questionNext()">${gIndex === 8 ? copy.submit : copy.next}</button>
+        </div>
+      `;
 
-}
+      animateBlur();
+      ghost(item.group);
+      spawnPreviousAnswerGhost();
 
+      setTimeout(() => {
+        const el = document.getElementById("answer");
+        if(el) el.focus();
+      }, 400);
+    }
 
-/* =========================================================
-   BLUR
-   ========================================================= */
+    function animateBlur(){
+      if(blurTimer) clearInterval(blurTimer);
 
-function animateBlur(){
+      blurTimer = setInterval(() => {
+        const words = [...document.querySelectorAll(".dreamword")];
+        if(!words.length) return;
+        const word = words[Math.floor(Math.random() * words.length)];
+        if(Math.random() > .64){
+          word.classList.toggle("blur");
+        }else if(Math.random() > .82){
+          word.classList.toggle("deepblur");
+        }
+      }, 3800 + Math.random() * 2200);
+    }
 
-  if(
-    blurTimer
-  ){
+    function saveCurrentAnswer(){
+      const input = document.getElementById("answer");
+      if(!input) return;
 
-    clearInterval(
-      blurTimer
-    );
+      const gIndex = globalQuestionIndex();
+      const item = currentQuestion();
+      const existing = state.answers[gIndex];
 
-  }
+      state.answers[gIndex] = {
+        level: state.level,
+        category: item.group,
+        question: existing ? existing.question : item.question,
+        answer: input.value.trim()
+      };
+    }
 
-  blurTimer =
-  setInterval(
-    ()=>{
+    function questionBack(){
+      saveCurrentAnswer();
 
-      const words =
-      [
-        ...document
-        .querySelectorAll(
-          ".dreamword"
-        )
-      ];
-
-      if(
-        !words.length
-      ){
+      if(state.level === 0 && state.levelQuestion === 0){
+        state.introStep = INTRO[state.lang].length - 1;
+        transition(renderIntro);
         return;
       }
 
-      const word =
-      words[
-        Math.floor(
-          Math.random()
-          *
-          words.length
-        )
-      ];
-
-      if(
-        Math.random()>.62
-      ){
-
-        word
-        .classList
-        .toggle(
-          "blur"
-        );
-
+      if(state.levelQuestion > 0){
+        state.levelQuestion--;
+      }else{
+        state.level--;
+        state.levelQuestion = 2;
+        updateDepthVisuals();
       }
 
-    },
-    3500
-    +
-    Math.random()*1800
-  );
+      transition(renderQuestion);
+    }
 
-}
+    function questionNext(){
+      saveCurrentAnswer();
 
+      const gIndex = globalQuestionIndex();
 
-/* =========================================================
-   SAVE ANSWER
-   ========================================================= */
-
-function saveCurrentAnswer(){
-
-  const input =
-  document.getElementById(
-    "answer"
-  );
-
-  if(!input){
-    return;
-  }
-
-  const globalIndex =
-  globalQuestionIndex();
-
-  const item =
-  currentQuestion();
-
-  const existing =
-  state.answers[
-    globalIndex
-  ];
-
-  state.answers[
-    globalIndex
-  ]
-  =
-  {
-
-    level:
-    state.level,
-
-    category:
-    item.group,
-
-    question:
-    existing
-    ?
-    existing.question
-    :
-    item.question,
-
-    answer:
-    input.value.trim()
-
-  };
-
-}
-
-
-/* =========================================================
-   BACK
-   ========================================================= */
-
-function questionBack(){
-
-  saveCurrentAnswer();
-
-  if(
-    state.level===0
-    &&
-    state.levelQuestion===0
-  ){
-
-    state.introStep =
-    INTRO[
-      state.lang
-    ].length-1;
-
-    transition(
-      renderIntro
-    );
-
-    return;
-
-  }
-
-  if(
-    state.levelQuestion>0
-  ){
-
-    state.levelQuestion--;
-
-  }
-  else{
-
-    state.level--;
-
-    state.levelQuestion =
-    2;
-
-    updateDepthVisuals();
-
-  }
-
-  transition(
-    renderQuestion
-  );
-
-}
-
-
-/* =========================================================
-   NEXT
-   ========================================================= */
-
-function questionNext(){
-
-  saveCurrentAnswer();
-
-  const globalIndex =
-  globalQuestionIndex();
-
-  if(
-    globalIndex===8
-  ){
-
-    transition(
-      renderNickname
-    );
-
-    return;
-
-  }
-
-  if(
-    state.level===0
-    &&
-    state.levelQuestion===2
-  ){
-
-    runFalseAwakening(
-      1
-    );
-
-    return;
-
-  }
-
-  if(
-    state.level===1
-    &&
-    state.levelQuestion===2
-  ){
-
-    runFalseAwakening(
-      2
-    );
-
-    return;
-
-  }
-
-  state.levelQuestion++;
-
-  transition(
-    renderQuestion
-  );
-
-}
-
-
-/* =========================================================
-   FALSE AWAKENING
-   ========================================================= */
-
-function runFalseAwakening(
-  targetLevel
-){
-
-  const overlay =
-  document.getElementById(
-    "falseWake"
-  );
-
-  const main =
-  document.getElementById(
-    "falseWakeMain"
-  );
-
-  const sub =
-  document.getElementById(
-    "falseWakeSub"
-  );
-
-  const ui =
-  document.getElementById(
-    "ui"
-  );
-
-  ui.classList.add(
-    "hide"
-  );
-
-  if(
-    targetLevel===1
-  ){
-
-    main.textContent =
-    "TRAUM SIM";
-
-    sub.textContent =
-    state.lang==="PL"
-    ?
-    "SESJA UTRACONA"
-    :
-    "SESSION LOST";
-
-  }
-  else{
-
-    main.textContent =
-    state.lang==="PL"
-    ?
-    "OBUDZIŁEŚ SIĘ"
-    :
-    "YOU WOKE UP";
-
-    sub.textContent =
-    state.lang==="PL"
-    ?
-    "ale coś nadal pamięta"
-    :
-    "but something still remembers";
-
-  }
-
-  overlay.classList.add(
-    "active"
-  );
-
-  setTimeout(
-    ()=>{
-
-      if(
-        targetLevel===1
-      ){
-
-        sub.textContent =
-        state.lang==="PL"
-        ?
-        "SESJA ODNALEZIONA · JUŻ TU BYŁEŚ"
-        :
-        "SESSION FOUND · YOU HAVE BEEN HERE";
-
-      }
-      else{
-
-        sub.textContent =
-        state.lang==="PL"
-        ?
-        "TO NIE BYŁO PRZEBUDZENIE"
-        :
-        "THAT WAS NOT WAKING";
-
+      if(gIndex === 8){
+        transition(renderNickname);
+        return;
       }
 
-    },
-    3200
-  );
+      if(state.level === 0 && state.levelQuestion === 2){
+        runFalseAwakening(1);
+        return;
+      }
 
-  setTimeout(
-    ()=>{
+      if(state.level === 1 && state.levelQuestion === 2){
+        runFalseAwakening(2);
+        return;
+      }
 
-      overlay.classList.remove(
-        "active"
-      );
+      state.levelQuestion++;
+      transition(renderQuestion);
+    }
 
-      state.level =
-      targetLevel;
+    function renderNickname(){
+      setVisualMode("nickname");
 
-      state.levelQuestion =
-      0;
+      progress.textContent = "";
+      depthLabel.textContent = "WAKE ?";
 
-      updateDepthVisuals();
+      const copy = UI[state.lang];
 
-      renderQuestion();
+      screen.innerHTML = `
+        <div class="eyebrow">WHO DREAMED THIS?</div>
+        <h2>${copy.nicknameTitle}</h2>
+        <p class="sub">${copy.nicknameMeta}</p>
 
-      ui.classList.remove(
-        "hide"
-      );
+        <input
+          id="nickname"
+          type="text"
+          maxlength="40"
+          autocomplete="off"
+          spellcheck="false"
+          placeholder="${copy.nicknamePlaceholder}"
+          value="${escapeHtml(state.nickname)}"
+        >
 
-    },
-    7400
-  );
+        <div class="actions">
+          <button class="back" onclick="nicknameBack()">${copy.back}</button>
+          <button class="next" onclick="saveDream()">${copy.nicknameSubmit}</button>
+        </div>
+      `;
 
-}
+      ghost("WHO DREAMED THIS?");
 
+      setTimeout(() => {
+        const el = document.getElementById("nickname");
+        if(el) el.focus();
+      }, 400);
+    }
 
-/* =========================================================
-   DEPTH
-   ========================================================= */
+    function nicknameBack(){
+      const nick = document.getElementById("nickname");
+      if(nick) state.nickname = nick.value.trim();
 
-function updateDepthVisuals(){
+      state.level = 2;
+      state.levelQuestion = 2;
+      transition(renderQuestion);
+    }
 
-  const canvas =
-  document.getElementById(
-    "rorschach"
-  );
+    async function saveDream(){
+      const nicknameInput = document.getElementById("nickname");
+      state.nickname = nicknameInput ? nicknameInput.value.trim() : "";
+      if(!state.nickname) state.nickname = "ANONYMOUS";
 
-  if(
-    state.level===0
-  ){
+      const copy = UI[state.lang];
 
-    canvas.style.filter =
-    "blur(16px) contrast(145%)";
+      const payload = {
+        nickname: state.nickname,
+        language: state.lang,
+        answers: state.answers,
+        dream: state.answers.map(entry => entry ? entry.answer : "").join("\n\n")
+      };
 
-    canvas.style.opacity =
-    ".78";
+      transition(() => {
+        setVisualMode("saving");
+        progress.textContent = "";
+        depthLabel.textContent = "ARCHIVE";
 
-  }
-  else if(
-    state.level===1
-  ){
+        screen.innerHTML = `
+          <div class="eyebrow">TRAUM SIM</div>
+          <h2>${copy.saving}</h2>
+          <p class="sub">...</p>
+        `;
+      });
 
-    canvas.style.filter =
-    "blur(18px) contrast(155%)";
+      try{
+        const response = await fetch(API_URL, {
+          method:"POST",
+          headers:{ "Content-Type":"text/plain;charset=utf-8" },
+          body:JSON.stringify(payload)
+        });
 
-    canvas.style.opacity =
-    ".82";
+        if(!response.ok){
+          throw new Error("HTTP " + response.status);
+        }
 
-  }
-  else{
+        const data = await response.json();
 
-    canvas.style.filter =
-    "blur(20px) contrast(165%)";
+        if(!data.ok){
+          throw new Error(data.error || "Backend error");
+        }
 
-    canvas.style.opacity =
-    ".86";
+        renderSaved(data.dreamId);
+      }catch(error){
+        console.error("DREAM SAVE ERROR", error);
+        renderError();
+      }
+    }
 
-  }
+    function renderSaved(id){
+      transition(() => {
+        setVisualMode("saved");
+        const copy = UI[state.lang];
 
-}
+        screen.innerHTML = `
+          <div class="eyebrow">TRAUM SIM</div>
+          <h2>${copy.done}</h2>
+          <p class="sub">${copy.sub}</p>
+          <div class="received">
+            ${escapeHtml(id || "")}
+            &nbsp;&nbsp;/&nbsp;&nbsp;
+            ${escapeHtml(state.nickname)}
+          </div>
+        `;
+      });
 
+      setTimeout(startFinalSequence, 4600);
+    }
 
-/* =========================================================
-   PREVIOUS ANSWER GHOST
-   ========================================================= */
+    function renderError(){
+      transition(() => {
+        setVisualMode("error");
+        const copy = UI[state.lang];
 
-function spawnPreviousAnswerGhost(){
+        screen.innerHTML = `
+          <div class="eyebrow">TRAUM SIM</div>
+          <h2>${copy.error}</h2>
+          <p class="sub">
+            ${state.lang === "PL"
+              ? "Połączenie z archiwum zostało przerwane."
+              : "The connection to the archive was interrupted."}
+          </p>
+          <div class="actions">
+            <span></span>
+            <button class="next" onclick="saveDream()">${copy.retry}</button>
+          </div>
+        `;
+      });
+    }
 
-  if(
-    state.level===0
-  ){
+    /* =========================================================
+       FALSE AWAKENING
+       ========================================================= */
+    function runFalseAwakening(targetLevel){
+      const overlay = document.getElementById("falseWake");
+      const main = document.getElementById("falseWakeMain");
+      const sub = document.getElementById("falseWakeSub");
+      const ui = document.getElementById("ui");
 
-    return;
+      ui.classList.add("hide");
 
-  }
+      if(targetLevel === 1){
+        main.textContent = "TRAUM SIM";
+        sub.textContent = state.lang === "PL" ? "SESJA UTRACONA" : "SESSION LOST";
+      }else{
+        main.textContent = state.lang === "PL" ? "OBUDZIŁEŚ SIĘ" : "YOU WOKE UP";
+        sub.textContent = state.lang === "PL" ? "ale coś nadal pamięta" : "but something still remembers";
+      }
 
-  const previous =
-  state.answers
-  .filter(
-    entry=>
-    entry &&
-    entry.answer &&
-    entry.answer.length>2
-  );
+      overlay.classList.add("active");
 
-  if(
-    !previous.length
-  ){
+      setTimeout(() => {
+        if(targetLevel === 1){
+          sub.textContent = state.lang === "PL"
+            ? "SESJA ODNALEZIONA · JUŻ TU BYŁEŚ"
+            : "SESSION FOUND · YOU HAVE BEEN HERE";
+        }else{
+          sub.textContent = state.lang === "PL"
+            ? "TO NIE BYŁO PRZEBUDZENIE"
+            : "THAT WAS NOT WAKING";
+        }
+      }, 3600);
 
-    return;
+      setTimeout(() => {
+        overlay.classList.remove("active");
+        state.level = targetLevel;
+        state.levelQuestion = 0;
+        updateDepthVisuals();
+        renderQuestion();
+        ui.classList.remove("hide");
+      }, 8200);
+    }
 
-  }
+    function updateDepthVisuals(){
+      if(state.level === 0){
+        dreamFX.levelContrast = 112;
+        dreamFX.levelBlur = 10;
+      }else if(state.level === 1){
+        dreamFX.levelContrast = 118;
+        dreamFX.levelBlur = 11.5;
+      }else{
+        dreamFX.levelContrast = 124;
+        dreamFX.levelBlur = 13;
+      }
+    }
 
-  if(
-    Math.random()>.55
-  ){
+    /* =========================================================
+       FINAL
+       ========================================================= */
+    function startFinalSequence(){
+      const ui = document.getElementById("ui");
+      const bloom = document.getElementById("whiteBloom");
+      const whiteout = document.getElementById("whiteout");
+      const final = document.getElementById("finalInvite");
 
-    const entry =
-    previous[
-      Math.floor(
-        Math.random()
-        *
-        previous.length
-      )
+      ui.classList.add("hide");
+
+      setTimeout(() => {
+        bloom.classList.add("active");
+        whiteout.classList.add("active");
+      }, 1300);
+
+      setTimeout(() => {
+        document.getElementById("finalTitle").textContent = UI[state.lang].invite;
+        final.classList.add("active");
+      }, 7300);
+
+      setTimeout(() => {
+        bloom.style.display = "none";
+        whiteout.style.display = "none";
+      }, 7900);
+    }
+
+    /* =========================================================
+       GHOSTS
+       ========================================================= */
+    function ghost(text, answer = false){
+      if(!text) return;
+
+      const el = document.createElement("div");
+      el.className = answer ? "ghost answerGhost" : "ghost";
+      el.textContent = text;
+      el.style.left = ((Math.random() * 55) - 5) + "vw";
+      el.style.top = ((Math.random() * 75) + 8) + "vh";
+      el.style.animationDuration = (15 + Math.random() * 14) + "s";
+
+      ghostLayer.appendChild(el);
+
+      setTimeout(() => el.remove(), 30000);
+    }
+
+    function spawnPreviousAnswerGhost(){
+      if(state.level === 0) return;
+
+      const previous = state.answers.filter(entry => entry && entry.answer && entry.answer.length > 2);
+      if(!previous.length) return;
+
+      if(Math.random() > .56){
+        const entry = previous[Math.floor(Math.random() * previous.length)];
+        const fragment = entry.answer.split(/\s+/).slice(0, 8).join(" ");
+        ghost(fragment, true);
+      }
+    }
+
+    const ghostWords = [
+      "REMEMBER",
+      "WHO IS DREAMING",
+      "NOT HERE",
+      "AGAIN",
+      "THE OTHER SIDE",
+      "YOU HAVE BEEN HERE",
+      "NO BEGINNING",
+      "NOT YET",
+      "WAKE",
+      "ALMOST",
+      "TRAUM",
+      "SESSION FOUND",
+      "WHO REMEMBERS?"
     ];
 
-    const fragment =
-    entry.answer
-    .split(/\s+/)
-    .slice(
-      0,
-      8
-    )
-    .join(" ");
-
-    ghost(
-      fragment,
-      true
-    );
-
-  }
-
-}
-
-
-/* =========================================================
-   NICKNAME
-   ========================================================= */
-
-function renderNickname(){
-
-  state.mode =
-  "nickname";
-
-  progress.textContent =
-  "";
-
-  depthLabel.textContent =
-  "WAKE ?";
-
-  const copy =
-  UI[
-    state.lang
-  ];
-
-  screen.innerHTML = `
-
-  <div class="eyebrow">
-  WHO DREAMED THIS?
-  </div>
-
-  <h2>
-  ${copy.nicknameTitle}
-  </h2>
-
-  <p class="sub">
-  ${copy.nicknameMeta}
-  </p>
-
-  <input
-  id="nickname"
-  type="text"
-  maxlength="40"
-  autocomplete="off"
-  spellcheck="false"
-  placeholder="${copy.nicknamePlaceholder}"
-  value="${escapeHtml(
-    state.nickname
-  )}"
-  >
-
-  <div class="actions">
-
-  <button
-  class="back"
-  onclick="nicknameBack()"
-  >
-  ${copy.back}
-  </button>
-
-  <button
-  class="next"
-  onclick="saveDream()"
-  >
-  ${copy.nicknameSubmit}
-  </button>
-
-  </div>
-
-  `;
-
-  ghost(
-    "WHO DREAMED THIS?"
-  );
-
-}
-
-
-/* =========================================================
-   NICKNAME BACK
-   ========================================================= */
-
-function nicknameBack(){
-
-  const nick =
-  document.getElementById(
-    "nickname"
-  );
-
-  if(nick){
-
-    state.nickname =
-    nick.value.trim();
-
-  }
-
-  state.level =
-  2;
-
-  state.levelQuestion =
-  2;
-
-  transition(
-    renderQuestion
-  );
-
-}
-
-
-/* =========================================================
-   SAVE DREAM
-   ========================================================= */
-
-async function saveDream(){
-
-  const nicknameInput =
-  document.getElementById(
-    "nickname"
-  );
-
-  state.nickname =
-  nicknameInput
-  ?
-  nicknameInput.value.trim()
-  :
-  "";
-
-  if(
-    !state.nickname
-  ){
-
-    state.nickname =
-    "ANONYMOUS";
-
-  }
-
-  const copy =
-  UI[
-    state.lang
-  ];
-
-  const payload = {
-
-    nickname:
-    state.nickname,
-
-    language:
-    state.lang,
-
-    answers:
-    state.answers,
-
-    dream:
-    state.answers
-    .map(
-      entry=>
-      entry
-      ?
-      entry.answer
-      :
-      ""
-    )
-    .join(
-      "\n\n"
-    )
-
-  };
-
-  transition(
-    ()=>{
-
-      progress.textContent =
-      "";
-
-      depthLabel.textContent =
-      "ARCHIVE";
-
-      screen.innerHTML = `
-
-      <div class="eyebrow">
-      TRAUM SIM
-      </div>
-
-      <h2>
-      ${copy.saving}
-      </h2>
-
-      <p class="sub">
-      ...
-      </p>
-
-      `;
-
-    }
-  );
-
-  try{
-
-    const response =
-    await fetch(
-      API_URL,
-      {
-
-        method:
-        "POST",
-
-        headers:{
-          "Content-Type":
-          "text/plain;charset=utf-8"
-        },
-
-        body:
-        JSON.stringify(
-          payload
-        )
-
+    setInterval(() => {
+      if(Math.random() > .58){
+        ghost(ghostWords[Math.floor(Math.random() * ghostWords.length)]);
       }
-    );
+    }, 7600);
 
-    if(
-      !response.ok
-    ){
+    /* =========================================================
+       DREAM ENGINE — SLOW MORPHING RORSCHACH FIELD
+       ========================================================= */
+    const canvas = document.getElementById("dreamCanvas");
+    const ctx = canvas.getContext("2d");
 
-      throw new Error(
-        "HTTP "
-        +
-        response.status
-      );
+    let W = 0;
+    let H = 0;
+    let DPR = 1;
 
+    const dreamFX = {
+      targetDim:.82,
+      targetContrast:110,
+      targetBlur:10,
+      targetOpacity:.80,
+      levelContrast:112,
+      levelBlur:10
+    };
+
+    const sceneA = { shapes:[] };
+    const sceneB = { shapes:[] };
+    let morphStart = performance.now();
+    const MORPH_DURATION = 85000; // bardzo wolny morph
+    let initialized = false;
+
+    function resizeCanvas(){
+      W = window.innerWidth;
+      H = window.innerHeight;
+      DPR = Math.min(window.devicePixelRatio || 1, 1.5);
+
+      canvas.width = W * DPR;
+      canvas.height = H * DPR;
+      canvas.style.width = W + "px";
+      canvas.style.height = H + "px";
+
+      ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+
+      if(!initialized){
+        sceneA.shapes = generateScene();
+        sceneB.shapes = generateScene();
+        initialized = true;
+      }else{
+        sceneA.shapes = generateScene();
+        sceneB.shapes = generateScene();
+      }
     }
 
-    const data =
-    await response.json();
+    window.addEventListener("resize", resizeCanvas);
 
-    if(
-      !data.ok
-    ){
-
-      throw new Error(
-        data.error
-        ||
-        "Backend error"
-      );
-
+    function rand(min, max){
+      return min + Math.random() * (max - min);
     }
 
-    renderSaved(
-      data.dreamId
-    );
+    function generateShape(index){
+      const baseScale = Math.min(W, H);
 
-  }
-  catch(error){
-
-    console.error(
-      "DREAM SAVE ERROR",
-      error
-    );
-
-    renderError();
-
-  }
-
-}
-
-
-/* =========================================================
-   SAVED
-   ========================================================= */
-
-function renderSaved(id){
-
-  const copy =
-  UI[
-    state.lang
-  ];
-
-  transition(
-    ()=>{
-
-      screen.innerHTML = `
-
-      <div class="eyebrow">
-      TRAUM SIM
-      </div>
-
-      <h2>
-      ${copy.done}
-      </h2>
-
-      <p class="sub">
-      ${copy.sub}
-      </p>
-
-      <div class="received">
-      ${escapeHtml(
-        id || ""
-      )}
-      &nbsp;&nbsp;/&nbsp;&nbsp;
-      ${escapeHtml(
-        state.nickname
-      )}
-      </div>
-
-      `;
-
+      return {
+        centerY: rand(H * 0.18, H * 0.82),
+        centerJitter: rand(10, 55),
+        radius: rand(baseScale * 0.16, baseScale * 0.44),
+        stretchX: rand(0.95, 2.45),
+        stretchY: rand(0.58, 1.55),
+        phase1: rand(0, Math.PI * 2),
+        phase2: rand(0, Math.PI * 2),
+        phase3: rand(0, Math.PI * 2),
+        phase4: rand(0, Math.PI * 2),
+        lobe1: rand(1.4, 4.8),
+        lobe2: rand(2.5, 8.2),
+        lobe3: rand(5.5, 12.0),
+        amplitude1: rand(0.06, 0.16),
+        amplitude2: rand(0.03, 0.11),
+        amplitude3: rand(0.01, 0.06),
+        flow1: rand(0.000014, 0.000034),
+        flow2: rand(0.000008, 0.000024),
+        flow3: rand(0.000004, 0.000018),
+        flow4: rand(0.000003, 0.00001),
+        toneOuter: rand(96, 148),
+        toneMain: rand(68, 130),
+        toneInner: rand(38, 92),
+        toneCore: rand(18, 54),
+        alphaOuter: rand(0.032, 0.060),
+        alphaMain: rand(0.045, 0.095),
+        alphaInner: rand(0.030, 0.064),
+        alphaCore: rand(0.018, 0.050),
+        seed:index,
+        nested: Math.random() > 0.48
+      };
     }
-  );
 
-  setTimeout(
-    startFinalSequence,
-    4500
-  );
+    function generateScene(){
+      const level = state.level || 0;
+      const count = level === 0 ? 5 : level === 1 ? 7 : 9;
+      const arr = [];
+      for(let i = 0; i < count; i++){
+        arr.push(generateShape(i));
+      }
+      return arr;
+    }
 
-}
+    function lerp(a,b,t){
+      return a + (b - a) * t;
+    }
 
+    function easeInOut(t){
+      return t < 0.5 ? 2*t*t : 1 - Math.pow(-2*t + 2, 2) / 2;
+    }
 
-/* =========================================================
-   ERROR
-   ========================================================= */
+    function interpolateShape(a, b, t){
+      return {
+        centerY: lerp(a.centerY, b.centerY, t),
+        centerJitter: lerp(a.centerJitter, b.centerJitter, t),
+        radius: lerp(a.radius, b.radius, t),
+        stretchX: lerp(a.stretchX, b.stretchX, t),
+        stretchY: lerp(a.stretchY, b.stretchY, t),
+        phase1: lerp(a.phase1, b.phase1, t),
+        phase2: lerp(a.phase2, b.phase2, t),
+        phase3: lerp(a.phase3, b.phase3, t),
+        phase4: lerp(a.phase4, b.phase4, t),
+        lobe1: lerp(a.lobe1, b.lobe1, t),
+        lobe2: lerp(a.lobe2, b.lobe2, t),
+        lobe3: lerp(a.lobe3, b.lobe3, t),
+        amplitude1: lerp(a.amplitude1, b.amplitude1, t),
+        amplitude2: lerp(a.amplitude2, b.amplitude2, t),
+        amplitude3: lerp(a.amplitude3, b.amplitude3, t),
+        flow1: lerp(a.flow1, b.flow1, t),
+        flow2: lerp(a.flow2, b.flow2, t),
+        flow3: lerp(a.flow3, b.flow3, t),
+        flow4: lerp(a.flow4, b.flow4, t),
+        toneOuter: lerp(a.toneOuter, b.toneOuter, t),
+        toneMain: lerp(a.toneMain, b.toneMain, t),
+        toneInner: lerp(a.toneInner, b.toneInner, t),
+        toneCore: lerp(a.toneCore, b.toneCore, t),
+        alphaOuter: lerp(a.alphaOuter, b.alphaOuter, t),
+        alphaMain: lerp(a.alphaMain, b.alphaMain, t),
+        alphaInner: lerp(a.alphaInner, b.alphaInner, t),
+        alphaCore: lerp(a.alphaCore, b.alphaCore, t),
+        seed: a.seed,
+        nested: t < 0.5 ? a.nested : b.nested
+      };
+    }
 
-function renderError(){
+    function buildHalfPoints(shape, time, scale = 1){
+      const centerX = W * 0.5;
+      const centerY =
+        shape.centerY +
+        Math.sin(time * shape.flow4 * 1000 + shape.phase4) * shape.centerJitter;
 
-  const copy =
-  UI[
-    state.lang
-  ];
+      const count = 180;
+      const pts = [];
 
-  transition(
-    ()=>{
+      for(let i = 0; i <= count; i++){
+        const p = i / count;
+        const angle = -Math.PI * 0.5 + p * Math.PI;
 
-      screen.innerHTML = `
+        const r1 = Math.sin(angle * shape.lobe1 + time * shape.flow1 * 1000 + shape.phase1) * shape.amplitude1;
+        const r2 = Math.cos(angle * shape.lobe2 - time * shape.flow2 * 1000 + shape.phase2) * shape.amplitude2;
+        const r3 = Math.sin(angle * shape.lobe3 + time * shape.flow3 * 1000 + shape.phase3) * shape.amplitude3;
+        const breath = Math.sin(time * 0.000018 + shape.phase1) * 0.018;
+        const radius = shape.radius * (1 + r1 + r2 + r3 + breath) * scale;
 
-      <div class="eyebrow">
-      TRAUM SIM
-      </div>
+        const x = Math.cos(angle) * radius * shape.stretchX;
+        const y = Math.sin(angle) * radius * shape.stretchY;
 
-      <h2>
-      ${copy.error}
-      </h2>
-
-      <p class="sub">
-
-      ${
-        state.lang==="PL"
-        ?
-        "Połączenie z archiwum zostało przerwane."
-        :
-        "The connection to the archive was interrupted."
+        pts.push({
+          x: centerX - x,
+          y: centerY + y
+        });
       }
 
-      </p>
-
-      <div class="actions">
-
-      <span></span>
-
-      <button
-      class="next"
-      onclick="saveDream()"
-      >
-      ${copy.retry}
-      </button>
-
-      </div>
-
-      `;
-
-    }
-  );
-
-}
-
-
-/* =========================================================
-   FINAL
-   ========================================================= */
-
-function startFinalSequence(){
-
-  const ui =
-  document.getElementById(
-    "ui"
-  );
-
-  const bloom =
-  document.getElementById(
-    "whiteBloom"
-  );
-
-  const whiteout =
-  document.getElementById(
-    "whiteout"
-  );
-
-  const final =
-  document.getElementById(
-    "finalInvite"
-  );
-
-  ui.classList.add(
-    "hide"
-  );
-
-  setTimeout(
-    ()=>{
-
-      bloom.classList.add(
-        "active"
-      );
-
-      whiteout.classList.add(
-        "active"
-      );
-
-    },
-    1300
-  );
-
-  setTimeout(
-    ()=>{
-
-      document
-      .getElementById(
-        "finalTitle"
-      )
-      .textContent =
-      UI[
-        state.lang
-      ]
-      .invite;
-
-      final.classList.add(
-        "active"
-      );
-
-    },
-    7200
-  );
-
-  setTimeout(
-    ()=>{
-
-      bloom.style.display =
-      "none";
-
-      whiteout.style.display =
-      "none";
-
-    },
-    7800
-  );
-
-}
-
-
-/* =========================================================
-   GHOST
-   ========================================================= */
-
-function ghost(
-  text,
-  answer=false
-){
-
-  if(!text){
-    return;
-  }
-
-  const element =
-  document.createElement(
-    "div"
-  );
-
-  element.className =
-  answer
-  ?
-  "ghost answerGhost"
-  :
-  "ghost";
-
-  element.textContent =
-  text;
-
-  element.style.left =
-  (
-    Math.random()*55
-    -
-    5
-  )
-  +
-  "vw";
-
-  element.style.top =
-  (
-    Math.random()*75
-    +
-    8
-  )
-  +
-  "vh";
-
-  element.style.animationDuration =
-  (
-    14
-    +
-    Math.random()*12
-  )
-  +
-  "s";
-
-  ghostLayer.appendChild(
-    element
-  );
-
-  setTimeout(
-    ()=>{
-
-      element.remove();
-
-    },
-    28000
-  );
-
-}
-
-
-/* =========================================================
-   AUTONOMOUS WORDS
-   ========================================================= */
-
-const ghostWords = [
-
-"REMEMBER",
-
-"WHO IS DREAMING",
-
-"NOT HERE",
-
-"AGAIN",
-
-"THE OTHER SIDE",
-
-"YOU HAVE BEEN HERE",
-
-"NO BEGINNING",
-
-"NOT YET",
-
-"WAKE",
-
-"ALMOST",
-
-"TRAUM",
-
-"SESSION FOUND",
-
-"WHO REMEMBERS?"
-
-];
-
-
-setInterval(
-  ()=>{
-
-    if(
-      Math.random()>.58
-    ){
-
-      ghost(
-        ghostWords[
-          Math.floor(
-            Math.random()
-            *
-            ghostWords.length
-          )
-        ]
-      );
-
+      return { centerX, centerY, pts };
     }
 
-  },
-  7000
-);
-
-
-/* =========================================================
-   HTML ESCAPE
-   ========================================================= */
-
-function escapeHtml(value){
-
-  return String(
-    value || ""
-  )
-  .replace(
-    /[&<>"']/g,
-    char=>({
-
-      "&":"&amp;",
-
-      "<":"&lt;",
-
-      ">":"&gt;",
-
-      "\"":"&quot;",
-
-      "'":"&#039;"
-
-    }[char])
-  );
-
-}
-
-
-/* =========================================================
-   ADVANCED RORSCHACH
-   ========================================================= */
-
-const rCanvas =
-document.getElementById(
-  "rorschach"
-);
-
-const rCtx =
-rCanvas.getContext(
-  "2d"
-);
-
-
-let RW;
-let RH;
-let RDPR;
-
-let forms=[];
-
-
-/* =========================================================
-   FORM PARAMETERS
-   ========================================================= */
-
-function resizeRorschach(){
-
-  RW =
-  window.innerWidth;
-
-  RH =
-  window.innerHeight;
-
-  RDPR =
-  Math.min(
-    window.devicePixelRatio || 1,
-    1.5
-  );
-
-  rCanvas.width =
-  RW * RDPR;
-
-  rCanvas.height =
-  RH * RDPR;
-
-  rCtx.setTransform(
-    RDPR,
-    0,
-    0,
-    RDPR,
-    0,
-    0
-  );
-
-  createForms();
-
-}
-
-
-/* =========================================================
-   CREATE FORMS
-   ========================================================= */
-
-function createForms(){
-
-  forms=[];
-
-  const level =
-  state.level || 0;
-
-  const count =
-  level===0
-  ?
-  5
-  :
-  level===1
-  ?
-  7
-  :
-  9;
-
-  for(
-    let i=0;
-    i<count;
-    i++
-  ){
-
-    forms.push({
-
-      cy:
-      RH *
-      (
-        .16 +
-        Math.random()*.68
-      ),
-
-      radius:
-      Math.min(
-        RW,
-        RH
-      )
-      *
-      (
-        .08 +
-        Math.random()*.19
-      ),
-
-      stretch:
-      .50 +
-      Math.random()*.95,
-
-      lobes:
-      2 +
-      Math.floor(
-        Math.random()*7
-      ),
-
-      phase:
-      Math.random()
-      *
-      Math.PI
-      *
-      2,
-
-      speed:
-      .000015 +
-      Math.random()*.000025,
-
-      drift:
-      .000004 +
-      Math.random()*.000008,
-
-      alpha:
-      .035 +
-      Math.random()*.055,
-
-      tone:
-      105 +
-      Math.floor(
-        Math.random()*135
-      ),
-
-      innerTone:
-      35 +
-      Math.floor(
-        Math.random()*90
-      ),
-
-      nested:
-      Math.random()>.58
-
-    });
-
-  }
-
-}
-
-
-/* =========================================================
-   ORGANIC RADIUS
-   ========================================================= */
-
-function organicRadius(
-  form,
-  angle,
-  time,
-  layer=0
-){
-
-  const level =
-  state.level || 0;
-
-  const wave1 =
-  Math.sin(
-    angle *
-    form.lobes
-    +
-    time *
-    form.speed
-    *
-    1000
-    +
-    form.phase
-    +
-    layer*.3
-  )
-  *
-  (
-    .16
-    +
-    level*.012
-  );
-
-  const wave2 =
-  Math.sin(
-    angle *
-    (
-      form.lobes+2
-    )
-    -
-    time *
-    form.speed
-    *
-    460
-    +
-    form.phase*.6
-  )
-  *
-  .065;
-
-  const wave3 =
-  Math.cos(
-    angle*2
-    +
-    time*.000035
-    +
-    form.phase*3
-  )
-  *
-  .05;
-
-  const wave4 =
-  Math.sin(
-    angle*7
-    +
-    time*.000018
-  )
-  *
-  .025;
-
-  return form.radius *
-  (
-    1
-    +
-    wave1
-    +
-    wave2
-    +
-    wave3
-    +
-    wave4
-  );
-
-}
-
-
-/* =========================================================
-   BUILD POINTS
-   ========================================================= */
-
-function buildBlotPoints(
-  form,
-  time,
-  scale=1
-){
-
-  const cx =
-  RW*.5;
-
-  const cy =
-  form.cy
-  +
-  Math.sin(
-    time*form.drift*1000
-    +
-    form.phase
-  )
-  *
-  12;
-
-  const count =
-  120;
-
-  const left=[];
-
-  for(
-    let i=0;
-    i<=count;
-    i++
-  ){
-
-    const p =
-    i/count;
-
-    const angle =
-    -Math.PI*.5
-    +
-    p*Math.PI;
-
-    const radius =
-    organicRadius(
-      form,
-      angle,
-      time
-    )
-    *
-    scale;
-
-    const x =
-    Math.cos(angle)
-    *
-    radius
-    *
-    form.stretch;
-
-    const y =
-    Math.sin(angle)
-    *
-    radius;
-
-    left.push({
-
-      x:
-      cx-x,
-
-      y:
-      cy+y
-
-    });
-
-  }
-
-  return {
-    cx,
-    cy,
-    left
-  };
-
-}
-
-
-/* =========================================================
-   DRAW MIRRORED SHAPE
-   ========================================================= */
-
-function drawShape(
-  form,
-  time,
-  scale,
-  alphaScale,
-  toneOffset=0
-){
-
-  const data =
-  buildBlotPoints(
-    form,
-    time,
-    scale
-  );
-
-  const cx =
-  data.cx;
-
-  const cy =
-  data.cy;
-
-  const left =
-  data.left;
-
-  const asymmetry =
-  state.level===2
-  ?
-  Math.sin(
-    time*.00006
-    +
-    form.phase
-  )
-  *
-  7
-  :
-  0;
-
-  rCtx.beginPath();
-
-  rCtx.moveTo(
-    cx,
-    cy-form.radius*.12*scale
-  );
-
-  for(
-    const point
-    of
-    left
-  ){
-
-    rCtx.lineTo(
-      point.x,
-      point.y
-    );
-
-  }
-
-  for(
-    let i=left.length-1;
-    i>=0;
-    i--
-  ){
-
-    const point =
-    left[i];
-
-    const mirroredX =
-    cx
-    +
-    (
-      cx-point.x
-    )
-    +
-    asymmetry;
-
-    rCtx.lineTo(
-      mirroredX,
-      point.y
-    );
-
-  }
-
-  rCtx.closePath();
-
-  const tone =
-  Math.max(
-    20,
-    Math.min(
-      240,
-      form.tone
-      +
-      toneOffset
-    )
-  );
-
-  rCtx.fillStyle =
-  `rgba(
-    ${tone},
-    ${tone},
-    ${tone},
-    ${form.alpha*alphaScale}
-  )`;
-
-  rCtx.fill();
-
-}
-
-
-/* =========================================================
-   DRAW ONE COMPLEX BLOT
-   ========================================================= */
-
-function drawComplexBlot(
-  form,
-  time
-){
-
-  /*
-  broad outer haze
-  */
-
-  drawShape(
-    form,
-    time,
-    1.18,
-    .28,
-    30
-  );
-
-  /*
-  main body
-  */
-
-  drawShape(
-    form,
-    time,
-    1.0,
-    1.0,
-    0
-  );
-
-  /*
-  middle grey
-  */
-
-  drawShape(
-    form,
-    time+8000,
-    .78,
-    .55,
-    -35
-  );
-
-  /*
-  darker core
-  */
-
-  drawShape(
-    form,
-    time+15000,
-    .55,
-    .38,
-    -90
-  );
-
-  /*
-  very faint internal dream
-  */
-
-  if(
-    state.level>=1
-    &&
-    form.nested
-  ){
-
-    drawShape(
-      form,
-      time+23000,
-      .34,
-      .26,
-      45
-    );
-
-  }
-
-}
-
-
-/* =========================================================
-   CENTRAL NESTED RORSCHACH
-   ========================================================= */
-
-function drawNestedDream(
-  time
-){
-
-  if(
-    state.level<1
-    ||
-    !forms.length
-  ){
-
-    return;
-
-  }
-
-  rCtx.save();
-
-  rCtx.translate(
-    RW*.5,
-    RH*.5
-  );
-
-  const breathe =
-  .70
-  +
-  Math.sin(
-    time*.000025
-  )
-  *
-  .04;
-
-  rCtx.scale(
-    breathe,
-    breathe
-  );
-
-  rCtx.translate(
-    -RW*.5,
-    -RH*.5
-  );
-
-  const limit =
-  Math.min(
-    state.level===1
-    ?
-    2
-    :
-    3,
-    forms.length
-  );
-
-  for(
-    let i=0;
-    i<limit;
-    i++
-  ){
-
-    drawShape(
-      forms[i],
-      time+30000,
-      .42,
-      .22,
-      20
-    );
-
-  }
-
-  rCtx.restore();
-
-}
-
-
-/* =========================================================
-   RORSCHACH LOOP
-   ========================================================= */
-
-function drawRorschach(time){
-
-  /*
-  long persistence
-  */
-
-  rCtx.fillStyle =
-  "rgba(0,0,0,.022)";
-
-  rCtx.fillRect(
-    0,
-    0,
-    RW,
-    RH
-  );
-
-
-  /*
-  very subtle grey fog exposure
-  */
-
-  const bg =
-  4
-  +
-  (
-    Math.sin(
-      time*.000025
-    )
-    +
-    1
-  )
-  *
-  2;
-
-  rCtx.fillStyle =
-  `rgba(
-    ${bg},
-    ${bg},
-    ${bg},
-    .11
-  )`;
-
-  rCtx.fillRect(
-    0,
-    0,
-    RW,
-    RH
-  );
-
-
-  /*
-  soft screen blend
-  */
-
-  rCtx.globalCompositeOperation =
-  "screen";
-
-
-  for(
-    const form
-    of
-    forms
-  ){
-
-    drawComplexBlot(
-      form,
-      time
-    );
-
-  }
-
-
-  drawNestedDream(
-    time
-  );
-
-
-  rCtx.globalCompositeOperation =
-  "source-over";
-
-
-  /*
-  central fold
-  */
-
-  const fold =
-  rCtx.createLinearGradient(
-    RW*.43,
-    0,
-    RW*.57,
-    0
-  );
-
-  fold.addColorStop(
-    0,
-    "rgba(0,0,0,0)"
-  );
-
-  fold.addColorStop(
-    .5,
-    state.level===2
-    ?
-    "rgba(200,200,200,.025)"
-    :
-    "rgba(180,180,180,.016)"
-  );
-
-  fold.addColorStop(
-    1,
-    "rgba(0,0,0,0)"
-  );
-
-  rCtx.fillStyle =
-  fold;
-
-  rCtx.fillRect(
-    RW*.39,
-    0,
-    RW*.22,
-    RH
-  );
-
-
-  requestAnimationFrame(
-    drawRorschach
-  );
-
-}
-
-
-/* =========================================================
-   VERY SLOW STRUCTURAL CHANGE
-   ========================================================= */
-
-setInterval(
-  ()=>{
-
-    /*
-    structure changes very rarely
-    */
-
-    if(
-      Math.random()>.60
-    ){
-
-      createForms();
-
+    function drawMirroredPath(shape, time, scale = 1, asymmetry = 0){
+      const data = buildHalfPoints(shape, time, scale);
+      const cx = data.centerX;
+      const pts = data.pts;
+
+      ctx.beginPath();
+      ctx.moveTo(cx, data.centerY - (shape.radius * 0.12 * scale));
+
+      for(const p of pts){
+        ctx.lineTo(p.x, p.y);
+      }
+
+      for(let i = pts.length - 1; i >= 0; i--){
+        const p = pts[i];
+        const mirroredX = cx + (cx - p.x) + asymmetry;
+        ctx.lineTo(mirroredX, p.y);
+      }
+
+      ctx.closePath();
     }
 
-  },
-  48000
-);
+    function fillShape(shape, time, scale, tone, alpha, asymmetry){
+      drawMirroredPath(shape, time, scale, asymmetry);
+      ctx.fillStyle = `rgba(${tone},${tone},${tone},${alpha})`;
+      ctx.fill();
+    }
 
+    function drawComplexShape(shape, time){
+      const asym = state.level === 2
+        ? Math.sin(time * 0.00005 + shape.phase2) * 6
+        : 0;
 
-/* =========================================================
-   INIT
-   ========================================================= */
+      fillShape(shape, time, 1.36, shape.toneOuter, shape.alphaOuter, asym * 0.3);
+      fillShape(shape, time + 7000, 1.08, shape.toneMain, shape.alphaMain, asym * 0.55);
+      fillShape(shape, time + 15000, 0.78, shape.toneInner, shape.alphaInner, asym * 0.82);
+      fillShape(shape, time + 26000, 0.54, shape.toneCore, shape.alphaCore, asym);
 
-window.addEventListener(
-  "resize",
-  resizeRorschach
-);
+      if(state.level >= 1 && shape.nested){
+        fillShape(shape, time + 37000, 0.32, Math.min(180, shape.toneMain + 28), shape.alphaInner * 0.28, asym * 1.1);
+      }
+    }
 
-resizeRorschach();
+    function updateScenes(now){
+      const raw = (now - morphStart) / MORPH_DURATION;
+      if(raw >= 1){
+        morphStart = now;
+        sceneA.shapes = sceneB.shapes.map((_, i) => sceneB.shapes[i]);
+        sceneB.shapes = generateScene();
+        return 0;
+      }
+      return easeInOut(Math.max(0, Math.min(1, raw)));
+    }
 
-rCtx.fillStyle =
-"#000";
+    function drawBackgroundGradient(time){
+      const shift = (Math.sin(time * 0.00002) + 1) * 0.5;
+      const topTone = Math.round(lerp(6, 18, shift));
+      const midTone = Math.round(lerp(12, 28, shift));
+      const botTone = Math.round(lerp(2, 12, shift));
 
-rCtx.fillRect(
-  0,
-  0,
-  RW,
-  RH
-);
+      const g = ctx.createLinearGradient(0, 0, 0, H);
+      g.addColorStop(0, `rgba(${topTone},${topTone},${topTone},0.28)`);
+      g.addColorStop(0.5, `rgba(${midTone},${midTone},${midTone},0.18)`);
+      g.addColorStop(1, `rgba(${botTone},${botTone},${botTone},0.26)`);
+      ctx.fillStyle = g;
+      ctx.fillRect(0, 0, W, H);
+    }
 
-requestAnimationFrame(
-  drawRorschach
-);
+    function drawFold(){
+      const fold = ctx.createLinearGradient(W * 0.42, 0, W * 0.58, 0);
+      fold.addColorStop(0, "rgba(0,0,0,0)");
+      fold.addColorStop(0.5, state.mode === "questions"
+        ? "rgba(170,170,170,.032)"
+        : "rgba(155,155,155,.020)");
+      fold.addColorStop(1, "rgba(0,0,0,0)");
+      ctx.fillStyle = fold;
+      ctx.fillRect(W * 0.37, 0, W * 0.26, H);
+    }
 
-renderStart();
+    function animateCanvas(now){
+      if(!initialized){
+        requestAnimationFrame(animateCanvas);
+        return;
+      }
 
-</script>
+      const t = updateScenes(now);
 
+      ctx.fillStyle = "rgba(0,0,0,0.020)";
+      ctx.fillRect(0, 0, W, H);
+      drawBackgroundGradient(now);
+
+      ctx.globalCompositeOperation = "screen";
+
+      const maxCount = Math.max(sceneA.shapes.length, sceneB.shapes.length);
+      for(let i = 0; i < maxCount; i++){
+        const a = sceneA.shapes[i % sceneA.shapes.length];
+        const b = sceneB.shapes[i % sceneB.shapes.length];
+        const s = interpolateShape(a, b, t);
+        drawComplexShape(s, now);
+      }
+
+      if(state.level >= 1){
+        ctx.save();
+        ctx.translate(W * 0.5, H * 0.5);
+        const nestedScale = 0.72 + Math.sin(now * 0.000016) * 0.03;
+        ctx.scale(nestedScale, nestedScale);
+        ctx.translate(-W * 0.5, -H * 0.5);
+
+        const nestedCount = state.level === 1 ? 2 : 3;
+        for(let i = 0; i < nestedCount; i++){
+          const a = sceneA.shapes[i % sceneA.shapes.length];
+          const b = sceneB.shapes[i % sceneB.shapes.length];
+          const s = interpolateShape(a, b, t);
+          fillShape(s, now + 48000, 0.36, 152, 0.040, 0);
+          fillShape(s, now + 62000, 0.24, 78, 0.032, 0);
+        }
+
+        ctx.restore();
+      }
+
+      ctx.globalCompositeOperation = "source-over";
+      drawFold();
+
+      /* canvas visual tuning */
+      const finalContrast = Math.round((dreamFX.targetContrast + dreamFX.levelContrast) * 0.5);
+      const finalBlur = ((dreamFX.targetBlur + dreamFX.levelBlur) * 0.5).toFixed(1);
+
+      canvas.style.opacity = String(dreamFX.targetOpacity);
+      canvas.style.filter = `blur(${finalBlur}px) contrast(${finalContrast}%) saturate(0%)`;
+
+      requestAnimationFrame(animateCanvas);
+    }
+
+    /* =========================================================
+       INIT
+       ========================================================= */
+    resizeCanvas();
+    updateDepthVisuals();
+    renderStart();
+    requestAnimationFrame(animateCanvas);
+  </script>
 </body>
 </html>
