@@ -2536,6 +2536,7 @@ function setVH(){
 
 setVH();
 
+
 window.addEventListener(
   "resize",
   setVH
@@ -2546,7 +2547,8 @@ if(
   window.visualViewport
 ){
 
-  window.visualViewport
+  window
+  .visualViewport
   .addEventListener(
     "resize",
     setVH
@@ -2685,18 +2687,42 @@ PL:{
 back:"WSTECZ",
 next:"DALEJ",
 begin:"WEJDŹ W SEN",
-placeholder:"opisz to własnymi słowami...",
-colorPlaceholder:"np. magenta, granatowy, lawendowy, #ff00ff...",
-nicknameTitle:"Jak mamy zapamiętać osobę, która śniła?",
-nicknameMeta:"Możesz użyć pseudonimu. Nie musisz podawać prawdziwego imienia.",
-nicknamePlaceholder:"NICKNAME",
-nicknameSubmit:"ZAPISZ SEN",
-saving:"ZAPISUJĘ SEN",
-done:"SEN ZAPISANY",
-sub:"Twój sen wszedł do wspólnego archiwum.",
-error:"Sen nie został zapisany.",
-retry:"SPRÓBUJ PONOWNIE",
-invite:"Zapraszamy na nasz performance ze swoim snem."
+
+placeholder:
+"opisz to własnymi słowami...",
+
+colorPlaceholder:
+"np. szary, magenta, granatowy, lawendowy...",
+
+nicknameTitle:
+"Jak mamy zapamiętać osobę, która śniła?",
+
+nicknameMeta:
+"Możesz użyć pseudonimu. Nie musisz podawać prawdziwego imienia.",
+
+nicknamePlaceholder:
+"NICKNAME",
+
+nicknameSubmit:
+"ZAPISZ SEN",
+
+saving:
+"ZAPISUJĘ SEN",
+
+done:
+"SEN ZAPISANY",
+
+sub:
+"Twój sen wszedł do wspólnego archiwum.",
+
+error:
+"Sen nie został zapisany.",
+
+retry:
+"SPRÓBUJ PONOWNIE",
+
+invite:
+"Zapraszamy na nasz performance ze swoim snem."
 
 },
 
@@ -2706,18 +2732,42 @@ ENG:{
 back:"BACK",
 next:"NEXT",
 begin:"ENTER DREAM",
-placeholder:"describe it in your own words...",
-colorPlaceholder:"e.g. magenta, lavender, indigo, #ff00ff...",
-nicknameTitle:"How should the dreamer be remembered?",
-nicknameMeta:"You may use a nickname. You do not need to provide your real name.",
-nicknamePlaceholder:"NICKNAME",
-nicknameSubmit:"SAVE DREAM",
-saving:"SAVING DREAM",
-done:"DREAM RECEIVED",
-sub:"Your dream has entered the collective archive.",
-error:"The dream could not be saved.",
-retry:"TRY AGAIN",
-invite:"Join our performance with your dream."
+
+placeholder:
+"describe it in your own words...",
+
+colorPlaceholder:
+"e.g. grey, magenta, lavender, indigo...",
+
+nicknameTitle:
+"How should the dreamer be remembered?",
+
+nicknameMeta:
+"You may use a nickname. You do not need to provide your real name.",
+
+nicknamePlaceholder:
+"NICKNAME",
+
+nicknameSubmit:
+"SAVE DREAM",
+
+saving:
+"SAVING DREAM",
+
+done:
+"DREAM RECEIVED",
+
+sub:
+"Your dream has entered the collective archive.",
+
+error:
+"The dream could not be saved.",
+
+retry:
+"TRY AGAIN",
+
+invite:
+"Join our performance with your dream."
 
 },
 
@@ -2727,18 +2777,42 @@ UKR:{
 back:"НАЗАД",
 next:"ДАЛІ",
 begin:"УВІЙТИ У СОН",
-placeholder:"опиши це своїми словами...",
-colorPlaceholder:"наприклад: маджента, лавандовий, індиго...",
-nicknameTitle:"Як нам запам’ятати людину, якій наснився цей сон?",
-nicknameMeta:"Можна використати псевдонім. Справжнє ім’я вказувати не обов’язково.",
-nicknamePlaceholder:"NICKNAME",
-nicknameSubmit:"ЗБЕРЕГТИ СОН",
-saving:"ЗБЕРІГАЮ СОН",
-done:"СОН ЗБЕРЕЖЕНО",
-sub:"Цей сон увійшов до спільного архіву.",
-error:"Сон не вдалося зберегти.",
-retry:"СПРОБУВАТИ ЩЕ РАЗ",
-invite:"Приходь на наш перформанс зі своїм сном."
+
+placeholder:
+"опиши це своїми словами...",
+
+colorPlaceholder:
+"наприклад: сірий, маджента, лавандовий...",
+
+nicknameTitle:
+"Як нам запам’ятати людину, якій наснився цей сон?",
+
+nicknameMeta:
+"Можна використати псевдонім. Справжнє ім’я вказувати не обов’язково.",
+
+nicknamePlaceholder:
+"NICKNAME",
+
+nicknameSubmit:
+"ЗБЕРЕГТИ СОН",
+
+saving:
+"ЗБЕРІГАЮ СОН",
+
+done:
+"СОН ЗБЕРЕЖЕНО",
+
+sub:
+"Цей сон увійшов до спільного архіву.",
+
+error:
+"Сон не вдалося зберегти.",
+
+retry:
+"СПРОБУВАТИ ЩЕ РАЗ",
+
+invite:
+"Приходь на наш перформанс зі своїм сном."
 
 }
 
@@ -2752,13 +2826,21 @@ invite:"Приходь на наш перформанс зі своїм сном
 const state = {
 
 lang:null,
+
 mode:"start",
+
 introStep:0,
+
 questionIndex:0,
+
 totalQuestions:9,
+
 answers:[],
+
 generatedQuestions:[],
+
 nickname:"",
+
 dreamColorName:"",
 
 dreamColor:{
@@ -2843,22 +2925,6 @@ function randomItem(array){
    COLOR PARSER
    ========================================================= */
 
-/*
-Supports:
-
-- Polish names
-- English names
-- Ukrainian names
-- CSS colour names
-- HEX
-- rgb()
-- rgba()
-- hsl()
-- hsla()
-
-So users are no longer limited to a small hand-made list.
-*/
-
 function parseDreamColor(name){
 
   let s =
@@ -2880,10 +2946,6 @@ function parseDreamColor(name){
   }
 
 
-  /*
-  Normalize some common spelling variants.
-  */
-
   s =
     s
     .replace(/colour/g,"color")
@@ -2893,8 +2955,93 @@ function parseDreamColor(name){
 
   const map = {
 
+
     /* =====================================================
-       PINK / MAGENTA / PURPLE
+       GREY / GREYSCALE
+       ===================================================== */
+
+    "szary":[155,155,160],
+    "szara":[155,155,160],
+    "szare":[155,155,160],
+    "szarość":[155,155,160],
+    "szarosc":[155,155,160],
+
+    "grey":[155,155,160],
+    "gray":[155,155,160],
+
+    "сірий":[155,155,160],
+    "сіра":[155,155,160],
+    "сіре":[155,155,160],
+
+    "jasnoszary":[205,205,210],
+    "jasno szary":[205,205,210],
+    "jasnoszara":[205,205,210],
+
+    "light grey":[205,205,210],
+    "light gray":[205,205,210],
+
+    "ciemnoszary":[90,92,100],
+    "ciemno szary":[90,92,100],
+    "ciemnoszara":[90,92,100],
+
+    "dark grey":[90,92,100],
+    "dark gray":[90,92,100],
+
+    "popielaty":[175,175,180],
+    "popielata":[175,175,180],
+    "popiel":[175,175,180],
+    "ash grey":[175,175,180],
+    "ash gray":[175,175,180],
+
+    "stalowy":[120,135,145],
+    "stalowa":[120,135,145],
+    "steel":[120,135,145],
+    "steel grey":[120,135,145],
+    "steel gray":[120,135,145],
+
+    "cool grey":[135,145,160],
+    "cool gray":[135,145,160],
+    "chłodny szary":[135,145,160],
+
+    "warm grey":[165,155,145],
+    "warm gray":[165,155,145],
+    "ciepły szary":[165,155,145],
+
+    "silver grey":[185,190,200],
+    "silver gray":[185,190,200],
+
+    "grafitowy":[95,100,110],
+    "grafitowa":[95,100,110],
+    "grafit":[95,100,110],
+    "graphite":[95,100,110],
+    "графітовий":[95,100,110],
+
+    "antracytowy":[70,75,80],
+    "antracytowa":[70,75,80],
+    "antracyt":[70,75,80],
+    "anthracite":[70,75,80],
+
+    "srebrny":[190,195,205],
+    "srebrna":[190,195,205],
+    "srebro":[190,195,205],
+    "silver":[190,195,205],
+    "срібний":[190,195,205],
+
+    "biały":[235,235,230],
+    "biała":[235,235,230],
+    "białe":[235,235,230],
+    "white":[235,235,230],
+    "білий":[235,235,230],
+
+    "czarny":[70,70,70],
+    "czarna":[70,70,70],
+    "czarne":[70,70,70],
+    "black":[70,70,70],
+    "чорний":[70,70,70],
+
+
+    /* =====================================================
+       MAGENTA / PINK / PURPLE
        ===================================================== */
 
     "magenta":[255,0,255],
@@ -3007,7 +3154,7 @@ function parseDreamColor(name){
 
 
     /* =====================================================
-       ORANGE / WARM
+       ORANGE
        ===================================================== */
 
     "pomarańczowy":[235,125,45],
@@ -3141,6 +3288,7 @@ function parseDreamColor(name){
     "ціан":[0,210,235],
 
     "aqua":[40,215,215],
+
     "akwamaryna":[80,200,180],
     "aquamarine":[80,200,180],
     "аквамариновий":[80,200,180],
@@ -3208,7 +3356,7 @@ function parseDreamColor(name){
 
 
     /* =====================================================
-       BROWN / EARTH
+       EARTH
        ===================================================== */
 
     "brązowy":[145,90,65],
@@ -3248,50 +3396,7 @@ function parseDreamColor(name){
 
 
     /* =====================================================
-       GREYSCALE
-       ===================================================== */
-
-    "biały":[235,235,230],
-    "biała":[235,235,230],
-    "white":[235,235,230],
-    "білий":[235,235,230],
-
-    "czarny":[70,70,70],
-    "czarna":[70,70,70],
-    "black":[70,70,70],
-    "чорний":[70,70,70],
-
-    "szary":[155,155,160],
-    "szara":[155,155,160],
-    "grey":[155,155,160],
-    "gray":[155,155,160],
-    "сірий":[155,155,160],
-
-    "jasnoszary":[200,200,200],
-    "light grey":[200,200,200],
-    "light gray":[200,200,200],
-
-    "ciemnoszary":[95,95,105],
-    "dark grey":[95,95,105],
-    "dark gray":[95,95,105],
-
-    "grafitowy":[95,100,110],
-    "grafit":[95,100,110],
-    "graphite":[95,100,110],
-    "графітовий":[95,100,110],
-
-    "antracytowy":[70,75,80],
-    "antracyt":[70,75,80],
-    "anthracite":[70,75,80],
-
-    "srebrny":[190,195,205],
-    "srebro":[190,195,205],
-    "silver":[190,195,205],
-    "срібний":[190,195,205],
-
-
-    /* =====================================================
-       SPECIAL / NEON
+       NEON
        ===================================================== */
 
     "neon pink":[255,40,180],
@@ -3325,17 +3430,15 @@ function parseDreamColor(name){
 
 
   /*
-  Prefer longest keys first.
-
-  Otherwise e.g. "jasny różowy" could match "różowy"
-  before "jasny róż".
+  Longer names first.
   */
 
   const keys =
-    Object.keys(map)
+    Object
+    .keys(map)
     .sort(
       (a,b)=>
-        b.length-a.length
+      b.length-a.length
     );
 
 
@@ -3361,26 +3464,11 @@ function parseDreamColor(name){
 
 
   /*
-  ---------------------------------------------------------
-  CSS COLOUR FALLBACK
-
-  Supports:
-  red
-  blue
-  magenta
-  rebeccapurple
-  darkslateblue
-  aliceblue
-  tomato
-  orchid
-  etc.
-
-  Also:
+  CSS FALLBACK:
   #ff00ff
-  #f0f
-  rgb(255,0,255)
-  hsl(300,100%,50%)
-  ---------------------------------------------------------
+  rgb(...)
+  hsl(...)
+  CSS names
   */
 
   const css =
@@ -3393,11 +3481,6 @@ function parseDreamColor(name){
 
   }
 
-
-  /*
-  Unknown colour:
-  neutral silver-gray rather than failing.
-  */
 
   return {
 
@@ -3419,17 +3502,14 @@ function parseCssColor(value){
   try{
 
     const canvas =
-      document.createElement(
+      document
+      .createElement(
         "canvas"
       );
 
 
-    canvas.width =
-      1;
-
-
-    canvas.height =
-      1;
+    canvas.width=1;
+    canvas.height=1;
 
 
     const ctx =
@@ -3445,11 +3525,6 @@ function parseCssColor(value){
     }
 
 
-    /*
-    Deliberately set impossible sentinel,
-    then assign requested colour.
-    */
-
     ctx.fillStyle =
       "#010203";
 
@@ -3462,12 +3537,9 @@ function parseCssColor(value){
       ctx.fillStyle;
 
 
-    /*
-    If invalid, browsers usually keep previous value.
-    */
-
     if(
-      normalized === "#010203" &&
+      normalized === "#010203"
+      &&
       value !== "#010203"
     ){
 
@@ -3497,7 +3569,8 @@ function parseCssColor(value){
 
 
     const pixel =
-      ctx.getImageData(
+      ctx
+      .getImageData(
         0,
         0,
         1,
@@ -4369,12 +4442,14 @@ function introBack(){
 
 
   if(
-    state.introStep === 0
+    state.introStep ===
+    0
   ){
 
     transition(
       renderStart
     );
+
 
     return;
 
@@ -4463,8 +4538,7 @@ function generateOpeningQuestion(){
 
     return {
 
-      category:
-        "POCZĄTEK",
+      category:"POCZĄTEK",
 
       question:
         "Przywołaj jeden sen, który został z Tobą dłużej niż inne. Opowiedz o pierwszej scenie, obrazie albo sytuacji, która właśnie teraz wraca do pamięci."
@@ -4481,8 +4555,7 @@ function generateOpeningQuestion(){
 
     return {
 
-      category:
-        "ПОЧАТОК",
+      category:"ПОЧАТОК",
 
       question:
         "Згадай один сон, який залишився в пам’яті довше за інші. Опиши першу сцену, образ або ситуацію, що повертається просто зараз."
@@ -4494,8 +4567,7 @@ function generateOpeningQuestion(){
 
   return {
 
-    category:
-      "BEGINNING",
+    category:"BEGINNING",
 
     question:
       "Remember one dream that stayed with you longer than the others. Describe the first scene, image or situation that returns to you now."
@@ -4506,7 +4578,7 @@ function generateOpeningQuestion(){
 
 
 /* =========================================================
-   EXTRACT FRAGMENT
+   FRAGMENT
    ========================================================= */
 
 function extractFragment(text){
@@ -4531,7 +4603,8 @@ function extractFragment(text){
 
 
   if(
-    words.length <= 8
+    words.length <=
+    8
   ){
 
     return cleaned;
@@ -4744,14 +4817,17 @@ door:[
 
 
   for(
-    const type in dict
+    const type
+    in dict
   ){
 
     if(
       dict[type]
       .some(
         word =>
-          t.includes(word)
+          t.includes(
+            word
+          )
       )
     ){
 
@@ -4899,7 +4975,9 @@ function generateLayerOneQuestion(
 
 
     if(
-      themes.includes("person")
+      themes.includes(
+        "person"
+      )
     ){
 
       pool.push({
@@ -4915,7 +4993,9 @@ function generateLayerOneQuestion(
 
 
     if(
-      themes.includes("place")
+      themes.includes(
+        "place"
+      )
     ){
 
       pool.push({
@@ -4930,7 +5010,9 @@ function generateLayerOneQuestion(
     }
 
 
-    return randomItem(pool);
+    return randomItem(
+      pool
+    );
 
   }
 
@@ -5115,7 +5197,9 @@ function generateLayerTwoQuestion(
     }
 
 
-    return randomItem(pool);
+    return randomItem(
+      pool
+    );
 
   }
 
@@ -5622,7 +5706,8 @@ function saveCurrentAnswer(){
 function questionNext(){
 
   if(
-    transitionRunning ||
+    transitionRunning
+    ||
     dreamShiftRunning
   ){
 
@@ -5641,7 +5726,8 @@ function questionNext(){
 
 
   if(
-    !current ||
+    !current
+    ||
     !current.answer
   ){
 
@@ -5721,7 +5807,10 @@ function questionNext(){
     state.questionIndex === 3
   ){
 
-    runDreamShift(1);
+    runDreamShift(
+      1
+    );
+
 
     return;
 
@@ -5732,7 +5821,10 @@ function questionNext(){
     state.questionIndex === 6
   ){
 
-    runDreamShift(2);
+    runDreamShift(
+      2
+    );
+
 
     return;
 
@@ -5753,7 +5845,8 @@ function questionNext(){
 function questionBack(){
 
   if(
-    transitionRunning ||
+    transitionRunning
+    ||
     dreamShiftRunning
   ){
 
@@ -5876,7 +5969,8 @@ function runDreamShift(level){
   ){
 
     if(
-      state.lang === "PL"
+      state.lang ===
+      "PL"
     ){
 
       main.textContent =
@@ -5888,7 +5982,8 @@ function runDreamShift(level){
     }
 
     else if(
-      state.lang === "UKR"
+      state.lang ===
+      "UKR"
     ){
 
       main.textContent =
@@ -5914,7 +6009,8 @@ function runDreamShift(level){
   else{
 
     if(
-      state.lang === "PL"
+      state.lang ===
+      "PL"
     ){
 
       main.textContent =
@@ -5926,7 +6022,8 @@ function runDreamShift(level){
     }
 
     else if(
-      state.lang === "UKR"
+      state.lang ===
+      "UKR"
     ){
 
       main.textContent =
@@ -5991,7 +6088,8 @@ function runDreamShift(level){
       ){
 
         if(
-          state.lang === "PL"
+          state.lang ===
+          "PL"
         ){
 
           main.textContent =
@@ -6003,7 +6101,8 @@ function runDreamShift(level){
         }
 
         else if(
-          state.lang === "UKR"
+          state.lang ===
+          "UKR"
         ){
 
           main.textContent =
@@ -6029,7 +6128,8 @@ function runDreamShift(level){
       else{
 
         if(
-          state.lang === "PL"
+          state.lang ===
+          "PL"
         ){
 
           main.textContent =
@@ -6041,7 +6141,8 @@ function runDreamShift(level){
         }
 
         else if(
-          state.lang === "UKR"
+          state.lang ===
+          "UKR"
         ){
 
           main.textContent =
@@ -6181,7 +6282,8 @@ function runDreamShift(level){
 function spawnPreviousAnswerGhost(){
 
   if(
-    state.questionIndex === 0
+    state.questionIndex ===
+    0
   ){
 
     return;
@@ -6194,8 +6296,10 @@ function spawnPreviousAnswerGhost(){
     .filter(
 
       a =>
-        a &&
-        a.answer &&
+        a
+        &&
+        a.answer
+        &&
         a.answer.length > 2
 
     );
@@ -6354,7 +6458,8 @@ function renderNickname(){
 
 
   if(
-    state.lang === "PL"
+    state.lang ===
+    "PL"
   ){
 
     eyebrow =
@@ -6363,7 +6468,8 @@ function renderNickname(){
   }
 
   else if(
-    state.lang === "UKR"
+    state.lang ===
+    "UKR"
   ){
 
     eyebrow =
@@ -7016,19 +7122,26 @@ document
   ".dreamImage"
 )
 .forEach(
+
   img=>{
 
+
     img.addEventListener(
+
       "error",
+
       ()=>{
 
         img.style.display =
           "none";
 
       }
+
     );
 
+
   }
+
 );
 
 
