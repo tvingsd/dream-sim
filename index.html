@@ -145,7 +145,7 @@ body{
 
 
 /* =========================================================
-   BASE DREAM IMAGES
+   DREAM IMAGES
    ========================================================= */
 
 .dreamImage{
@@ -178,7 +178,7 @@ body{
 
 
 /* =========================================================
-   IMAGE MORPH
+   MORPH
    ========================================================= */
 
 #dreamImg1{
@@ -199,7 +199,7 @@ body{
 
 
 /* =========================================================
-   DREAM COLOR WASH
+   DREAM COLOR
    ========================================================= */
 
 #dreamColorWash{
@@ -257,7 +257,7 @@ body{
   mix-blend-mode:color;
 
   transition:
-    opacity 3s ease;
+    opacity 2.5s ease;
 
 }
 
@@ -308,14 +308,11 @@ body{
 
   mix-blend-mode:screen;
 
-  transition:
-    opacity 3s ease;
-
 }
 
 
 /* =========================================================
-   MILKY DREAM VEIL
+   VEIL
    ========================================================= */
 
 #dreamImageVeil{
@@ -369,7 +366,7 @@ body{
 
 
 /* =========================================================
-   SOFT FOG
+   FOG
    ========================================================= */
 
 #softFog{
@@ -442,8 +439,8 @@ body{
     50% 50%;
 
   transition:
-    transform 7s cubic-bezier(.22,.61,.36,1),
-    opacity 4s ease;
+    transform 6s cubic-bezier(.22,.61,.36,1),
+    opacity 3s ease;
 
 }
 
@@ -604,7 +601,7 @@ body{
 
 
 /* =========================================================
-   SUN DISK
+   SUN CORE
    ========================================================= */
 
 .sunDisk{
@@ -694,17 +691,15 @@ body{
 
   z-index:12;
 
-  opacity:.035;
+  opacity:.028;
 
   pointer-events:none;
 
   background-image:
 
     url(
-      "data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.72' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.65'/%3E%3C/svg%3E"
+      "data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.72' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E"
     );
-
-  mix-blend-mode:soft-light;
 
 }
 
@@ -776,54 +771,11 @@ body{
       100%
     );
 
-  transition:
-    opacity 2s ease;
-
-}
-
-
-body.questionMode #readingShadow{
-
-  opacity:.33;
-
 }
 
 
 /* =========================================================
-   LOW POWER IOS
-
-   Full graphics remain during intro.
-
-   From first questionnaire screen onward:
-   all heavy graphics are physically removed
-   from rendering.
-   ========================================================= */
-
-body.lowPowerIOS.formActive{
-
-  background:#000 !important;
-
-}
-
-
-body.lowPowerIOS.formActive #dreamWorld,
-body.lowPowerIOS.formActive #ghostLayer,
-body.lowPowerIOS.formActive #readingShadow{
-
-  display:none !important;
-
-}
-
-
-body.lowPowerIOS.formActive #ui{
-
-  background:#000;
-
-}
-
-
-/* =========================================================
-   GHOST TEXT
+   GHOST
    ========================================================= */
 
 #ghostLayer{
@@ -873,10 +825,196 @@ body.lowPowerIOS.formActive #ui{
 }
 
 
-.answerGhost{
+/* =========================================================
+   =========================================================
+   LOW POWER IPHONE MODE
+   =========================================================
+   ========================================================= */
 
-  color:
-    rgba(255,255,255,.034);
+/*
+IMPORTANT:
+
+This mode is deliberately much simpler.
+
+No:
+- blur
+- noise
+- screen blend
+- color blend
+- animated fog
+- ghost blur
+
+during the intro.
+
+Once questions begin:
+the whole dream graphics world disappears.
+*/
+
+
+body.lowPowerIOS #noise,
+body.lowPowerIOS #dreamColorGlow,
+body.lowPowerIOS #dreamImageVeil,
+body.lowPowerIOS #softFog,
+body.lowPowerIOS #ghostLayer{
+
+  display:none !important;
+
+}
+
+
+/* Images remain visible but have NO CSS filter */
+
+body.lowPowerIOS .dreamImage{
+
+  filter:none !important;
+
+  inset:-4%;
+
+  width:108%;
+  height:108%;
+
+  will-change:auto;
+
+}
+
+
+/*
+Simple colour overlay.
+No mix-blend-mode.
+*/
+
+body.lowPowerIOS #dreamColorWash{
+
+  mix-blend-mode:normal !important;
+
+  opacity:
+    calc(
+      var(--dream-color-strength) * .28
+    );
+
+  background:
+    rgba(
+      var(--dream-r),
+      var(--dream-g),
+      var(--dream-b),
+      .42
+    );
+
+  transition:
+    opacity 1.8s ease;
+
+}
+
+
+/* Simplified sun */
+
+body.lowPowerIOS .sunHalo{
+
+  filter:none !important;
+
+  background:
+
+    radial-gradient(
+      circle,
+
+      rgba(
+        var(--sun-r),
+        var(--sun-g),
+        var(--sun-b),
+        .44
+      )
+      0%,
+
+      rgba(
+        var(--sun-r),
+        var(--sun-g),
+        var(--sun-b),
+        .19
+      )
+      24%,
+
+      rgba(
+        var(--sun-r),
+        var(--sun-g),
+        var(--sun-b),
+        .05
+      )
+      48%,
+
+      transparent
+      72%
+    );
+
+}
+
+
+body.lowPowerIOS .sunHalo::before,
+body.lowPowerIOS .sunHalo::after{
+
+  display:none !important;
+
+}
+
+
+body.lowPowerIOS .sunDisk{
+
+  filter:none !important;
+
+  opacity:.42;
+
+}
+
+
+/* Do not force GPU compositing */
+
+body.lowPowerIOS #dreamSun{
+
+  will-change:auto;
+
+}
+
+
+body.lowPowerIOS #dreamMoon{
+
+  will-change:auto;
+
+}
+
+
+/* =========================================================
+   FORM ACTIVE — IPHONE
+   ========================================================= */
+
+/*
+Once questionnaire begins, remove EVERYTHING heavy.
+*/
+
+body.lowPowerIOS.formActive{
+
+  background:#000 !important;
+
+}
+
+
+body.lowPowerIOS.formActive #dreamWorld,
+body.lowPowerIOS.formActive #readingShadow,
+body.lowPowerIOS.formActive #ghostLayer{
+
+  display:none !important;
+
+}
+
+
+body.lowPowerIOS.formActive #ui{
+
+  background:#000 !important;
+
+}
+
+
+body.lowPowerIOS.formActive #screenWrap::before{
+
+  display:none !important;
 
 }
 
@@ -927,7 +1065,7 @@ body.lowPowerIOS.formActive #ui{
     );
 
   transition:
-    opacity 1.35s ease;
+    opacity 1.2s ease;
 
 }
 
@@ -1021,13 +1159,6 @@ body.lowPowerIOS.formActive #ui{
 }
 
 
-body.lowPowerIOS.formActive #screenWrap::before{
-
-  display:none;
-
-}
-
-
 #screen{
 
   position:relative;
@@ -1036,7 +1167,7 @@ body.lowPowerIOS.formActive #screenWrap::before{
 
   transition:
     opacity
-    1.15s
+    .95s
     cubic-bezier(.45,0,.25,1);
 
 }
@@ -1198,7 +1329,9 @@ h2{
   display:grid;
 
   grid-template-columns:
-    1fr 1fr 1fr;
+    1fr
+    1fr
+    1fr;
 
   gap:1px;
 
@@ -1276,6 +1409,8 @@ input{
 
   border-radius:0;
 
+  -webkit-appearance:none;
+
 }
 
 
@@ -1286,7 +1421,9 @@ textarea{
   margin-top:30px;
 
   padding:
-    16px 0 20px;
+    16px
+    0
+    20px;
 
   resize:none;
 
@@ -1307,7 +1444,9 @@ input{
   margin-top:34px;
 
   padding:
-    18px 0 20px;
+    18px
+    0
+    20px;
 
   font-size:
     clamp(
@@ -1397,7 +1536,8 @@ input::placeholder{
   min-width:150px;
 
   padding:
-    17px 20px;
+    17px
+    20px;
 
   border:
     1px solid
@@ -1463,7 +1603,7 @@ input::placeholder{
   opacity:0;
 
   background:
-    rgba(0,0,0,.94);
+    rgba(0,0,0,.96);
 
 }
 
@@ -1472,7 +1612,7 @@ input::placeholder{
 
   animation:
     dreamShift
-    8.3s
+    7.4s
     ease
     forwards;
 
@@ -1534,7 +1674,7 @@ input::placeholder{
   opacity:1;
 
   transition:
-    opacity 1.2s ease;
+    opacity 1s ease;
 
 }
 
@@ -1550,55 +1690,6 @@ input::placeholder{
 /* =========================================================
    FINAL
    ========================================================= */
-
-#whiteBloom{
-
-  position:fixed;
-
-  inset:-30%;
-
-  z-index:200;
-
-  pointer-events:none;
-
-  opacity:0;
-
-  transform:scale(.2);
-
-  background:
-
-    radial-gradient(
-      circle at 50% 50%,
-
-      rgba(255,255,255,1)
-      0%,
-
-      rgba(255,255,255,.90)
-      17%,
-
-      rgba(255,255,255,.48)
-      37%,
-
-      rgba(255,255,255,.08)
-      58%,
-
-      transparent
-      74%
-    );
-
-}
-
-
-#whiteBloom.active{
-
-  animation:
-    bloom
-    5.3s
-    cubic-bezier(.22,.62,.22,1)
-    forwards;
-
-}
-
 
 #whiteout{
 
@@ -1621,8 +1712,8 @@ input::placeholder{
 
   animation:
     whiteout
-    5.4s
-    cubic-bezier(.22,.62,.22,1)
+    4s
+    ease
     forwards;
 
 }
@@ -1657,7 +1748,7 @@ input::placeholder{
 
   animation:
     finalIn
-    2.4s
+    2s
     ease
     forwards;
 
@@ -1666,12 +1757,19 @@ input::placeholder{
 
 .finalGrid{
 
-  width:min(1100px,100%);
+  width:
+    min(
+      1100px,
+      100%
+    );
 
   display:grid;
 
   grid-template-columns:
-    minmax(180px,280px)
+    minmax(
+      180px,
+      280px
+    )
     1fr;
 
   gap:
@@ -1690,7 +1788,11 @@ input::placeholder{
 
   display:block;
 
-  width:min(100%,260px);
+  width:
+    min(
+      100%,
+      260px
+    );
 
   height:auto;
 
@@ -1743,7 +1845,9 @@ input::placeholder{
   height:1px;
 
   margin:
-    42px 0 24px;
+    42px
+    0
+    24px;
 
   background:
     rgba(255,255,255,.21);
@@ -1772,34 +1876,34 @@ input::placeholder{
 
 
 /* =========================================================
-   MORPH ANIMATIONS
+   IMAGE MORPH
    ========================================================= */
 
 @keyframes imageMorph1{
 
   0%{
+    opacity:.90;
+    transform:translate3d(-1%,0,0) scale(1.07);
+  }
+
+  18%{
     opacity:.92;
-    transform:translate3d(-1.5%,0,0) scale(1.09);
+    transform:translate3d(.3%,-.4%,0) scale(1.10);
   }
 
-  17%{
-    opacity:.94;
-    transform:translate3d(.2%,-.6%,0) scale(1.13);
-  }
-
-  29%{
+  30%{
     opacity:0;
-    transform:translate3d(1.2%,-1%,0) scale(1.17);
+    transform:translate3d(1%,-.8%,0) scale(1.13);
   }
 
   87%{
     opacity:0;
-    transform:translate3d(-1.4%,.8%,0) scale(1.07);
+    transform:translate3d(-1%,.5%,0) scale(1.06);
   }
 
   100%{
-    opacity:.92;
-    transform:translate3d(-1.5%,0,0) scale(1.09);
+    opacity:.90;
+    transform:translate3d(-1%,0,0) scale(1.07);
   }
 
 }
@@ -1810,22 +1914,22 @@ input::placeholder{
   0%,
   10%{
     opacity:0;
-    transform:translate3d(1%,.6%,0) scale(1.09);
+    transform:translate3d(1%,.5%,0) scale(1.07);
   }
 
-  21%{
-    opacity:.92;
-    transform:translate3d(.4%,0,0) scale(1.13);
+  22%{
+    opacity:.90;
+    transform:translate3d(.4%,0,0) scale(1.10);
   }
 
   40%{
-    opacity:.94;
-    transform:translate3d(-.6%,-.5%,0) scale(1.17);
+    opacity:.92;
+    transform:translate3d(-.5%,-.4%,0) scale(1.13);
   }
 
   51%{
     opacity:0;
-    transform:translate3d(-1.2%,-1%,0) scale(1.20);
+    transform:translate3d(-1%,-.8%,0) scale(1.15);
   }
 
   100%{
@@ -1840,22 +1944,22 @@ input::placeholder{
   0%,
   34%{
     opacity:0;
-    transform:translate3d(-1%,0,0) scale(1.08);
+    transform:translate3d(-1%,0,0) scale(1.07);
   }
 
-  44%{
-    opacity:.92;
-    transform:translate3d(-.3%,.5%,0) scale(1.12);
+  45%{
+    opacity:.90;
+    transform:translate3d(-.3%,.4%,0) scale(1.10);
   }
 
   63%{
-    opacity:.94;
-    transform:translate3d(.8%,-.3%,0) scale(1.16);
+    opacity:.92;
+    transform:translate3d(.7%,-.3%,0) scale(1.13);
   }
 
   74%{
     opacity:0;
-    transform:translate3d(1.3%,-.8%,0) scale(1.19);
+    transform:translate3d(1%,-.7%,0) scale(1.15);
   }
 
   100%{
@@ -1870,22 +1974,22 @@ input::placeholder{
   0%,
   58%{
     opacity:0;
-    transform:translate3d(1%,0,0) scale(1.08);
+    transform:translate3d(1%,0,0) scale(1.07);
   }
 
-  68%{
-    opacity:.92;
-    transform:translate3d(.3%,-.4%,0) scale(1.12);
+  69%{
+    opacity:.90;
+    transform:translate3d(.3%,-.4%,0) scale(1.10);
   }
 
   87%{
-    opacity:.94;
-    transform:translate3d(-.7%,.5%,0) scale(1.17);
+    opacity:.92;
+    transform:translate3d(-.6%,.4%,0) scale(1.13);
   }
 
   97%{
-    opacity:.12;
-    transform:translate3d(-1%,1%,0) scale(1.20);
+    opacity:.10;
+    transform:translate3d(-1%,.8%,0) scale(1.15);
   }
 
   100%{
@@ -1902,17 +2006,17 @@ input::placeholder{
 @keyframes sunBreath{
 
   0%{
-    transform:scale(.94);
-    opacity:.82;
+    transform:scale(.95);
+    opacity:.83;
   }
 
   50%{
-    transform:scale(1.01);
+    transform:scale(1);
     opacity:.95;
   }
 
   100%{
-    transform:scale(1.08);
+    transform:scale(1.06);
     opacity:1;
   }
 
@@ -1920,7 +2024,7 @@ input::placeholder{
 
 
 /* =========================================================
-   VEILS
+   VEIL
    ========================================================= */
 
 @keyframes imageVeilDrift{
@@ -1937,7 +2041,7 @@ input::placeholder{
 
     transform:
       translate3d(2%,-1%,0)
-      scale(1.07);
+      scale(1.06);
 
   }
 
@@ -1952,17 +2056,13 @@ input::placeholder{
       translate3d(-2%,0,0)
       scale(1.02);
 
-    opacity:.66;
-
   }
 
   to{
 
     transform:
       translate3d(2%,1%,0)
-      scale(1.08);
-
-    opacity:.90;
+      scale(1.07);
 
   }
 
@@ -1977,7 +2077,6 @@ input::placeholder{
 
   0%{
     opacity:0;
-    transform:translate3d(-1vw,1vh,0);
   }
 
   20%{
@@ -1985,19 +2084,18 @@ input::placeholder{
   }
 
   75%{
-    opacity:.48;
+    opacity:.45;
   }
 
   100%{
     opacity:0;
-    transform:translate3d(1.5vw,-1vh,0);
   }
 
 }
 
 
 /* =========================================================
-   DREAM SHIFT
+   SHIFT
    ========================================================= */
 
 @keyframes dreamShift{
@@ -2025,38 +2123,14 @@ input::placeholder{
    FINAL
    ========================================================= */
 
-@keyframes bloom{
-
-  0%{
-    opacity:0;
-    transform:scale(.2);
-  }
-
-  74%{
-    opacity:.62;
-    transform:scale(1);
-  }
-
-  100%{
-    opacity:1;
-    transform:scale(1.9);
-  }
-
-}
-
-
 @keyframes whiteout{
 
   0%{
     opacity:0;
   }
 
-  58%{
-    opacity:.05;
-  }
-
-  82%{
-    opacity:.34;
+  65%{
+    opacity:.08;
   }
 
   100%{
@@ -2192,9 +2266,9 @@ input::placeholder{
 
     width:
       clamp(
-        390px,
-        110vw,
-        780px
+        360px,
+        98vw,
+        680px
       );
 
   }
@@ -2212,37 +2286,6 @@ input::placeholder{
   }
 
 
-  .dreamImage{
-
-    filter:
-      grayscale(1)
-      contrast(1.06)
-      brightness(.96)
-      blur(7px);
-
-  }
-
-
-  #noise{
-    display:none;
-  }
-
-
-  #dreamColorGlow{
-    display:none;
-  }
-
-
-  #dreamImageVeil{
-    filter:blur(18px);
-  }
-
-
-  #softFog{
-    filter:blur(14px);
-  }
-
-
   .finalGrid{
 
     display:flex;
@@ -2257,7 +2300,13 @@ input::placeholder{
 
 
   .logoBlock img{
-    width:min(52vw,190px);
+
+    width:
+      min(
+        52vw,
+        190px
+      );
+
   }
 
 
@@ -2355,7 +2404,6 @@ input::placeholder{
 
   <div id="dreamMoon"></div>
 
-
   <div id="noise"></div>
 
   <div id="dreamVignette"></div>
@@ -2389,8 +2437,6 @@ input::placeholder{
 <!-- ======================================================
      FINAL
      ====================================================== -->
-
-<div id="whiteBloom"></div>
 
 <div id="whiteout"></div>
 
@@ -2508,10 +2554,7 @@ function setVH(){
     window.innerHeight;
 
 
-  document
-  .documentElement
-  .style
-  .setProperty(
+  document.documentElement.style.setProperty(
     "--vh",
     (h*.01)+"px"
   );
@@ -2532,9 +2575,7 @@ if(
   window.visualViewport
 ){
 
-  window
-  .visualViewport
-  .addEventListener(
+  window.visualViewport.addEventListener(
     "resize",
     setVH
   );
@@ -2543,7 +2584,7 @@ if(
 
 
 /* =========================================================
-   IOS PERFORMANCE PROFILE
+   DEVICE DETECTION
    ========================================================= */
 
 function detectLowPowerIOS(){
@@ -2560,89 +2601,70 @@ function detectLowPowerIOS(){
     navigator.maxTouchPoints || 0;
 
 
-  /*
-  Normal iPhone detection.
-  Also covers iOS-style WebKit identification.
-  */
-
-  const isIPhone =
-    /iPhone|iPod/i.test(ua);
-
-
-  const isiOSDevice =
-    isIPhone
-    ||
-    (
-      platform === "MacIntel"
-      &&
-      touchPoints > 1
-      &&
-      Math.min(
-        screen.width,
-        screen.height
-      ) <= 430
+  const isiPhoneUA =
+    /iPhone|iPod/i.test(
+      ua
     );
 
 
-  if(
-    !isiOSDevice
-  ){
+  /*
+  Some Apple devices report MacIntel.
+  */
 
-    return false;
-
-  }
+  const appleTouchDevice =
+    platform === "MacIntel"
+    &&
+    touchPoints > 1;
 
 
   const shortSide =
     Math.min(
-      screen.width,
-      screen.height
+      window.screen.width,
+      window.screen.height
     );
 
 
   const longSide =
     Math.max(
-      screen.width,
-      screen.height
+      window.screen.width,
+      window.screen.height
     );
 
 
-  const dpr =
-    window.devicePixelRatio || 1;
-
-
   /*
-  IMPORTANT:
+  Safari does NOT reliably expose exact iPhone model.
 
-  Safari does not expose an exact model such as
-  "iPhone 13" or "iPhone 14".
+  We therefore use a conservative phone performance class.
 
-  This intentionally uses a SAFE PERFORMANCE CLASS.
+  This intentionally includes:
+  - iPhone SE
+  - 11
+  - 12
+  - 13
+  - 14
+  - and possibly some similarly sized newer models
 
-  It includes typical iPhone 14 / 13 / 12 / 11 / SE etc.
-  It may also classify some newer similarly-sized iPhones
-  as low power.
-
-  That is deliberate:
-  stability is more important than guessing the exact model.
+  Stability > exact model recognition.
   */
 
-  const phoneSizeClass =
+  const phoneDimensions =
     shortSide <= 430
     &&
     longSide <= 932;
 
 
-  const retinaPhone =
-    dpr >= 2
-    &&
-    dpr <= 3.5;
-
-
   return (
-    phoneSizeClass
+
+    phoneDimensions
+
     &&
-    retinaPhone
+
+    (
+      isiPhoneUA
+      ||
+      appleTouchDevice
+    )
+
   );
 
 }
@@ -2656,11 +2678,112 @@ if(
   LOW_POWER_IOS
 ){
 
-  document
-  .body
-  .classList
-  .add(
+  document.body.classList.add(
     "lowPowerIOS"
+  );
+
+}
+
+
+/* =========================================================
+   MOBILE IMAGE SOURCES
+   ========================================================= */
+
+function applyMobileImageSources(){
+
+  if(
+    !LOW_POWER_IOS
+  ){
+
+    return;
+
+  }
+
+
+  const images = [
+
+    {
+      id:"dreamImg1",
+      mobile:"r_1_mobile.jpg",
+      fallback:"r_1.png"
+    },
+
+    {
+      id:"dreamImg2",
+      mobile:"r_2_mobile.jpg",
+      fallback:"r_2.png"
+    },
+
+    {
+      id:"dreamImg3",
+      mobile:"r_3_mobile.jpg",
+      fallback:"r_3.png"
+    },
+
+    {
+      id:"dreamImg4",
+      mobile:"r_4_mobile.jpg",
+      fallback:"r_4.png"
+    }
+
+  ];
+
+
+  images.forEach(
+    item=>{
+
+
+      const img =
+        document.getElementById(
+          item.id
+        );
+
+
+      if(
+        !img
+      ){
+
+        return;
+
+      }
+
+
+      let alreadyFallback =
+        false;
+
+
+      img.onerror =
+        ()=>{
+
+
+          if(
+            alreadyFallback
+          ){
+
+            img.style.display =
+              "none";
+
+            return;
+
+          }
+
+
+          alreadyFallback =
+            true;
+
+
+          img.src =
+            item.fallback;
+
+
+        };
+
+
+      img.src =
+        item.mobile;
+
+
+    }
   );
 
 }
@@ -2695,7 +2818,7 @@ type:"color",
 label:"TRAUM / 03",
 title:"Jaki kolor mają Twoje najlepsze sny?",
 text:"Nie zastanawiaj się długo. Wpisz pierwszy kolor, który pojawił się w Twojej głowie.",
-meta:"Od tej chwili światło i obraz zaczną pamiętać ten kolor."
+meta:"Nie ma właściwej odpowiedzi. Interesuje nas pierwszy ślad."
 },
 
 {
@@ -2732,7 +2855,7 @@ type:"color",
 label:"TRAUM / 03",
 title:"What colour do your best dreams have?",
 text:"Do not think too long. Type the first colour that appeared in your mind.",
-meta:"From this moment the light and the image will begin to remember this colour."
+meta:"There is no correct answer. We are interested in the first trace."
 },
 
 {
@@ -2769,7 +2892,7 @@ type:"color",
 label:"TRAUM / 03",
 title:"Якого кольору найкращі сни?",
 text:"Не думай довго. Напиши перший колір, який з’являється в уяві.",
-meta:"Відтепер світло й образ почнуть пам’ятати цей колір."
+meta:"Правильної відповіді немає. Нас цікавить перший слід."
 },
 
 {
@@ -2786,7 +2909,7 @@ meta:"Кожна відповідь змінюватиме наступне за
 
 
 /* =========================================================
-   UI COPY
+   UI
    ========================================================= */
 
 const UI = {
@@ -2966,19 +3089,27 @@ dreamColor:{
    ========================================================= */
 
 const screen =
-document.getElementById("screen");
+document.getElementById(
+  "screen"
+);
 
 
 const progress =
-document.getElementById("progress");
+document.getElementById(
+  "progress"
+);
 
 
 const depthLabel =
-document.getElementById("depthLabel");
+document.getElementById(
+  "depthLabel"
+);
 
 
 const ghostLayer =
-document.getElementById("ghostLayer");
+document.getElementById(
+  "ghostLayer"
+);
 
 
 /* =========================================================
@@ -3034,7 +3165,7 @@ function randomItem(array){
 
 
 /* =========================================================
-   COLOR PARSER
+   COLOR DATABASE
    ========================================================= */
 
 function parseDreamColor(name){
@@ -3047,7 +3178,9 @@ function parseDreamColor(name){
     .trim();
 
 
-  if(!s){
+  if(
+    !s
+  ){
 
     return {
       r:220,
@@ -3068,19 +3201,15 @@ function parseDreamColor(name){
   const map = {
 
 
-    /* GREY */
+    /* GREYS */
 
     "jasno szary":[205,205,210],
     "jasnoszary":[205,205,210],
-    "jasnoszara":[205,205,210],
-
     "light grey":[205,205,210],
     "light gray":[205,205,210],
 
     "ciemno szary":[90,92,100],
     "ciemnoszary":[90,92,100],
-    "ciemnoszara":[90,92,100],
-
     "dark grey":[90,92,100],
     "dark gray":[90,92,100],
 
@@ -3093,16 +3222,13 @@ function parseDreamColor(name){
     "cool gray":[135,145,160],
 
     "popielaty":[175,175,180],
-    "popielata":[175,175,180],
     "popiel":[175,175,180],
 
     "stalowy":[120,135,145],
-    "stalowa":[120,135,145],
     "steel grey":[120,135,145],
     "steel gray":[120,135,145],
 
     "grafitowy":[95,100,110],
-    "grafitowa":[95,100,110],
     "grafit":[95,100,110],
     "graphite":[95,100,110],
 
@@ -3123,10 +3249,9 @@ function parseDreamColor(name){
     "сіра":[155,155,160],
 
 
-    /* WHITE / BLACK / SILVER */
+    /* WHITE BLACK */
 
     "srebrny":[190,195,205],
-    "srebro":[190,195,205],
     "silver":[190,195,205],
 
     "biały":[235,235,230],
@@ -3140,7 +3265,7 @@ function parseDreamColor(name){
     "чорний":[70,70,70],
 
 
-    /* MAGENTA / PINK / PURPLE */
+    /* MAGENTA PINK */
 
     "neonowa magenta":[255,0,255],
     "neon magenta":[255,0,255],
@@ -3152,15 +3277,12 @@ function parseDreamColor(name){
     "маджента":[255,0,255],
 
     "fuksjowy":[255,0,170],
-    "fuksjowa":[255,0,170],
     "fuksja":[255,0,170],
     "fuchsia":[255,0,170],
 
     "hot pink":[255,80,175],
-    "hotpink":[255,80,175],
 
     "pudrowy róż":[220,165,185],
-    "dusty pink":[220,165,185],
 
     "jasny róż":[255,170,210],
     "light pink":[255,170,210],
@@ -3169,7 +3291,6 @@ function parseDreamColor(name){
     "dark pink":[185,55,120],
 
     "różowy":[235,105,175],
-    "różowa":[235,105,175],
     "róż":[235,105,175],
     "pink":[235,105,175],
     "рожевий":[235,105,175],
@@ -3179,6 +3300,9 @@ function parseDreamColor(name){
 
     "amarantowy":[225,40,110],
     "amarant":[225,40,110],
+
+
+    /* PURPLE */
 
     "ciemny fiolet":[85,35,135],
     "dark violet":[85,35,135],
@@ -3258,7 +3382,6 @@ function parseDreamColor(name){
     /* YELLOW */
 
     "żółty":[240,205,65],
-    "żółta":[240,205,65],
     "yellow":[240,205,65],
 
     "cytrynowy":[225,235,65],
@@ -3313,7 +3436,7 @@ function parseDreamColor(name){
     "green":[65,165,95],
 
 
-    /* CYAN */
+    /* CYAN / TURQUOISE */
 
     "neonowy turkus":[20,245,210],
     "neon turquoise":[20,245,210],
@@ -3354,7 +3477,6 @@ function parseDreamColor(name){
 
     "granatowy":[35,55,125],
     "granat":[35,55,125],
-    "navy blue":[35,55,125],
     "navy":[35,55,125],
 
     "błękitny":[90,175,230],
@@ -3372,7 +3494,6 @@ function parseDreamColor(name){
     "azure":[70,155,225],
 
     "niebieski":[65,120,215],
-    "niebieska":[65,120,215],
     "blue":[65,120,215],
 
 
@@ -3396,7 +3517,6 @@ function parseDreamColor(name){
     "beige":[195,180,155],
 
     "kremowy":[225,215,185],
-    "krem":[225,215,185],
     "cream":[225,215,185],
 
     "ivory":[225,220,195],
@@ -3408,8 +3528,9 @@ function parseDreamColor(name){
 
 
   const keys =
-    Object
-    .keys(map)
+    Object.keys(
+      map
+    )
     .sort(
       (a,b)=>
         b.length-a.length
@@ -3445,7 +3566,9 @@ function parseDreamColor(name){
     );
 
 
-  if(css){
+  if(
+    css
+  ){
 
     return css;
 
@@ -3464,7 +3587,7 @@ function parseDreamColor(name){
 
 
 /* =========================================================
-   CSS COLOR FALLBACK
+   CSS COLOR
    ========================================================= */
 
 function parseCssColor(value){
@@ -3472,8 +3595,7 @@ function parseCssColor(value){
   try{
 
     const canvas =
-      document
-      .createElement(
+      document.createElement(
         "canvas"
       );
 
@@ -3483,13 +3605,17 @@ function parseCssColor(value){
 
 
     const ctx =
-      canvas
-      .getContext(
-        "2d"
+      canvas.getContext(
+        "2d",
+        {
+          willReadFrequently:true
+        }
       );
 
 
-    if(!ctx){
+    if(
+      !ctx
+    ){
 
       return null;
 
@@ -3540,8 +3666,7 @@ function parseCssColor(value){
 
 
     const pixel =
-      ctx
-      .getImageData(
+      ctx.getImageData(
         0,
         0,
         1,
@@ -3579,55 +3704,41 @@ function applyDreamColor(){
     state.dreamColor;
 
 
-  document
-  .documentElement
-  .style
-  .setProperty(
+  const root =
+    document.documentElement;
+
+
+  root.style.setProperty(
     "--sun-r",
     c.r
   );
 
 
-  document
-  .documentElement
-  .style
-  .setProperty(
+  root.style.setProperty(
     "--sun-g",
     c.g
   );
 
 
-  document
-  .documentElement
-  .style
-  .setProperty(
+  root.style.setProperty(
     "--sun-b",
     c.b
   );
 
 
-  document
-  .documentElement
-  .style
-  .setProperty(
+  root.style.setProperty(
     "--dream-r",
     c.r
   );
 
 
-  document
-  .documentElement
-  .style
-  .setProperty(
+  root.style.setProperty(
     "--dream-g",
     c.g
   );
 
 
-  document
-  .documentElement
-  .style
-  .setProperty(
+  root.style.setProperty(
     "--dream-b",
     c.b
   );
@@ -3636,15 +3747,10 @@ function applyDreamColor(){
   const hasColour =
     state.dreamColorName
     &&
-    state.dreamColorName
-    .trim()
-    .length > 0;
+    state.dreamColorName.trim().length>0;
 
 
-  document
-  .documentElement
-  .style
-  .setProperty(
+  root.style.setProperty(
     "--dream-color-strength",
     hasColour
     ?
@@ -3683,32 +3789,17 @@ function setVisualMode(mode){
     );
 
 
-  document
-  .body
-  .classList
-  .toggle(
+  document.body.classList.toggle(
     "questionMode",
     isFormMode
   );
 
 
-  /*
-  LOW POWER IOS:
-
-  Intro = full visuals.
-
-  Questionnaire onwards =
-  pure black lightweight environment.
-  */
-
   if(
     LOW_POWER_IOS
   ){
 
-    document
-    .body
-    .classList
-    .toggle(
+    document.body.classList.toggle(
       "formActive",
       isFormMode
     );
@@ -3725,17 +3816,13 @@ function setVisualMode(mode){
 function updateDreamCosmos(){
 
   /*
-  No reason to update hidden graphics
-  on low-power iPhones.
+  Never update hidden graphics on low-power iPhones.
   */
 
   if(
     LOW_POWER_IOS
     &&
-    document
-    .body
-    .classList
-    .contains(
+    document.body.classList.contains(
       "formActive"
     )
   ){
@@ -3783,19 +3870,13 @@ function updateDreamCosmos(){
     p*.20;
 
 
-  document
-  .documentElement
-  .style
-  .setProperty(
+  document.documentElement.style.setProperty(
     "--sun-scale",
     sunScale
   );
 
 
-  document
-  .documentElement
-  .style
-  .setProperty(
+  document.documentElement.style.setProperty(
     "--sun-opacity",
     sunOpacity
   );
@@ -3805,14 +3886,10 @@ function updateDreamCosmos(){
     level === 0
   ){
 
-    document
-    .documentElement
-    .style
-    .setProperty(
+    document.documentElement.style.setProperty(
       "--moon-opacity",
       "0"
     );
-
 
     return;
 
@@ -3843,28 +3920,19 @@ function updateDreamCosmos(){
       local*.18;
 
 
-    document
-    .documentElement
-    .style
-    .setProperty(
+    document.documentElement.style.setProperty(
       "--moon-opacity",
       ".94"
     );
 
 
-    document
-    .documentElement
-    .style
-    .setProperty(
+    document.documentElement.style.setProperty(
       "--moon-x",
       moonX+"%"
     );
 
 
-    document
-    .documentElement
-    .style
-    .setProperty(
+    document.documentElement.style.setProperty(
       "--moon-scale",
       moonScale
     );
@@ -3895,28 +3963,19 @@ function updateDreamCosmos(){
     local*.28;
 
 
-  document
-  .documentElement
-  .style
-  .setProperty(
+  document.documentElement.style.setProperty(
     "--moon-opacity",
     ".995"
   );
 
 
-  document
-  .documentElement
-  .style
-  .setProperty(
+  document.documentElement.style.setProperty(
     "--moon-x",
     moonX+"%"
   );
 
 
-  document
-  .documentElement
-  .style
-  .setProperty(
+  document.documentElement.style.setProperty(
     "--moon-scale",
     moonScale
   );
@@ -3947,9 +4006,7 @@ function transition(fn){
     true;
 
 
-  screen
-  .classList
-  .add(
+  screen.classList.add(
     "fade"
   );
 
@@ -3972,9 +4029,7 @@ function transition(fn){
             ()=>{
 
 
-              screen
-              .classList
-              .remove(
+              screen.classList.remove(
                 "fade"
               );
 
@@ -3988,7 +4043,7 @@ function transition(fn){
 
                 },
 
-                1200
+                1000
 
               );
 
@@ -4005,7 +4060,7 @@ function transition(fn){
 
     },
 
-    1150
+    950
 
   );
 
@@ -4208,6 +4263,8 @@ id="dreamColorInput"
 type="text"
 autocomplete="off"
 spellcheck="false"
+autocorrect="off"
+autocapitalize="none"
 placeholder="${copy.colorPlaceholder}"
 value="${escapeHtml(
   state.dreamColorName
@@ -4245,43 +4302,31 @@ ${copy.next}
 
 
         const field =
-          document
-          .getElementById(
+          document.getElementById(
             "dreamColorInput"
           );
 
 
-        if(field){
-
-
-          field.focus();
+        if(
+          field
+        ){
 
 
           /*
-          CRITICAL iOS FIX:
+          IMPORTANT:
 
-          Do NOT recolor full-screen graphics
-          after every typed letter.
-
-          Only store the text.
-
-          Actual colour is applied when user
-          presses NEXT.
+          No graphic updates while typing.
+          Especially important for Safari.
           */
 
-          field
-          .addEventListener(
+          field.addEventListener(
 
             "input",
 
             ()=>{
 
-
               state.dreamColorName =
-                field
-                .value
-                .trim();
-
+                field.value.trim();
 
             }
 
@@ -4293,7 +4338,7 @@ ${copy.next}
 
       },
 
-      200
+      100
 
     );
 
@@ -4345,9 +4390,19 @@ ${last ? copy.begin : copy.next}
   }
 
 
-  ghost(
-    slide.title
-  );
+  /*
+  Ghosts only on full-power devices.
+  */
+
+  if(
+    !LOW_POWER_IOS
+  ){
+
+    ghost(
+      slide.title
+    );
+
+  }
 
 }
 
@@ -4359,8 +4414,7 @@ ${last ? copy.begin : copy.next}
 function saveColorField(){
 
   const field =
-    document
-    .getElementById(
+    document.getElementById(
       "dreamColorInput"
     );
 
@@ -4375,9 +4429,7 @@ function saveColorField(){
 
 
   state.dreamColorName =
-    field
-    .value
-    .trim();
+    field.value.trim();
 
 
   state.dreamColor =
@@ -4387,8 +4439,7 @@ function saveColorField(){
 
 
   /*
-  Only here do we repaint.
-  Keyboard input itself stays lightweight.
+  Repaint only once, after NEXT.
   */
 
   applyDreamColor();
@@ -4415,7 +4466,8 @@ function introBack(){
 
 
   if(
-    state.introStep === 0
+    state.introStep ===
+    0
   ){
 
     transition(
@@ -4498,7 +4550,7 @@ function introNext(){
 
 
 /* =========================================================
-   OPENING QUESTION
+   OPENING
    ========================================================= */
 
 function generateOpeningQuestion(){
@@ -4703,6 +4755,11 @@ fear:[
 door:[
 "drzwi","okno","schody","korytarz",
 "tunel","przejście","brama"
+],
+
+animal:[
+"pies","kot","ptak","koń","zwierzę",
+"wilk","lis","szczur","ryba"
 ]
 
 },
@@ -4737,6 +4794,11 @@ fear:[
 door:[
 "door","window","stairs","corridor",
 "tunnel","passage","gate"
+],
+
+animal:[
+"dog","cat","bird","horse","animal",
+"wolf","fox","rat","fish"
 ]
 
 },
@@ -4772,6 +4834,12 @@ door:[
 "двері","вікно","сходи",
 "коридор","тунель",
 "прохід","брама"
+],
+
+animal:[
+"собака","кіт","птах","кінь",
+"тварина","вовк","лисиця",
+"щур","риба"
 ]
 
 }
@@ -4792,8 +4860,7 @@ door:[
   ){
 
     if(
-      dict[type]
-      .some(
+      dict[type].some(
         word =>
           t.includes(
             word
@@ -4816,7 +4883,7 @@ door:[
 
 
 /* =========================================================
-   ADAPTIVE QUESTIONS
+   ADAPTIVE
    ========================================================= */
 
 function generateAdaptiveQuestion(){
@@ -5406,13 +5473,12 @@ function generateLayerThreeQuestion(
 
 
 /* =========================================================
-   QUESTION HELPERS
+   HELPERS
    ========================================================= */
 
 function getCurrentQuestion(){
 
-  return state
-  .generatedQuestions[
+  return state.generatedQuestions[
     state.questionIndex
   ];
 
@@ -5445,19 +5511,16 @@ function getDreamLevel(){
 
 
 /* =========================================================
-   RENDER QUESTION
+   QUESTION
    ========================================================= */
 
 function renderQuestion(){
 
   /*
-  IMPORTANT:
+  Critical iPhone moment.
 
-  Calling setVisualMode here activates
-  formActive on LOW_POWER_IOS.
-
-  This is the exact moment all background
-  graphics disappear.
+  setVisualMode("questions") makes
+  dreamWorld display:none on LOW_POWER_IOS.
   */
 
   setVisualMode(
@@ -5522,7 +5585,7 @@ function renderQuestion(){
 
 
   if(
-    state.questionIndex > 0
+    state.questionIndex>0
   ){
 
     const previous =
@@ -5552,7 +5615,9 @@ function renderQuestion(){
         trace = `
 
 <div class="contextTrace">
-${escapeHtml(fragment)}
+${escapeHtml(
+  fragment
+)}
 </div>
 
 `;
@@ -5583,6 +5648,8 @@ ${trace}
 <textarea
 id="answer"
 placeholder="${copy.placeholder}"
+autocorrect="on"
+autocapitalize="sentences"
 >${escapeHtml(
   saved
   ?
@@ -5612,11 +5679,6 @@ ${copy.next}
 `;
 
 
-  /*
-  Disable ghost generation entirely
-  for low-power iPhones.
-  */
-
   if(
     !LOW_POWER_IOS
   ){
@@ -5625,35 +5687,17 @@ ${copy.next}
 
   }
 
-
-  setTimeout(
-
-    ()=>{
-
-      document
-      .getElementById(
-        "answer"
-      )
-      ?.focus();
-
-    },
-
-    250
-
-  );
-
 }
 
 
 /* =========================================================
-   SAVE CURRENT ANSWER
+   SAVE ANSWER
    ========================================================= */
 
 function saveCurrentAnswer(){
 
   const field =
-    document
-    .getElementById(
+    document.getElementById(
       "answer"
     );
 
@@ -5727,13 +5771,14 @@ function questionNext(){
   ){
 
     const field =
-      document
-      .getElementById(
+      document.getElementById(
         "answer"
       );
 
 
-    if(field){
+    if(
+      field
+    ){
 
       field.focus();
 
@@ -5751,7 +5796,7 @@ function questionNext(){
 
         },
 
-        700
+        600
 
       );
 
@@ -5771,7 +5816,6 @@ function questionNext(){
     transition(
       renderNickname
     );
-
 
     return;
 
@@ -5795,9 +5839,6 @@ function questionNext(){
   }
 
 
-  updateDreamCosmos();
-
-
   if(
     state.questionIndex === 3
   ){
@@ -5805,7 +5846,6 @@ function questionNext(){
     runDreamShift(
       1
     );
-
 
     return;
 
@@ -5819,7 +5859,6 @@ function questionNext(){
     runDreamShift(
       2
     );
-
 
     return;
 
@@ -5860,8 +5899,7 @@ function questionBack(){
     state.introStep =
       INTRO[
         state.lang
-      ]
-      .length-1;
+      ].length-1;
 
 
     transition(
@@ -5908,52 +5946,47 @@ function runDreamShift(level){
 
 
   const overlay =
-    document
-    .getElementById(
+    document.getElementById(
       "dreamShift"
     );
 
 
   const main =
-    document
-    .getElementById(
+    document.getElementById(
       "dreamShiftMain"
     );
 
 
   const sub =
-    document
-    .getElementById(
+    document.getElementById(
       "dreamShiftSub"
     );
 
 
   const ui =
-    document
-    .getElementById(
+    document.getElementById(
       "ui"
     );
 
 
-  main
-  .classList
-  .remove(
+  main.classList.remove(
     "shiftFade"
   );
 
 
-  sub
-  .classList
-  .remove(
+  sub.classList.remove(
     "shiftFade"
   );
 
 
-  ui
-  .classList
-  .add(
+  ui.classList.add(
     "hide"
   );
+
+
+  /*
+  Original more poetic copy.
+  */
 
 
   if(
@@ -5965,10 +5998,10 @@ function runDreamShift(level){
     ){
 
       main.textContent =
-        "COŚ PRZESZŁO PRZEZ ŚWIATŁO";
+        "ZAMKNIJ OCZY JESZCZE RAZ";
 
       sub.textContent =
-        "sen ma jeszcze jedną warstwę";
+        "to samo wspomnienie może prowadzić głębiej";
 
     }
 
@@ -5977,20 +6010,20 @@ function runDreamShift(level){
     ){
 
       main.textContent =
-        "ЩОСЬ ПРОЙШЛО КРІЗЬ СВІТЛО";
+        "ЗАПЛЮЩ ОЧІ ЩЕ РАЗ";
 
       sub.textContent =
-        "сон має ще один шар";
+        "той самий спогад може вести глибше";
 
     }
 
     else{
 
       main.textContent =
-        "SOMETHING CROSSED THE LIGHT";
+        "CLOSE YOUR EYES AGAIN";
 
       sub.textContent =
-        "the dream has another layer";
+        "the same memory can lead deeper";
 
     }
 
@@ -6003,10 +6036,10 @@ function runDreamShift(level){
     ){
 
       main.textContent =
-        "ŚWIATŁO NIE ZNIKNĘŁO";
+        "SEN PAMIĘTA";
 
       sub.textContent =
-        "zostało tylko przesłonięte";
+        "niektóre obrazy wracają inaczej";
 
     }
 
@@ -6015,29 +6048,27 @@ function runDreamShift(level){
     ){
 
       main.textContent =
-        "СВІТЛО НЕ ЗНИКЛО";
+        "СОН ПАМ’ЯТАЄ";
 
       sub.textContent =
-        "його лише було закрито";
+        "деякі образи повертаються інакше";
 
     }
 
     else{
 
       main.textContent =
-        "THE LIGHT DID NOT DISAPPEAR";
+        "THE DREAM REMEMBERS";
 
       sub.textContent =
-        "it was only covered";
+        "some images return differently";
 
     }
 
   }
 
 
-  overlay
-  .classList
-  .add(
+  overlay.classList.add(
     "active"
   );
 
@@ -6046,22 +6077,17 @@ function runDreamShift(level){
 
     ()=>{
 
-      main
-      .classList
-      .add(
+      main.classList.add(
         "shiftFade"
       );
 
-
-      sub
-      .classList
-      .add(
+      sub.classList.add(
         "shiftFade"
       );
 
     },
 
-    2600
+    2250
 
   );
 
@@ -6083,7 +6109,7 @@ function runDreamShift(level){
             "NIE SZUKAJ POCZĄTKU";
 
           sub.textContent =
-            "pozwól obrazowi prowadzić dalej";
+            "po prostu wejdź w następną scenę";
 
         }
 
@@ -6095,7 +6121,7 @@ function runDreamShift(level){
             "НЕ ШУКАЙ ПОЧАТКУ";
 
           sub.textContent =
-            "дозволь образу вести далі";
+            "просто увійди в наступну сцену";
 
         }
 
@@ -6105,7 +6131,7 @@ function runDreamShift(level){
             "DO NOT LOOK FOR THE BEGINNING";
 
           sub.textContent =
-            "let the image lead you further";
+            "simply enter the next scene";
 
         }
 
@@ -6118,10 +6144,10 @@ function runDreamShift(level){
         ){
 
           main.textContent =
-            "ZOSTAŁA KORONA";
+            "TERAZ SEN PATRZY NA CIEBIE";
 
           sub.textContent =
-            "kolor nadal jest pod spodem";
+            "zostań jeszcze chwilę";
 
         }
 
@@ -6130,63 +6156,39 @@ function runDreamShift(level){
         ){
 
           main.textContent =
-            "ЗАЛИШИЛАСЯ КОРОНА";
+            "ТЕПЕР СОН ДИВИТЬСЯ У ВІДПОВІДЬ";
 
           sub.textContent =
-            "колір усе ще під нею";
+            "залишся ще трохи";
 
         }
 
         else{
 
           main.textContent =
-            "THE CORONA REMAINS";
+            "NOW THE DREAM LOOKS BACK";
 
           sub.textContent =
-            "the colour is still underneath";
+            "stay a little longer";
 
         }
 
       }
 
 
-      requestAnimationFrame(
-
-        ()=>{
-
-
-          requestAnimationFrame(
-
-            ()=>{
+      main.classList.remove(
+        "shiftFade"
+      );
 
 
-              main
-              .classList
-              .remove(
-                "shiftFade"
-              );
-
-
-              sub
-              .classList
-              .remove(
-                "shiftFade"
-              );
-
-
-            }
-
-          );
-
-
-        }
-
+      sub.classList.remove(
+        "shiftFade"
       );
 
 
     },
 
-    3900
+    3450
 
   );
 
@@ -6195,22 +6197,17 @@ function runDreamShift(level){
 
     ()=>{
 
-      main
-      .classList
-      .add(
+      main.classList.add(
         "shiftFade"
       );
 
-
-      sub
-      .classList
-      .add(
+      sub.classList.add(
         "shiftFade"
       );
 
     },
 
-    6500
+    5900
 
   );
 
@@ -6219,9 +6216,7 @@ function runDreamShift(level){
 
     ()=>{
 
-      overlay
-      .classList
-      .remove(
+      overlay.classList.remove(
         "active"
       );
 
@@ -6229,30 +6224,18 @@ function runDreamShift(level){
       renderQuestion();
 
 
-      ui
-      .classList
-      .remove(
+      ui.classList.remove(
         "hide"
       );
 
 
-      setTimeout(
-
-        ()=>{
-
-          dreamShiftRunning =
-            false;
-
-        },
-
-        650
-
-      );
+      dreamShiftRunning =
+        false;
 
 
     },
 
-    8300
+    7400
 
   );
 
@@ -6284,15 +6267,14 @@ function spawnPreviousAnswerGhost(){
 
 
   const previous =
-    state.answers
-    .filter(
+    state.answers.filter(
 
       a =>
         a
         &&
         a.answer
         &&
-        a.answer.length > 2
+        a.answer.length>2
 
     );
 
@@ -6307,8 +6289,7 @@ function spawnPreviousAnswerGhost(){
 
 
   if(
-    Math.random() >
-    .60
+    Math.random()>.60
   ){
 
     const a =
@@ -6317,17 +6298,16 @@ function spawnPreviousAnswerGhost(){
       );
 
 
-    const fragment =
+    ghost(
+
       cleanFragmentForPrompt(
         extractFragment(
           a.answer
         )
-      );
+      ),
 
-
-    ghost(
-      fragment,
       true
+
     );
 
   }
@@ -6341,6 +6321,8 @@ function ghost(
 ){
 
   if(
+    LOW_POWER_IOS
+    ||
     !text
   ){
 
@@ -6349,25 +6331,8 @@ function ghost(
   }
 
 
-  if(
-    LOW_POWER_IOS
-    &&
-    document
-    .body
-    .classList
-    .contains(
-      "formActive"
-    )
-  ){
-
-    return;
-
-  }
-
-
   const e =
-    document
-    .createElement(
+    document.createElement(
       "div"
     );
 
@@ -6414,8 +6379,7 @@ function ghost(
     "s";
 
 
-  ghostLayer
-  .appendChild(
+  ghostLayer.appendChild(
     e
   );
 
@@ -6548,18 +6512,17 @@ function nicknameBack(){
 
 
   const field =
-    document
-    .getElementById(
+    document.getElementById(
       "nickname"
     );
 
 
-  if(field){
+  if(
+    field
+  ){
 
     state.nickname =
-      field
-      .value
-      .trim();
+      field.value.trim();
 
   }
 
@@ -6576,7 +6539,7 @@ function nicknameBack(){
 
 
 /* =========================================================
-   SAVE
+   SAVE DREAM
    ========================================================= */
 
 async function saveDream(){
@@ -6591,21 +6554,22 @@ async function saveDream(){
 
 
   const field =
-    document
-    .getElementById(
+    document.getElementById(
       "nickname"
     );
 
 
-  if(field){
+  if(
+    field
+  ){
 
     const value =
-      field
-      .value
-      .trim();
+      field.value.trim();
 
 
-    if(value){
+    if(
+      value
+    ){
 
       state.nickname =
         value;
@@ -6626,8 +6590,7 @@ async function saveDream(){
 
 
   const honeypot =
-    document
-    .getElementById(
+    document.getElementById(
       "website"
     );
 
@@ -6724,7 +6687,8 @@ ${copy.saving}
 
         {
 
-          method:"POST",
+          method:
+            "POST",
 
           headers:{
 
@@ -6816,9 +6780,8 @@ function renderSaved(id){
 
         setTimeout(
           show,
-          150
+          120
         );
-
 
         return;
 
@@ -6874,7 +6837,7 @@ ${escapeHtml(
 
         startFinalSequence,
 
-        5200
+        4300
 
       );
 
@@ -6933,9 +6896,8 @@ function renderError(){
 
         setTimeout(
           show,
-          150
+          120
         );
-
 
         return;
 
@@ -7001,36 +6963,24 @@ ${copy.retry}
 function startFinalSequence(){
 
   const ui =
-    document
-    .getElementById(
+    document.getElementById(
       "ui"
     );
 
 
-  const bloom =
-    document
-    .getElementById(
-      "whiteBloom"
-    );
-
-
   const whiteout =
-    document
-    .getElementById(
+    document.getElementById(
       "whiteout"
     );
 
 
   const final =
-    document
-    .getElementById(
+    document.getElementById(
       "finalInvite"
     );
 
 
-  ui
-  .classList
-  .add(
+  ui.classList.add(
     "hide"
   );
 
@@ -7039,24 +6989,13 @@ function startFinalSequence(){
 
     ()=>{
 
-
-      bloom
-      .classList
-      .add(
+      whiteout.classList.add(
         "active"
       );
-
-
-      whiteout
-      .classList
-      .add(
-        "active"
-      );
-
 
     },
 
-    950
+    700
 
   );
 
@@ -7066,8 +7005,7 @@ function startFinalSequence(){
     ()=>{
 
 
-      document
-      .getElementById(
+      document.getElementById(
         "finalTitle"
       )
       .textContent =
@@ -7077,16 +7015,14 @@ function startFinalSequence(){
         .invite;
 
 
-      final
-      .classList
-      .add(
+      final.classList.add(
         "active"
       );
 
 
     },
 
-    6500
+    4700
 
   );
 
@@ -7095,18 +7031,12 @@ function startFinalSequence(){
 
     ()=>{
 
-
-      bloom.style.display =
-        "none";
-
-
       whiteout.style.display =
         "none";
 
-
     },
 
-    7000
+    5200
 
   );
 
@@ -7114,41 +7044,10 @@ function startFinalSequence(){
 
 
 /* =========================================================
-   IMAGE FALLBACK
-   ========================================================= */
-
-document
-.querySelectorAll(
-  ".dreamImage"
-)
-.forEach(
-
-  img=>{
-
-
-    img
-    .addEventListener(
-
-      "error",
-
-      ()=>{
-
-        img.style.display =
-          "none";
-
-      }
-
-    );
-
-
-  }
-
-);
-
-
-/* =========================================================
    INIT
    ========================================================= */
+
+applyMobileImageSources();
 
 applyDreamColor();
 
