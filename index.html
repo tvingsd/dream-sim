@@ -257,14 +257,13 @@ body{
   mix-blend-mode:color;
 
   transition:
-    opacity 3s ease,
-    background 4s ease;
+    opacity 3s ease;
 
 }
 
 
 /* =========================================================
-   SECOND COLOR GLOW
+   COLOR GLOW
    ========================================================= */
 
 #dreamColorGlow{
@@ -370,7 +369,7 @@ body{
 
 
 /* =========================================================
-   SOFT WHITE FOG
+   SOFT FOG
    ========================================================= */
 
 #softFog{
@@ -601,14 +600,11 @@ body{
 
   filter:blur(70px);
 
-  transform:
-    rotate(-6deg);
-
 }
 
 
 /* =========================================================
-   SUN CORE
+   SUN DISK
    ========================================================= */
 
 .sunDisk{
@@ -637,17 +633,6 @@ body{
   opacity:.44;
 
   filter:blur(20px);
-
-  box-shadow:
-
-    0 0 60px
-
-    rgba(
-      var(--sun-r),
-      var(--sun-g),
-      var(--sun-b),
-      .28
-    );
 
 }
 
@@ -800,6 +785,39 @@ body{
 body.questionMode #readingShadow{
 
   opacity:.33;
+
+}
+
+
+/* =========================================================
+   LOW POWER IOS
+
+   Full graphics remain during intro.
+
+   From first questionnaire screen onward:
+   all heavy graphics are physically removed
+   from rendering.
+   ========================================================= */
+
+body.lowPowerIOS.formActive{
+
+  background:#000 !important;
+
+}
+
+
+body.lowPowerIOS.formActive #dreamWorld,
+body.lowPowerIOS.formActive #ghostLayer,
+body.lowPowerIOS.formActive #readingShadow{
+
+  display:none !important;
+
+}
+
+
+body.lowPowerIOS.formActive #ui{
+
+  background:#000;
 
 }
 
@@ -1003,6 +1021,13 @@ body.questionMode #readingShadow{
 }
 
 
+body.lowPowerIOS.formActive #screenWrap::before{
+
+  display:none;
+
+}
+
+
 #screen{
 
   position:relative;
@@ -1013,9 +1038,6 @@ body.questionMode #readingShadow{
     opacity
     1.15s
     cubic-bezier(.45,0,.25,1);
-
-  will-change:
-    opacity;
 
 }
 
@@ -1130,9 +1152,6 @@ h2{
   color:
     rgba(255,255,255,.56);
 
-  text-shadow:
-    var(--shadow);
-
 }
 
 
@@ -1148,9 +1167,6 @@ h2{
 
   color:
     rgba(255,255,255,.59);
-
-  text-shadow:
-    var(--shadow);
 
 }
 
@@ -1170,9 +1186,6 @@ h2{
   color:
     rgba(255,255,255,.32);
 
-  text-shadow:
-    var(--shadow);
-
 }
 
 
@@ -1185,9 +1198,7 @@ h2{
   display:grid;
 
   grid-template-columns:
-    1fr
-    1fr
-    1fr;
+    1fr 1fr 1fr;
 
   gap:1px;
 
@@ -1214,9 +1225,6 @@ button{
 
   cursor:pointer;
 
-  text-shadow:
-    var(--shadow);
-
 }
 
 
@@ -1236,8 +1244,6 @@ button:hover{
   background:#fff;
 
   color:#000;
-
-  text-shadow:none;
 
 }
 
@@ -1269,9 +1275,6 @@ input{
   caret-color:#fff;
 
   border-radius:0;
-
-  text-shadow:
-    var(--shadow);
 
 }
 
@@ -1312,8 +1315,6 @@ input{
       5vw,
       44px
     );
-
-  letter-spacing:-.02em;
 
 }
 
@@ -1402,8 +1403,6 @@ input::placeholder{
     1px solid
     rgba(255,255,255,.30);
 
-  transition:.36s;
-
 }
 
 
@@ -1464,7 +1463,7 @@ input::placeholder{
   opacity:0;
 
   background:
-    rgba(0,0,0,.88);
+    rgba(0,0,0,.94);
 
 }
 
@@ -1535,9 +1534,7 @@ input::placeholder{
   opacity:1;
 
   transition:
-    opacity
-    1.2s
-    ease;
+    opacity 1.2s ease;
 
 }
 
@@ -1566,11 +1563,7 @@ input::placeholder{
 
   opacity:0;
 
-  transform:
-    scale(.2);
-
-  filter:
-    blur(55px);
+  transform:scale(.2);
 
   background:
 
@@ -1655,27 +1648,7 @@ input::placeholder{
 
   pointer-events:none;
 
-  padding:
-
-    max(
-      30px,
-      env(safe-area-inset-top)
-    )
-
-    max(
-      28px,
-      env(safe-area-inset-right)
-    )
-
-    max(
-      30px,
-      env(safe-area-inset-bottom)
-    )
-
-    max(
-      28px,
-      env(safe-area-inset-left)
-    );
+  padding:30px;
 
 }
 
@@ -1693,19 +1666,12 @@ input::placeholder{
 
 .finalGrid{
 
-  width:
-    min(
-      1100px,
-      100%
-    );
+  width:min(1100px,100%);
 
   display:grid;
 
   grid-template-columns:
-    minmax(
-      180px,
-      280px
-    )
+    minmax(180px,280px)
     1fr;
 
   gap:
@@ -1724,11 +1690,7 @@ input::placeholder{
 
   display:block;
 
-  width:
-    min(
-      100%,
-      260px
-    );
+  width:min(100%,260px);
 
   height:auto;
 
@@ -1810,7 +1772,7 @@ input::placeholder{
 
 
 /* =========================================================
-   IMAGE MORPH
+   MORPH ANIMATIONS
    ========================================================= */
 
 @keyframes imageMorph1{
@@ -1934,7 +1896,7 @@ input::placeholder{
 
 
 /* =========================================================
-   SUN BREATH
+   SUN
    ========================================================= */
 
 @keyframes sunBreath{
@@ -1958,21 +1920,25 @@ input::placeholder{
 
 
 /* =========================================================
-   VEIL
+   VEILS
    ========================================================= */
 
 @keyframes imageVeilDrift{
 
   from{
+
     transform:
       translate3d(-2%,1%,0)
       scale(1);
+
   }
 
   to{
+
     transform:
       translate3d(2%,-1%,0)
       scale(1.07);
+
   }
 
 }
@@ -1981,19 +1947,23 @@ input::placeholder{
 @keyframes softFogMove{
 
   from{
+
     transform:
       translate3d(-2%,0,0)
       scale(1.02);
 
     opacity:.66;
+
   }
 
   to{
+
     transform:
       translate3d(2%,1%,0)
       scale(1.08);
 
     opacity:.90;
+
   }
 
 }
@@ -2098,14 +2068,12 @@ input::placeholder{
 
 @keyframes finalIn{
 
-  0%{
+  from{
     opacity:0;
-    transform:scale(1.01);
   }
 
-  100%{
+  to{
     opacity:1;
-    transform:scale(1);
   }
 
 }
@@ -2248,10 +2216,30 @@ input::placeholder{
 
     filter:
       grayscale(1)
-      contrast(1.08)
-      brightness(.94)
-      blur(8px);
+      contrast(1.06)
+      brightness(.96)
+      blur(7px);
 
+  }
+
+
+  #noise{
+    display:none;
+  }
+
+
+  #dreamColorGlow{
+    display:none;
+  }
+
+
+  #dreamImageVeil{
+    filter:blur(18px);
+  }
+
+
+  #softFog{
+    filter:blur(14px);
   }
 
 
@@ -2262,8 +2250,6 @@ input::placeholder{
     flex-direction:column;
 
     align-items:flex-start;
-
-    justify-content:center;
 
     gap:44px;
 
@@ -2352,7 +2338,6 @@ input::placeholder{
   <div id="dreamColorWash"></div>
 
   <div id="dreamColorGlow"></div>
-
 
   <div id="dreamImageVeil"></div>
 
@@ -2552,6 +2537,130 @@ if(
   .addEventListener(
     "resize",
     setVH
+  );
+
+}
+
+
+/* =========================================================
+   IOS PERFORMANCE PROFILE
+   ========================================================= */
+
+function detectLowPowerIOS(){
+
+  const ua =
+    navigator.userAgent || "";
+
+
+  const platform =
+    navigator.platform || "";
+
+
+  const touchPoints =
+    navigator.maxTouchPoints || 0;
+
+
+  /*
+  Normal iPhone detection.
+  Also covers iOS-style WebKit identification.
+  */
+
+  const isIPhone =
+    /iPhone|iPod/i.test(ua);
+
+
+  const isiOSDevice =
+    isIPhone
+    ||
+    (
+      platform === "MacIntel"
+      &&
+      touchPoints > 1
+      &&
+      Math.min(
+        screen.width,
+        screen.height
+      ) <= 430
+    );
+
+
+  if(
+    !isiOSDevice
+  ){
+
+    return false;
+
+  }
+
+
+  const shortSide =
+    Math.min(
+      screen.width,
+      screen.height
+    );
+
+
+  const longSide =
+    Math.max(
+      screen.width,
+      screen.height
+    );
+
+
+  const dpr =
+    window.devicePixelRatio || 1;
+
+
+  /*
+  IMPORTANT:
+
+  Safari does not expose an exact model such as
+  "iPhone 13" or "iPhone 14".
+
+  This intentionally uses a SAFE PERFORMANCE CLASS.
+
+  It includes typical iPhone 14 / 13 / 12 / 11 / SE etc.
+  It may also classify some newer similarly-sized iPhones
+  as low power.
+
+  That is deliberate:
+  stability is more important than guessing the exact model.
+  */
+
+  const phoneSizeClass =
+    shortSide <= 430
+    &&
+    longSide <= 932;
+
+
+  const retinaPhone =
+    dpr >= 2
+    &&
+    dpr <= 3.5;
+
+
+  return (
+    phoneSizeClass
+    &&
+    retinaPhone
+  );
+
+}
+
+
+const LOW_POWER_IOS =
+  detectLowPowerIOS();
+
+
+if(
+  LOW_POWER_IOS
+){
+
+  document
+  .body
+  .classList
+  .add(
+    "lowPowerIOS"
   );
 
 }
@@ -2859,11 +2968,14 @@ dreamColor:{
 const screen =
 document.getElementById("screen");
 
+
 const progress =
 document.getElementById("progress");
 
+
 const depthLabel =
 document.getElementById("depthLabel");
+
 
 const ghostLayer =
 document.getElementById("ghostLayer");
@@ -2956,108 +3068,105 @@ function parseDreamColor(name){
   const map = {
 
 
-    /* =====================================================
-       GREY / GREYSCALE
-       ===================================================== */
+    /* GREY */
 
+    "jasno szary":[205,205,210],
+    "jasnoszary":[205,205,210],
+    "jasnoszara":[205,205,210],
+
+    "light grey":[205,205,210],
+    "light gray":[205,205,210],
+
+    "ciemno szary":[90,92,100],
+    "ciemnoszary":[90,92,100],
+    "ciemnoszara":[90,92,100],
+
+    "dark grey":[90,92,100],
+    "dark gray":[90,92,100],
+
+    "ciepły szary":[165,155,145],
+    "warm grey":[165,155,145],
+    "warm gray":[165,155,145],
+
+    "chłodny szary":[135,145,160],
+    "cool grey":[135,145,160],
+    "cool gray":[135,145,160],
+
+    "popielaty":[175,175,180],
+    "popielata":[175,175,180],
+    "popiel":[175,175,180],
+
+    "stalowy":[120,135,145],
+    "stalowa":[120,135,145],
+    "steel grey":[120,135,145],
+    "steel gray":[120,135,145],
+
+    "grafitowy":[95,100,110],
+    "grafitowa":[95,100,110],
+    "grafit":[95,100,110],
+    "graphite":[95,100,110],
+
+    "antracytowy":[70,75,80],
+    "antracyt":[70,75,80],
+    "anthracite":[70,75,80],
+
+    "szarość":[155,155,160],
+    "szarosc":[155,155,160],
     "szary":[155,155,160],
     "szara":[155,155,160],
     "szare":[155,155,160],
-    "szarość":[155,155,160],
-    "szarosc":[155,155,160],
 
     "grey":[155,155,160],
     "gray":[155,155,160],
 
     "сірий":[155,155,160],
     "сіра":[155,155,160],
-    "сіре":[155,155,160],
 
-    "jasnoszary":[205,205,210],
-    "jasno szary":[205,205,210],
-    "jasnoszara":[205,205,210],
 
-    "light grey":[205,205,210],
-    "light gray":[205,205,210],
-
-    "ciemnoszary":[90,92,100],
-    "ciemno szary":[90,92,100],
-    "ciemnoszara":[90,92,100],
-
-    "dark grey":[90,92,100],
-    "dark gray":[90,92,100],
-
-    "popielaty":[175,175,180],
-    "popielata":[175,175,180],
-    "popiel":[175,175,180],
-    "ash grey":[175,175,180],
-    "ash gray":[175,175,180],
-
-    "stalowy":[120,135,145],
-    "stalowa":[120,135,145],
-    "steel":[120,135,145],
-    "steel grey":[120,135,145],
-    "steel gray":[120,135,145],
-
-    "cool grey":[135,145,160],
-    "cool gray":[135,145,160],
-    "chłodny szary":[135,145,160],
-
-    "warm grey":[165,155,145],
-    "warm gray":[165,155,145],
-    "ciepły szary":[165,155,145],
-
-    "silver grey":[185,190,200],
-    "silver gray":[185,190,200],
-
-    "grafitowy":[95,100,110],
-    "grafitowa":[95,100,110],
-    "grafit":[95,100,110],
-    "graphite":[95,100,110],
-    "графітовий":[95,100,110],
-
-    "antracytowy":[70,75,80],
-    "antracytowa":[70,75,80],
-    "antracyt":[70,75,80],
-    "anthracite":[70,75,80],
+    /* WHITE / BLACK / SILVER */
 
     "srebrny":[190,195,205],
-    "srebrna":[190,195,205],
     "srebro":[190,195,205],
     "silver":[190,195,205],
-    "срібний":[190,195,205],
 
     "biały":[235,235,230],
     "biała":[235,235,230],
-    "białe":[235,235,230],
     "white":[235,235,230],
     "білий":[235,235,230],
 
     "czarny":[70,70,70],
     "czarna":[70,70,70],
-    "czarne":[70,70,70],
     "black":[70,70,70],
     "чорний":[70,70,70],
 
 
-    /* =====================================================
-       MAGENTA / PINK / PURPLE
-       ===================================================== */
+    /* MAGENTA / PINK / PURPLE */
 
-    "magenta":[255,0,255],
+    "neonowa magenta":[255,0,255],
+    "neon magenta":[255,0,255],
+
     "magentowy":[255,0,255],
     "magentowa":[255,0,255],
     "magentowe":[255,0,255],
+    "magenta":[255,0,255],
     "маджента":[255,0,255],
 
-    "fuksja":[255,0,170],
     "fuksjowy":[255,0,170],
     "fuksjowa":[255,0,170],
+    "fuksja":[255,0,170],
     "fuchsia":[255,0,170],
-    "фуксія":[255,0,170],
 
     "hot pink":[255,80,175],
     "hotpink":[255,80,175],
+
+    "pudrowy róż":[220,165,185],
+    "dusty pink":[220,165,185],
+
+    "jasny róż":[255,170,210],
+    "light pink":[255,170,210],
+
+    "ciemny róż":[185,55,120],
+    "dark pink":[185,55,120],
 
     "różowy":[235,105,175],
     "różowa":[235,105,175],
@@ -3065,36 +3174,14 @@ function parseDreamColor(name){
     "pink":[235,105,175],
     "рожевий":[235,105,175],
 
-    "jasny róż":[255,170,210],
-    "light pink":[255,170,210],
-    "lightpink":[255,170,210],
-
-    "ciemny róż":[185,55,120],
-    "dark pink":[185,55,120],
-
-    "pudrowy róż":[220,165,185],
-    "dusty pink":[220,165,185],
-
     "malinowy":[210,45,105],
     "raspberry":[210,45,105],
-    "малиновий":[210,45,105],
 
     "amarantowy":[225,40,110],
     "amarant":[225,40,110],
 
-    "purpurowy":[185,65,190],
-    "purpura":[185,65,190],
-    "purple":[155,85,220],
-    "пурпуровий":[185,65,190],
-
-    "fioletowy":[150,75,220],
-    "fiolet":[150,75,220],
-    "violet":[150,75,220],
-    "фіолетовий":[150,75,220],
-
     "ciemny fiolet":[85,35,135],
     "dark violet":[85,35,135],
-    "darkviolet":[85,35,135],
 
     "jasny fiolet":[195,145,235],
     "light violet":[195,145,235],
@@ -3102,241 +3189,177 @@ function parseDreamColor(name){
     "lawendowy":[190,165,235],
     "lawenda":[190,165,235],
     "lavender":[190,165,235],
-    "лавандовий":[190,165,235],
 
     "lila":[205,160,225],
     "lilac":[205,160,225],
-    "ліловий":[205,160,225],
 
-    "mauve":[180,135,175],
+    "purpurowy":[185,65,190],
+    "purpura":[185,65,190],
+    "purple":[155,85,220],
 
-    "śliwkowy":[120,55,120],
-    "plum":[120,55,120],
-    "сливовий":[120,55,120],
+    "fioletowy":[150,75,220],
+    "fiolet":[150,75,220],
+    "violet":[150,75,220],
 
     "indygo":[70,55,180],
     "indigo":[70,55,180],
-    "індіго":[70,55,180],
+
+    "śliwkowy":[120,55,120],
+    "plum":[120,55,120],
 
 
-    /* =====================================================
-       RED
-       ===================================================== */
+    /* RED */
 
     "czerwony":[220,55,65],
     "czerwień":[220,55,65],
     "red":[220,55,65],
-    "червоний":[220,55,65],
 
     "scarlet":[240,45,45],
     "szkarłatny":[240,45,45],
 
     "crimson":[200,35,70],
     "karmazynowy":[200,35,70],
-    "karmazyn":[200,35,70],
-
-    "wiśniowy":[155,35,65],
-    "cherry":[195,40,75],
-    "вишневий":[155,35,65],
 
     "bordowy":[135,35,60],
     "bordo":[135,35,60],
     "burgundy":[135,35,60],
-    "бордовий":[135,35,60],
 
-    "maroon":[115,35,45],
+    "wiśniowy":[155,35,65],
+    "cherry":[195,40,75],
 
     "rubinowy":[180,30,55],
     "ruby":[180,30,55],
 
-    "ceglasty":[175,70,55],
-    "brick red":[175,70,55],
 
-
-    /* =====================================================
-       ORANGE
-       ===================================================== */
+    /* ORANGE */
 
     "pomarańczowy":[235,125,45],
     "pomarańcz":[235,125,45],
     "orange":[235,125,45],
-    "помаранчевий":[235,125,45],
-
-    "mandarynkowy":[240,105,35],
-    "tangerine":[240,105,35],
 
     "koralowy":[235,100,90],
     "koral":[235,100,90],
     "coral":[235,100,90],
-    "кораловий":[235,100,90],
 
     "łososiowy":[235,135,125],
     "salmon":[235,135,125],
-    "лососевий":[235,135,125],
 
     "brzoskwiniowy":[240,165,120],
     "brzoskwinia":[240,165,120],
     "peach":[240,165,120],
-    "персиковий":[240,165,120],
 
     "morelowy":[235,155,100],
     "apricot":[235,155,100],
-
-    "rudy":[180,90,50],
-    "rust":[180,90,50],
 
     "miedziany":[175,105,70],
     "copper":[175,105,70],
 
 
-    /* =====================================================
-       YELLOW / GOLD
-       ===================================================== */
+    /* YELLOW */
 
     "żółty":[240,205,65],
     "żółta":[240,205,65],
     "yellow":[240,205,65],
-    "жовтий":[240,205,65],
 
     "cytrynowy":[225,235,65],
     "lemon":[225,235,65],
-    "лимонний":[225,235,65],
-
-    "kanarkowy":[245,220,65],
-    "canary":[245,220,65],
 
     "musztardowy":[190,155,55],
     "mustard":[190,155,55],
 
     "bursztynowy":[225,150,35],
     "amber":[225,150,35],
-    "бурштиновий":[225,150,35],
 
     "złoty":[220,170,55],
     "złoto":[220,170,55],
     "gold":[220,170,55],
     "golden":[220,170,55],
-    "золотий":[220,170,55],
-
-    "szampański":[220,195,150],
-    "champagne":[220,195,150],
 
 
-    /* =====================================================
-       GREEN
-       ===================================================== */
-
-    "zielony":[65,165,95],
-    "zieleń":[65,165,95],
-    "green":[65,165,95],
-    "зелений":[65,165,95],
-
-    "jasnozielony":[130,210,125],
-    "light green":[130,210,125],
-    "lightgreen":[130,210,125],
+    /* GREEN */
 
     "ciemnozielony":[35,105,65],
     "dark green":[35,105,65],
-    "darkgreen":[35,105,65],
+
+    "jasnozielony":[130,210,125],
+    "light green":[130,210,125],
+
+    "neonowy zielony":[80,255,80],
+    "neon green":[80,255,80],
 
     "limonkowy":[150,220,55],
     "limonka":[150,220,55],
     "lime":[150,220,55],
-    "лаймовий":[150,220,55],
-
-    "neon green":[80,255,80],
-    "neonowy zielony":[80,255,80],
 
     "miętowy":[115,210,170],
     "mięta":[115,210,170],
     "mint":[115,210,170],
-    "м’ятний":[115,210,170],
 
     "szmaragdowy":[35,155,105],
     "szmaragd":[35,155,105],
     "emerald":[35,155,105],
-    "смарагдовий":[35,155,105],
 
     "butelkowy":[30,100,70],
-    "bottle green":[30,100,70],
 
     "oliwkowy":[120,130,65],
     "oliwka":[120,130,65],
     "olive":[120,130,65],
-    "оливковий":[120,130,65],
-
-    "khaki":[135,125,80],
 
     "szałwiowy":[135,160,130],
     "sage":[135,160,130],
 
-    "pistacjowy":[165,195,125],
-    "pistachio":[165,195,125],
-
-    "forest green":[35,105,65],
-
-    "sea green":[55,165,130],
+    "zielony":[65,165,95],
+    "zieleń":[65,165,95],
+    "green":[65,165,95],
 
 
-    /* =====================================================
-       CYAN / TURQUOISE / TEAL
-       ===================================================== */
+    /* CYAN */
 
-    "cyan":[0,210,235],
-    "cyjan":[0,210,235],
-    "cyjanowy":[0,210,235],
-    "ціан":[0,210,235],
+    "neonowy turkus":[20,245,210],
+    "neon turquoise":[20,245,210],
 
-    "aqua":[40,215,215],
+    "neonowy cyan":[0,245,255],
+    "neon cyan":[0,245,255],
 
     "akwamaryna":[80,200,180],
     "aquamarine":[80,200,180],
-    "аквамариновий":[80,200,180],
 
     "turkusowy":[45,185,180],
     "turkus":[45,185,180],
     "turquoise":[45,185,180],
-    "бірюзовий":[45,185,180],
+
+    "petrolowy":[35,105,115],
+    "petrol":[35,105,115],
+
+    "morski":[40,145,155],
 
     "teal":[35,135,135],
 
-    "petrol":[35,105,115],
-    "petrolowy":[35,105,115],
+    "cyan":[0,210,235],
+    "cyjan":[0,210,235],
 
-    "morski":[40,145,155],
-    "morska zieleń":[40,145,155],
-
-    "sea blue":[45,135,175],
+    "aqua":[40,215,215],
 
 
-    /* =====================================================
-       BLUE
-       ===================================================== */
+    /* BLUE */
 
-    "niebieski":[65,120,215],
-    "niebieska":[65,120,215],
-    "blue":[65,120,215],
-    "синій":[65,120,215],
+    "elektryczny niebieski":[55,145,255],
+    "electric blue":[55,145,255],
+
+    "ciemnoniebieski":[40,75,155],
+    "dark blue":[40,75,155],
+
+    "jasnoniebieski":[120,185,235],
+    "light blue":[120,185,235],
+
+    "granatowy":[35,55,125],
+    "granat":[35,55,125],
+    "navy blue":[35,55,125],
+    "navy":[35,55,125],
 
     "błękitny":[90,175,230],
     "błękit":[90,175,230],
     "sky blue":[90,175,230],
-    "skyblue":[90,175,230],
-    "блакитний":[90,175,230],
-
-    "jasnoniebieski":[120,185,235],
-    "light blue":[120,185,235],
-    "lightblue":[120,185,235],
-
-    "ciemnoniebieski":[40,75,155],
-    "dark blue":[40,75,155],
-    "darkblue":[40,75,155],
-
-    "granatowy":[35,55,125],
-    "granat":[35,55,125],
-    "navy":[35,55,125],
-    "navy blue":[35,55,125],
-    "темно-синій":[35,55,125],
 
     "kobaltowy":[50,75,205],
     "kobalt":[50,75,205],
@@ -3345,36 +3368,25 @@ function parseDreamColor(name){
     "ultramaryna":[55,60,200],
     "ultramarine":[55,60,200],
 
-    "royal blue":[65,85,210],
-
-    "electric blue":[55,145,255],
-    "elektryczny niebieski":[55,145,255],
-
-    "azure":[70,155,225],
     "lazurowy":[70,155,225],
-    "azure blue":[70,155,225],
+    "azure":[70,155,225],
+
+    "niebieski":[65,120,215],
+    "niebieska":[65,120,215],
+    "blue":[65,120,215],
 
 
-    /* =====================================================
-       EARTH
-       ===================================================== */
+    /* EARTH */
 
     "brązowy":[145,90,65],
     "brąz":[145,90,65],
     "brown":[145,90,65],
-    "коричневий":[145,90,65],
 
     "czekoladowy":[115,65,50],
     "chocolate":[115,65,50],
 
-    "kasztanowy":[125,65,50],
-    "chestnut":[125,65,50],
-
     "karmelowy":[185,120,70],
     "caramel":[185,120,70],
-
-    "toffi":[185,130,85],
-    "toffee":[185,130,85],
 
     "piaskowy":[195,175,135],
     "sand":[195,175,135],
@@ -3382,63 +3394,25 @@ function parseDreamColor(name){
     "beżowy":[195,180,155],
     "beż":[195,180,155],
     "beige":[195,180,155],
-    "бежевий":[195,180,155],
 
     "kremowy":[225,215,185],
     "krem":[225,215,185],
     "cream":[225,215,185],
-    "кремовий":[225,215,185],
 
     "ivory":[225,220,195],
     "kość słoniowa":[225,220,195],
 
-    "taupe":[150,135,125],
-
-
-    /* =====================================================
-       NEON
-       ===================================================== */
-
-    "neon pink":[255,40,180],
-    "neonowy różowy":[255,40,180],
-
-    "neon magenta":[255,0,255],
-    "neonowa magenta":[255,0,255],
-
-    "neon purple":[185,60,255],
-    "neonowy fiolet":[185,60,255],
-
-    "neon blue":[35,125,255],
-    "neonowy niebieski":[35,125,255],
-
-    "neon cyan":[0,245,255],
-    "neonowy cyan":[0,245,255],
-
-    "neon turquoise":[20,245,210],
-    "neonowy turkus":[20,245,210],
-
-    "neon yellow":[245,255,45],
-    "neonowy żółty":[245,255,45],
-
-    "neon orange":[255,105,20],
-    "neonowy pomarańczowy":[255,105,20],
-
-    "neon red":[255,45,55],
-    "neonowy czerwony":[255,45,55]
+    "taupe":[150,135,125]
 
   };
 
-
-  /*
-  Longer names first.
-  */
 
   const keys =
     Object
     .keys(map)
     .sort(
       (a,b)=>
-      b.length-a.length
+        b.length-a.length
     );
 
 
@@ -3447,7 +3421,9 @@ function parseDreamColor(name){
   ){
 
     if(
-      s.includes(key)
+      s.includes(
+        key
+      )
     ){
 
       return {
@@ -3463,16 +3439,10 @@ function parseDreamColor(name){
   }
 
 
-  /*
-  CSS FALLBACK:
-  #ff00ff
-  rgb(...)
-  hsl(...)
-  CSS names
-  */
-
   const css =
-    parseCssColor(s);
+    parseCssColor(
+      s
+    );
 
 
   if(css){
@@ -3494,7 +3464,7 @@ function parseDreamColor(name){
 
 
 /* =========================================================
-   CSS COLOR PARSER
+   CSS COLOR FALLBACK
    ========================================================= */
 
 function parseCssColor(value){
@@ -3513,7 +3483,8 @@ function parseCssColor(value){
 
 
     const ctx =
-      canvas.getContext(
+      canvas
+      .getContext(
         "2d"
       );
 
@@ -3599,7 +3570,7 @@ function parseCssColor(value){
 
 
 /* =========================================================
-   APPLY DREAM COLOR
+   APPLY COLOR
    ========================================================= */
 
 function applyDreamColor(){
@@ -3665,7 +3636,9 @@ function applyDreamColor(){
   const hasColour =
     state.dreamColorName
     &&
-    state.dreamColorName.trim().length > 0;
+    state.dreamColorName
+    .trim()
+    .length > 0;
 
 
   document
@@ -3684,10 +3657,93 @@ function applyDreamColor(){
 
 
 /* =========================================================
+   VISUAL MODE
+   ========================================================= */
+
+function setVisualMode(mode){
+
+  state.mode =
+    mode;
+
+
+  const formModes = [
+
+    "questions",
+    "nickname",
+    "saving",
+    "saved",
+    "error"
+
+  ];
+
+
+  const isFormMode =
+    formModes.includes(
+      mode
+    );
+
+
+  document
+  .body
+  .classList
+  .toggle(
+    "questionMode",
+    isFormMode
+  );
+
+
+  /*
+  LOW POWER IOS:
+
+  Intro = full visuals.
+
+  Questionnaire onwards =
+  pure black lightweight environment.
+  */
+
+  if(
+    LOW_POWER_IOS
+  ){
+
+    document
+    .body
+    .classList
+    .toggle(
+      "formActive",
+      isFormMode
+    );
+
+  }
+
+}
+
+
+/* =========================================================
    COSMOS
    ========================================================= */
 
 function updateDreamCosmos(){
+
+  /*
+  No reason to update hidden graphics
+  on low-power iPhones.
+  */
+
+  if(
+    LOW_POWER_IOS
+    &&
+    document
+    .body
+    .classList
+    .contains(
+      "formActive"
+    )
+  ){
+
+    return;
+
+  }
+
 
   if(
     state.mode !==
@@ -3719,12 +3775,12 @@ function updateDreamCosmos(){
 
   const sunScale =
     .84 +
-    p * 2.20;
+    p*2.20;
 
 
   const sunOpacity =
     .73 +
-    p * .20;
+    p*.20;
 
 
   document
@@ -3758,24 +3814,6 @@ function updateDreamCosmos(){
     );
 
 
-    document
-    .documentElement
-    .style
-    .setProperty(
-      "--moon-x",
-      "94%"
-    );
-
-
-    document
-    .documentElement
-    .style
-    .setProperty(
-      "--moon-scale",
-      ".72"
-    );
-
-
     return;
 
   }
@@ -3797,12 +3835,12 @@ function updateDreamCosmos(){
 
     const moonX =
       85 -
-      local * 21;
+      local*21;
 
 
     const moonScale =
       .75 +
-      local * .18;
+      local*.18;
 
 
     document
@@ -3820,15 +3858,6 @@ function updateDreamCosmos(){
     .setProperty(
       "--moon-x",
       moonX+"%"
-    );
-
-
-    document
-    .documentElement
-    .style
-    .setProperty(
-      "--moon-y",
-      "50%"
     );
 
 
@@ -3858,12 +3887,12 @@ function updateDreamCosmos(){
 
   const moonX =
     61 -
-    local * 11;
+    local*11;
 
 
   const moonScale =
     .95 +
-    local * .28;
+    local*.28;
 
 
   document
@@ -3888,48 +3917,8 @@ function updateDreamCosmos(){
   .documentElement
   .style
   .setProperty(
-    "--moon-y",
-    "50%"
-  );
-
-
-  document
-  .documentElement
-  .style
-  .setProperty(
     "--moon-scale",
     moonScale
-  );
-
-}
-
-
-/* =========================================================
-   MODE
-   ========================================================= */
-
-function setVisualMode(mode){
-
-  state.mode =
-    mode;
-
-
-  document
-  .body
-  .classList
-  .toggle(
-
-    "questionMode",
-
-    [
-      "questions",
-      "nickname",
-      "saving",
-      "saved",
-      "error"
-    ]
-    .includes(mode)
-
   );
 
 }
@@ -4134,33 +4123,6 @@ function chooseLanguage(lang){
   applyDreamColor();
 
 
-  document
-  .documentElement
-  .style
-  .setProperty(
-    "--sun-scale",
-    ".78"
-  );
-
-
-  document
-  .documentElement
-  .style
-  .setProperty(
-    "--sun-opacity",
-    ".72"
-  );
-
-
-  document
-  .documentElement
-  .style
-  .setProperty(
-    "--moon-opacity",
-    "0"
-  );
-
-
   transition(
     renderIntro
   );
@@ -4203,19 +4165,16 @@ function renderIntro(){
 
 
   progress.textContent =
-
     `${String(
       state.introStep+1
-    )
-    .padStart(
+    ).padStart(
       2,
       "0"
     )}
     /
     ${String(
       slides.length
-    )
-    .padStart(
+    ).padStart(
       2,
       "0"
     )}`;
@@ -4298,6 +4257,18 @@ ${copy.next}
           field.focus();
 
 
+          /*
+          CRITICAL iOS FIX:
+
+          Do NOT recolor full-screen graphics
+          after every typed letter.
+
+          Only store the text.
+
+          Actual colour is applied when user
+          presses NEXT.
+          */
+
           field
           .addEventListener(
 
@@ -4310,15 +4281,6 @@ ${copy.next}
                 field
                 .value
                 .trim();
-
-
-              state.dreamColor =
-                parseDreamColor(
-                  state.dreamColorName
-                );
-
-
-              applyDreamColor();
 
 
             }
@@ -4391,7 +4353,7 @@ ${last ? copy.begin : copy.next}
 
 
 /* =========================================================
-   INTRO NAV
+   COLOR SAVE
    ========================================================= */
 
 function saveColorField(){
@@ -4403,7 +4365,9 @@ function saveColorField(){
     );
 
 
-  if(!field){
+  if(
+    !field
+  ){
 
     return;
 
@@ -4422,10 +4386,19 @@ function saveColorField(){
     );
 
 
+  /*
+  Only here do we repaint.
+  Keyboard input itself stays lightweight.
+  */
+
   applyDreamColor();
 
 }
 
+
+/* =========================================================
+   INTRO NAV
+   ========================================================= */
 
 function introBack(){
 
@@ -4442,8 +4415,7 @@ function introBack(){
 
 
   if(
-    state.introStep ===
-    0
+    state.introStep === 0
   ){
 
     transition(
@@ -4532,8 +4504,7 @@ function introNext(){
 function generateOpeningQuestion(){
 
   if(
-    state.lang ===
-    "PL"
+    state.lang === "PL"
   ){
 
     return {
@@ -4549,8 +4520,7 @@ function generateOpeningQuestion(){
 
 
   if(
-    state.lang ===
-    "UKR"
+    state.lang === "UKR"
   ){
 
     return {
@@ -4589,7 +4559,9 @@ function extractFragment(text){
     );
 
 
-  if(!cleaned){
+  if(
+    !cleaned
+  ){
 
     return "";
 
@@ -4603,8 +4575,7 @@ function extractFragment(text){
 
 
   if(
-    words.length <=
-    8
+    words.length <= 8
   ){
 
     return cleaned;
@@ -4817,8 +4788,7 @@ door:[
 
 
   for(
-    const type
-    in dict
+    const type in dict
   ){
 
     if(
@@ -4846,7 +4816,7 @@ door:[
 
 
 /* =========================================================
-   ADAPTIVE
+   ADAPTIVE QUESTIONS
    ========================================================= */
 
 function generateAdaptiveQuestion(){
@@ -4941,8 +4911,7 @@ function generateLayerOneQuestion(
 
 
   if(
-    state.lang ===
-    "PL"
+    state.lang === "PL"
   ){
 
     const pool = [
@@ -5018,8 +4987,7 @@ function generateLayerOneQuestion(
 
 
   if(
-    state.lang ===
-    "UKR"
+    state.lang === "UKR"
   ){
 
     return randomItem([
@@ -5110,8 +5078,7 @@ function generateLayerTwoQuestion(
 
 
   if(
-    state.lang ===
-    "PL"
+    state.lang === "PL"
   ){
 
     const pool = [
@@ -5150,7 +5117,9 @@ function generateLayerTwoQuestion(
 
 
     if(
-      themes.includes("water")
+      themes.includes(
+        "water"
+      )
     ){
 
       pool.push({
@@ -5166,7 +5135,9 @@ function generateLayerTwoQuestion(
 
 
     if(
-      themes.includes("door")
+      themes.includes(
+        "door"
+      )
     ){
 
       pool.push({
@@ -5182,7 +5153,9 @@ function generateLayerTwoQuestion(
 
 
     if(
-      themes.includes("fear")
+      themes.includes(
+        "fear"
+      )
     ){
 
       pool.push({
@@ -5205,8 +5178,7 @@ function generateLayerTwoQuestion(
 
 
   if(
-    state.lang ===
-    "UKR"
+    state.lang === "UKR"
   ){
 
     return randomItem([
@@ -5309,8 +5281,7 @@ function generateLayerThreeQuestion(
 
 
   if(
-    state.lang ===
-    "PL"
+    state.lang === "PL"
   ){
 
     return randomItem([
@@ -5357,8 +5328,7 @@ function generateLayerThreeQuestion(
 
 
   if(
-    state.lang ===
-    "UKR"
+    state.lang === "UKR"
   ){
 
     return randomItem([
@@ -5480,6 +5450,16 @@ function getDreamLevel(){
 
 function renderQuestion(){
 
+  /*
+  IMPORTANT:
+
+  Calling setVisualMode here activates
+  formActive on LOW_POWER_IOS.
+
+  This is the exact moment all background
+  graphics disappear.
+  */
+
   setVisualMode(
     "questions"
   );
@@ -5498,7 +5478,9 @@ function renderQuestion(){
     getCurrentQuestion();
 
 
-  if(!q){
+  if(
+    !q
+  ){
 
     return;
 
@@ -5516,19 +5498,16 @@ function renderQuestion(){
 
 
   progress.textContent =
-
     `${String(
       state.questionIndex+1
-    )
-    .padStart(
+    ).padStart(
       2,
       "0"
     )}
     /
     ${String(
       state.totalQuestions
-    )
-    .padStart(
+    ).padStart(
       2,
       "0"
     )}`;
@@ -5553,7 +5532,8 @@ function renderQuestion(){
 
 
     if(
-      previous &&
+      previous
+      &&
       previous.answer
     ){
 
@@ -5565,7 +5545,9 @@ function renderQuestion(){
         );
 
 
-      if(fragment){
+      if(
+        fragment
+      ){
 
         trace = `
 
@@ -5630,7 +5612,18 @@ ${copy.next}
 `;
 
 
-  spawnPreviousAnswerGhost();
+  /*
+  Disable ghost generation entirely
+  for low-power iPhones.
+  */
+
+  if(
+    !LOW_POWER_IOS
+  ){
+
+    spawnPreviousAnswerGhost();
+
+  }
 
 
   setTimeout(
@@ -5653,7 +5646,7 @@ ${copy.next}
 
 
 /* =========================================================
-   SAVE ANSWER
+   SAVE CURRENT ANSWER
    ========================================================= */
 
 function saveCurrentAnswer(){
@@ -5665,7 +5658,9 @@ function saveCurrentAnswer(){
     );
 
 
-  if(!field){
+  if(
+    !field
+  ){
 
     return;
 
@@ -5882,9 +5877,6 @@ function questionBack(){
   state.questionIndex--;
 
 
-  updateDreamCosmos();
-
-
   transition(
     renderQuestion
   );
@@ -5969,8 +5961,7 @@ function runDreamShift(level){
   ){
 
     if(
-      state.lang ===
-      "PL"
+      state.lang === "PL"
     ){
 
       main.textContent =
@@ -5982,8 +5973,7 @@ function runDreamShift(level){
     }
 
     else if(
-      state.lang ===
-      "UKR"
+      state.lang === "UKR"
     ){
 
       main.textContent =
@@ -6009,8 +5999,7 @@ function runDreamShift(level){
   else{
 
     if(
-      state.lang ===
-      "PL"
+      state.lang === "PL"
     ){
 
       main.textContent =
@@ -6022,8 +6011,7 @@ function runDreamShift(level){
     }
 
     else if(
-      state.lang ===
-      "UKR"
+      state.lang === "UKR"
     ){
 
       main.textContent =
@@ -6088,8 +6076,7 @@ function runDreamShift(level){
       ){
 
         if(
-          state.lang ===
-          "PL"
+          state.lang === "PL"
         ){
 
           main.textContent =
@@ -6101,8 +6088,7 @@ function runDreamShift(level){
         }
 
         else if(
-          state.lang ===
-          "UKR"
+          state.lang === "UKR"
         ){
 
           main.textContent =
@@ -6128,8 +6114,7 @@ function runDreamShift(level){
       else{
 
         if(
-          state.lang ===
-          "PL"
+          state.lang === "PL"
         ){
 
           main.textContent =
@@ -6141,8 +6126,7 @@ function runDreamShift(level){
         }
 
         else if(
-          state.lang ===
-          "UKR"
+          state.lang === "UKR"
         ){
 
           main.textContent =
@@ -6282,8 +6266,16 @@ function runDreamShift(level){
 function spawnPreviousAnswerGhost(){
 
   if(
-    state.questionIndex ===
-    0
+    LOW_POWER_IOS
+  ){
+
+    return;
+
+  }
+
+
+  if(
+    state.questionIndex === 0
   ){
 
     return;
@@ -6348,7 +6340,25 @@ function ghost(
   answer=false
 ){
 
-  if(!text){
+  if(
+    !text
+  ){
+
+    return;
+
+  }
+
+
+  if(
+    LOW_POWER_IOS
+    &&
+    document
+    .body
+    .classList
+    .contains(
+      "formActive"
+    )
+  ){
 
     return;
 
@@ -6375,7 +6385,6 @@ function ghost(
 
 
   e.style.left =
-
     (
       Math.random()*55
       -
@@ -6386,7 +6395,6 @@ function ghost(
 
 
   e.style.top =
-
     (
       Math.random()*75
       +
@@ -6397,7 +6405,6 @@ function ghost(
 
 
   e.style.animationDuration =
-
     (
       30
       +
@@ -6458,8 +6465,7 @@ function renderNickname(){
 
 
   if(
-    state.lang ===
-    "PL"
+    state.lang === "PL"
   ){
 
     eyebrow =
@@ -6468,8 +6474,7 @@ function renderNickname(){
   }
 
   else if(
-    state.lang ===
-    "UKR"
+    state.lang === "UKR"
   ){
 
     eyebrow =
@@ -6561,9 +6566,6 @@ function nicknameBack(){
 
   state.questionIndex =
     state.totalQuestions-1;
-
-
-  updateDreamCosmos();
 
 
   transition(
@@ -6902,8 +6904,7 @@ function renderError(){
 
 
   if(
-    state.lang ===
-    "PL"
+    state.lang === "PL"
   ){
 
     message =
@@ -6913,8 +6914,7 @@ function renderError(){
 
 
   if(
-    state.lang ===
-    "UKR"
+    state.lang === "UKR"
   ){
 
     message =
@@ -7126,7 +7126,8 @@ document
   img=>{
 
 
-    img.addEventListener(
+    img
+    .addEventListener(
 
       "error",
 
