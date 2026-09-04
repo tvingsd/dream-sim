@@ -26,28 +26,25 @@
   --vh:1vh;
 
   --white:#f4f4f1;
+
   --muted:rgba(255,255,255,.50);
 
   --shadow:
-    0 1px 2px rgba(0,0,0,.96),
-    0 4px 24px rgba(0,0,0,.50);
+    0 1px 2px rgba(0,0,0,.95),
+    0 5px 28px rgba(0,0,0,.52);
 
 
-  /* =====================================================
-     SUN
-     ===================================================== */
+  /* SUN */
 
   --sun-r:220;
   --sun-g:220;
   --sun-b:220;
 
-  --sun-scale:.82;
-  --sun-opacity:.72;
+  --sun-scale:.78;
+  --sun-opacity:.70;
 
 
-  /* =====================================================
-     MOON
-     ===================================================== */
+  /* MOON */
 
   --moon-x:94%;
   --moon-y:50%;
@@ -94,19 +91,19 @@ body{
 
   min-height:
     calc(
-      var(--vh)
-      *
-      100
+      var(--vh) * 100
     );
 
 }
 
 
 /* =========================================================
-   DREAM LANDSCAPE
+   =========================================================
+   DREAM IMAGE WORLD
+   =========================================================
    ========================================================= */
 
-#dreamLandscape{
+#dreamWorld{
 
   position:fixed;
 
@@ -124,56 +121,181 @@ body{
 
 
 /* =========================================================
-   SKY
+   IMAGE MORPH STAGE
    ========================================================= */
 
-.sky{
+#dreamImages{
 
   position:absolute;
 
-  inset:-12%;
+  inset:-5%;
+
+  overflow:hidden;
+
+  background:#000;
+
+}
+
+
+/*
+IMPORTANT:
+
+Filters are STATIC.
+
+We do NOT animate:
+blur
+contrast
+grayscale
+brightness
+
+Only:
+opacity
+transform
+
+This is much safer for Safari / MacBook Air.
+*/
+
+.dreamImage{
+
+  position:absolute;
+
+  inset:-6%;
+
+  width:112%;
+  height:112%;
+
+  object-fit:cover;
+
+  object-position:center;
+
+  opacity:0;
+
+  /*
+  preliminary processing:
+  - grayscale
+  - light threshold-like contrast
+  - slight darkening
+  - soft blur
+  */
+
+  filter:
+    grayscale(1)
+    contrast(1.42)
+    brightness(.72)
+    blur(5px);
+
+  transform-origin:50% 50%;
+
+  will-change:
+    opacity,
+    transform;
+
+}
+
+
+/* =========================================================
+   FOUR DIFFERENT MOVEMENTS
+   ========================================================= */
+
+#dreamImg1{
+
+  animation:
+    imageMorph1
+    64s
+    linear
+    infinite;
+
+}
+
+
+#dreamImg2{
+
+  animation:
+    imageMorph2
+    64s
+    linear
+    infinite;
+
+}
+
+
+#dreamImg3{
+
+  animation:
+    imageMorph3
+    64s
+    linear
+    infinite;
+
+}
+
+
+#dreamImg4{
+
+  animation:
+    imageMorph4
+    64s
+    linear
+    infinite;
+
+}
+
+
+/* =========================================================
+   EXTRA SOFT IMAGE LAYER
+   ========================================================= */
+
+/*
+This layer sits above the four images.
+
+No SVG displacement.
+No animated blur.
+
+Just a very slow milky veil.
+*/
+
+#dreamImageVeil{
+
+  position:absolute;
+
+  inset:-15%;
 
   background:
 
     radial-gradient(
-      ellipse at 20% 64%,
-      rgba(255,255,255,.055),
-      rgba(255,255,255,.018) 28%,
-      transparent 53%
-    ),
+      ellipse at 38% 45%,
 
-    radial-gradient(
-      ellipse at 78% 29%,
-      rgba(255,255,255,.045),
-      rgba(255,255,255,.012) 32%,
-      transparent 56%
-    ),
-
-    radial-gradient(
-      ellipse at 50% 57%,
-      rgba(255,255,255,.034),
-      transparent 48%
-    ),
-
-    linear-gradient(
-      180deg,
-
-      #010101
+      rgba(255,255,255,.075)
       0%,
 
-      #060606
-      40%,
+      rgba(255,255,255,.020)
+      30%,
 
-      #0d0d0d
-      64%,
+      transparent
+      67%
+    ),
 
-      #030303
-      100%
+    radial-gradient(
+      ellipse at 72% 54%,
+
+      rgba(255,255,255,.050)
+      0%,
+
+      rgba(255,255,255,.014)
+      35%,
+
+      transparent
+      72%
     );
 
+  filter:
+    blur(35px);
+
+  opacity:.38;
+
   animation:
-    skyDream
-    225s
+    imageVeilDrift
+    130s
     ease-in-out
     infinite
     alternate;
@@ -194,14 +316,14 @@ body{
 
   width:
     clamp(
-      460px,
-      61vw,
-      1160px
+      440px,
+      58vw,
+      1120px
     );
 
   aspect-ratio:1;
 
-  z-index:3;
+  z-index:5;
 
   opacity:
     var(--sun-opacity);
@@ -216,11 +338,11 @@ body{
   transition:
 
     transform
-    8.8s
+    8.5s
     cubic-bezier(.22,.61,.36,1),
 
     opacity
-    5s
+    6s
     ease;
 
   will-change:
@@ -238,7 +360,7 @@ body{
 
   position:absolute;
 
-  inset:-22%;
+  inset:-24%;
 
   border-radius:50%;
 
@@ -251,7 +373,7 @@ body{
         var(--sun-r),
         var(--sun-g),
         var(--sun-b),
-        .58
+        .54
       )
       0%,
 
@@ -259,7 +381,7 @@ body{
         var(--sun-r),
         var(--sun-g),
         var(--sun-b),
-        .34
+        .31
       )
       8%,
 
@@ -267,25 +389,25 @@ body{
         var(--sun-r),
         var(--sun-g),
         var(--sun-b),
-        .18
+        .16
       )
-      19%,
+      20%,
 
       rgba(
         var(--sun-r),
         var(--sun-g),
         var(--sun-b),
-        .08
+        .065
       )
-      34%,
+      36%,
 
       rgba(
         var(--sun-r),
         var(--sun-g),
         var(--sun-b),
-        .025
+        .018
       )
-      53%,
+      55%,
 
       rgba(
         var(--sun-r),
@@ -293,15 +415,15 @@ body{
         var(--sun-b),
         0
       )
-      74%
+      75%
     );
 
   /*
-  STATIC blur.
+  static blur
   */
 
   filter:
-    blur(42px);
+    blur(45px);
 
   animation:
     sunBreath
@@ -313,64 +435,47 @@ body{
 }
 
 
-/* =========================================================
-   IRREGULAR SECOND HALO
-   ========================================================= */
-
 .sunHalo::before{
 
   content:"";
 
   position:absolute;
 
-  inset:-17%;
+  inset:-16%;
 
   border-radius:50%;
 
   background:
 
     radial-gradient(
-      ellipse at 42% 53%,
+      ellipse at 43% 52%,
 
       rgba(
         var(--sun-r),
         var(--sun-g),
         var(--sun-b),
-        .21
-      )
-      0%,
+        .18
+      ),
 
       rgba(
         var(--sun-r),
         var(--sun-g),
         var(--sun-b),
-        .09
+        .052
       )
-      28%,
-
-      rgba(
-        var(--sun-r),
-        var(--sun-g),
-        var(--sun-b),
-        .025
-      )
-      48%,
+      38%,
 
       transparent
-      74%
+      72%
     );
 
   filter:
     blur(54px);
 
-  opacity:.90;
+  opacity:.84;
 
 }
 
-
-/* =========================================================
-   DREAM FLARE
-   ========================================================= */
 
 .sunHalo::after{
 
@@ -378,11 +483,11 @@ body{
 
   position:absolute;
 
-  width:94%;
-  height:54%;
+  left:7%;
+  top:32%;
 
-  left:3%;
-  top:26%;
+  width:86%;
+  height:42%;
 
   border-radius:50%;
 
@@ -395,16 +500,16 @@ body{
         var(--sun-r),
         var(--sun-g),
         var(--sun-b),
-        .16
+        .13
       ),
 
       rgba(
         var(--sun-r),
         var(--sun-g),
         var(--sun-b),
-        .045
+        .025
       )
-      47%,
+      49%,
 
       transparent
       76%
@@ -414,7 +519,7 @@ body{
     blur(60px);
 
   transform:
-    rotate(-7deg);
+    rotate(-6deg);
 
 }
 
@@ -430,7 +535,7 @@ body{
   left:50%;
   top:50%;
 
-  width:13%;
+  width:12%;
 
   aspect-ratio:1;
 
@@ -446,20 +551,20 @@ body{
       var(--sun-b)
     );
 
-  opacity:.38;
+  opacity:.34;
 
   filter:
     blur(17px);
 
   box-shadow:
 
-    0 0 48px
+    0 0 45px
 
     rgba(
       var(--sun-r),
       var(--sun-g),
       var(--sun-b),
-      .26
+      .21
     );
 
 }
@@ -473,8 +578,11 @@ body{
 
   position:absolute;
 
-  left:var(--moon-x);
-  top:var(--moon-y);
+  left:
+    var(--moon-x);
+
+  top:
+    var(--moon-y);
 
   width:
     clamp(
@@ -485,12 +593,11 @@ body{
 
   aspect-ratio:1;
 
-  z-index:4;
+  z-index:6;
 
   border-radius:50%;
 
-  background:
-    #000;
+  background:#000;
 
   opacity:
     var(--moon-opacity);
@@ -519,718 +626,46 @@ body{
 
   box-shadow:
 
-    0 0 1px
-    rgba(255,255,255,.08),
+    0 0 2px
+    rgba(255,255,255,.05),
 
     inset
-    0 0 15px
-    rgba(255,255,255,.012);
-
-  will-change:
-    left,
-    top,
-    transform,
-    opacity;
+    0 0 12px
+    rgba(255,255,255,.008);
 
 }
 
 
 /* =========================================================
-   HORIZON
+   NOISE
    ========================================================= */
 
-.horizonFar{
+/*
+Static noise image.
+Not animated.
+
+This gives texture without forcing GPU redraws.
+*/
+
+#noise{
 
   position:absolute;
 
-  left:-18%;
-  right:-18%;
+  inset:0;
 
-  bottom:21%;
+  z-index:10;
 
-  height:42%;
+  opacity:.055;
 
-  background:
+  pointer-events:none;
 
-    radial-gradient(
-      ellipse at 4% 100%,
-      rgba(255,255,255,.075),
-      transparent 53%
-    ),
+  background-image:
 
-    radial-gradient(
-      ellipse at 23% 100%,
-      rgba(255,255,255,.052),
-      transparent 55%
-    ),
-
-    radial-gradient(
-      ellipse at 47% 100%,
-      rgba(255,255,255,.095),
-      transparent 52%
-    ),
-
-    radial-gradient(
-      ellipse at 69% 100%,
-      rgba(255,255,255,.060),
-      transparent 54%
-    ),
-
-    radial-gradient(
-      ellipse at 95% 100%,
-      rgba(255,255,255,.045),
-      transparent 54%
+    url(
+      "data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.78' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.75'/%3E%3C/svg%3E"
     );
 
-  filter:
-    blur(18px);
-
-  opacity:.80;
-
-  animation:
-    horizonDream
-    258s
-    ease-in-out
-    infinite
-    alternate;
-
-}
-
-
-/* =========================================================
-   GROUND
-   ========================================================= */
-
-.ground{
-
-  position:absolute;
-
-  left:-14%;
-  right:-14%;
-
-  bottom:-20%;
-
-  height:64%;
-
-  background:
-
-    radial-gradient(
-      ellipse at 14% 17%,
-      rgba(255,255,255,.055),
-      transparent 34%
-    ),
-
-    radial-gradient(
-      ellipse at 42% 9%,
-      rgba(255,255,255,.032),
-      transparent 38%
-    ),
-
-    radial-gradient(
-      ellipse at 70% 15%,
-      rgba(255,255,255,.052),
-      transparent 34%
-    ),
-
-    linear-gradient(
-      180deg,
-
-      rgba(20,20,20,.88)
-      0%,
-
-      rgba(6,6,6,.98)
-      34%,
-
-      #000
-      100%
-    );
-
-  filter:
-    blur(11px);
-
-  animation:
-    groundDream
-    244s
-    ease-in-out
-    infinite
-    alternate;
-
-}
-
-
-/* =========================================================
-   TREE
-   ========================================================= */
-
-.tree{
-
-  position:absolute;
-
-  left:27%;
-
-  bottom:22%;
-
-  width:
-    clamp(
-      150px,
-      21vw,
-      360px
-    );
-
-  height:
-    clamp(
-      320px,
-      54vh,
-      660px
-    );
-
-  transform:
-    translateX(-50%);
-
-  opacity:.68;
-
-  filter:
-    blur(4px);
-
-  transform-origin:
-    50% 100%;
-
-  animation:
-    treeDream
-    205s
-    ease-in-out
-    infinite
-    alternate;
-
-}
-
-
-.treeTrunk{
-
-  position:absolute;
-
-  left:49%;
-  bottom:0;
-
-  width:4.8%;
-  height:51%;
-
-  border-radius:
-    50% 50% 15% 15%;
-
-  background:
-    rgba(4,4,4,.98);
-
-  transform:
-    translateX(-50%)
-    rotate(-1deg);
-
-}
-
-
-.treeBranchA,
-.treeBranchB,
-.treeBranchC{
-
-  position:absolute;
-
-  left:50%;
-
-  transform-origin:
-    0 100%;
-
-  background:
-    rgba(3,3,3,.98);
-
-  border-radius:99px;
-
-}
-
-
-.treeBranchA{
-
-  bottom:42%;
-
-  width:3.5%;
-  height:31%;
-
-  transform:
-    rotate(-34deg);
-
-}
-
-
-.treeBranchB{
-
-  bottom:40%;
-
-  width:3.5%;
-  height:34%;
-
-  transform:
-    rotate(31deg);
-
-}
-
-
-.treeBranchC{
-
-  bottom:50%;
-
-  width:2.6%;
-  height:23%;
-
-  transform:
-    rotate(8deg);
-
-}
-
-
-.crown{
-
-  position:absolute;
-
-  border-radius:50%;
-
-  background:
-
-    radial-gradient(
-      ellipse,
-
-      rgba(11,11,11,.98)
-      0%,
-
-      rgba(5,5,5,.94)
-      58%,
-
-      rgba(2,2,2,.84)
-      77%,
-
-      transparent
-      100%
-    );
-
-}
-
-
-.crown.a{
-
-  width:74%;
-  height:40%;
-
-  left:2%;
-  top:12%;
-
-}
-
-
-.crown.b{
-
-  width:66%;
-  height:46%;
-
-  right:-2%;
-  top:3%;
-
-}
-
-
-.crown.c{
-
-  width:82%;
-  height:38%;
-
-  left:10%;
-  top:27%;
-
-}
-
-
-.crown.d{
-
-  width:48%;
-  height:34%;
-
-  left:26%;
-  top:-1%;
-
-}
-
-
-/* =========================================================
-   HOUSE
-   ========================================================= */
-
-.house{
-
-  position:absolute;
-
-  right:13%;
-
-  bottom:27%;
-
-  width:
-    clamp(
-      120px,
-      14vw,
-      225px
-    );
-
-  aspect-ratio:1.22;
-
-  opacity:.65;
-
-  filter:
-    blur(3px);
-
-  transform-origin:
-    50% 100%;
-
-  animation:
-    houseDream
-    247s
-    ease-in-out
-    infinite
-    alternate;
-
-}
-
-
-.houseBody{
-
-  position:absolute;
-
-  left:13%;
-  right:13%;
-
-  bottom:0;
-
-  height:60%;
-
-  background:
-    rgba(5,5,5,.98);
-
-}
-
-
-.houseRoof{
-
-  position:absolute;
-
-  left:4%;
-  top:3%;
-
-  width:92%;
-  height:51%;
-
-  background:
-    rgba(3,3,3,.99);
-
-  clip-path:
-    polygon(
-      50% 0%,
-      100% 78%,
-      89% 100%,
-      11% 100%,
-      0% 78%
-    );
-
-}
-
-
-.windowA,
-.windowB{
-
-  position:absolute;
-
-  bottom:18%;
-
-  width:13%;
-  height:24%;
-
-  border-radius:
-    50% 50% 10% 10%;
-
-  background:
-    rgba(255,255,255,.22);
-
-  box-shadow:
-    0 0 24px
-    rgba(255,255,255,.10);
-
-}
-
-
-.windowA{
-  left:30%;
-}
-
-
-.windowB{
-  right:30%;
-}
-
-
-/* =========================================================
-   DISTANT HOUSE
-   ========================================================= */
-
-.houseGhost{
-
-  position:absolute;
-
-  right:3%;
-
-  bottom:39%;
-
-  width:
-    clamp(
-      60px,
-      8vw,
-      130px
-    );
-
-  height:
-    clamp(
-      50px,
-      7vw,
-      105px
-    );
-
-  opacity:.085;
-
-  filter:
-    blur(8px);
-
-  background:
-    rgba(255,255,255,.17);
-
-  clip-path:
-    polygon(
-      10% 42%,
-      50% 0%,
-      90% 42%,
-      90% 100%,
-      10% 100%
-    );
-
-  animation:
-    ghostHouseDream
-    310s
-    ease-in-out
-    infinite
-    alternate;
-
-}
-
-
-/* =========================================================
-   FOG
-   ========================================================= */
-
-.fog{
-
-  position:absolute;
-
-  left:-20%;
-
-  width:140%;
-
-  height:27%;
-
-  border-radius:50%;
-
-  background:
-
-    radial-gradient(
-      ellipse,
-
-      rgba(255,255,255,.070)
-      0%,
-
-      rgba(255,255,255,.028)
-      42%,
-
-      transparent
-      76%
-    );
-
-  filter:
-    blur(20px);
-
-}
-
-
-.fog.one{
-
-  bottom:10%;
-
-  opacity:.68;
-
-  animation:
-    fogOne
-    190s
-    ease-in-out
-    infinite
-    alternate;
-
-}
-
-
-.fog.two{
-
-  bottom:29%;
-
-  opacity:.42;
-
-  animation:
-    fogTwo
-    260s
-    ease-in-out
-    infinite
-    alternate;
-
-}
-
-
-.fog.three{
-
-  bottom:47%;
-
-  height:20%;
-
-  opacity:.25;
-
-  animation:
-    fogThree
-    330s
-    ease-in-out
-    infinite
-    alternate;
-
-}
-
-
-/* =========================================================
-   CLOUD VEILS
-   ========================================================= */
-
-.cloudVeil{
-
-  position:absolute;
-
-  width:95%;
-  height:38%;
-
-  border-radius:50%;
-
-  background:
-
-    radial-gradient(
-      ellipse,
-
-      rgba(255,255,255,.045),
-
-      rgba(255,255,255,.016)
-      38%,
-
-      transparent
-      71%
-    );
-
-  filter:
-    blur(25px);
-
-}
-
-
-.cloudVeil.one{
-
-  left:-15%;
-  top:3%;
-
-  animation:
-    cloudOne
-    290s
-    ease-in-out
-    infinite
-    alternate;
-
-}
-
-
-.cloudVeil.two{
-
-  right:-19%;
-  top:20%;
-
-  opacity:.64;
-
-  animation:
-    cloudTwo
-    340s
-    ease-in-out
-    infinite
-    alternate;
-
-}
-
-
-/* =========================================================
-   STRANGE LIGHT
-   ========================================================= */
-
-.strangeLight{
-
-  position:absolute;
-
-  left:56%;
-  top:23%;
-
-  width:
-    clamp(
-      300px,
-      45vw,
-      780px
-    );
-
-  height:
-    clamp(
-      180px,
-      28vw,
-      470px
-    );
-
-  border-radius:50%;
-
-  background:
-
-    radial-gradient(
-      ellipse,
-
-      rgba(255,255,255,.060),
-
-      rgba(255,255,255,.018)
-      44%,
-
-      transparent
-      75%
-    );
-
-  filter:
-    blur(27px);
-
-  opacity:.48;
-
-  transform:
-    rotate(-8deg);
-
-  animation:
-    strangeLightDream
-    310s
-    ease-in-out
-    infinite
-    alternate;
+  mix-blend-mode:soft-light;
 
 }
 
@@ -1245,23 +680,23 @@ body{
 
   inset:0;
 
-  z-index:8;
+  z-index:11;
 
   background:
 
     radial-gradient(
       ellipse at 50% 48%,
 
-      transparent
+      rgba(0,0,0,0)
       0%,
 
-      rgba(0,0,0,.04)
-      40%,
+      rgba(0,0,0,.03)
+      37%,
 
-      rgba(0,0,0,.25)
-      74%,
+      rgba(0,0,0,.22)
+      72%,
 
-      rgba(0,0,0,.72)
+      rgba(0,0,0,.73)
       100%
     );
 
@@ -1278,7 +713,7 @@ body{
 
   inset:0;
 
-  z-index:9;
+  z-index:12;
 
   pointer-events:none;
 
@@ -1287,24 +722,24 @@ body{
   background:
 
     radial-gradient(
-      ellipse at 50% 49%,
+      ellipse at 50% 50%,
 
-      rgba(0,0,0,.04)
+      rgba(0,0,0,.06)
       0%,
 
-      rgba(0,0,0,.12)
-      42%,
+      rgba(0,0,0,.14)
+      43%,
 
-      rgba(0,0,0,.38)
+      rgba(0,0,0,.42)
       83%,
 
-      rgba(0,0,0,.58)
+      rgba(0,0,0,.64)
       100%
     );
 
   transition:
     opacity
-    2.7s
+    2.8s
     ease;
 
 }
@@ -1312,36 +747,13 @@ body{
 
 body.questionMode #readingShadow{
 
-  opacity:.42;
+  opacity:.40;
 
 }
 
 
 /* =========================================================
-   STATIC GRAIN
-   ========================================================= */
-
-#grain{
-
-  position:fixed;
-
-  inset:0;
-
-  z-index:10;
-
-  pointer-events:none;
-
-  opacity:.015;
-
-  background-image:url(
-    "data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.88' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"
-  );
-
-}
-
-
-/* =========================================================
-   GHOST WORDS
+   GHOST TEXT
    ========================================================= */
 
 #ghostLayer{
@@ -1350,7 +762,7 @@ body.questionMode #readingShadow{
 
   inset:0;
 
-  z-index:11;
+  z-index:13;
 
   pointer-events:none;
 
@@ -1371,7 +783,7 @@ body.questionMode #readingShadow{
     clamp(
       24px,
       8vw,
-      110px
+      112px
     );
 
   line-height:.9;
@@ -1414,9 +826,7 @@ body.questionMode #readingShadow{
 
   height:
     calc(
-      var(--vh)
-      *
-      100
+      var(--vh) * 100
     );
 
   display:flex;
@@ -1481,9 +891,11 @@ body.questionMode #readingShadow{
 
   text-transform:uppercase;
 
-  color:var(--muted);
+  color:
+    var(--muted);
 
-  text-shadow:var(--shadow);
+  text-shadow:
+    var(--shadow);
 
 }
 
@@ -1526,14 +938,14 @@ body.questionMode #readingShadow{
     radial-gradient(
       ellipse,
 
-      rgba(0,0,0,.52)
+      rgba(0,0,0,.51)
       0%,
 
-      rgba(0,0,0,.30)
-      46%,
+      rgba(0,0,0,.29)
+      47%,
 
-      rgba(0,0,0,.08)
-      69%,
+      rgba(0,0,0,.07)
+      70%,
 
       transparent
       84%
@@ -1822,7 +1234,9 @@ textarea{
   margin-top:30px;
 
   padding:
-    16px 0 20px;
+    16px
+    0
+    20px;
 
   resize:none;
 
@@ -1843,7 +1257,9 @@ input{
   margin-top:34px;
 
   padding:
-    18px 0 20px;
+    18px
+    0
+    20px;
 
   font-size:
     clamp(
@@ -1921,9 +1337,12 @@ input::placeholder{
 
   background:transparent;
 
-  color:var(--muted);
+  color:
+    var(--muted);
 
-  padding:16px 0;
+  padding:
+    16px
+    0;
 
 }
 
@@ -1933,7 +1352,8 @@ input::placeholder{
   min-width:150px;
 
   padding:
-    17px 20px;
+    17px
+    20px;
 
   border:
     1px solid
@@ -2273,7 +1693,9 @@ input::placeholder{
 
 
 .finalCopy{
+
   max-width:760px;
+
 }
 
 
@@ -2318,7 +1740,9 @@ input::placeholder{
   height:1px;
 
   margin:
-    42px 0 24px;
+    42px
+    0
+    24px;
 
   background:
     rgba(255,255,255,.21);
@@ -2347,7 +1771,252 @@ input::placeholder{
 
 
 /* =========================================================
-   ANIMATIONS
+   =========================================================
+   IMAGE MORPH ANIMATIONS
+   =========================================================
+   ========================================================= */
+
+
+/*
+64 second loop.
+
+Each image:
+approx 24 sec visible / blending.
+
+This means two images overlap during transitions.
+There is never a hard cut.
+*/
+
+
+@keyframes imageMorph1{
+
+  0%{
+
+    opacity:.88;
+
+    transform:
+      translate3d(-1%,0,0)
+      scale(1.08);
+
+  }
+
+
+  17%{
+
+    opacity:.90;
+
+    transform:
+      translate3d(.5%,-.7%,0)
+      scale(1.12);
+
+  }
+
+
+  27%{
+
+    opacity:0;
+
+    transform:
+      translate3d(1.2%,-1%,0)
+      scale(1.16);
+
+  }
+
+
+  88%{
+
+    opacity:0;
+
+    transform:
+      translate3d(-1.5%,1%,0)
+      scale(1.06);
+
+  }
+
+
+  100%{
+
+    opacity:.88;
+
+    transform:
+      translate3d(-1%,0,0)
+      scale(1.08);
+
+  }
+
+}
+
+
+@keyframes imageMorph2{
+
+  0%,
+  12%{
+
+    opacity:0;
+
+    transform:
+      translate3d(1%,.5%,0)
+      scale(1.10);
+
+  }
+
+
+  22%{
+
+    opacity:.88;
+
+    transform:
+      translate3d(.5%,0,0)
+      scale(1.13);
+
+  }
+
+
+  39%{
+
+    opacity:.90;
+
+    transform:
+      translate3d(-.7%,-.6%,0)
+      scale(1.17);
+
+  }
+
+
+  49%{
+
+    opacity:0;
+
+    transform:
+      translate3d(-1.2%,-1%,0)
+      scale(1.20);
+
+  }
+
+
+  100%{
+
+    opacity:0;
+
+  }
+
+}
+
+
+@keyframes imageMorph3{
+
+  0%,
+  35%{
+
+    opacity:0;
+
+    transform:
+      translate3d(-1%,0,0)
+      scale(1.07);
+
+  }
+
+
+  45%{
+
+    opacity:.88;
+
+    transform:
+      translate3d(-.3%,.5%,0)
+      scale(1.11);
+
+  }
+
+
+  62%{
+
+    opacity:.90;
+
+    transform:
+      translate3d(.8%,-.3%,0)
+      scale(1.16);
+
+  }
+
+
+  72%{
+
+    opacity:0;
+
+    transform:
+      translate3d(1.4%,-.8%,0)
+      scale(1.19);
+
+  }
+
+
+  100%{
+
+    opacity:0;
+
+  }
+
+}
+
+
+@keyframes imageMorph4{
+
+  0%,
+  59%{
+
+    opacity:0;
+
+    transform:
+      translate3d(1%,0,0)
+      scale(1.08);
+
+  }
+
+
+  69%{
+
+    opacity:.88;
+
+    transform:
+      translate3d(.4%,-.5%,0)
+      scale(1.12);
+
+  }
+
+
+  86%{
+
+    opacity:.90;
+
+    transform:
+      translate3d(-.7%,.5%,0)
+      scale(1.17);
+
+  }
+
+
+  96%{
+
+    opacity:.15;
+
+    transform:
+      translate3d(-1%,1%,0)
+      scale(1.20);
+
+  }
+
+
+  100%{
+
+    opacity:0;
+
+  }
+
+}
+
+
+/* =========================================================
+   SUN
    ========================================================= */
 
 @keyframes sunBreath{
@@ -2355,11 +2024,12 @@ input::placeholder{
   0%{
 
     transform:
-      scale(.93);
+      scale(.94);
 
-    opacity:.80;
+    opacity:.79;
 
   }
+
 
   50%{
 
@@ -2370,10 +2040,11 @@ input::placeholder{
 
   }
 
+
   100%{
 
     transform:
-      scale(1.09);
+      scale(1.085);
 
     opacity:1;
 
@@ -2382,261 +2053,35 @@ input::placeholder{
 }
 
 
-@keyframes skyDream{
+/* =========================================================
+   VEIL
+   ========================================================= */
 
-  0%{
-
-    transform:
-      translate3d(-1%,0,0)
-      scale(1.02);
-
-  }
-
-  100%{
-
-    transform:
-      translate3d(1%,.5%,0)
-      scale(1.05);
-
-  }
-
-}
-
-
-@keyframes horizonDream{
-
-  0%{
-
-    transform:
-      translate3d(-1%,0,0)
-      scaleX(.98)
-      scaleY(1.03);
-
-  }
-
-  100%{
-
-    transform:
-      translate3d(1.5%,-.5%,0)
-      scaleX(1.03)
-      scaleY(.98);
-
-  }
-
-}
-
-
-@keyframes groundDream{
-
-  0%{
-
-    transform:
-      translate3d(-1%,0,0)
-      scaleX(1.02)
-      scaleY(1.02);
-
-  }
-
-  100%{
-
-    transform:
-      translate3d(1%,.4%,0)
-      scaleX(.99)
-      scaleY(1.04);
-
-  }
-
-}
-
-
-@keyframes treeDream{
-
-  0%{
-
-    transform:
-      translateX(-50%)
-      rotate(-.35deg)
-      scale(.985);
-
-  }
-
-  100%{
-
-    transform:
-      translateX(-50%)
-      rotate(.30deg)
-      scale(1.025);
-
-  }
-
-}
-
-
-@keyframes houseDream{
-
-  0%{
-
-    transform:
-      translate3d(-1px,1px,0)
-      scale(.98);
-
-  }
-
-  100%{
-
-    transform:
-      translate3d(2px,-1px,0)
-      scale(1.025);
-
-  }
-
-}
-
-
-@keyframes ghostHouseDream{
-
-  0%{
-
-    transform:
-      translate3d(0,2px,0)
-      scale(.94);
-
-    opacity:.035;
-
-  }
-
-  100%{
-
-    transform:
-      translate3d(-4px,-2px,0)
-      scale(1.08);
-
-    opacity:.11;
-
-  }
-
-}
-
-
-@keyframes fogOne{
+@keyframes imageVeilDrift{
 
   from{
 
     transform:
-      translate3d(-5%,0,0);
+      translate3d(-2%,1%,0)
+      scale(1);
 
   }
+
 
   to{
 
     transform:
-      translate3d(6%,-2%,0);
+      translate3d(2%,-1%,0)
+      scale(1.06);
 
   }
 
 }
 
 
-@keyframes fogTwo{
-
-  from{
-
-    transform:
-      translate3d(5%,-1%,0);
-
-  }
-
-  to{
-
-    transform:
-      translate3d(-6%,1%,0);
-
-  }
-
-}
-
-
-@keyframes fogThree{
-
-  from{
-
-    transform:
-      translate3d(-3%,0,0);
-
-  }
-
-  to{
-
-    transform:
-      translate3d(4%,2%,0);
-
-  }
-
-}
-
-
-@keyframes cloudOne{
-
-  from{
-
-    transform:
-      translate3d(-2%,0,0);
-
-  }
-
-  to{
-
-    transform:
-      translate3d(5%,2%,0);
-
-  }
-
-}
-
-
-@keyframes cloudTwo{
-
-  from{
-
-    transform:
-      translate3d(4%,0,0);
-
-  }
-
-  to{
-
-    transform:
-      translate3d(-4%,-2%,0);
-
-  }
-
-}
-
-
-@keyframes strangeLightDream{
-
-  0%{
-
-    transform:
-      rotate(-8deg)
-      scale(.92);
-
-    opacity:.25;
-
-  }
-
-  100%{
-
-    transform:
-      rotate(-6deg)
-      scale(1.11);
-
-    opacity:.60;
-
-  }
-
-}
-
+/* =========================================================
+   GHOST
+   ========================================================= */
 
 @keyframes ghostMove{
 
@@ -2645,29 +2090,48 @@ input::placeholder{
     opacity:0;
 
     transform:
-      translate3d(-1vw,1vh,0);
+      translate3d(
+        -1vw,
+        1vh,
+        0
+      );
 
   }
+
 
   20%{
+
     opacity:1;
+
   }
 
+
   75%{
+
     opacity:.48;
+
   }
+
 
   100%{
 
     opacity:0;
 
     transform:
-      translate3d(1.5vw,-1vh,0);
+      translate3d(
+        1.5vw,
+        -1vh,
+        0
+      );
 
   }
 
 }
 
+
+/* =========================================================
+   DREAM SHIFT
+   ========================================================= */
 
 @keyframes dreamShift{
 
@@ -2690,6 +2154,10 @@ input::placeholder{
 }
 
 
+/* =========================================================
+   FINAL
+   ========================================================= */
+
 @keyframes bloom{
 
   0%{
@@ -2701,6 +2169,7 @@ input::placeholder{
 
   }
 
+
   74%{
 
     opacity:.62;
@@ -2709,6 +2178,7 @@ input::placeholder{
       scale(1);
 
   }
+
 
   100%{
 
@@ -2753,6 +2223,7 @@ input::placeholder{
       scale(1.01);
 
   }
+
 
   100%{
 
@@ -2855,7 +2326,9 @@ input::placeholder{
 
 
   .langs{
+
     margin-top:36px;
+
   }
 
 
@@ -2869,12 +2342,16 @@ input::placeholder{
 
 
   .actions{
+
     margin-top:24px;
+
   }
 
 
   .next{
+
     min-width:128px;
+
   }
 
 
@@ -2882,9 +2359,9 @@ input::placeholder{
 
     width:
       clamp(
-        350px,
-        100vw,
-        740px
+        370px,
+        105vw,
+        760px
       );
 
   }
@@ -2902,32 +2379,18 @@ input::placeholder{
   }
 
 
-  .tree{
+  .dreamImage{
 
-    left:21%;
+    /*
+    Slightly less blur on phones,
+    because their screen is smaller.
+    */
 
-    width:
-      clamp(
-        130px,
-        40vw,
-        250px
-      );
-
-    opacity:.58;
-
-  }
-
-
-  .house{
-
-    right:5%;
-
-    width:
-      clamp(
-        110px,
-        32vw,
-        190px
-      );
+    filter:
+      grayscale(1)
+      contrast(1.42)
+      brightness(.72)
+      blur(3.5px);
 
   }
 
@@ -2989,16 +2452,64 @@ input::placeholder{
 
 
 <!-- ======================================================
-     DREAM LANDSCAPE
+     DREAM WORLD
      ====================================================== -->
 
-<div id="dreamLandscape">
+<div id="dreamWorld">
 
 
-  <div class="sky"></div>
+  <!-- ====================================================
+       MORPHING R_1 - R_4
+       ==================================================== -->
+
+  <div id="dreamImages">
 
 
-  <!-- CENTRAL SUN -->
+    <img
+      id="dreamImg1"
+      class="dreamImage"
+      src="r_1.png"
+      alt=""
+      draggable="false"
+    >
+
+
+    <img
+      id="dreamImg2"
+      class="dreamImage"
+      src="r_2.png"
+      alt=""
+      draggable="false"
+    >
+
+
+    <img
+      id="dreamImg3"
+      class="dreamImage"
+      src="r_3.png"
+      alt=""
+      draggable="false"
+    >
+
+
+    <img
+      id="dreamImg4"
+      class="dreamImage"
+      src="r_4.png"
+      alt=""
+      draggable="false"
+    >
+
+
+  </div>
+
+
+  <div id="dreamImageVeil"></div>
+
+
+  <!-- ====================================================
+       SUN
+       ==================================================== -->
 
   <div id="dreamSun">
 
@@ -3009,74 +2520,14 @@ input::placeholder{
   </div>
 
 
-  <!-- MOON -->
+  <!-- ====================================================
+       MOON
+       ==================================================== -->
 
   <div id="dreamMoon"></div>
 
 
-  <div class="cloudVeil one"></div>
-
-  <div class="cloudVeil two"></div>
-
-
-  <div class="strangeLight"></div>
-
-
-  <div class="horizonFar"></div>
-
-
-  <!-- TREE -->
-
-  <div class="tree">
-
-    <div class="treeTrunk"></div>
-
-    <div class="treeBranchA"></div>
-
-    <div class="treeBranchB"></div>
-
-    <div class="treeBranchC"></div>
-
-    <div class="crown a"></div>
-
-    <div class="crown b"></div>
-
-    <div class="crown c"></div>
-
-    <div class="crown d"></div>
-
-  </div>
-
-
-  <!-- HOUSE -->
-
-  <div class="house">
-
-    <div class="houseRoof"></div>
-
-    <div class="houseBody">
-
-      <div class="windowA"></div>
-
-      <div class="windowB"></div>
-
-    </div>
-
-  </div>
-
-
-  <div class="houseGhost"></div>
-
-
-  <div class="ground"></div>
-
-
-  <div class="fog three"></div>
-
-  <div class="fog two"></div>
-
-  <div class="fog one"></div>
-
+  <div id="noise"></div>
 
   <div id="dreamVignette"></div>
 
@@ -3087,8 +2538,6 @@ input::placeholder{
 <div id="readingShadow"></div>
 
 <div id="ghostLayer"></div>
-
-<div id="grain"></div>
 
 
 <!-- ======================================================
@@ -3521,7 +2970,7 @@ retry:
 "СПРОБУВАТИ ЩЕ РАЗ",
 
 invite:
-"Приходь на наш performance зі своїм сном."
+"Приходь на наш перформанс зі своїм сном."
 
 }
 
@@ -3566,27 +3015,19 @@ dreamColor:{
    ========================================================= */
 
 const screen =
-document.getElementById(
-  "screen"
-);
+document.getElementById("screen");
 
 
 const progress =
-document.getElementById(
-  "progress"
-);
+document.getElementById("progress");
 
 
 const depthLabel =
-document.getElementById(
-  "depthLabel"
-);
+document.getElementById("depthLabel");
 
 
 const ghostLayer =
-document.getElementById(
-  "ghostLayer"
-);
+document.getElementById("ghostLayer");
 
 
 /* =========================================================
@@ -3648,16 +3089,12 @@ function randomItem(array){
 function parseDreamColor(name){
 
   const s =
-    String(
-      name || ""
-    )
+    String(name || "")
     .toLowerCase()
     .trim();
 
 
   const map = {
-
-    /* PL */
 
     "niebieski":[65,115,195],
     "niebieska":[65,115,195],
@@ -3678,7 +3115,6 @@ function parseDreamColor(name){
     "fioletowy":[135,80,185],
     "fiolet":[135,80,185],
     "purpurowy":[155,70,150],
-    "purpura":[155,70,150],
     "pomarańczowy":[205,120,55],
     "żółty":[215,180,75],
     "złoty":[195,150,75],
@@ -3688,8 +3124,6 @@ function parseDreamColor(name){
     "biały":[220,220,215],
     "czarny":[90,90,90],
     "brązowy":[135,90,70],
-
-    /* ENG */
 
     "blue":[65,115,195],
     "navy":[43,68,135],
@@ -3710,8 +3144,6 @@ function parseDreamColor(name){
     "white":[220,220,215],
     "black":[90,90,90],
     "brown":[135,90,70],
-
-    /* UKR */
 
     "синій":[65,115,195],
     "блакитний":[85,160,215],
@@ -3737,26 +3169,18 @@ function parseDreamColor(name){
 
 
   for(
-    const key
-    in map
+    const key in map
   ){
 
     if(
-      s.includes(
-        key
-      )
+      s.includes(key)
     ){
 
       return {
 
-        r:
-          map[key][0],
-
-        g:
-          map[key][1],
-
-        b:
-          map[key][2]
+        r:map[key][0],
+        g:map[key][1],
+        b:map[key][2]
 
       };
 
@@ -3782,28 +3206,19 @@ function applySunColor(){
     state.dreamColor;
 
 
-  document
-  .documentElement
-  .style
-  .setProperty(
+  document.documentElement.style.setProperty(
     "--sun-r",
     c.r
   );
 
 
-  document
-  .documentElement
-  .style
-  .setProperty(
+  document.documentElement.style.setProperty(
     "--sun-g",
     c.g
   );
 
 
-  document
-  .documentElement
-  .style
-  .setProperty(
+  document.documentElement.style.setProperty(
     "--sun-b",
     c.b
   );
@@ -3812,7 +3227,7 @@ function applySunColor(){
 
 
 /* =========================================================
-   DREAM COSMOS
+   COSMOS
    ========================================================= */
 
 function updateDreamCosmos(){
@@ -3835,97 +3250,63 @@ function updateDreamCosmos(){
     getDreamLevel();
 
 
-  /*
-  =====================================================
-  SUN
-
-  Always centered.
-  Becomes significantly larger with every question.
-
-  Q1 = .86
-  Q9 = 3.15
-  =====================================================
-  */
-
   const p =
     Math.max(
       0,
       Math.min(
         1,
-        i / 8
+        i/8
       )
     );
 
 
+  /*
+  Central light grows with every question.
+  */
+
   const sunScale =
-    .86 +
-    p * 2.29;
+    .84 +
+    p * 2.20;
 
 
   const sunOpacity =
-    .70 +
+    .69 +
     p * .20;
 
 
-  document
-  .documentElement
-  .style
-  .setProperty(
+  document.documentElement.style.setProperty(
     "--sun-scale",
     sunScale
   );
 
 
-  document
-  .documentElement
-  .style
-  .setProperty(
+  document.documentElement.style.setProperty(
     "--sun-opacity",
     sunOpacity
   );
 
 
   /*
-  =====================================================
   TRAUM 0
-  =====================================================
   */
 
   if(
     level === 0
   ){
 
-    document
-    .documentElement
-    .style
-    .setProperty(
+    document.documentElement.style.setProperty(
       "--moon-opacity",
       "0"
     );
 
 
-    document
-    .documentElement
-    .style
-    .setProperty(
+    document.documentElement.style.setProperty(
       "--moon-x",
       "94%"
     );
 
 
-    document
-    .documentElement
-    .style
-    .setProperty(
-      "--moon-y",
-      "50%"
-    );
-
-
-    document
-    .documentElement
-    .style
-    .setProperty(
+    document.documentElement.style.setProperty(
       "--moon-scale",
       ".72"
     );
@@ -3937,9 +3318,7 @@ function updateDreamCosmos(){
 
 
   /*
-  =====================================================
   TRAUM 1
-  =====================================================
   */
 
   if(
@@ -3966,37 +3345,25 @@ function updateDreamCosmos(){
       local * .18;
 
 
-    document
-    .documentElement
-    .style
-    .setProperty(
+    document.documentElement.style.setProperty(
       "--moon-opacity",
       ".94"
     );
 
 
-    document
-    .documentElement
-    .style
-    .setProperty(
+    document.documentElement.style.setProperty(
       "--moon-x",
       moonX+"%"
     );
 
 
-    document
-    .documentElement
-    .style
-    .setProperty(
+    document.documentElement.style.setProperty(
       "--moon-y",
       "50%"
     );
 
 
-    document
-    .documentElement
-    .style
-    .setProperty(
+    document.documentElement.style.setProperty(
       "--moon-scale",
       moonScale
     );
@@ -4008,9 +3375,7 @@ function updateDreamCosmos(){
 
 
   /*
-  =====================================================
-  TRAUM 2
-  =====================================================
+  TRAUM 2 / eclipse
   */
 
   const local =
@@ -4033,37 +3398,25 @@ function updateDreamCosmos(){
     local * .28;
 
 
-  document
-  .documentElement
-  .style
-  .setProperty(
+  document.documentElement.style.setProperty(
     "--moon-opacity",
     ".995"
   );
 
 
-  document
-  .documentElement
-  .style
-  .setProperty(
+  document.documentElement.style.setProperty(
     "--moon-x",
     moonX+"%"
   );
 
 
-  document
-  .documentElement
-  .style
-  .setProperty(
+  document.documentElement.style.setProperty(
     "--moon-y",
     "50%"
   );
 
 
-  document
-  .documentElement
-  .style
-  .setProperty(
+  document.documentElement.style.setProperty(
     "--moon-scale",
     moonScale
   );
@@ -4072,7 +3425,7 @@ function updateDreamCosmos(){
 
 
 /* =========================================================
-   MODE
+   VISUAL MODE
    ========================================================= */
 
 function setVisualMode(mode){
@@ -4081,10 +3434,7 @@ function setVisualMode(mode){
     mode;
 
 
-  document
-  .body
-  .classList
-  .toggle(
+  document.body.classList.toggle(
 
     "questionMode",
 
@@ -4095,9 +3445,7 @@ function setVisualMode(mode){
       "saved",
       "error"
     ]
-    .includes(
-      mode
-    )
+    .includes(mode)
 
   );
 
@@ -4105,7 +3453,7 @@ function setVisualMode(mode){
 
 
 /* =========================================================
-   CROSSFADE
+   UI CROSSFADE
    ========================================================= */
 
 let transitionRunning =
@@ -4127,9 +3475,7 @@ function transition(fn){
     true;
 
 
-  screen
-  .classList
-  .add(
+  screen.classList.add(
     "fade"
   );
 
@@ -4157,9 +3503,7 @@ function transition(fn){
                 ()=>{
 
 
-                  screen
-                  .classList
-                  .remove(
+                  screen.classList.remove(
                     "fade"
                   );
 
@@ -4168,10 +3512,8 @@ function transition(fn){
 
                     ()=>{
 
-
                       transitionRunning =
                         false;
-
 
                     },
 
@@ -4243,21 +3585,15 @@ choose language / wybierz język / оберіть мову
 
 <div class="langs">
 
-<button
-onclick="chooseLanguage('PL')"
->
+<button onclick="chooseLanguage('PL')">
 PL
 </button>
 
-<button
-onclick="chooseLanguage('ENG')"
->
+<button onclick="chooseLanguage('ENG')">
 ENG
 </button>
 
-<button
-onclick="chooseLanguage('UKR')"
->
+<button onclick="chooseLanguage('UKR')">
 УКР
 </button>
 
@@ -4323,28 +3659,19 @@ function chooseLanguage(lang){
   applySunColor();
 
 
-  document
-  .documentElement
-  .style
-  .setProperty(
+  document.documentElement.style.setProperty(
     "--sun-scale",
-    ".82"
+    ".78"
   );
 
 
-  document
-  .documentElement
-  .style
-  .setProperty(
+  document.documentElement.style.setProperty(
     "--sun-opacity",
-    ".72"
+    ".70"
   );
 
 
-  document
-  .documentElement
-  .style
-  .setProperty(
+  document.documentElement.style.setProperty(
     "--moon-opacity",
     "0"
   );
@@ -4475,8 +3802,7 @@ ${copy.next}
 
 
         const field =
-          document
-          .getElementById(
+          document.getElementById(
             "dreamColorInput"
           );
 
@@ -4487,8 +3813,7 @@ ${copy.next}
           field.focus();
 
 
-          field
-          .addEventListener(
+          field.addEventListener(
 
             "input",
 
@@ -4496,9 +3821,7 @@ ${copy.next}
 
 
               state.dreamColorName =
-                field
-                .value
-                .trim();
+                field.value.trim();
 
 
               state.dreamColor =
@@ -4586,8 +3909,7 @@ ${last ? copy.begin : copy.next}
 function saveColorField(){
 
   const field =
-    document
-    .getElementById(
+    document.getElementById(
       "dreamColorInput"
     );
 
@@ -4602,9 +3924,7 @@ function saveColorField(){
 
 
   state.dreamColorName =
-    field
-    .value
-    .trim();
+    field.value.trim();
 
 
   state.dreamColor =
@@ -4633,8 +3953,7 @@ function introBack(){
 
 
   if(
-    state.introStep ===
-    0
+    state.introStep === 0
   ){
 
     transition(
@@ -4678,8 +3997,7 @@ function introNext(){
 
 
   if(
-    state.introStep
-    <
+    state.introStep <
     slides.length-1
   ){
 
@@ -4718,7 +4036,7 @@ function introNext(){
 
 
 /* =========================================================
-   FIRST QUESTION
+   OPENING
    ========================================================= */
 
 function generateOpeningQuestion(){
@@ -4773,7 +4091,7 @@ function generateOpeningQuestion(){
 
 
 /* =========================================================
-   EXTRACT FRAGMENT
+   FRAGMENT
    ========================================================= */
 
 function extractFragment(text){
@@ -4796,9 +4114,7 @@ function extractFragment(text){
   const words =
     cleaned
     .split(/\s+/)
-    .filter(
-      Boolean
-    );
+    .filter(Boolean);
 
 
   if(
@@ -4810,7 +4126,7 @@ function extractFragment(text){
   }
 
 
-  const startOptions = [
+  const starts = [
 
     0,
 
@@ -4832,7 +4148,7 @@ function extractFragment(text){
 
   const start =
     randomItem(
-      startOptions
+      starts
     );
 
 
@@ -4860,10 +4176,6 @@ function cleanFragmentForPrompt(text){
     );
 
 
-  /*
-  Remove quotation marks.
-  */
-
   fragment =
     fragment
     .replace(
@@ -4872,10 +4184,6 @@ function cleanFragmentForPrompt(text){
     )
     .trim();
 
-
-  /*
-  Remove punctuation from ending.
-  */
 
   fragment =
     fragment
@@ -5025,17 +4333,14 @@ door:[
 
 
   for(
-    const type
-    in dict
+    const type in dict
   ){
 
     if(
       dict[type]
       .some(
         word =>
-          t.includes(
-            word
-          )
+          t.includes(word)
       )
     ){
 
@@ -5054,7 +4359,7 @@ door:[
 
 
 /* =========================================================
-   ADAPTIVE QUESTION
+   ADAPTIVE
    ========================================================= */
 
 function generateAdaptiveQuestion(){
@@ -5069,7 +4374,7 @@ function generateAdaptiveQuestion(){
     ];
 
 
-  const previousAnswer =
+  const answer =
     previous
     ?
     previous.answer
@@ -5080,14 +4385,14 @@ function generateAdaptiveQuestion(){
   const fragment =
     cleanFragmentForPrompt(
       extractFragment(
-        previousAnswer
+        answer
       )
     );
 
 
   const themes =
     detectThemes(
-      previousAnswer
+      answer
     );
 
 
@@ -5248,7 +4553,7 @@ function generateLayerOneQuestion(
     "UKR"
   ){
 
-    const pool = [
+    return randomItem([
 
       {
 
@@ -5290,17 +4595,12 @@ function generateLayerOneQuestion(
 
       }
 
-    ];
-
-
-    return randomItem(
-      pool
-    );
+    ]);
 
   }
 
 
-  const pool = [
+  return randomItem([
 
     {
 
@@ -5342,12 +4642,7 @@ function generateLayerOneQuestion(
 
     }
 
-  ];
-
-
-  return randomItem(
-    pool
-  );
+  ]);
 
 }
 
@@ -5853,8 +5148,7 @@ function getCurrentQuestion(){
 function getDreamLevel(){
 
   if(
-    state.questionIndex <=
-    2
+    state.questionIndex <= 2
   ){
 
     return 0;
@@ -5863,8 +5157,7 @@ function getDreamLevel(){
 
 
   if(
-    state.questionIndex <=
-    5
+    state.questionIndex <= 5
   ){
 
     return 1;
@@ -5948,8 +5241,7 @@ function renderQuestion(){
 
 
   if(
-    state.questionIndex >
-    0
+    state.questionIndex > 0
   ){
 
     const previous =
@@ -6047,13 +5339,11 @@ ${copy.next}
 
     ()=>{
 
-
       document
       .getElementById(
         "answer"
       )
       ?.focus();
-
 
     },
 
@@ -6165,10 +5455,8 @@ function questionNext(){
 
         ()=>{
 
-
           field.style.borderBottomColor =
             "rgba(255,255,255,.22)";
-
 
         },
 
@@ -6335,57 +5623,46 @@ function runDreamShift(level){
 
 
   const overlay =
-    document
-    .getElementById(
+    document.getElementById(
       "dreamShift"
     );
 
 
   const main =
-    document
-    .getElementById(
+    document.getElementById(
       "dreamShiftMain"
     );
 
 
   const sub =
-    document
-    .getElementById(
+    document.getElementById(
       "dreamShiftSub"
     );
 
 
   const ui =
-    document
-    .getElementById(
+    document.getElementById(
       "ui"
     );
 
 
-  main
-  .classList
-  .remove(
+  main.classList.remove(
     "shiftFade"
   );
 
 
-  sub
-  .classList
-  .remove(
+  sub.classList.remove(
     "shiftFade"
   );
 
 
-  ui
-  .classList
-  .add(
+  ui.classList.add(
     "hide"
   );
 
 
   if(
-    level ===
-    1
+    level === 1
   ){
 
     if(
@@ -6473,9 +5750,7 @@ function runDreamShift(level){
   }
 
 
-  overlay
-  .classList
-  .add(
+  overlay.classList.add(
     "active"
   );
 
@@ -6485,16 +5760,12 @@ function runDreamShift(level){
     ()=>{
 
 
-      main
-      .classList
-      .add(
+      main.classList.add(
         "shiftFade"
       );
 
 
-      sub
-      .classList
-      .add(
+      sub.classList.add(
         "shiftFade"
       );
 
@@ -6512,8 +5783,7 @@ function runDreamShift(level){
 
 
       if(
-        level ===
-        1
+        level === 1
       ){
 
         if(
@@ -6611,16 +5881,12 @@ function runDreamShift(level){
             ()=>{
 
 
-              main
-              .classList
-              .remove(
+              main.classList.remove(
                 "shiftFade"
               );
 
 
-              sub
-              .classList
-              .remove(
+              sub.classList.remove(
                 "shiftFade"
               );
 
@@ -6647,16 +5913,12 @@ function runDreamShift(level){
     ()=>{
 
 
-      main
-      .classList
-      .add(
+      main.classList.add(
         "shiftFade"
       );
 
 
-      sub
-      .classList
-      .add(
+      sub.classList.add(
         "shiftFade"
       );
 
@@ -6673,9 +5935,7 @@ function runDreamShift(level){
     ()=>{
 
 
-      overlay
-      .classList
-      .remove(
+      overlay.classList.remove(
         "active"
       );
 
@@ -6683,9 +5943,7 @@ function runDreamShift(level){
       renderQuestion();
 
 
-      ui
-      .classList
-      .remove(
+      ui.classList.remove(
         "hide"
       );
 
@@ -6694,10 +5952,8 @@ function runDreamShift(level){
 
         ()=>{
 
-
           dreamShiftRunning =
             false;
-
 
         },
 
@@ -6722,8 +5978,7 @@ function runDreamShift(level){
 function spawnPreviousAnswerGhost(){
 
   if(
-    state.questionIndex ===
-    0
+    state.questionIndex === 0
   ){
 
     return;
@@ -6736,10 +5991,8 @@ function spawnPreviousAnswerGhost(){
     .filter(
 
       a =>
-        a
-        &&
-        a.answer
-        &&
+        a &&
+        a.answer &&
         a.answer.length > 2
 
     );
@@ -6798,8 +6051,7 @@ function ghost(
 
 
   const e =
-    document
-    .createElement(
+    document.createElement(
       "div"
     );
 
@@ -6849,8 +6101,7 @@ function ghost(
     "s";
 
 
-  ghostLayer
-  .appendChild(
+  ghostLayer.appendChild(
     e
   );
 
@@ -6859,9 +6110,7 @@ function ghost(
 
     ()=>{
 
-
       e.remove();
-
 
     },
 
@@ -6972,7 +6221,7 @@ ${copy.nicknameSubmit}
 
 
 /* =========================================================
-   NICK BACK
+   NICKNAME BACK
    ========================================================= */
 
 function nicknameBack(){
@@ -6987,8 +6236,7 @@ function nicknameBack(){
 
 
   const field =
-    document
-    .getElementById(
+    document.getElementById(
       "nickname"
     );
 
@@ -6996,9 +6244,7 @@ function nicknameBack(){
   if(field){
 
     state.nickname =
-      field
-      .value
-      .trim();
+      field.value.trim();
 
   }
 
@@ -7033,8 +6279,7 @@ async function saveDream(){
 
 
   const field =
-    document
-    .getElementById(
+    document.getElementById(
       "nickname"
     );
 
@@ -7042,9 +6287,7 @@ async function saveDream(){
   if(field){
 
     const value =
-      field
-      .value
-      .trim();
+      field.value.trim();
 
 
     if(value){
@@ -7068,8 +6311,7 @@ async function saveDream(){
 
 
   const honeypot =
-    document
-    .getElementById(
+    document.getElementById(
       "website"
     );
 
@@ -7446,36 +6688,30 @@ ${copy.retry}
 function startFinalSequence(){
 
   const ui =
-    document
-    .getElementById(
+    document.getElementById(
       "ui"
     );
 
 
   const bloom =
-    document
-    .getElementById(
+    document.getElementById(
       "whiteBloom"
     );
 
 
   const whiteout =
-    document
-    .getElementById(
+    document.getElementById(
       "whiteout"
     );
 
 
   const final =
-    document
-    .getElementById(
+    document.getElementById(
       "finalInvite"
     );
 
 
-  ui
-  .classList
-  .add(
+  ui.classList.add(
     "hide"
   );
 
@@ -7485,16 +6721,12 @@ function startFinalSequence(){
     ()=>{
 
 
-      bloom
-      .classList
-      .add(
+      bloom.classList.add(
         "active"
       );
 
 
-      whiteout
-      .classList
-      .add(
+      whiteout.classList.add(
         "active"
       );
 
@@ -7522,9 +6754,7 @@ function startFinalSequence(){
         .invite;
 
 
-      final
-      .classList
-      .add(
+      final.classList.add(
         "active"
       );
 
@@ -7556,6 +6786,36 @@ function startFinalSequence(){
   );
 
 }
+
+
+/* =========================================================
+   IMAGE ERROR FALLBACK
+   ========================================================= */
+
+/*
+If one of r_1.png - r_4.png is not uploaded yet,
+the rest of the page still works.
+*/
+
+document
+.querySelectorAll(
+  ".dreamImage"
+)
+.forEach(
+  img=>{
+
+    img.addEventListener(
+      "error",
+      ()=>{
+
+        img.style.display =
+          "none";
+
+      }
+    );
+
+  }
+);
 
 
 /* =========================================================
