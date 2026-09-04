@@ -162,13 +162,6 @@ body{
 
   opacity:0;
 
-  /*
-  Softer than before:
-  - still monochromatic
-  - much less harsh threshold feeling
-  - more milk / haze
-  */
-
   filter:
     grayscale(1)
     contrast(1.10)
@@ -189,57 +182,25 @@ body{
    ========================================================= */
 
 #dreamImg1{
-
-  animation:
-    imageMorph1
-    52s
-    linear
-    infinite;
-
+  animation:imageMorph1 52s linear infinite;
 }
 
 #dreamImg2{
-
-  animation:
-    imageMorph2
-    52s
-    linear
-    infinite;
-
+  animation:imageMorph2 52s linear infinite;
 }
 
 #dreamImg3{
-
-  animation:
-    imageMorph3
-    52s
-    linear
-    infinite;
-
+  animation:imageMorph3 52s linear infinite;
 }
 
 #dreamImg4{
-
-  animation:
-    imageMorph4
-    52s
-    linear
-    infinite;
-
+  animation:imageMorph4 52s linear infinite;
 }
 
 
 /* =========================================================
-   COLOR WASH FOR RORSCHACH IMAGES
+   DREAM COLOR WASH
    ========================================================= */
-
-/*
-This is the key change.
-
-We are not recolouring the image destructively.
-We place a soft colour field over the entire dream image
-and blend it with the grayscale Rorschach layers.
-*/
 
 #dreamColorWash{
 
@@ -296,12 +257,8 @@ and blend it with the grayscale Rorschach layers.
   mix-blend-mode:color;
 
   transition:
-    opacity
-    3s
-    ease,
-    background
-    4s
-    ease;
+    opacity 3s ease,
+    background 4s ease;
 
 }
 
@@ -348,15 +305,12 @@ and blend it with the grayscale Rorschach layers.
       70%
     );
 
-  filter:
-    blur(55px);
+  filter:blur(55px);
 
   mix-blend-mode:screen;
 
   transition:
-    opacity
-    3s
-    ease;
+    opacity 3s ease;
 
 }
 
@@ -401,8 +355,7 @@ and blend it with the grayscale Rorschach layers.
       72%
     );
 
-  filter:
-    blur(42px);
+  filter:blur(42px);
 
   opacity:.54;
 
@@ -443,8 +396,7 @@ and blend it with the grayscale Rorschach layers.
       75%
     );
 
-  filter:
-    blur(34px);
+  filter:blur(34px);
 
   opacity:.78;
 
@@ -491,12 +443,8 @@ and blend it with the grayscale Rorschach layers.
     50% 50%;
 
   transition:
-    transform
-    7s
-    cubic-bezier(.22,.61,.36,1),
-    opacity
-    4s
-    ease;
+    transform 7s cubic-bezier(.22,.61,.36,1),
+    opacity 4s ease;
 
 }
 
@@ -562,8 +510,7 @@ and blend it with the grayscale Rorschach layers.
       77%
     );
 
-  filter:
-    blur(54px);
+  filter:blur(54px);
 
   animation:
     sunBreath
@@ -609,8 +556,7 @@ and blend it with the grayscale Rorschach layers.
       72%
     );
 
-  filter:
-    blur(62px);
+  filter:blur(62px);
 
 }
 
@@ -653,8 +599,7 @@ and blend it with the grayscale Rorschach layers.
       76%
     );
 
-  filter:
-    blur(70px);
+  filter:blur(70px);
 
   transform:
     rotate(-6deg);
@@ -691,8 +636,7 @@ and blend it with the grayscale Rorschach layers.
 
   opacity:.44;
 
-  filter:
-    blur(20px);
+  filter:blur(20px);
 
   box-shadow:
 
@@ -745,18 +689,10 @@ and blend it with the grayscale Rorschach layers.
     scale(var(--moon-scale));
 
   transition:
-    left
-    8s
-    cubic-bezier(.22,.61,.36,1),
-    top
-    8s
-    cubic-bezier(.22,.61,.36,1),
-    transform
-    8s
-    cubic-bezier(.22,.61,.36,1),
-    opacity
-    4s
-    ease;
+    left 8s cubic-bezier(.22,.61,.36,1),
+    top 8s cubic-bezier(.22,.61,.36,1),
+    transform 8s cubic-bezier(.22,.61,.36,1),
+    opacity 4s ease;
 
 }
 
@@ -856,9 +792,7 @@ and blend it with the grayscale Rorschach layers.
     );
 
   transition:
-    opacity
-    2s
-    ease;
+    opacity 2s ease;
 
 }
 
@@ -911,8 +845,7 @@ body.questionMode #readingShadow{
   color:
     rgba(255,255,255,.020);
 
-  filter:
-    blur(15px);
+  filter:blur(15px);
 
   animation:
     ghostMove
@@ -976,9 +909,7 @@ body.questionMode #readingShadow{
     );
 
   transition:
-    opacity
-    1.35s
-    ease;
+    opacity 1.35s ease;
 
 }
 
@@ -1885,53 +1816,28 @@ input::placeholder{
 @keyframes imageMorph1{
 
   0%{
-
     opacity:.92;
-
-    transform:
-      translate3d(-1.5%,0,0)
-      scale(1.09);
-
+    transform:translate3d(-1.5%,0,0) scale(1.09);
   }
 
   17%{
-
     opacity:.94;
-
-    transform:
-      translate3d(.2%,-.6%,0)
-      scale(1.13);
-
+    transform:translate3d(.2%,-.6%,0) scale(1.13);
   }
 
   29%{
-
     opacity:0;
-
-    transform:
-      translate3d(1.2%,-1%,0)
-      scale(1.17);
-
+    transform:translate3d(1.2%,-1%,0) scale(1.17);
   }
 
   87%{
-
     opacity:0;
-
-    transform:
-      translate3d(-1.4%,.8%,0)
-      scale(1.07);
-
+    transform:translate3d(-1.4%,.8%,0) scale(1.07);
   }
 
   100%{
-
     opacity:.92;
-
-    transform:
-      translate3d(-1.5%,0,0)
-      scale(1.09);
-
+    transform:translate3d(-1.5%,0,0) scale(1.09);
   }
 
 }
@@ -1941,43 +1847,23 @@ input::placeholder{
 
   0%,
   10%{
-
     opacity:0;
-
-    transform:
-      translate3d(1%,.6%,0)
-      scale(1.09);
-
+    transform:translate3d(1%,.6%,0) scale(1.09);
   }
 
   21%{
-
     opacity:.92;
-
-    transform:
-      translate3d(.4%,0,0)
-      scale(1.13);
-
+    transform:translate3d(.4%,0,0) scale(1.13);
   }
 
   40%{
-
     opacity:.94;
-
-    transform:
-      translate3d(-.6%,-.5%,0)
-      scale(1.17);
-
+    transform:translate3d(-.6%,-.5%,0) scale(1.17);
   }
 
   51%{
-
     opacity:0;
-
-    transform:
-      translate3d(-1.2%,-1%,0)
-      scale(1.20);
-
+    transform:translate3d(-1.2%,-1%,0) scale(1.20);
   }
 
   100%{
@@ -1991,43 +1877,23 @@ input::placeholder{
 
   0%,
   34%{
-
     opacity:0;
-
-    transform:
-      translate3d(-1%,0,0)
-      scale(1.08);
-
+    transform:translate3d(-1%,0,0) scale(1.08);
   }
 
   44%{
-
     opacity:.92;
-
-    transform:
-      translate3d(-.3%,.5%,0)
-      scale(1.12);
-
+    transform:translate3d(-.3%,.5%,0) scale(1.12);
   }
 
   63%{
-
     opacity:.94;
-
-    transform:
-      translate3d(.8%,-.3%,0)
-      scale(1.16);
-
+    transform:translate3d(.8%,-.3%,0) scale(1.16);
   }
 
   74%{
-
     opacity:0;
-
-    transform:
-      translate3d(1.3%,-.8%,0)
-      scale(1.19);
-
+    transform:translate3d(1.3%,-.8%,0) scale(1.19);
   }
 
   100%{
@@ -2041,43 +1907,23 @@ input::placeholder{
 
   0%,
   58%{
-
     opacity:0;
-
-    transform:
-      translate3d(1%,0,0)
-      scale(1.08);
-
+    transform:translate3d(1%,0,0) scale(1.08);
   }
 
   68%{
-
     opacity:.92;
-
-    transform:
-      translate3d(.3%,-.4%,0)
-      scale(1.12);
-
+    transform:translate3d(.3%,-.4%,0) scale(1.12);
   }
 
   87%{
-
     opacity:.94;
-
-    transform:
-      translate3d(-.7%,.5%,0)
-      scale(1.17);
-
+    transform:translate3d(-.7%,.5%,0) scale(1.17);
   }
 
   97%{
-
     opacity:.12;
-
-    transform:
-      translate3d(-1%,1%,0)
-      scale(1.20);
-
+    transform:translate3d(-1%,1%,0) scale(1.20);
   }
 
   100%{
@@ -2118,19 +1964,15 @@ input::placeholder{
 @keyframes imageVeilDrift{
 
   from{
-
     transform:
       translate3d(-2%,1%,0)
       scale(1);
-
   }
 
   to{
-
     transform:
       translate3d(2%,-1%,0)
       scale(1.07);
-
   }
 
 }
@@ -2139,23 +1981,19 @@ input::placeholder{
 @keyframes softFogMove{
 
   from{
-
     transform:
       translate3d(-2%,0,0)
       scale(1.02);
 
     opacity:.66;
-
   }
 
   to{
-
     transform:
       translate3d(2%,1%,0)
       scale(1.08);
 
     opacity:.90;
-
   }
 
 }
@@ -2168,12 +2006,8 @@ input::placeholder{
 @keyframes ghostMove{
 
   0%{
-
     opacity:0;
-
-    transform:
-      translate3d(-1vw,1vh,0);
-
+    transform:translate3d(-1vw,1vh,0);
   }
 
   20%{
@@ -2185,12 +2019,8 @@ input::placeholder{
   }
 
   100%{
-
     opacity:0;
-
-    transform:
-      translate3d(1.5vw,-1vh,0);
-
+    transform:translate3d(1.5vw,-1vh,0);
   }
 
 }
@@ -2484,7 +2314,6 @@ input::placeholder{
 
   <div id="dreamImages">
 
-
     <img
       id="dreamImg1"
       class="dreamImage"
@@ -2492,7 +2321,6 @@ input::placeholder{
       alt=""
       draggable="false"
     >
-
 
     <img
       id="dreamImg2"
@@ -2502,7 +2330,6 @@ input::placeholder{
       draggable="false"
     >
 
-
     <img
       id="dreamImg3"
       class="dreamImage"
@@ -2510,7 +2337,6 @@ input::placeholder{
       alt=""
       draggable="false"
     >
-
 
     <img
       id="dreamImg4"
@@ -2520,25 +2346,18 @@ input::placeholder{
       draggable="false"
     >
 
-
   </div>
 
-
-  <!-- COLOUR OF THE DREAM -->
 
   <div id="dreamColorWash"></div>
 
   <div id="dreamColorGlow"></div>
 
 
-  <!-- SOFT DREAM ATMOSPHERE -->
-
   <div id="dreamImageVeil"></div>
 
   <div id="softFog"></div>
 
-
-  <!-- SUN -->
 
   <div id="dreamSun">
 
@@ -2548,8 +2367,6 @@ input::placeholder{
 
   </div>
 
-
-  <!-- MOON -->
 
   <div id="dreamMoon"></div>
 
@@ -2719,7 +2536,6 @@ function setVH(){
 
 setVH();
 
-
 window.addEventListener(
   "resize",
   setVH
@@ -2870,7 +2686,7 @@ back:"WSTECZ",
 next:"DALEJ",
 begin:"WEJDŹ W SEN",
 placeholder:"opisz to własnymi słowami...",
-colorPlaceholder:"np. granatowy, fioletowy, czerwony...",
+colorPlaceholder:"np. magenta, granatowy, lawendowy, #ff00ff...",
 nicknameTitle:"Jak mamy zapamiętać osobę, która śniła?",
 nicknameMeta:"Możesz użyć pseudonimu. Nie musisz podawać prawdziwego imienia.",
 nicknamePlaceholder:"NICKNAME",
@@ -2891,7 +2707,7 @@ back:"BACK",
 next:"NEXT",
 begin:"ENTER DREAM",
 placeholder:"describe it in your own words...",
-colorPlaceholder:"e.g. blue, violet, red...",
+colorPlaceholder:"e.g. magenta, lavender, indigo, #ff00ff...",
 nicknameTitle:"How should the dreamer be remembered?",
 nicknameMeta:"You may use a nickname. You do not need to provide your real name.",
 nicknamePlaceholder:"NICKNAME",
@@ -2912,7 +2728,7 @@ back:"НАЗАД",
 next:"ДАЛІ",
 begin:"УВІЙТИ У СОН",
 placeholder:"опиши це своїми словами...",
-colorPlaceholder:"наприклад: синій, фіолетовий, червоний...",
+colorPlaceholder:"наприклад: маджента, лавандовий, індиго...",
 nicknameTitle:"Як нам запам’ятати людину, якій наснився цей сон?",
 nicknameMeta:"Можна використати псевдонім. Справжнє ім’я вказувати не обов’язково.",
 nicknamePlaceholder:"NICKNAME",
@@ -3024,94 +2840,507 @@ function randomItem(array){
 
 
 /* =========================================================
-   COLOR
+   COLOR PARSER
    ========================================================= */
+
+/*
+Supports:
+
+- Polish names
+- English names
+- Ukrainian names
+- CSS colour names
+- HEX
+- rgb()
+- rgba()
+- hsl()
+- hsla()
+
+So users are no longer limited to a small hand-made list.
+*/
 
 function parseDreamColor(name){
 
-  const s =
-    String(name || "")
+  let s =
+    String(
+      name || ""
+    )
     .toLowerCase()
+    .trim();
+
+
+  if(!s){
+
+    return {
+      r:220,
+      g:220,
+      b:220
+    };
+
+  }
+
+
+  /*
+  Normalize some common spelling variants.
+  */
+
+  s =
+    s
+    .replace(/colour/g,"color")
+    .replace(/\s+/g," ")
     .trim();
 
 
   const map = {
 
-    "niebieski":[65,115,210],
-    "niebieska":[65,115,210],
-    "błękitny":[90,170,230],
-    "błękit":[90,170,230],
-    "granatowy":[45,70,170],
-    "granat":[45,70,170],
-    "turkusowy":[45,190,180],
-    "turkus":[45,190,180],
-    "zielony":[75,175,105],
-    "zieleń":[75,175,105],
-    "czerwony":[220,65,75],
-    "czerwień":[220,65,75],
-    "bordowy":[160,45,70],
-    "bordo":[160,45,70],
-    "różowy":[225,100,170],
-    "róż":[225,100,170],
-    "fioletowy":[155,85,220],
-    "fiolet":[155,85,220],
-    "purpurowy":[185,65,180],
-    "purpura":[185,65,180],
-    "pomarańczowy":[230,130,50],
-    "żółty":[235,200,70],
-    "złoty":[225,175,65],
-    "srebrny":[190,195,205],
-    "szary":[165,165,165],
-    "grafitowy":[115,115,125],
-    "biały":[230,230,225],
-    "czarny":[95,95,95],
-    "brązowy":[150,95,70],
+    /* =====================================================
+       PINK / MAGENTA / PURPLE
+       ===================================================== */
 
-    "blue":[65,115,210],
-    "navy":[45,70,170],
-    "cyan":[75,180,220],
-    "turquoise":[45,190,180],
-    "green":[75,175,105],
-    "red":[220,65,75],
-    "burgundy":[160,45,70],
-    "pink":[225,100,170],
+    "magenta":[255,0,255],
+    "magentowy":[255,0,255],
+    "magentowa":[255,0,255],
+    "magentowe":[255,0,255],
+    "маджента":[255,0,255],
+
+    "fuksja":[255,0,170],
+    "fuksjowy":[255,0,170],
+    "fuksjowa":[255,0,170],
+    "fuchsia":[255,0,170],
+    "фуксія":[255,0,170],
+
+    "hot pink":[255,80,175],
+    "hotpink":[255,80,175],
+
+    "różowy":[235,105,175],
+    "różowa":[235,105,175],
+    "róż":[235,105,175],
+    "pink":[235,105,175],
+    "рожевий":[235,105,175],
+
+    "jasny róż":[255,170,210],
+    "light pink":[255,170,210],
+    "lightpink":[255,170,210],
+
+    "ciemny róż":[185,55,120],
+    "dark pink":[185,55,120],
+
+    "pudrowy róż":[220,165,185],
+    "dusty pink":[220,165,185],
+
+    "malinowy":[210,45,105],
+    "raspberry":[210,45,105],
+    "малиновий":[210,45,105],
+
+    "amarantowy":[225,40,110],
+    "amarant":[225,40,110],
+
+    "purpurowy":[185,65,190],
+    "purpura":[185,65,190],
     "purple":[155,85,220],
-    "violet":[155,85,220],
-    "orange":[230,130,50],
-    "yellow":[235,200,70],
-    "gold":[225,175,65],
-    "silver":[190,195,205],
-    "grey":[165,165,165],
-    "gray":[165,165,165],
-    "white":[230,230,225],
-    "black":[95,95,95],
-    "brown":[150,95,70],
+    "пурпуровий":[185,65,190],
 
-    "синій":[65,115,210],
-    "блакитний":[90,170,230],
-    "темно-синій":[45,70,170],
-    "бірюзовий":[45,190,180],
-    "зелений":[75,175,105],
-    "червоний":[220,65,75],
-    "бордовий":[160,45,70],
-    "рожевий":[225,100,170],
-    "фіолетовий":[155,85,220],
-    "пурпуровий":[185,65,180],
-    "помаранчевий":[230,130,50],
-    "жовтий":[235,200,70],
-    "золотий":[225,175,65],
+    "fioletowy":[150,75,220],
+    "fiolet":[150,75,220],
+    "violet":[150,75,220],
+    "фіолетовий":[150,75,220],
+
+    "ciemny fiolet":[85,35,135],
+    "dark violet":[85,35,135],
+    "darkviolet":[85,35,135],
+
+    "jasny fiolet":[195,145,235],
+    "light violet":[195,145,235],
+
+    "lawendowy":[190,165,235],
+    "lawenda":[190,165,235],
+    "lavender":[190,165,235],
+    "лавандовий":[190,165,235],
+
+    "lila":[205,160,225],
+    "lilac":[205,160,225],
+    "ліловий":[205,160,225],
+
+    "mauve":[180,135,175],
+
+    "śliwkowy":[120,55,120],
+    "plum":[120,55,120],
+    "сливовий":[120,55,120],
+
+    "indygo":[70,55,180],
+    "indigo":[70,55,180],
+    "індіго":[70,55,180],
+
+
+    /* =====================================================
+       RED
+       ===================================================== */
+
+    "czerwony":[220,55,65],
+    "czerwień":[220,55,65],
+    "red":[220,55,65],
+    "червоний":[220,55,65],
+
+    "scarlet":[240,45,45],
+    "szkarłatny":[240,45,45],
+
+    "crimson":[200,35,70],
+    "karmazynowy":[200,35,70],
+    "karmazyn":[200,35,70],
+
+    "wiśniowy":[155,35,65],
+    "cherry":[195,40,75],
+    "вишневий":[155,35,65],
+
+    "bordowy":[135,35,60],
+    "bordo":[135,35,60],
+    "burgundy":[135,35,60],
+    "бордовий":[135,35,60],
+
+    "maroon":[115,35,45],
+
+    "rubinowy":[180,30,55],
+    "ruby":[180,30,55],
+
+    "ceglasty":[175,70,55],
+    "brick red":[175,70,55],
+
+
+    /* =====================================================
+       ORANGE / WARM
+       ===================================================== */
+
+    "pomarańczowy":[235,125,45],
+    "pomarańcz":[235,125,45],
+    "orange":[235,125,45],
+    "помаранчевий":[235,125,45],
+
+    "mandarynkowy":[240,105,35],
+    "tangerine":[240,105,35],
+
+    "koralowy":[235,100,90],
+    "koral":[235,100,90],
+    "coral":[235,100,90],
+    "кораловий":[235,100,90],
+
+    "łososiowy":[235,135,125],
+    "salmon":[235,135,125],
+    "лососевий":[235,135,125],
+
+    "brzoskwiniowy":[240,165,120],
+    "brzoskwinia":[240,165,120],
+    "peach":[240,165,120],
+    "персиковий":[240,165,120],
+
+    "morelowy":[235,155,100],
+    "apricot":[235,155,100],
+
+    "rudy":[180,90,50],
+    "rust":[180,90,50],
+
+    "miedziany":[175,105,70],
+    "copper":[175,105,70],
+
+
+    /* =====================================================
+       YELLOW / GOLD
+       ===================================================== */
+
+    "żółty":[240,205,65],
+    "żółta":[240,205,65],
+    "yellow":[240,205,65],
+    "жовтий":[240,205,65],
+
+    "cytrynowy":[225,235,65],
+    "lemon":[225,235,65],
+    "лимонний":[225,235,65],
+
+    "kanarkowy":[245,220,65],
+    "canary":[245,220,65],
+
+    "musztardowy":[190,155,55],
+    "mustard":[190,155,55],
+
+    "bursztynowy":[225,150,35],
+    "amber":[225,150,35],
+    "бурштиновий":[225,150,35],
+
+    "złoty":[220,170,55],
+    "złoto":[220,170,55],
+    "gold":[220,170,55],
+    "golden":[220,170,55],
+    "золотий":[220,170,55],
+
+    "szampański":[220,195,150],
+    "champagne":[220,195,150],
+
+
+    /* =====================================================
+       GREEN
+       ===================================================== */
+
+    "zielony":[65,165,95],
+    "zieleń":[65,165,95],
+    "green":[65,165,95],
+    "зелений":[65,165,95],
+
+    "jasnozielony":[130,210,125],
+    "light green":[130,210,125],
+    "lightgreen":[130,210,125],
+
+    "ciemnozielony":[35,105,65],
+    "dark green":[35,105,65],
+    "darkgreen":[35,105,65],
+
+    "limonkowy":[150,220,55],
+    "limonka":[150,220,55],
+    "lime":[150,220,55],
+    "лаймовий":[150,220,55],
+
+    "neon green":[80,255,80],
+    "neonowy zielony":[80,255,80],
+
+    "miętowy":[115,210,170],
+    "mięta":[115,210,170],
+    "mint":[115,210,170],
+    "м’ятний":[115,210,170],
+
+    "szmaragdowy":[35,155,105],
+    "szmaragd":[35,155,105],
+    "emerald":[35,155,105],
+    "смарагдовий":[35,155,105],
+
+    "butelkowy":[30,100,70],
+    "bottle green":[30,100,70],
+
+    "oliwkowy":[120,130,65],
+    "oliwka":[120,130,65],
+    "olive":[120,130,65],
+    "оливковий":[120,130,65],
+
+    "khaki":[135,125,80],
+
+    "szałwiowy":[135,160,130],
+    "sage":[135,160,130],
+
+    "pistacjowy":[165,195,125],
+    "pistachio":[165,195,125],
+
+    "forest green":[35,105,65],
+
+    "sea green":[55,165,130],
+
+
+    /* =====================================================
+       CYAN / TURQUOISE / TEAL
+       ===================================================== */
+
+    "cyan":[0,210,235],
+    "cyjan":[0,210,235],
+    "cyjanowy":[0,210,235],
+    "ціан":[0,210,235],
+
+    "aqua":[40,215,215],
+    "akwamaryna":[80,200,180],
+    "aquamarine":[80,200,180],
+    "аквамариновий":[80,200,180],
+
+    "turkusowy":[45,185,180],
+    "turkus":[45,185,180],
+    "turquoise":[45,185,180],
+    "бірюзовий":[45,185,180],
+
+    "teal":[35,135,135],
+
+    "petrol":[35,105,115],
+    "petrolowy":[35,105,115],
+
+    "morski":[40,145,155],
+    "morska zieleń":[40,145,155],
+
+    "sea blue":[45,135,175],
+
+
+    /* =====================================================
+       BLUE
+       ===================================================== */
+
+    "niebieski":[65,120,215],
+    "niebieska":[65,120,215],
+    "blue":[65,120,215],
+    "синій":[65,120,215],
+
+    "błękitny":[90,175,230],
+    "błękit":[90,175,230],
+    "sky blue":[90,175,230],
+    "skyblue":[90,175,230],
+    "блакитний":[90,175,230],
+
+    "jasnoniebieski":[120,185,235],
+    "light blue":[120,185,235],
+    "lightblue":[120,185,235],
+
+    "ciemnoniebieski":[40,75,155],
+    "dark blue":[40,75,155],
+    "darkblue":[40,75,155],
+
+    "granatowy":[35,55,125],
+    "granat":[35,55,125],
+    "navy":[35,55,125],
+    "navy blue":[35,55,125],
+    "темно-синій":[35,55,125],
+
+    "kobaltowy":[50,75,205],
+    "kobalt":[50,75,205],
+    "cobalt":[50,75,205],
+
+    "ultramaryna":[55,60,200],
+    "ultramarine":[55,60,200],
+
+    "royal blue":[65,85,210],
+
+    "electric blue":[55,145,255],
+    "elektryczny niebieski":[55,145,255],
+
+    "azure":[70,155,225],
+    "lazurowy":[70,155,225],
+    "azure blue":[70,155,225],
+
+
+    /* =====================================================
+       BROWN / EARTH
+       ===================================================== */
+
+    "brązowy":[145,90,65],
+    "brąz":[145,90,65],
+    "brown":[145,90,65],
+    "коричневий":[145,90,65],
+
+    "czekoladowy":[115,65,50],
+    "chocolate":[115,65,50],
+
+    "kasztanowy":[125,65,50],
+    "chestnut":[125,65,50],
+
+    "karmelowy":[185,120,70],
+    "caramel":[185,120,70],
+
+    "toffi":[185,130,85],
+    "toffee":[185,130,85],
+
+    "piaskowy":[195,175,135],
+    "sand":[195,175,135],
+
+    "beżowy":[195,180,155],
+    "beż":[195,180,155],
+    "beige":[195,180,155],
+    "бежевий":[195,180,155],
+
+    "kremowy":[225,215,185],
+    "krem":[225,215,185],
+    "cream":[225,215,185],
+    "кремовий":[225,215,185],
+
+    "ivory":[225,220,195],
+    "kość słoniowa":[225,220,195],
+
+    "taupe":[150,135,125],
+
+
+    /* =====================================================
+       GREYSCALE
+       ===================================================== */
+
+    "biały":[235,235,230],
+    "biała":[235,235,230],
+    "white":[235,235,230],
+    "білий":[235,235,230],
+
+    "czarny":[70,70,70],
+    "czarna":[70,70,70],
+    "black":[70,70,70],
+    "чорний":[70,70,70],
+
+    "szary":[155,155,160],
+    "szara":[155,155,160],
+    "grey":[155,155,160],
+    "gray":[155,155,160],
+    "сірий":[155,155,160],
+
+    "jasnoszary":[200,200,200],
+    "light grey":[200,200,200],
+    "light gray":[200,200,200],
+
+    "ciemnoszary":[95,95,105],
+    "dark grey":[95,95,105],
+    "dark gray":[95,95,105],
+
+    "grafitowy":[95,100,110],
+    "grafit":[95,100,110],
+    "graphite":[95,100,110],
+    "графітовий":[95,100,110],
+
+    "antracytowy":[70,75,80],
+    "antracyt":[70,75,80],
+    "anthracite":[70,75,80],
+
+    "srebrny":[190,195,205],
+    "srebro":[190,195,205],
+    "silver":[190,195,205],
     "срібний":[190,195,205],
-    "сірий":[165,165,165],
-    "графітовий":[115,115,125],
-    "білий":[230,230,225],
-    "чорний":[95,95,95],
-    "коричневий":[150,95,70]
+
+
+    /* =====================================================
+       SPECIAL / NEON
+       ===================================================== */
+
+    "neon pink":[255,40,180],
+    "neonowy różowy":[255,40,180],
+
+    "neon magenta":[255,0,255],
+    "neonowa magenta":[255,0,255],
+
+    "neon purple":[185,60,255],
+    "neonowy fiolet":[185,60,255],
+
+    "neon blue":[35,125,255],
+    "neonowy niebieski":[35,125,255],
+
+    "neon cyan":[0,245,255],
+    "neonowy cyan":[0,245,255],
+
+    "neon turquoise":[20,245,210],
+    "neonowy turkus":[20,245,210],
+
+    "neon yellow":[245,255,45],
+    "neonowy żółty":[245,255,45],
+
+    "neon orange":[255,105,20],
+    "neonowy pomarańczowy":[255,105,20],
+
+    "neon red":[255,45,55],
+    "neonowy czerwony":[255,45,55]
 
   };
 
 
+  /*
+  Prefer longest keys first.
+
+  Otherwise e.g. "jasny różowy" could match "różowy"
+  before "jasny róż".
+  */
+
+  const keys =
+    Object.keys(map)
+    .sort(
+      (a,b)=>
+        b.length-a.length
+    );
+
+
   for(
-    const key in map
+    const key of keys
   ){
 
     if(
@@ -3131,13 +3360,167 @@ function parseDreamColor(name){
   }
 
 
+  /*
+  ---------------------------------------------------------
+  CSS COLOUR FALLBACK
+
+  Supports:
+  red
+  blue
+  magenta
+  rebeccapurple
+  darkslateblue
+  aliceblue
+  tomato
+  orchid
+  etc.
+
+  Also:
+  #ff00ff
+  #f0f
+  rgb(255,0,255)
+  hsl(300,100%,50%)
+  ---------------------------------------------------------
+  */
+
+  const css =
+    parseCssColor(s);
+
+
+  if(css){
+
+    return css;
+
+  }
+
+
+  /*
+  Unknown colour:
+  neutral silver-gray rather than failing.
+  */
+
   return {
 
     r:180,
     g:180,
-    b:180
+    b:185
 
   };
+
+}
+
+
+/* =========================================================
+   CSS COLOR PARSER
+   ========================================================= */
+
+function parseCssColor(value){
+
+  try{
+
+    const canvas =
+      document.createElement(
+        "canvas"
+      );
+
+
+    canvas.width =
+      1;
+
+
+    canvas.height =
+      1;
+
+
+    const ctx =
+      canvas.getContext(
+        "2d"
+      );
+
+
+    if(!ctx){
+
+      return null;
+
+    }
+
+
+    /*
+    Deliberately set impossible sentinel,
+    then assign requested colour.
+    */
+
+    ctx.fillStyle =
+      "#010203";
+
+
+    ctx.fillStyle =
+      value;
+
+
+    const normalized =
+      ctx.fillStyle;
+
+
+    /*
+    If invalid, browsers usually keep previous value.
+    */
+
+    if(
+      normalized === "#010203" &&
+      value !== "#010203"
+    ){
+
+      return null;
+
+    }
+
+
+    ctx.clearRect(
+      0,
+      0,
+      1,
+      1
+    );
+
+
+    ctx.fillStyle =
+      normalized;
+
+
+    ctx.fillRect(
+      0,
+      0,
+      1,
+      1
+    );
+
+
+    const pixel =
+      ctx.getImageData(
+        0,
+        0,
+        1,
+        1
+      )
+      .data;
+
+
+    return {
+
+      r:pixel[0],
+      g:pixel[1],
+      b:pixel[2]
+
+    };
+
+  }
+
+  catch(error){
+
+    return null;
+
+  }
 
 }
 
@@ -3152,33 +3535,55 @@ function applyDreamColor(){
     state.dreamColor;
 
 
-  document.documentElement.style.setProperty(
+  document
+  .documentElement
+  .style
+  .setProperty(
     "--sun-r",
     c.r
   );
 
-  document.documentElement.style.setProperty(
+
+  document
+  .documentElement
+  .style
+  .setProperty(
     "--sun-g",
     c.g
   );
 
-  document.documentElement.style.setProperty(
+
+  document
+  .documentElement
+  .style
+  .setProperty(
     "--sun-b",
     c.b
   );
 
 
-  document.documentElement.style.setProperty(
+  document
+  .documentElement
+  .style
+  .setProperty(
     "--dream-r",
     c.r
   );
 
-  document.documentElement.style.setProperty(
+
+  document
+  .documentElement
+  .style
+  .setProperty(
     "--dream-g",
     c.g
   );
 
-  document.documentElement.style.setProperty(
+
+  document
+  .documentElement
+  .style
+  .setProperty(
     "--dream-b",
     c.b
   );
@@ -3190,7 +3595,10 @@ function applyDreamColor(){
     state.dreamColorName.trim().length > 0;
 
 
-  document.documentElement.style.setProperty(
+  document
+  .documentElement
+  .style
+  .setProperty(
     "--dream-color-strength",
     hasColour
     ?
@@ -3246,13 +3654,19 @@ function updateDreamCosmos(){
     p * .20;
 
 
-  document.documentElement.style.setProperty(
+  document
+  .documentElement
+  .style
+  .setProperty(
     "--sun-scale",
     sunScale
   );
 
 
-  document.documentElement.style.setProperty(
+  document
+  .documentElement
+  .style
+  .setProperty(
     "--sun-opacity",
     sunOpacity
   );
@@ -3262,20 +3676,32 @@ function updateDreamCosmos(){
     level === 0
   ){
 
-    document.documentElement.style.setProperty(
+    document
+    .documentElement
+    .style
+    .setProperty(
       "--moon-opacity",
       "0"
     );
 
-    document.documentElement.style.setProperty(
+
+    document
+    .documentElement
+    .style
+    .setProperty(
       "--moon-x",
       "94%"
     );
 
-    document.documentElement.style.setProperty(
+
+    document
+    .documentElement
+    .style
+    .setProperty(
       "--moon-scale",
       ".72"
     );
+
 
     return;
 
@@ -3306,25 +3732,41 @@ function updateDreamCosmos(){
       local * .18;
 
 
-    document.documentElement.style.setProperty(
+    document
+    .documentElement
+    .style
+    .setProperty(
       "--moon-opacity",
       ".94"
     );
 
-    document.documentElement.style.setProperty(
+
+    document
+    .documentElement
+    .style
+    .setProperty(
       "--moon-x",
       moonX+"%"
     );
 
-    document.documentElement.style.setProperty(
+
+    document
+    .documentElement
+    .style
+    .setProperty(
       "--moon-y",
       "50%"
     );
 
-    document.documentElement.style.setProperty(
+
+    document
+    .documentElement
+    .style
+    .setProperty(
       "--moon-scale",
       moonScale
     );
+
 
     return;
 
@@ -3351,22 +3793,37 @@ function updateDreamCosmos(){
     local * .28;
 
 
-  document.documentElement.style.setProperty(
+  document
+  .documentElement
+  .style
+  .setProperty(
     "--moon-opacity",
     ".995"
   );
 
-  document.documentElement.style.setProperty(
+
+  document
+  .documentElement
+  .style
+  .setProperty(
     "--moon-x",
     moonX+"%"
   );
 
-  document.documentElement.style.setProperty(
+
+  document
+  .documentElement
+  .style
+  .setProperty(
     "--moon-y",
     "50%"
   );
 
-  document.documentElement.style.setProperty(
+
+  document
+  .documentElement
+  .style
+  .setProperty(
     "--moon-scale",
     moonScale
   );
@@ -3384,7 +3841,10 @@ function setVisualMode(mode){
     mode;
 
 
-  document.body.classList.toggle(
+  document
+  .body
+  .classList
+  .toggle(
 
     "questionMode",
 
@@ -3425,7 +3885,9 @@ function transition(fn){
     true;
 
 
-  screen.classList.add(
+  screen
+  .classList
+  .add(
     "fade"
   );
 
@@ -3448,7 +3910,9 @@ function transition(fn){
             ()=>{
 
 
-              screen.classList.remove(
+              screen
+              .classList
+              .remove(
                 "fade"
               );
 
@@ -3597,19 +4061,28 @@ function chooseLanguage(lang){
   applyDreamColor();
 
 
-  document.documentElement.style.setProperty(
+  document
+  .documentElement
+  .style
+  .setProperty(
     "--sun-scale",
     ".78"
   );
 
 
-  document.documentElement.style.setProperty(
+  document
+  .documentElement
+  .style
+  .setProperty(
     "--sun-opacity",
     ".72"
   );
 
 
-  document.documentElement.style.setProperty(
+  document
+  .documentElement
+  .style
+  .setProperty(
     "--moon-opacity",
     "0"
   );
@@ -3740,7 +4213,8 @@ ${copy.next}
 
 
         const field =
-          document.getElementById(
+          document
+          .getElementById(
             "dreamColorInput"
           );
 
@@ -3751,7 +4225,8 @@ ${copy.next}
           field.focus();
 
 
-          field.addEventListener(
+          field
+          .addEventListener(
 
             "input",
 
@@ -3759,7 +4234,9 @@ ${copy.next}
 
 
               state.dreamColorName =
-                field.value.trim();
+                field
+                .value
+                .trim();
 
 
               state.dreamColor =
@@ -3847,18 +4324,23 @@ ${last ? copy.begin : copy.next}
 function saveColorField(){
 
   const field =
-    document.getElementById(
+    document
+    .getElementById(
       "dreamColorInput"
     );
 
 
   if(!field){
+
     return;
+
   }
 
 
   state.dreamColorName =
-    field.value.trim();
+    field
+    .value
+    .trim();
 
 
   state.dreamColor =
@@ -3941,6 +4423,7 @@ function introNext(){
       renderIntro
     );
 
+
     return;
 
   }
@@ -3968,7 +4451,7 @@ function introNext(){
 
 
 /* =========================================================
-   OPENING
+   OPENING QUESTION
    ========================================================= */
 
 function generateOpeningQuestion(){
@@ -4023,7 +4506,7 @@ function generateOpeningQuestion(){
 
 
 /* =========================================================
-   FRAGMENT
+   EXTRACT FRAGMENT
    ========================================================= */
 
 function extractFragment(text){
@@ -4035,7 +4518,9 @@ function extractFragment(text){
 
 
   if(!cleaned){
+
     return "";
+
   }
 
 
@@ -4930,7 +5415,9 @@ function renderQuestion(){
 
 
   if(!q){
+
     return;
+
   }
 
 
@@ -4945,16 +5432,19 @@ function renderQuestion(){
 
 
   progress.textContent =
+
     `${String(
       state.questionIndex+1
-    ).padStart(
+    )
+    .padStart(
       2,
       "0"
     )}
     /
     ${String(
       state.totalQuestions
-    ).padStart(
+    )
+    .padStart(
       2,
       "0"
     )}`;
@@ -5060,6 +5550,7 @@ ${copy.next}
 
 
   setTimeout(
+
     ()=>{
 
       document
@@ -5069,7 +5560,9 @@ ${copy.next}
       ?.focus();
 
     },
+
     250
+
   );
 
 }
@@ -5082,13 +5575,16 @@ ${copy.next}
 function saveCurrentAnswer(){
 
   const field =
-    document.getElementById(
+    document
+    .getElementById(
       "answer"
     );
 
 
   if(!field){
+
     return;
+
   }
 
 
@@ -5150,7 +5646,8 @@ function questionNext(){
   ){
 
     const field =
-      document.getElementById(
+      document
+      .getElementById(
         "answer"
       );
 
@@ -5159,18 +5656,22 @@ function questionNext(){
 
       field.focus();
 
+
       field.style.borderBottomColor =
         "rgba(255,255,255,.72)";
 
 
       setTimeout(
+
         ()=>{
 
           field.style.borderBottomColor =
             "rgba(255,255,255,.24)";
 
         },
+
         700
+
       );
 
     }
@@ -5189,6 +5690,7 @@ function questionNext(){
     transition(
       renderNickname
     );
+
 
     return;
 
@@ -5278,6 +5780,7 @@ function questionBack(){
       renderIntro
     );
 
+
     return;
 
   }
@@ -5320,40 +5823,50 @@ function runDreamShift(level){
 
 
   const overlay =
-    document.getElementById(
+    document
+    .getElementById(
       "dreamShift"
     );
 
 
   const main =
-    document.getElementById(
+    document
+    .getElementById(
       "dreamShiftMain"
     );
 
 
   const sub =
-    document.getElementById(
+    document
+    .getElementById(
       "dreamShiftSub"
     );
 
 
   const ui =
-    document.getElementById(
+    document
+    .getElementById(
       "ui"
     );
 
 
-  main.classList.remove(
+  main
+  .classList
+  .remove(
     "shiftFade"
   );
 
 
-  sub.classList.remove(
+  sub
+  .classList
+  .remove(
     "shiftFade"
   );
 
 
-  ui.classList.add(
+  ui
+  .classList
+  .add(
     "hide"
   );
 
@@ -5437,29 +5950,41 @@ function runDreamShift(level){
   }
 
 
-  overlay.classList.add(
+  overlay
+  .classList
+  .add(
     "active"
   );
 
 
   setTimeout(
+
     ()=>{
 
-      main.classList.add(
+      main
+      .classList
+      .add(
         "shiftFade"
       );
 
-      sub.classList.add(
+
+      sub
+      .classList
+      .add(
         "shiftFade"
       );
 
     },
+
     2600
+
   );
 
 
   setTimeout(
+
     ()=>{
+
 
       if(
         level === 1
@@ -5541,50 +6066,77 @@ function runDreamShift(level){
 
 
       requestAnimationFrame(
+
         ()=>{
 
+
           requestAnimationFrame(
+
             ()=>{
 
-              main.classList.remove(
+
+              main
+              .classList
+              .remove(
                 "shiftFade"
               );
 
-              sub.classList.remove(
+
+              sub
+              .classList
+              .remove(
                 "shiftFade"
               );
+
 
             }
+
           );
 
+
         }
+
       );
 
+
     },
+
     3900
+
   );
 
 
   setTimeout(
+
     ()=>{
 
-      main.classList.add(
+      main
+      .classList
+      .add(
         "shiftFade"
       );
 
-      sub.classList.add(
+
+      sub
+      .classList
+      .add(
         "shiftFade"
       );
 
     },
+
     6500
+
   );
 
 
   setTimeout(
+
     ()=>{
 
-      overlay.classList.remove(
+      overlay
+      .classList
+      .remove(
         "active"
       );
 
@@ -5592,23 +6144,31 @@ function runDreamShift(level){
       renderQuestion();
 
 
-      ui.classList.remove(
+      ui
+      .classList
+      .remove(
         "hide"
       );
 
 
       setTimeout(
+
         ()=>{
 
           dreamShiftRunning =
             false;
 
         },
+
         650
+
       );
 
+
     },
+
     8300
+
   );
 
 }
@@ -5632,10 +6192,12 @@ function spawnPreviousAnswerGhost(){
   const previous =
     state.answers
     .filter(
+
       a =>
         a &&
         a.answer &&
         a.answer.length > 2
+
     );
 
 
@@ -5683,12 +6245,15 @@ function ghost(
 ){
 
   if(!text){
+
     return;
+
   }
 
 
   const e =
-    document.createElement(
+    document
+    .createElement(
       "div"
     );
 
@@ -5706,6 +6271,7 @@ function ghost(
 
 
   e.style.left =
+
     (
       Math.random()*55
       -
@@ -5716,6 +6282,7 @@ function ghost(
 
 
   e.style.top =
+
     (
       Math.random()*75
       +
@@ -5726,6 +6293,7 @@ function ghost(
 
 
   e.style.animationDuration =
+
     (
       30
       +
@@ -5735,18 +6303,22 @@ function ghost(
     "s";
 
 
-  ghostLayer.appendChild(
+  ghostLayer
+  .appendChild(
     e
   );
 
 
   setTimeout(
+
     ()=>{
 
       e.remove();
 
     },
+
     56000
+
   );
 
 }
@@ -5865,7 +6437,8 @@ function nicknameBack(){
 
 
   const field =
-    document.getElementById(
+    document
+    .getElementById(
       "nickname"
     );
 
@@ -5873,7 +6446,9 @@ function nicknameBack(){
   if(field){
 
     state.nickname =
-      field.value.trim();
+      field
+      .value
+      .trim();
 
   }
 
@@ -5908,7 +6483,8 @@ async function saveDream(){
 
 
   const field =
-    document.getElementById(
+    document
+    .getElementById(
       "nickname"
     );
 
@@ -5916,7 +6492,9 @@ async function saveDream(){
   if(field){
 
     const value =
-      field.value.trim();
+      field
+      .value
+      .trim();
 
 
     if(value){
@@ -5940,7 +6518,8 @@ async function saveDream(){
 
 
   const honeypot =
-    document.getElementById(
+    document
+    .getElementById(
       "website"
     );
 
@@ -5990,7 +6569,9 @@ async function saveDream(){
 
 
   transition(
+
     ()=>{
+
 
       setVisualMode(
         "saving"
@@ -6022,6 +6603,7 @@ ${copy.saving}
 `;
 
     }
+
   );
 
 
@@ -6029,14 +6611,18 @@ ${copy.saving}
 
     const response =
       await fetch(
+
         API_URL,
+
         {
 
           method:"POST",
 
           headers:{
+
             "Content-Type":
               "text/plain;charset=utf-8"
+
           },
 
           body:
@@ -6045,6 +6631,7 @@ ${copy.saving}
             )
 
         }
+
       );
 
 
@@ -6124,13 +6711,16 @@ function renderSaved(id){
           150
         );
 
+
         return;
 
       }
 
 
       transition(
+
         ()=>{
+
 
           setVisualMode(
             "saved"
@@ -6168,13 +6758,18 @@ ${escapeHtml(
 `;
 
         }
+
       );
 
 
       setTimeout(
+
         startFinalSequence,
+
         5200
+
       );
+
 
     };
 
@@ -6235,13 +6830,16 @@ function renderError(){
           150
         );
 
+
         return;
 
       }
 
 
       transition(
+
         ()=>{
+
 
           setVisualMode(
             "error"
@@ -6278,7 +6876,9 @@ ${copy.retry}
 `;
 
         }
+
       );
+
 
     };
 
@@ -6295,52 +6895,70 @@ ${copy.retry}
 function startFinalSequence(){
 
   const ui =
-    document.getElementById(
+    document
+    .getElementById(
       "ui"
     );
 
 
   const bloom =
-    document.getElementById(
+    document
+    .getElementById(
       "whiteBloom"
     );
 
 
   const whiteout =
-    document.getElementById(
+    document
+    .getElementById(
       "whiteout"
     );
 
 
   const final =
-    document.getElementById(
+    document
+    .getElementById(
       "finalInvite"
     );
 
 
-  ui.classList.add(
+  ui
+  .classList
+  .add(
     "hide"
   );
 
 
   setTimeout(
+
     ()=>{
 
-      bloom.classList.add(
+
+      bloom
+      .classList
+      .add(
         "active"
       );
 
-      whiteout.classList.add(
+
+      whiteout
+      .classList
+      .add(
         "active"
       );
+
 
     },
+
     950
+
   );
 
 
   setTimeout(
+
     ()=>{
+
 
       document
       .getElementById(
@@ -6353,17 +6971,24 @@ function startFinalSequence(){
         .invite;
 
 
-      final.classList.add(
+      final
+      .classList
+      .add(
         "active"
       );
 
+
     },
+
     6500
+
   );
 
 
   setTimeout(
+
     ()=>{
+
 
       bloom.style.display =
         "none";
@@ -6372,8 +6997,11 @@ function startFinalSequence(){
       whiteout.style.display =
         "none";
 
+
     },
+
     7000
+
   );
 
 }
